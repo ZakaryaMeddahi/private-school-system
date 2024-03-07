@@ -2,7 +2,7 @@ import { Body, Controller, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginUserDto } from './dto/login.dto';
 import { RegisterUserDto } from './dto/register.dto';
-import { Role } from '../utils/enums';
+import { Role } from '../../utils/enums';
 
 @Controller('auth')
 export class AuthController {
@@ -10,7 +10,7 @@ export class AuthController {
 
   @Post('register')
   register(@Body() registerUserDto: RegisterUserDto) {
-    const role = Role.STUDENT;
+    const role = Role.ADMIN;
     const data = this.authService.register({ ...registerUserDto, role });
     return {
       status: 'success',
