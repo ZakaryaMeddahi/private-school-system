@@ -1,6 +1,6 @@
 import { CanActivate, ExecutionContext } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { Role } from 'src/utils/enums';
+import { Role } from 'src/shared/enums';
 
 export class AdminGuard implements CanActivate {
   canActivate(

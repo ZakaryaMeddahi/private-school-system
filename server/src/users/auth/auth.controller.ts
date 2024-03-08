@@ -1,27 +1,55 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  HttpException,
+  Post,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginUserDto } from './dto/login.dto';
 import { RegisterUserDto } from './dto/register.dto';
-import { Role } from '../../utils/enums';
+import { Role } from '../../shared/enums';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('register')
-  register(@Body() registerUserDto: RegisterUserDto) {
-    const role = Role.ADMIN;
-    const data = this.authService.register({ ...registerUserDto, role });
-    return {
-      status: 'success',
-      message: 'User Registered in successfully',
-      data,
-    };
+  async register(@Body() registerUserDto: RegisterUserDto) {
+    try {
+      const role = Role.STUDENT;
+      const data = await this.authService.registerUser({
+        ...registerUserDto,
+        role,
+      });
+      console.log(data);
+      if (!data) {
+        throw new BadRequestException('Email already exists');
+      }
+      return {
+        status: 'success',
+        message: 'User Registered successfully',
+        data,
+      };
+    } catch (error) {
+      throw new HttpException(error.response, error.status);
+    }
   }
 
   @Post('login')
-  login(@Body() loginUserDto: LoginUserDto) {
-    const data = this.authService.login(loginUserDto);
-    return { status: 'success', message: 'User logged in successfully', data };
+  async login(@Body() loginUserDto: LoginUserDto) {
+    try {
+      const data = await this.authService.loginUser(loginUserDto);
+      if (!data) {
+        throw new BadRequestException('Invalid email or password');
+      }
+      return {
+        status: 'success',
+        message: 'User logged in successfully',
+        data,
+      };
+    } catch (error) {
+      throw new HttpException(error.response, error.status);
+    }
   }
 }

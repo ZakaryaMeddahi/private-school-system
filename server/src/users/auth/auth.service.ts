@@ -1,46 +1,67 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { LoginUserParams, RegisterUserParams } from '../utils/types';
 import { JwtService } from '@nestjs/jwt';
+import { Repository } from 'typeorm';
+import { User } from '../entities/user.entity';
+import { InjectRepository } from '@nestjs/typeorm';
 
 let users = [];
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly jwtService: JwtService) {}
+  constructor(
+    private readonly jwtService: JwtService,
+    @InjectRepository(User) private readonly usersRepository: Repository<User>,
+  ) {}
 
-  register(userData: RegisterUserParams) {
-    const user = users.find((u) => u.email === userData.email);
+  async registerUser(userData: RegisterUserParams) {
+    try {
+      const user = await this.usersRepository.findOneBy({
+        email: userData.email,
+      });
 
-    if (user) return null;
+      console.log(user);
 
-    const newUser = {
-      id: users.length + 1,
-      ...userData,
-    };
-    users = [...users, newUser];
+      if (user) return null;
 
-    const access_token = this.jwtService.sign({
-      sub: newUser.id,
-      email: newUser.email,
-      role: newUser.role,
-    });
+      const newUser = this.usersRepository.create(userData);
+      console.log(newUser);
 
-    return { ...newUser, access_token };
+      const userEntity = await this.usersRepository.save(newUser);
+      console.log(userEntity);
+
+      const access_token = this.jwtService.sign({
+        sub: userEntity.id,
+        email: userEntity.email,
+        role: userEntity.role,
+      });
+
+      console.log({ ...userEntity, access_token });
+
+      return { ...userEntity, access_token };
+    } catch (error) {
+      throw new HttpException('Something went wrong in the server', 500);
+    }
   }
 
-  login(userData: LoginUserParams) {
-    const user = users.find(
-      (u) => u.email === userData.email && u.password === userData.password,
-    );
+  async loginUser(userData: LoginUserParams) {
+    try {
+      const user = await this.usersRepository.findOneBy({
+        email: userData.email,
+        password: userData.password,
+      });
 
-    if (!user) return null;
+      if (!user) return null;
 
-    const access_token = this.jwtService.sign({
-      sub: user.id,
-      email: user.email,
-      role: user.role,
-    });
+      const access_token = this.jwtService.sign({
+        sub: user.id,
+        email: user.email,
+        role: user.role,
+      });
 
-    return { ...user, access_token };
+      return { ...user, access_token };
+    } catch (error) {
+      throw new HttpException('Something went wrong in the server', 500);
+    }
   }
 }

@@ -4,6 +4,8 @@ import { AuthController } from './auth/auth.controller';
 import { AuthService } from './auth/auth.service';
 import { UsersController } from './users/users.controller';
 import { UsersService } from './users/users.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from './entities/user.entity';
 
 @Module({
   imports: [
@@ -11,6 +13,7 @@ import { UsersService } from './users/users.service';
       secret: 'secret',
       signOptions: { expiresIn: '1d' },
     }),
+    TypeOrmModule.forFeature([User]),
   ],
   controllers: [AuthController, UsersController],
   providers: [AuthService, UsersService],
