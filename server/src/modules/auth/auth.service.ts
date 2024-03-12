@@ -1,8 +1,8 @@
 import { HttpException, Injectable } from '@nestjs/common';
-import { LoginUserParams, RegisterUserParams } from '../utils/types';
+import { LoginUserParams, RegisterUserParams } from '../../shared/types';
 import { JwtService } from '@nestjs/jwt';
 import { Repository } from 'typeorm';
-import { User } from '../entities/user.entity';
+import { User } from '../../shared/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 
 let users = [];
@@ -40,6 +40,7 @@ export class AuthService {
 
       return { ...userEntity, access_token };
     } catch (error) {
+      console.error(error);
       throw new HttpException('Something went wrong in the server', 500);
     }
   }
