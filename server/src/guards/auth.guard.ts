@@ -18,9 +18,16 @@ export class AuthGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const token = this.extractHeaderFromHeader(request);
     if (!token) throw new UnauthorizedException();
-    const user = this.jwtService.verify(token, { secret: 'secret' });
-    request.user = user;
-    return true;
+    try {
+      const user = this.jwtService.verify(token, { secret: 'secret' });
+      request.user = user;
+      return true;
+    } catch (error) {
+      if (error.name === 'TokenExpiredError') {
+        throw new UnauthorizedException('Token expired');
+      }
+      throw new UnauthorizedException();
+    }
   }
 
   private extractHeaderFromHeader(request: Request): string | undefined {

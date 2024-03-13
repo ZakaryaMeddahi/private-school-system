@@ -1,11 +1,14 @@
 import { Module } from '@nestjs/common';
-import { UsersModule } from './users/users.module';
+import { UsersModule } from './modules/users/users.module';
+import { AuthModule } from './modules/auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './users/entities/user.entity';
+import { User } from './shared/entities/user.entity';
+import { CoursesModule } from './modules/courses/courses.module';
+import { JwtModule } from '@nestjs/jwt';
+import { Course } from './shared/entities/course.entity';
 
 @Module({
   imports: [
-    UsersModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
@@ -13,9 +16,12 @@ import { User } from './users/entities/user.entity';
       username: 'postgres',
       password: 'root',
       database: 'private-school',
-      entities: [User],
+      entities: [User,Course],
       synchronize: true,
     }),
+    AuthModule,
+    UsersModule,
+    CoursesModule,
   ],
   controllers: [],
   providers: [],

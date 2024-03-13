@@ -26,7 +26,7 @@ export class User {
   @Column({ default: true })
   isActive: boolean;
 
-  @Column({ type: 'timestamp' })
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   lastLogging: Date;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
