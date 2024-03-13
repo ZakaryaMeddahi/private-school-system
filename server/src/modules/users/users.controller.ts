@@ -2,7 +2,7 @@ import { Controller, Get, UseGuards } from '@nestjs/common';
 import { AdminGuard } from 'src/guards/admin.guard';
 import { AuthGuard } from 'src/guards/auth.guard';
 
-@Controller('users')
+@Controller('api/v1/users')
 export class UsersController {
   constructor() {}
 

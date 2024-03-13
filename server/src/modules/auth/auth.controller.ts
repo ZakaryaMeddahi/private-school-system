@@ -10,7 +10,7 @@ import { LoginUserDto } from './dto/login.dto';
 import { RegisterUserDto } from './dto/register.dto';
 import { Role } from '../../shared/enums';
 
-@Controller('auth')
+@Controller('api/v1/auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
