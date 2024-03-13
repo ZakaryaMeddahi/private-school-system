@@ -42,7 +42,7 @@ export class Course {
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   updatedAt: Date;
 
-  @OneToMany(() => Topic, (topic) => topic.course)
+  @OneToMany(() => Topic, (topic) => topic.course, { cascade: true })
   topics: Topic[];
 
   @OneToMany(() => Enrollment, (enrollment) => enrollment.course)
