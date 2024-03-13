@@ -6,6 +6,11 @@ import { User } from './shared/entities/user.entity';
 import { CoursesModule } from './modules/courses/courses.module';
 import { JwtModule } from '@nestjs/jwt';
 import { Course } from './shared/entities/course.entity';
+import { RoomsModule } from './modules/rooms/rooms.module';
+import { EnrollmentsModule } from './modules/enrollments/enrollments.module';
+import { SessionsModule } from './modules/sessions/sessions.module';
+import { MessagesModule } from './modules/messages/messages.module';
+import { ChatsModule } from './modules/chats/chats.module';
 
 @Module({
   imports: [
@@ -22,6 +27,11 @@ import { Course } from './shared/entities/course.entity';
     AuthModule,
     UsersModule,
     CoursesModule,
+    RoomsModule,
+    EnrollmentsModule,
+    SessionsModule,
+    MessagesModule,
+    ChatsModule,
   ],
   controllers: [],
   providers: [],
