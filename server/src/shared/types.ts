@@ -1,5 +1,5 @@
 import { Topic } from './entities/topic.entity';
-import { Difficulty, DurationUnit } from './enums';
+import { Difficulty, DurationUnit, RoomStatus } from './enums';
 
 export type LoginUserParams = {
   email: string;
@@ -56,6 +56,18 @@ export type UpdateTopicParams = {
   title?: string;
   startTime?: Date;
   isDeleted?: boolean;
+};
+
+export type CreateRoomParams = {
+  name: string;
+  slug: string;
+  status: RoomStatus;
+};
+
+export type UpdateRoomParams = {
+  name?: string;
+  slug?: string;
+  status?: RoomStatus;
 };
 
 export type CreateChatParams = {
