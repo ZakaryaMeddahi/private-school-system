@@ -28,6 +28,21 @@ export class CoursesController {
     }
   }
 
+  @Get(':id')
+  async getCourse(@Param('id', ParseIntPipe) id: number) {
+    try {
+      const course = await this.coursesService.findOne(id);
+
+      if (!course) {
+        throw new NotFoundException('Course not found');
+      }
+
+      return { status: 'success', data: course };
+    } catch (error) {
+      throw new HttpException(error.message, error.status || 500);
+    }
+  }
+
   @Post()
   async createCourse(@Body() courseData: createCourseDto) {
     try {
@@ -43,7 +58,10 @@ export class CoursesController {
   }
 
   @Patch(':id')
-  async updateCourse(@Param('id', ParseIntPipe) id: number, @Body() courseData: UpdateCourseDto) {
+  async updateCourse(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() courseData: UpdateCourseDto,
+  ) {
     try {
       const course = await this.coursesService.update(id, courseData);
 

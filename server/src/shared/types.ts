@@ -1,4 +1,10 @@
-import { Difficulty, DurationUnit } from "./enums";
+import { Topic } from './entities/topic.entity';
+import {
+  Difficulty,
+  DurationUnit,
+  EnrollmentStatus,
+  RoomStatus,
+} from './enums';
 
 export type LoginUserParams = {
   email: string;
@@ -30,8 +36,8 @@ export type CreateCourseParams = {
   enrollmentLimit: number;
   duration: number;
   durationUnit: DurationUnit;
-  topics: []
-}
+  topics: Topic[];
+};
 
 export type UpdateCourseParams = {
   title?: string;
@@ -42,5 +48,57 @@ export type UpdateCourseParams = {
   enrollmentLimit?: number;
   duration?: number;
   durationUnit?: DurationUnit;
-  topics?: []
-}
+  topics?: Topic[];
+};
+
+export type CreateTopicParams = {
+  title: string;
+  startTime: Date;
+};
+
+export type UpdateTopicParams = {
+  id?: number;
+  title?: string;
+  startTime?: Date;
+  isDeleted?: boolean;
+};
+
+export type CreateRoomParams = {
+  name: string;
+  slug: string;
+  status: RoomStatus;
+};
+
+export type UpdateRoomParams = {
+  name?: string;
+  slug?: string;
+  status?: RoomStatus;
+};
+
+export type CreateChatParams = {
+  name: string;
+};
+
+export type UpdateChatParams = {
+  name?: string;
+};
+
+export type CreateEnrollmentParams = {
+  enrollmentStatus: EnrollmentStatus;
+  progress: number;
+  enrollmentDate: Date;
+};
+
+export type UpdateEnrollmentParams = {
+  enrollmentStatus?: EnrollmentStatus;
+  progress?: number;
+  enrollmentDate?: Date;
+};
+
+export type MessagesOptions = {
+  courseId: number;
+  chatId?: number;
+  roomId?: number;
+  page?: number;
+  pageSize?: number;
+};
