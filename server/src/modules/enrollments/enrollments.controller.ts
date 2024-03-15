@@ -9,6 +9,8 @@ import {
 import { EnrollmentsService } from './enrollments.service';
 import { CreateEnrollmentDto } from './dto/createEnrollment.dto';
 import { UpdateEnrollmentDto } from './dto/updateEnrollment.dto';
+import { AuthUser } from 'src/decorators/user.decorator';
+import { User } from 'src/shared/entities/user.entity';
 
 @Controller('api/v1/courses/:courseId/enrollments')
 export class EnrollmentsController {
@@ -31,6 +33,7 @@ export class EnrollmentsController {
 
   @Post()
   async enrollStudent(
+    @AuthUser() user: User,
     @Param('courseId', ParseIntPipe) courseId: number,
     enrollmentData: CreateEnrollmentDto,
   ) {
@@ -70,7 +73,7 @@ export class EnrollmentsController {
     }
   }
 
-  async cancelEnrollment(@Param('id', ParseIntPipe) id: number) {
+  async cancelEnrollment(@AuthUser() user:User, @Param('id', ParseIntPipe) id: number) {
     try {
       await this.enrollmentService.remove(id);
       return {

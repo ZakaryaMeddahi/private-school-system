@@ -13,13 +13,15 @@ import {
 import { CoursesService } from './courses.service';
 import { createCourseDto } from './dto/createCourse.dto';
 import { UpdateCourseDto } from './dto/updateCourse.dto';
+import { AuthUser } from 'src/decorators/user.decorator';
+import { User } from 'src/shared/entities/user.entity';
 
 @Controller('api/v1/courses')
 export class CoursesController {
   constructor(private readonly coursesService: CoursesService) {}
 
   @Get()
-  async getCourses() {
+  async getCourses(@AuthUser() user: User) {
     try {
       const courses = await this.coursesService.findAll();
       return { status: 'success', data: courses };
@@ -29,7 +31,10 @@ export class CoursesController {
   }
 
   @Get(':id')
-  async getCourse(@Param('id', ParseIntPipe) id: number) {
+  async getCourse(
+    @AuthUser() user: User,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
     try {
       const course = await this.coursesService.findOne(id);
 
@@ -44,7 +49,10 @@ export class CoursesController {
   }
 
   @Post()
-  async createCourse(@Body() courseData: createCourseDto) {
+  async createCourse(
+    @AuthUser() user: User,
+    @Body() courseData: createCourseDto,
+  ) {
     try {
       const course = await this.coursesService.create(courseData);
       return {
@@ -59,6 +67,7 @@ export class CoursesController {
 
   @Patch(':id')
   async updateCourse(
+    @AuthUser() user: User,
     @Param('id', ParseIntPipe) id: number,
     @Body() courseData: UpdateCourseDto,
   ) {
@@ -80,7 +89,10 @@ export class CoursesController {
   }
 
   @Delete(':id')
-  async removeCourse(@Param('id', ParseIntPipe) id: number) {
+  async removeCourse(
+    @AuthUser() user: User,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
     try {
       const course = await this.coursesService.remove(id);
 
