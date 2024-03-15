@@ -1,5 +1,10 @@
 import { Topic } from './entities/topic.entity';
-import { Difficulty, DurationUnit, RoomStatus } from './enums';
+import {
+  Difficulty,
+  DurationUnit,
+  EnrollmentStatus,
+  RoomStatus,
+} from './enums';
 
 export type LoginUserParams = {
   email: string;
@@ -76,6 +81,18 @@ export type CreateChatParams = {
 
 export type UpdateChatParams = {
   name?: string;
+};
+
+export type CreateEnrollmentParams = {
+  enrollmentStatus: EnrollmentStatus;
+  progress: number;
+  enrollmentDate: Date;
+};
+
+export type UpdateEnrollmentParams = {
+  enrollmentStatus?: EnrollmentStatus;
+  progress?: number;
+  enrollmentDate?: Date;
 };
 
 export type MessagesOptions = {
