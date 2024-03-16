@@ -1,4 +1,10 @@
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Difficulty, DurationUnit } from '../enums';
 import { Topic } from './topic.entity';
 import { Enrollment } from './enrollment.entity';
@@ -43,11 +49,11 @@ export class Course {
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   updatedAt: Date;
 
-  @OneToMany(() => Topic, (topic) => topic.course, { cascade: true })
-  topics: Topic[];
-
   @ManyToOne(() => Teacher, (teacher) => teacher.courses)
   teacher: Teacher;
+
+  @OneToMany(() => Topic, (topic) => topic.course, { cascade: true })
+  topics: Topic[];
 
   @OneToMany(() => Enrollment, (enrollment) => enrollment.course)
   enrollments: Enrollment[];
