@@ -1,8 +1,9 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Difficulty, DurationUnit } from '../enums';
 import { Topic } from './topic.entity';
 import { Enrollment } from './enrollment.entity';
 import { Room } from './room.entity';
+import { Teacher } from './teacher.entity';
 
 @Entity({ name: 'courses' })
 export class Course {
@@ -44,6 +45,9 @@ export class Course {
 
   @OneToMany(() => Topic, (topic) => topic.course, { cascade: true })
   topics: Topic[];
+
+  @ManyToOne(() => Teacher, (teacher) => teacher.courses)
+  teacher: Teacher;
 
   @OneToMany(() => Enrollment, (enrollment) => enrollment.course)
   enrollments: Enrollment[];
