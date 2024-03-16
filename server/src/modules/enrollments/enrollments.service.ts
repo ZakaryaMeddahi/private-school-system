@@ -16,11 +16,19 @@ export class EnrollmentsService {
     private readonly coursesService: CoursesService,
   ) {}
 
+  async findAll() {
+    try {
+      const enrollments = await this.enrollmentRepository.find();
+      return enrollments;
+    } catch (error) {
+      console.error(error);
+      throw new HttpException('Cannot retrieve enrollments', 500);
+    }
+  }
+
   async findByCourseId(courseId: number) {
     try {
-      // const enrollments = await this.enrollmentRepository.find({
-      //   where: { course: { id: courseId } },
-      // });
+      // Check if the course exists in the database
 
       const enrollments = await this.enrollmentRepository
         .createQueryBuilder('enrollment')
@@ -54,14 +62,14 @@ export class EnrollmentsService {
 
       const newEnrollment = this.enrollmentRepository.create({
         ...enrollmentData,
-        course,
+        course: { id: courseId },
       });
 
       await this.enrollmentRepository.save(newEnrollment);
       return newEnrollment;
     } catch (error) {
       console.error(error);
-      throw new HttpException('Cannot Enroll', 500);
+      throw new HttpException('Cannot enroll in this course', 500);
     }
   }
 
