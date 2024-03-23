@@ -21,6 +21,30 @@ export class ChatsService {
     }
   }
 
+  async findOne(id: number) {
+    try {
+      const chat = await this.chatsRepository.findOne({ where: { id } });
+
+      if (!chat) return null;
+
+      return chat;
+    } catch (error) {
+      console.error(error);
+      throw new HttpException('Cannot get chat', 500);
+    }
+  }
+
+  async create(chatData: UpdateChatParams) {
+    try {
+      const newChat = this.chatsRepository.create(chatData);
+
+      return await this.chatsRepository.save(newChat);
+    } catch (error) {
+      console.error(error);
+      throw new HttpException('Cannot create chat', 500);
+    }
+  }
+
   async update(id: number, chatData: UpdateChatParams) {
     try {
       const chat = await this.chatsRepository.findOne({ where: { id } });
