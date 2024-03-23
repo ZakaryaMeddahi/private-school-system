@@ -7,10 +7,11 @@ import { CoursesService } from '../courses/courses.service';
 import { Course } from 'src/shared/entities/course.entity';
 import { Topic } from 'src/shared/entities/topic.entity';
 import { TopicsService } from '../courses/topics/topics.service';
+import { RoomsGateway } from './rooms.gateway';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Room, Course, Topic])],
   controllers: [RoomsController],
-  providers: [RoomsService, CoursesService, TopicsService],
+  providers: [RoomsService, CoursesService, TopicsService, RoomsGateway],
 })
 export class RoomsModule {}
