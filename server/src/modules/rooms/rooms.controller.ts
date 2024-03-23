@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
   HttpException,
   Param,
   ParseIntPipe,
@@ -15,6 +16,20 @@ import { UpdateRoomDto } from './dto/updateRoom.dto';
 @Controller('api/v1/courses/:courseId/rooms')
 export class RoomsController {
   constructor(private readonly roomsService: RoomsService) {}
+
+  @Get()
+  async getRooms(@Param('courseId', ParseIntPipe) courseId: number) {
+    try {
+      const rooms = await this.roomsService.findAll(courseId);
+      return {
+        status: 'success',
+        message: 'Loaded rooms successfully',
+        data: rooms,
+      };
+    } catch (error) {
+      throw new HttpException(error.message, error.status);
+    }
+  }
 
   @Post()
   async createRoom(

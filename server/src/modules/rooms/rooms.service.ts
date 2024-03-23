@@ -12,6 +12,20 @@ export class RoomsService {
     private readonly coursesService: CoursesService,
   ) {}
 
+  async findAll(courseId: number) {
+    try {
+      const course = await this.coursesService.findOne(courseId);
+
+      if (!course)
+        throw new NotFoundException(`There is no course with id ${courseId}`);
+
+      return await this.roomsRepository.find({ where: { course } });
+    } catch (error) {
+      console.error(error);
+      throw new HttpException('Cannot get rooms', 500);
+    }
+  }
+
   async create(roomData: CreateRoomParams, courseId: number) {
     try {
       const course = await this.coursesService.findOne(courseId);
