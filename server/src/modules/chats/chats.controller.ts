@@ -1,4 +1,11 @@
-import { Controller, Get, HttpException, Patch } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpException,
+  Param,
+  Patch,
+} from '@nestjs/common';
 import { UpdateChatDto } from './dto/updateChat.dto';
 import { ChatsService } from './chats.service';
 
@@ -7,7 +14,7 @@ export class ChatsController {
   constructor(private readonly chatsService: ChatsService) {}
 
   @Get()
-  async getChats(id: number) {
+  async getChats(@Param('id') courseId: number) {
     try {
       const chats = await this.chatsService.findAll();
 
@@ -22,7 +29,8 @@ export class ChatsController {
     }
   }
 
-  async getChat(id: number) {
+  @Get(':id')
+  async getChat(@Param('id') id: number) {
     try {
       const chat = await this.chatsService.findOne(id);
 
@@ -42,7 +50,7 @@ export class ChatsController {
   }
 
   @Patch(':id')
-  async updateChat(id: number, chatData: UpdateChatDto) {
+  async updateChat(@Param('id') id: number, @Body() chatData: UpdateChatDto) {
     try {
       const updatedChat = await this.chatsService.update(id, chatData);
 
