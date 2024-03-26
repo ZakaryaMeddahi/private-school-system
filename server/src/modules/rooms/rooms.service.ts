@@ -4,22 +4,26 @@ import { Room } from 'src/shared/entities/room.entity';
 import { CreateRoomParams, UpdateRoomParams } from 'src/shared/types';
 import { Repository } from 'typeorm';
 import { CoursesService } from '../courses/courses.service';
+import { ChatsService } from '../chats/chats.service';
 
 @Injectable()
 export class RoomsService {
   constructor(
     @InjectRepository(Room) private readonly roomsRepository: Repository<Room>,
-    private readonly coursesService: CoursesService,
+    private readonly chatsService: ChatsService,
+    // private readonly coursesService: CoursesService,
   ) {}
 
   async findAll(courseId: number) {
     try {
-      const course = await this.coursesService.findOne(courseId);
+      // const course = await this.coursesService.findOne(courseId);
 
-      if (!course)
-        throw new NotFoundException(`There is no course with id ${courseId}`);
+      // if (!course)
+      //   throw new NotFoundException(`There is no course with id ${courseId}`);
 
-      return await this.roomsRepository.find({ where: { course } });
+      return await this.roomsRepository.find({
+        where: { course: { id: courseId } },
+      });
     } catch (error) {
       console.error(error);
       throw new HttpException('Cannot get rooms', 500);
@@ -28,19 +32,28 @@ export class RoomsService {
 
   async create(roomData: CreateRoomParams, courseId: number) {
     try {
-      const course = await this.coursesService.findOne(courseId);
+      // const course = await this.coursesService.findOne(courseId);
 
-      if (!course)
-        throw new NotFoundException(`There is no course with id ${courseId}`);
+      // if (!course)
+      //   throw new NotFoundException(`There is no course with id ${courseId}`);
 
       const newRoom = this.roomsRepository.create({
         ...roomData,
-        course,
+        course: { id: courseId },
       });
 
-      return await this.roomsRepository.save(newRoom);
+      const room = await this.roomsRepository.save(newRoom);
+
+      await this.chatsService.createByRoomId(newRoom.id, {
+        name: roomData.name,
+      });
+
+      return room;
     } catch (error) {
       console.error(error);
+      if(error.code === '23503') {
+        throw new NotFoundException(`There is no course with the provided id ${courseId}`);
+      }
       throw new HttpException('Cannot create room', 500);
     }
   }
