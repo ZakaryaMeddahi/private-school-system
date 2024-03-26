@@ -13,7 +13,7 @@ export class EnrollmentsService {
   constructor(
     @InjectRepository(Enrollment)
     private readonly enrollmentRepository: Repository<Enrollment>,
-    private readonly coursesService: CoursesService,
+    // private readonly coursesService: CoursesService,
   ) {}
 
   async findAll() {
@@ -52,13 +52,13 @@ export class EnrollmentsService {
 
   async create(courseId: number, enrollmentData: CreateEnrollmentParams) {
     try {
-      const course = await this.coursesService.findOne(courseId);
+      // const course = await this.coursesService.findOne(courseId);
 
-      if (!course) {
-        throw new NotFoundException(
-          `The course with the id ${courseId} was not found`,
-        );
-      }
+      // if (!course) {
+      //   throw new NotFoundException(
+      //     `The course with the id ${courseId} was not found`,
+      //   );
+      // }
 
       const newEnrollment = this.enrollmentRepository.create({
         ...enrollmentData,
@@ -69,6 +69,9 @@ export class EnrollmentsService {
       return newEnrollment;
     } catch (error) {
       console.error(error);
+      if(error.code === '23503') {
+        throw new NotFoundException(`There is no course with the provided id ${courseId}`);
+      }
       throw new HttpException('Cannot enroll in this course', 500);
     }
   }
