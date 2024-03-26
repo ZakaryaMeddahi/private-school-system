@@ -4,6 +4,9 @@ import { Course } from 'src/shared/entities/course.entity';
 import { CreateCourseParams, UpdateCourseParams } from 'src/shared/types';
 import { Repository } from 'typeorm';
 import { TopicsService } from './topics/topics.service';
+import { ChatsService } from '../chats/chats.service';
+import { RoomsService } from '../rooms/rooms.service';
+import { RoomStatus } from 'src/shared/enums';
 
 @Injectable()
 export class CoursesService {
@@ -11,6 +14,8 @@ export class CoursesService {
     @InjectRepository(Course)
     private readonly coursesRepository: Repository<Course>,
     private readonly topicsService: TopicsService,
+    private readonly chatsService: ChatsService,
+    private readonly roomsService: RoomsService,
   ) {}
 
   async findAll() {
@@ -49,10 +54,23 @@ export class CoursesService {
       }
 
       const newCourse = this.coursesRepository.create(courseData);
-      return this.coursesRepository.save(newCourse);
+
+      const course = await this.coursesRepository.save(newCourse);
+
+      await this.chatsService.createByCourseId(course.id, { name: 'Global Chat' });
+
+      await this.roomsService.create(
+        { name: 'General', slug: 'general', status: RoomStatus.OPEN },
+        course.id,
+      );
+
+      return course;
     } catch (error) {
       console.error(error);
-      throw new HttpException('Cannot create course', 500);
+      throw new HttpException(
+        error.message || 'Cannot create course',
+        error.status || 500,
+      );
     }
   }
 
