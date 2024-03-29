@@ -4,14 +4,16 @@ import { JwtService } from '@nestjs/jwt';
 import { Repository } from 'typeorm';
 import { User } from '../../shared/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-
-let users = [];
+import { UsersService } from '../users/users.service';
+import { StudentsService } from '../students/students.service';
+import { Role } from 'src/shared/enums';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
     @InjectRepository(User) private readonly usersRepository: Repository<User>,
+    private readonly studentsService: StudentsService,
   ) {}
 
   async registerUser(userData: RegisterUserParams) {
@@ -27,8 +29,15 @@ export class AuthService {
       const newUser = this.usersRepository.create(userData);
       console.log(newUser);
 
-      const userEntity = await this.usersRepository.save(newUser);
+      const userEntity = await this.usersRepository.save({
+        ...newUser,
+        lastLogging: new Date(),
+      });
       console.log(userEntity);
+
+      if(userEntity.role === Role.STUDENT) {
+        await this.studentsService.create(userEntity.id, {});
+      }
 
       const access_token = this.jwtService.sign({
         sub: userEntity.id,
@@ -36,9 +45,11 @@ export class AuthService {
         role: userEntity.role,
       });
 
+      const { password, ...userWithoutPass } = userEntity;
+
       console.log({ ...userEntity, access_token });
 
-      return { ...userEntity, access_token };
+      return { ...userWithoutPass, access_token };
     } catch (error) {
       console.error(error);
       throw new HttpException('Something went wrong in the server', 500);
@@ -60,7 +71,9 @@ export class AuthService {
         role: user.role,
       });
 
-      return { ...user, access_token };
+      const { password, ...userWithoutPass } = user;
+
+      return { ...userWithoutPass, access_token };
     } catch (error) {
       throw new HttpException('Something went wrong in the server', 500);
     }
