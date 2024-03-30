@@ -13,14 +13,22 @@ export class EnrollmentsService {
   constructor(
     @InjectRepository(Enrollment)
     private readonly enrollmentRepository: Repository<Enrollment>,
-    private readonly coursesService: CoursesService,
+    // private readonly coursesService: CoursesService,
   ) {}
+
+  async findAll() {
+    try {
+      const enrollments = await this.enrollmentRepository.find();
+      return enrollments;
+    } catch (error) {
+      console.error(error);
+      throw new HttpException('Cannot retrieve enrollments', 500);
+    }
+  }
 
   async findByCourseId(courseId: number) {
     try {
-      // const enrollments = await this.enrollmentRepository.find({
-      //   where: { course: { id: courseId } },
-      // });
+      // Check if the course exists in the database
 
       const enrollments = await this.enrollmentRepository
         .createQueryBuilder('enrollment')
@@ -44,24 +52,27 @@ export class EnrollmentsService {
 
   async create(courseId: number, enrollmentData: CreateEnrollmentParams) {
     try {
-      const course = await this.coursesService.findOne(courseId);
+      // const course = await this.coursesService.findOne(courseId);
 
-      if (!course) {
-        throw new NotFoundException(
-          `The course with the id ${courseId} was not found`,
-        );
-      }
+      // if (!course) {
+      //   throw new NotFoundException(
+      //     `The course with the id ${courseId} was not found`,
+      //   );
+      // }
 
       const newEnrollment = this.enrollmentRepository.create({
         ...enrollmentData,
-        course,
+        course: { id: courseId },
       });
 
       await this.enrollmentRepository.save(newEnrollment);
       return newEnrollment;
     } catch (error) {
       console.error(error);
-      throw new HttpException('Cannot Enroll', 500);
+      if(error.code === '23503') {
+        throw new NotFoundException(`There is no course with the provided id ${courseId}`);
+      }
+      throw new HttpException('Cannot enroll in this course', 500);
     }
   }
 
