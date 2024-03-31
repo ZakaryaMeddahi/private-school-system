@@ -4,9 +4,10 @@ import { AuthService } from './auth.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from 'src/shared/entities/user.entity';
 import { JwtModule } from '@nestjs/jwt';
-import { StudentsService } from '../students/students.service';
 import { Student } from 'src/shared/entities/student.entity';
 import { MailModule } from '../mail/mail.module';
+import { StudentsModule } from '../students/students.module';
+import { SocialLinksModule } from '../social-links/social-links.module';
 
 @Module({
   imports: [
@@ -15,9 +16,11 @@ import { MailModule } from '../mail/mail.module';
       secret: 'secret',
       signOptions: { expiresIn: '1d' },
     }),
-    MailModule
+    StudentsModule,
+    MailModule,
+    SocialLinksModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService, StudentsService],
+  providers: [AuthService],
 })
 export class AuthModule {}
