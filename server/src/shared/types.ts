@@ -161,3 +161,5 @@ export type CreateStudentParams = {
   biography?: string;
   profilePicture?: string;
 };
+
+export interface CreateFileParams extends Express.Multer.File {}
