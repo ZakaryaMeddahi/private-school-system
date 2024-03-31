@@ -1,6 +1,14 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { User } from './user.entity';
 import { Chat } from './chat.entity';
+import { File } from './file.entity';
 
 @Entity({ name: 'messages' })
 export class Message {
@@ -9,6 +17,8 @@ export class Message {
 
   @Column()
   content: string;
+
+  // TODO: Add isPinned column
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   sentAt: Date;
@@ -21,4 +31,8 @@ export class Message {
 
   @ManyToOne(() => Chat, (chat) => chat.messages)
   chat: Chat;
+
+  @OneToOne(() => File)
+  @JoinColumn()
+  file: File;
 }
