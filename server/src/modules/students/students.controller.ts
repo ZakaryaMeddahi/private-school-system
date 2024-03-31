@@ -31,7 +31,7 @@ export class StudentsController {
   }
 
   @Get(':id')
-  async findOne(@Param('id', ParseIntPipe) id: number) {
+  async getStudent(@Param('id', ParseIntPipe) id: number) {
     try {
       const student = await this.studentsService.findOne(id)
       if(!student) throw new NotFoundException('Student not found')
@@ -46,7 +46,7 @@ export class StudentsController {
   }
 
   @Delete(':id')
-  async remove(@Param('id', ParseIntPipe) id: number) {
+  async removeStudent(@Param('id', ParseIntPipe) id: number) {
     try {
       await this.studentsService.remove(id)
       return { status: 'success', message: 'Student removed successfully' }
