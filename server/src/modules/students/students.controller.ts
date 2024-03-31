@@ -9,12 +9,32 @@ import {
   ParseIntPipe,
   HttpException,
   NotFoundException,
+  UseGuards,
 } from '@nestjs/common';
 import { StudentsService } from './students.service';
+import { AuthGuard } from 'src/guards/auth.guard';
+import { AuthUser } from 'src/decorators/user.decorator';
+import { JwtPayload } from 'src/shared/types';
 
 @Controller('students')
 export class StudentsController {
   constructor(private readonly studentsService: StudentsService) {}
+
+  @Get('account/me')
+  @UseGuards(AuthGuard)
+  async getUser(@AuthUser() user: JwtPayload) {
+    const { sub: id } = user;
+    try {
+      const user = await this.studentsService.findByUserId(id);
+      return user;
+    } catch (error) {
+      console.error(error);
+      throw new HttpException(
+        error.message || 'Something went wrong in the server',
+        error.status || 500,
+      );
+    }
+  }
 
   @Get()
   async getStudents() {
