@@ -113,6 +113,16 @@ export type UpdateEnrollmentParams = {
   enrollmentDate?: Date;
 };
 
+export type CreateMessageParams = {
+  content: string;
+  file: File;
+};
+
+export type UpdateMessageParams = {
+  content?: string;
+  file?: File;
+};
+
 export type MessagesOptions = {
   courseId: number;
   chatId?: number;
