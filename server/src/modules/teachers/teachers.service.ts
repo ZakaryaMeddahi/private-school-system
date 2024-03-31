@@ -8,6 +8,7 @@ import { MailService } from '../mail/mail.service';
 import { Role } from 'src/shared/enums';
 import { hashPassword } from 'src/helpers/bcrypt';
 import generatePassword from 'src/helpers/generate-password';
+import { SocialLinksService } from '../social-links/social-links.service';
 
 @Injectable()
 export class TeachersService {
@@ -15,6 +16,7 @@ export class TeachersService {
     @InjectRepository(Teacher) private teacherRepository: Repository<Teacher>,
     private readonly usersService: UsersService,
     private readonly mailService: MailService,
+    private readonly socialLinksService: SocialLinksService,
   ) {}
 
   async findAll() {
@@ -38,6 +40,7 @@ export class TeachersService {
         .createQueryBuilder('teacher')
         .leftJoin('teacher.user', 'user')
         .select('*')
+        .where('teacher.id = :id', { id })
         .getRawOne();
 
       if (!teacher) throw new NotFoundException('Teacher not found');
@@ -51,13 +54,36 @@ export class TeachersService {
     }
   }
 
+  async findByUserId(userId: number) {
+    try {
+      const teacher = await this.teacherRepository
+        .createQueryBuilder('teacher')
+        .leftJoin('teacher.user', 'user')
+        .select('*')
+        .where('user.id = :id', { id: userId })
+        .getRawOne();
+
+      if (!teacher) throw new NotFoundException('Teacher not found');
+
+      const socialLinks = await this.socialLinksService.findByUserId(userId);
+
+      return { ...teacher, socialLinks };
+    } catch (error) {
+      console.error(error);
+      throw new HttpException(
+        error.message || 'Cannot get teacher',
+        error.status || 500,
+      );
+    }
+  }
+
   async create(teacherData: CreateTeacherParams) {
     try {
       // Cerate user then add id to teacher object
       // Generate password
       const password = generatePassword(10);
       console.log('password: ' + password);
-      
+
       // Hash password
       const hash = await hashPassword(password);
       const user = await this.usersService.create({
