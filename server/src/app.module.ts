@@ -45,6 +45,7 @@ import { File } from './shared/entities/file.entity';
         Topic,
         Enrollment,
         Chat,
+        File,
         Message,
         Room,
         Session,
