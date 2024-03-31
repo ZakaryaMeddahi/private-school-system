@@ -25,5 +25,5 @@ export class Session {
   // roomId: number;
 
   @OneToMany(() => StudentSession, (studentSession) => studentSession.session)
-  studentSession: StudentSession[];
+  studentSessions: StudentSession[];
 }
