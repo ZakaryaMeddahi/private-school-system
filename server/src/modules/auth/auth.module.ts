@@ -6,6 +6,7 @@ import { User } from 'src/shared/entities/user.entity';
 import { JwtModule } from '@nestjs/jwt';
 import { StudentsService } from '../students/students.service';
 import { Student } from 'src/shared/entities/student.entity';
+import { MailModule } from '../mail/mail.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { Student } from 'src/shared/entities/student.entity';
       secret: 'secret',
       signOptions: { expiresIn: '1d' },
     }),
+    MailModule
   ],
   controllers: [AuthController],
   providers: [AuthService, StudentsService],
