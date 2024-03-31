@@ -144,3 +144,15 @@ export type UpdateSessionParams = {
   startTime?: Date;
   endTime?: Date;
 };
+
+export type CreateTeacherParams = {
+  firstName: string;
+  lastName: string;
+  email: string;
+};
+
+export type UpdateTeacherParams = {
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+};
