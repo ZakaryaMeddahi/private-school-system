@@ -4,9 +4,10 @@ import { JwtService } from '@nestjs/jwt';
 import { Repository } from 'typeorm';
 import { User } from '../../shared/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UsersService } from '../users/users.service';
 import { StudentsService } from '../students/students.service';
 import { Role } from 'src/shared/enums';
+import { MailService } from '../mail/mail.service';
+import { comparePassword, hashPassword } from 'src/helpers/bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -14,6 +15,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
     @InjectRepository(User) private readonly usersRepository: Repository<User>,
     private readonly studentsService: StudentsService,
+    private readonly mailService: MailService,
   ) {}
 
   async registerUser(userData: RegisterUserParams) {
@@ -26,16 +28,21 @@ export class AuthService {
 
       if (user) return null;
 
-      const newUser = this.usersRepository.create(userData);
+      const hash = await hashPassword(userData.password);
+
+      const newUser = this.usersRepository.create({
+        ...userData,
+        password: hash,
+        lastLogging: new Date(),
+      });
       console.log(newUser);
 
       const userEntity = await this.usersRepository.save({
         ...newUser,
-        lastLogging: new Date(),
       });
       console.log(userEntity);
 
-      if(userEntity.role === Role.STUDENT) {
+      if (userEntity.role === Role.STUDENT) {
         await this.studentsService.create(userEntity.id, {});
       }
 
@@ -44,6 +51,9 @@ export class AuthService {
         email: userEntity.email,
         role: userEntity.role,
       });
+
+      // TODO: Send confirmation email
+      // this.mailService.sendUserRegistration(userEntity);
 
       const { password, ...userWithoutPass } = userEntity;
 
@@ -60,18 +70,26 @@ export class AuthService {
     try {
       const user = await this.usersRepository.findOneBy({
         email: userData.email,
-        password: userData.password,
       });
 
       if (!user) return null;
 
-      const access_token = this.jwtService.sign({
-        sub: user.id,
-        email: user.email,
-        role: user.role,
+      const isMatch = await comparePassword(userData.password, user.password);
+
+      if (!isMatch) return null;
+
+      const updatedUser = await this.usersRepository.save({
+        ...user,
+        lastLogging: new Date(),
       });
 
-      const { password, ...userWithoutPass } = user;
+      const access_token = this.jwtService.sign({
+        sub: updatedUser.id,
+        email: updatedUser.email,
+        role: updatedUser.role,
+      });
+
+      const { password, ...userWithoutPass } = updatedUser;
 
       return { ...userWithoutPass, access_token };
     } catch (error) {
