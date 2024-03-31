@@ -16,6 +16,6 @@ export class StudentSession {
   @ManyToOne(() => Student, (student) => student.joinedSessions)
   student: Student;
 
-  @ManyToOne(() => Session, (session) => session.studentSession)
+  @ManyToOne(() => Session, (session) => session.studentSessions)
   session: Session;
 }
