@@ -64,6 +64,8 @@ import { File } from './shared/entities/file.entity';
     ChatsModule,
     TeachersModule,
     StudentsModule,
+    MailModule,
+    FilesModule,
   ],
   controllers: [],
   providers: [],
