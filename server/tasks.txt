@@ -2,3 +2,4 @@
     * [ ] Add isPinned property into message entity
     * [X] Add user into student object
     * [X] Add user into teacher object
+    * [ ] Add social accounts relation to User
