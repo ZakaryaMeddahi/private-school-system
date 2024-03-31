@@ -156,3 +156,8 @@ export type UpdateTeacherParams = {
   lastName?: string;
   email?: string;
 };
+
+export type CreateStudentParams = {
+  biography?: string;
+  profilePicture?: string;
+};
