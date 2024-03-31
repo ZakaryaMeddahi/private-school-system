@@ -10,7 +10,6 @@ import {
 import { Socket } from 'socket.io';
 import { MessagesService } from '../messages/messages.service';
 import { ChatsService } from './chats.service';
-import { NotFoundException } from '@nestjs/common';
 
 // We should have as DS like Map to store user sockets in chat
 
@@ -42,13 +41,75 @@ export class ChatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
         throw new WsException(`There is no chat with id ${chatId}`);
       }
       // Implement creating message by chat id
-      const newMessage = await this.messagesService.createByChatId(chatId, message);
+      const newMessage = await this.messagesService.createByChatId(
+        chatId,
+        message,
+      );
       // Broadcast message to all users in chat
-      client.to(`chat-${data.chatId}`).emit('message', newMessage);
-      return newMessage;
+      client.to(`chat-${data.chatId}`).emit('message', { message: newMessage });
+
+      return {
+        status: 'success',
+        result: 'Message sent successfully',
+        message: newMessage,
+      };
     } catch (error) {
       console.error(error);
-      return { status: 'error', message: error.message };
+      return { status: 'error', result: error.message };
+    }
+  }
+
+  // TODO: Update message
+  @SubscribeMessage('update-message')
+  async updateMessage(
+    @MessageBody() data: any,
+    @ConnectedSocket() client: Socket,
+  ) {
+    try {
+      const { chatId, messageId, message } = data;
+
+      const updatedMessage = await this.messagesService.update(
+        messageId,
+        message,
+      );
+
+      // Broadcast message to all users in chat
+      client
+        .to(`chat-${chatId}`)
+        .emit('message-updated', { message: updatedMessage });
+
+      return {
+        status: 'success',
+        result: 'Message updated successfully',
+        message: updatedMessage,
+      };
+    } catch (error) {
+      console.error(error);
+      return { status: 'error', result: error.message };
+    }
+  }
+
+  // TODO: Delete message
+  @SubscribeMessage('remove-message')
+  async removeMessage(
+    @MessageBody() data: any,
+    @ConnectedSocket() client: Socket,
+  ) {
+    try {
+      const { chatId, messageId } = data;
+
+      await this.messagesService.remove(messageId);
+
+      client.to(`chat-${chatId}`).emit('message-removed', { messageId });
+
+      return {
+        status: 'success',
+        result: 'Message removed successfully',
+        messageId,
+      };
+    } catch (error) {
+      console.error(error);
+      return { status: 'error', result: error.message };
     }
   }
 
@@ -57,18 +118,21 @@ export class ChatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   async joinRoom(@MessageBody() data: any, @ConnectedSocket() client: Socket) {
     try {
       const { chatId } = data;
-      // check if chat exist
+      // Check if chat exist
       const chat = await this.chatsService.findOne(chatId);
       console.log(chat);
       if (!chat) {
         throw new WsException(`There is no chat with id ${chatId}`);
       }
       // TODO: check if the user has access to the chat
+
+      // Join room
       client.join(`chat-${chatId}`);
+
       return { result: `User with id ${client.id} joined the chat ${chatId}` };
     } catch (error) {
       console.error(error);
-      return { status: 'error', message: error.message };
+      return { status: 'error', result: error.message };
     }
   }
 
@@ -76,6 +140,8 @@ export class ChatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @SubscribeMessage('leave-room')
   leaveRoom(@MessageBody() data: any, @ConnectedSocket() client: Socket) {
     const { chatId } = data;
+
+    // Leave room
     client.leave(`chat-${chatId}`);
     return { result: `User with id ${client.id} left the chat ${chatId}` };
   }
@@ -92,6 +158,7 @@ export class ChatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
     console.log('------------------------------------------------');
     console.log(`Client with id ${client.id} disconnected`);
     console.log('------------------------------------------------');
+    // Leave all rooms
     client.rooms.forEach((room) => {
       client.leave(room);
     });
