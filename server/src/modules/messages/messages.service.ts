@@ -1,7 +1,7 @@
 import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Message } from 'src/shared/entities/message.entity';
-import { CreateMessageParams, MessagesOptions } from 'src/shared/types';
+import { CreateMessageParams, MessagesOptions, UpdateMessageParams } from 'src/shared/types';
 import { Repository } from 'typeorm';
 import { ChatsService } from '../chats/chats.service';
 
@@ -85,6 +85,36 @@ export class MessagesService {
     } catch (error) {
       console.error(error);
       throw new HttpException('Cannot create message', 500);
+    }
+  }
+
+  async update(id: number, MessageData: UpdateMessageParams) {
+    try {
+      const message = await this.messagesRepository.findOne({ where: { id } });
+
+      if (!message) throw new NotFoundException('Cannot find message');
+
+      message.content = MessageData.content || message.content;
+
+      const updatedMessage = await this.messagesRepository.save(message);
+
+      return updatedMessage;
+    } catch (error) {
+      console.error(error);
+      throw new HttpException('Cannot update message', 500);
+    }
+  }
+
+  async remove(id: number) {
+    try {
+      const message = await this.messagesRepository.findOne({ where: { id } });
+
+      if (!message) throw new NotFoundException('Cannot find message');
+
+      await this.messagesRepository.remove(message);
+    } catch (error) {
+      console.error(error);
+      throw new HttpException('Cannot delete message', 500);
     }
   }
 }
