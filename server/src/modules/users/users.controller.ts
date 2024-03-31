@@ -1,27 +1,26 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
-import { AdminGuard } from 'src/guards/admin.guard';
+import { Controller, Get, HttpException, UseGuards } from '@nestjs/common';
 import { AuthGuard } from 'src/guards/auth.guard';
+import { UsersService } from './users.service';
+import { AuthUser } from 'src/decorators/user.decorator';
+import { JwtPayload } from 'src/shared/types';
 
 @Controller('api/v1/users')
 export class UsersController {
-  constructor() {}
+  constructor(private readonly usersService: UsersService) {}
 
-  @UseGuards(AuthGuard, AdminGuard)
-  @Get()
-  getUsers() {
-    return 'This action returns all users';
-  }
-
-  // create user and send email contains generated password
-  createUser() {
-    return 'This action adds a new user';
-  }
-
-  updateUser() {
-    return 'This action updates a user';
-  }
-
-  removeUser() {
-    return 'This action removes a user';
+  @Get('account/me')
+  @UseGuards(AuthGuard)
+  async getUser(@AuthUser() user: JwtPayload) {
+    const { sub: id, role } = user;
+    try {
+      const user = await this.usersService.findOne(id, role);
+      return user;
+    } catch (error) {
+      console.error(error);
+      throw new HttpException(
+        error.message || 'Something went wrong in the server',
+        error.status || 500,
+      );
+    }
   }
 }
