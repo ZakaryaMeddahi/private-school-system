@@ -47,6 +47,20 @@ export class StudentsService {
     }
   }
 
+  async create(userId: number, studentData: CreateStudentParams) {
+    try {
+      const newStudent = this.studentRepository.create({
+        ...studentData,
+        user: { id: userId },
+      });
+      const studentEntity = await this.studentRepository.save(newStudent);
+      return studentEntity;
+    } catch (error) {
+      console.error(error);
+      throw new HttpException('Cannot create student', 500);
+    }
+  }
+
   async remove(id: number) {
     try {
       const student = await this.studentRepository.findOne({ where: { id } });
