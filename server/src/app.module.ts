@@ -21,6 +21,11 @@ import { Teacher } from './shared/entities/teacher.entity';
 import { Student } from './shared/entities/student.entity';
 import { StudentSession } from './shared/entities/studentSessions.entity';
 import { SocialLinks } from './shared/entities/socialLinks.entity';
+import { TeachersModule } from './modules/teachers/teachers.module';
+import { StudentsModule } from './modules/students/students.module';
+import { MailModule } from './modules/mail/mail.module';
+import { FilesModule } from './modules/files/files.module';
+import { File } from './shared/entities/file.entity';
 
 @Module({
   imports: [
@@ -56,6 +61,8 @@ import { SocialLinks } from './shared/entities/socialLinks.entity';
     SessionsModule,
     MessagesModule,
     ChatsModule,
+    TeachersModule,
+    StudentsModule,
   ],
   controllers: [],
   providers: [],
