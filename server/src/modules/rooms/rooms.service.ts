@@ -30,6 +30,19 @@ export class RoomsService {
     }
   }
 
+  async findOne(id: number) {
+    try {
+      const room = await this.roomsRepository.findOne({ where: { id } });
+
+      if (!room) throw new NotFoundException(`There is no room with id ${id}`);
+
+      return room;
+    } catch (error) {
+      console.error(error);
+      throw new HttpException('Cannot get room', 500);
+    }
+  }
+
   async create(roomData: CreateRoomParams, courseId: number) {
     try {
       // const course = await this.coursesService.findOne(courseId);
@@ -51,8 +64,10 @@ export class RoomsService {
       return room;
     } catch (error) {
       console.error(error);
-      if(error.code === '23503') {
-        throw new NotFoundException(`There is no course with the provided id ${courseId}`);
+      if (error.code === '23503') {
+        throw new NotFoundException(
+          `There is no course with the provided id ${courseId}`,
+        );
       }
       throw new HttpException('Cannot create room', 500);
     }
