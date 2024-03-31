@@ -50,6 +50,19 @@ export class ChatsService {
     }
   }
 
+  async findByRoomId(roomId: number) {
+    try {
+      const chat = await this.chatRepository.findOne({
+        where: { room: { id: roomId } },
+      });
+
+      return chat;
+    } catch (error) {
+      console.error(error);
+      throw new HttpException('Cannot get chats', 500);
+    }
+  }
+
   async createByCourseId(courseId: number, chatData: CreateChatParams) {
     try {
       // const course = await this.coursesService.findOne(courseId);
