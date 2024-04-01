@@ -134,15 +134,15 @@ export type MessagesOptions = {
 export type CreateSessionParams = {
   agoraChannel: string;
   agoraToken: string;
-  startTime: Date;
-  endTime: Date;
+  startTime?: Date;
+  endTime?: Date;
 };
 
 export type UpdateSessionParams = {
   agoraChannel?: string;
   agoraToken?: string;
   startTime?: Date;
-  endTime?: Date;
+  endTime: Date;
 };
 
 export type CreateTeacherParams = {
