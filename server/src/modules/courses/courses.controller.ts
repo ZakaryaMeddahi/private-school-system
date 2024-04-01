@@ -37,9 +37,7 @@ export class CoursesController {
   }
 
   @Get(':id')
-  async getCourse(
-    @Param('id', ParseIntPipe) id: number,
-  ) {
+  async getCourse(@Param('id', ParseIntPipe) id: number) {
     try {
       const course = await this.coursesService.findOne(id);
 
@@ -60,7 +58,8 @@ export class CoursesController {
     @Body() courseData: createCourseDto,
   ) {
     try {
-      const course = await this.coursesService.create(courseData);
+      const { sub: userId } = user;
+      const course = await this.coursesService.create(userId, courseData);
       return {
         status: 'success',
         message: 'Course created successfully',
@@ -79,7 +78,14 @@ export class CoursesController {
     @Body() courseData: UpdateCourseDto,
   ) {
     try {
-      const course = await this.coursesService.update(id, courseData);
+      const { sub: userId, role } = user;
+
+      const course = await this.coursesService.update(
+        userId,
+        role,
+        id,
+        courseData,
+      );
 
       if (!course) {
         throw new NotFoundException('Course not found');
@@ -102,7 +108,9 @@ export class CoursesController {
     @Param('id', ParseIntPipe) id: number,
   ) {
     try {
-      const course = await this.coursesService.remove(id);
+      const { sub: userId, role } = user;
+
+      const course = await this.coursesService.remove(userId, role, id);
 
       if (!course) {
         throw new NotFoundException('Course not found');
