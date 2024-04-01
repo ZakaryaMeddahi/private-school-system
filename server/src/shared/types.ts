@@ -163,3 +163,21 @@ export type CreateStudentParams = {
 };
 
 export interface CreateFileParams extends Express.Multer.File {}
+
+export type CreateSocialLinksParams = {
+  linkedIn?: string;
+  facebook?: string;
+  twitter?: string;
+  github?: string;
+  youtube?: string;
+  website?: string;
+};
+
+export type UpdateSocialLinksParams = {
+  linkedIn?: string;
+  facebook?: string;
+  twitter?: string;
+  github?: string;
+  youtube?: string;
+  website?: string;
+};

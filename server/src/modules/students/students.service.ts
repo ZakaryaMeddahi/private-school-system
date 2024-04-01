@@ -3,12 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Student } from 'src/shared/entities/student.entity';
 import { CreateStudentParams } from 'src/shared/types';
 import { Repository } from 'typeorm';
+import { SocialLinksService } from '../social-links/social-links.service';
 
 @Injectable()
 export class StudentsService {
   constructor(
     @InjectRepository(Student)
     private readonly studentRepository: Repository<Student>,
+    private readonly socialLinksService: SocialLinksService,
   ) {}
 
   async findAll() {
@@ -35,7 +37,7 @@ export class StudentsService {
         .select('*')
         .where('student.id = :id', { id })
         .getRawOne();
-        
+
       if (!student) throw new NotFoundException('Student not found');
 
       const { password, ...studentWithoutPassword } = student;
@@ -44,6 +46,28 @@ export class StudentsService {
     } catch (error) {
       console.error(error);
       throw new HttpException('Cannot get student', 500);
+    }
+  }
+
+  async findByUserId(userId: number) {
+    try {
+      const studentEntity = await this.studentRepository
+        .createQueryBuilder('student')
+        .leftJoin('student.user', 'user')
+        .select('*')
+        .orWhere('user.id = :id', { id: userId })
+        .getRawOne();
+
+      if (!studentEntity) throw new NotFoundException('Teacher not found');
+
+      const socialLinks = await this.socialLinksService.findByUserId(userId);
+
+      const { password, userId: id, ...student } = studentEntity;
+
+      return { ...student, socialLinks };
+    } catch (error) {
+      console.error(error);
+      throw new HttpException('Cannot get teacher', 500);
     }
   }
 

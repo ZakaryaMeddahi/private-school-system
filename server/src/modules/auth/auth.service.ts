@@ -8,6 +8,7 @@ import { StudentsService } from '../students/students.service';
 import { Role } from 'src/shared/enums';
 import { MailService } from '../mail/mail.service';
 import { comparePassword, hashPassword } from 'src/helpers/bcrypt';
+import { SocialLinksService } from '../social-links/social-links.service';
 
 @Injectable()
 export class AuthService {
@@ -16,6 +17,7 @@ export class AuthService {
     @InjectRepository(User) private readonly usersRepository: Repository<User>,
     private readonly studentsService: StudentsService,
     private readonly mailService: MailService,
+    private readonly socialLinksService: SocialLinksService,
   ) {}
 
   async registerUser(userData: RegisterUserParams) {
@@ -41,6 +43,8 @@ export class AuthService {
         ...newUser,
       });
       console.log(userEntity);
+
+      await this.socialLinksService.create(userEntity.id, {});
 
       if (userEntity.role === Role.STUDENT) {
         await this.studentsService.create(userEntity.id, {});

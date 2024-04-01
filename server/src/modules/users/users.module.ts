@@ -3,17 +3,15 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { User } from 'src/shared/entities/user.entity';
-import { JwtModule } from '@nestjs/jwt';
+import { SocialLinksModule } from '../social-links/social-links.module';
 
 @Module({
   imports: [
-    JwtModule.register({
-      secret: 'secret',
-      signOptions: { expiresIn: '1d' },
-    }),
     TypeOrmModule.forFeature([User]),
+    SocialLinksModule,
   ],
   controllers: [UsersController],
   providers: [UsersService],
+  exports: [UsersService],
 })
 export class UsersModule {}

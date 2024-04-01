@@ -26,6 +26,7 @@ import { StudentsModule } from './modules/students/students.module';
 import { MailModule } from './modules/mail/mail.module';
 import { FilesModule } from './modules/files/files.module';
 import { File } from './shared/entities/file.entity';
+import { SocialLinksModule } from './modules/social-links/social-links.module';
 
 @Module({
   imports: [
@@ -66,6 +67,7 @@ import { File } from './shared/entities/file.entity';
     StudentsModule,
     MailModule,
     FilesModule,
+    SocialLinksModule,
   ],
   controllers: [],
   providers: [],

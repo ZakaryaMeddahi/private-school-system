@@ -8,36 +8,52 @@ import { Repository } from 'typeorm';
 import { User } from '../../shared/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserParams, UpdateUserParams } from 'src/shared/types';
-import { Role } from 'src/shared/enums';
+import { SocialLinksService } from '../social-links/social-links.service';
+// import { StudentsService } from '../students/students.service';
+// import { TeachersService } from '../teachers/teachers.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User) private readonly usersRepository: Repository<User>,
+    private readonly socialLinksService: SocialLinksService,
+    // private readonly studentsService: StudentsService,
+    // private readonly teachersService: TeachersService,
   ) {}
 
-  async findOne(id: number, role: Role) {
-    try {
-      // TODO: Check the query correctness
-      const user = await this.usersRepository
-        .createQueryBuilder('user')
-        .leftJoin(`user.${role}`, role)
-        .leftJoin('user.socialAccounts', 'socialAccounts')
-        .select('*')
-        .where('user.id = :id', { id })
-        .getRawOne();
+  // async findOne(id: number, role: Role) {
+  //   try {
+  //     let user: User;
 
-      if (!user) throw new NotFoundException('User not found');
+  //     const userEntity = await this.usersRepository.findOne({ where: { id } });
+  //     // .createQueryBuilder('user')
+  //     // .leftJoin(`user.${role}`, role)
+  //     // .leftJoin('user.socialLinks', 'socialLinks')
+  //     // .select('*')
+  //     // .where('user.id = :id', { id })
+  //     // .getRawOne();
 
-      // TODO: Get the user's role and social accounts
-      // TODO: dynamically based on the `role` parameter
+  //     if (!userEntity) throw new NotFoundException('User not found');
 
-      return user;
-    } catch (error) {
-      console.error(error);
-      throw new HttpException('Cannot get user', 500);
-    }
-  }
+  //     // TODO: Get the user's role
+  //     // TODO: dynamically based on the `role` parameter
+  //     if (role === Role.STUDENT) {
+  //       user = await this.studentsService.findOne(id);
+  //     }
+
+  //     if (role === Role.TEACHER) {
+  //       user = await this.teachersService.findOne(id);
+  //     }
+
+  //     // TODO: Get user's social links and add them to the response object
+  //     const socialLinks = this.socialLinksService.findByUserId(id);
+
+  //     return { ...user, socialLinks };
+  //   } catch (error) {
+  //     console.error(error);
+  //     throw new HttpException('Cannot get user', 500);
+  //   }
+  // }
 
   async create(userData: CreateUserParams) {
     try {
@@ -48,6 +64,8 @@ export class UsersService {
 
       const newUser = this.usersRepository.create(userData);
       const userEntity = await this.usersRepository.save(newUser);
+
+      await this.socialLinksService.create(userEntity.id, {});
 
       const { password, ...userWithoutPassword } = userEntity;
 
