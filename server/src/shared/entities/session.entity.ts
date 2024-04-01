@@ -1,5 +1,5 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { StudentSession } from './studentSessions.entity';
+import { StudentSession } from './studentSession.entity';
 
 @Entity({ name: 'sessions' })
 export class Session {
@@ -15,10 +15,10 @@ export class Session {
   @Column({ default: null })
   recordedUrl: string;
 
-  @Column({ type: 'timestamp' })
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   startTime: Date;
 
-  @Column({ type: 'timestamp' })
+  @Column({ type: 'timestamp', default: null })
   endTime: Date;
 
   // @Column()

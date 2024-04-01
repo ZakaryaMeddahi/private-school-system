@@ -11,6 +11,19 @@ export class TopicsService {
     private readonly topicsRepository: Repository<Topic>,
   ) {}
 
+  async findOne(id: number) {
+    try {
+      const topic = await this.topicsRepository.findOne({ where: { id } });
+
+      if (!topic) return null;
+
+      return topic;
+    } catch (error) {
+      console.error(error);
+      throw new HttpException('Cannot get topics', 500);
+    }
+  }
+
   async createOne(topicData: CreateTopicParams) {
     try {
       const topic = this.topicsRepository.create(topicData);
@@ -37,7 +50,7 @@ export class TopicsService {
     }
   }
 
-  async updateOne(id: number, topicData: UpdateTopicParams) {
+  async updateOne(id: number, sessionId: number, topicData: UpdateTopicParams) {
     try {
       const topic = await this.topicsRepository.findOne({ where: { id } });
 
@@ -46,6 +59,7 @@ export class TopicsService {
       const updatedTopic = await this.topicsRepository.save({
         ...topic,
         ...topicData,
+        session: { id: sessionId },
       });
 
       return updatedTopic;
@@ -70,7 +84,7 @@ export class TopicsService {
           continue;
         }
 
-        const updatedTopic = await this.updateOne(topic.id, topic);
+        const updatedTopic = await this.updateOne(topic.id, null, topic);
         if (!updatedTopic) {
           const { id, isDeleted, ...newTopic } = topic;
           const createdTopic = await this.createOne(

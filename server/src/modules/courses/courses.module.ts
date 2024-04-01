@@ -3,7 +3,7 @@ import { CoursesController } from './courses.controller';
 import { CoursesService } from './courses.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Course } from 'src/shared/entities/course.entity';
-import { TopicsService } from './topics/topics.service';
+import { TopicsService } from '../topics/topics.service';
 import { Topic } from 'src/shared/entities/topic.entity';
 import { Chat } from 'src/shared/entities/chat.entity';
 import { ChatsService } from '../chats/chats.service';
