@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Course } from 'src/shared/entities/course.entity';
 import { CreateCourseParams, UpdateCourseParams } from 'src/shared/types';
 import { Repository } from 'typeorm';
-import { TopicsService } from './topics/topics.service';
+import { TopicsService } from '../topics/topics.service';
 import { ChatsService } from '../chats/chats.service';
 import { RoomsService } from '../rooms/rooms.service';
 import { RoomStatus } from 'src/shared/enums';
@@ -57,7 +57,9 @@ export class CoursesService {
 
       const course = await this.coursesRepository.save(newCourse);
 
-      await this.chatsService.createByCourseId(course.id, { name: 'Global Chat' });
+      await this.chatsService.createByCourseId(course.id, {
+        name: 'Global Chat',
+      });
 
       await this.roomsService.create(
         { name: 'General', slug: 'general', status: RoomStatus.OPEN },
