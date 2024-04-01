@@ -184,10 +184,10 @@ export type UpdateSocialLinksParams = {
 
 export type CreateStudentSessionParams = {
   joinDate: Date;
-  leftDate: Date;
+  leaveDate?: Date;
 }
 
 export type UpdateStudentSessionParams = {
   joinDate?: Date;
-  leftDate?: Date;
+  leaveDate?: Date;
 }
