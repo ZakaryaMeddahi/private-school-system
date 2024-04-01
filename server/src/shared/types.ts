@@ -181,3 +181,13 @@ export type UpdateSocialLinksParams = {
   youtube?: string;
   website?: string;
 };
+
+export type CreateStudentSessionParams = {
+  joinDate: Date;
+  leftDate: Date;
+}
+
+export type UpdateStudentSessionParams = {
+  joinDate?: Date;
+  leftDate?: Date;
+}
