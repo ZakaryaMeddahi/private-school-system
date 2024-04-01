@@ -6,7 +6,8 @@ import { Repository } from 'typeorm';
 import { TopicsService } from '../topics/topics.service';
 import { ChatsService } from '../chats/chats.service';
 import { RoomsService } from '../rooms/rooms.service';
-import { RoomStatus } from 'src/shared/enums';
+import { Role, RoomStatus } from 'src/shared/enums';
+import { TeachersService } from '../teachers/teachers.service';
 
 @Injectable()
 export class CoursesService {
@@ -16,6 +17,7 @@ export class CoursesService {
     private readonly topicsService: TopicsService,
     private readonly chatsService: ChatsService,
     private readonly roomsService: RoomsService,
+    private readonly teachersService: TeachersService,
   ) {}
 
   async findAll() {
@@ -44,16 +46,21 @@ export class CoursesService {
     }
   }
 
-  async create(courseData: CreateCourseParams) {
+  async create(userId: number, courseData: CreateCourseParams) {
     try {
       const { topics } = courseData;
+
+      const teacher = await this.teachersService.findEntityByUserId(userId);
 
       if (topics) {
         const newTopics = await this.topicsService.createMany(topics);
         courseData.topics = newTopics;
       }
 
-      const newCourse = this.coursesRepository.create(courseData);
+      const newCourse = this.coursesRepository.create({
+        ...courseData,
+        teacher: { id: teacher.id },
+      })
 
       const course = await this.coursesRepository.save(newCourse);
 
@@ -76,11 +83,21 @@ export class CoursesService {
     }
   }
 
-  async update(id: number, courseData: UpdateCourseParams) {
+  async update(
+    userId: number,
+    role: Role,
+    id: number,
+    courseData: UpdateCourseParams,
+  ) {
     try {
       const { topics, ...updatedCourse } = courseData;
 
-      let course = await this.coursesRepository.findOne({ where: { id } });
+      const options = { where: { id } };
+
+      if (role === Role.TEACHER)
+        options['where']['teacher'] = { user: { id: userId } };
+
+      let course = await this.coursesRepository.findOne(options);
 
       if (!course) return null;
 
@@ -97,9 +114,14 @@ export class CoursesService {
     }
   }
 
-  async remove(id: number) {
+  async remove(userId: number, role: Role, id: number) {
     try {
-      const course = await this.coursesRepository.findBy({ id });
+      const options = { where: { id } };
+
+      if (role === Role.TEACHER)
+        options['where']['teacher'] = { user: { id: userId } };
+
+      const course = await this.coursesRepository.findOne(options);
 
       if (!course) return null;
 
