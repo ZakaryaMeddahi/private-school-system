@@ -70,7 +70,9 @@ export class EnrollmentsController {
     enrollmentData: CreateEnrollmentDto,
   ) {
     try {
+      const { sub: userId } = user;
       const enrollment = await this.enrollmentService.create(
+        userId,
         courseId,
         enrollmentData,
       );
@@ -116,7 +118,8 @@ export class EnrollmentsController {
     @Param('id', ParseIntPipe) id: number,
   ) {
     try {
-      await this.enrollmentService.remove(id);
+      const { sub: userId } = user;
+      await this.enrollmentService.remove(userId, id);
       return {
         status: 'success',
         message: 'Enrollment canceled successfully',
