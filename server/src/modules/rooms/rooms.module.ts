@@ -8,9 +8,17 @@ import { ChatsService } from '../chats/chats.service';
 import { Chat } from 'src/shared/entities/chat.entity';
 import { Message } from 'src/shared/entities/message.entity';
 import { MessagesService } from '../messages/messages.service';
+import { SessionsModule } from '../sessions/sessions.module';
+import { StudentSessionsModule } from '../student-sessions/student-sessions.module';
+import { TopicsModule } from '../topics/topics.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Room, Chat, Message])],
+  imports: [
+    TypeOrmModule.forFeature([Room, Chat, Message]),
+    TopicsModule,
+    SessionsModule,
+    StudentSessionsModule,
+  ],
   controllers: [RoomsController],
   providers: [RoomsService, RoomsGateway, ChatsService, MessagesService],
 })
