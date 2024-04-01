@@ -114,6 +114,7 @@ export class MessagesService {
 
       message.content = MessageData.content || message.content;
       message.isPinned = MessageData.isPinned || message.isPinned;
+      message.updatedAt = new Date();
 
       const updatedMessage = await this.messagesRepository.save(message);
 

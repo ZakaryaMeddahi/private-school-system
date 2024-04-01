@@ -101,7 +101,7 @@ export class CoursesService {
 
       if (!course) return null;
 
-      course = { ...course, ...updatedCourse };
+      course = { ...course, ...updatedCourse, updatedAt: new Date()};
 
       if (topics) {
         const updatedTopics = await this.topicsService.updateMany(topics);

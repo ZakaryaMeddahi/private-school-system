@@ -84,6 +84,7 @@ export class UsersService {
       const updatedUser = await this.usersRepository.save({
         ...user,
         ...userData,
+        updatedAt: new Date(),
       });
 
       return updatedUser;

@@ -110,6 +110,7 @@ export class ChatsService {
       const updatedChat = await this.chatRepository.save({
         ...chat,
         ...chatData,
+        updatedAt: new Date(),
       });
 
       return updatedChat;

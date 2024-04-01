@@ -82,6 +82,7 @@ export class RoomsService {
       const updatedRoom = await this.roomsRepository.save({
         ...room,
         ...roomData,
+        updatedAt: new Date(),
       });
 
       return updatedRoom;
