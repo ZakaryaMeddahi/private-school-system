@@ -36,7 +36,6 @@ export class StudentsService {
         .leftJoin('student.user', 'user')
         .select('*')
         .where('student.id = :id', { id })
-        .orWhere('user.id = :id', { id })
         .getRawOne();
 
       if (!student) throw new NotFoundException('Student not found');
@@ -52,18 +51,20 @@ export class StudentsService {
 
   async findByUserId(userId: number) {
     try {
-      const teacher = await this.studentRepository
+      const studentEntity = await this.studentRepository
         .createQueryBuilder('student')
         .leftJoin('student.user', 'user')
         .select('*')
-        .orWhere('user.id = :id', { userId })
+        .orWhere('user.id = :id', { id: userId })
         .getRawOne();
 
-      if (!teacher) throw new NotFoundException('Teacher not found');
+      if (!studentEntity) throw new NotFoundException('Teacher not found');
 
       const socialLinks = await this.socialLinksService.findByUserId(userId);
 
-      return { ...teacher, socialLinks };
+      const { password, userId: id, ...student } = studentEntity;
+
+      return { ...student, socialLinks };
     } catch (error) {
       console.error(error);
       throw new HttpException('Cannot get teacher', 500);

@@ -56,16 +56,18 @@ export class TeachersService {
 
   async findByUserId(userId: number) {
     try {
-      const teacher = await this.teacherRepository
+      const teacherEntity = await this.teacherRepository
         .createQueryBuilder('teacher')
         .leftJoin('teacher.user', 'user')
         .select('*')
         .where('user.id = :id', { id: userId })
         .getRawOne();
 
-      if (!teacher) throw new NotFoundException('Teacher not found');
+      if (!teacherEntity) throw new NotFoundException('Teacher not found');
 
       const socialLinks = await this.socialLinksService.findByUserId(userId);
+
+      const { password, userId: id, ...teacher } = teacherEntity;
 
       return { ...teacher, socialLinks };
     } catch (error) {
