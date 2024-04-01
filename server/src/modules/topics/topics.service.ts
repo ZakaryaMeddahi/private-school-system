@@ -2,7 +2,7 @@ import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Topic } from 'src/shared/entities/topic.entity';
 import { CreateTopicParams, UpdateTopicParams } from 'src/shared/types';
-import { Repository } from 'typeorm';
+import { Equal, Repository } from 'typeorm';
 
 @Injectable()
 export class TopicsService {
@@ -52,7 +52,11 @@ export class TopicsService {
 
   async updateOne(id: number, sessionId: number, topicData: UpdateTopicParams) {
     try {
-      const topic = await this.topicsRepository.findOne({ where: { id } });
+      const topic = await this.topicsRepository.findOne({
+        where: { id: Equal(id) },
+      });
+
+      console.log('update one: ' + id);
 
       if (!topic) return null;
 
@@ -61,6 +65,8 @@ export class TopicsService {
         ...topicData,
         session: { id: sessionId },
       });
+
+      console.log('update one: ' + updatedTopic.id);
 
       return updatedTopic;
     } catch (error) {
@@ -84,9 +90,10 @@ export class TopicsService {
           continue;
         }
 
-        const updatedTopic = await this.updateOne(topic.id, null, topic);
+        const { id, isDeleted, ...newTopic } = topic;
+
+        const updatedTopic = await this.updateOne(id, null, newTopic);
         if (!updatedTopic) {
-          const { id, isDeleted, ...newTopic } = topic;
           const createdTopic = await this.createOne(
             newTopic as CreateTopicParams,
           );
