@@ -9,9 +9,13 @@ import { Chat } from 'src/shared/entities/chat.entity';
 import { ChatsService } from '../chats/chats.service';
 import { Room } from 'src/shared/entities/room.entity';
 import { RoomsService } from '../rooms/rooms.service';
+import { TeachersModule } from '../teachers/teachers.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Course, Topic, Chat, Room])],
+  imports: [
+    TypeOrmModule.forFeature([Course, Topic, Chat, Room]),
+    TeachersModule,
+  ],
   controllers: [CoursesController],
   providers: [CoursesService, TopicsService, ChatsService, RoomsService],
 })

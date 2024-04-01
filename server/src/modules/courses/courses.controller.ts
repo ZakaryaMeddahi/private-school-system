@@ -9,19 +9,25 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { CoursesService } from './courses.service';
 import { createCourseDto } from './dto/createCourse.dto';
 import { UpdateCourseDto } from './dto/updateCourse.dto';
 import { AuthUser } from 'src/decorators/user.decorator';
 import { User } from 'src/shared/entities/user.entity';
+import { AuthGuard } from 'src/guards/auth.guard';
+import { JwtPayload } from 'src/shared/types';
+import { TeacherGuard } from 'src/guards/teacher.guard';
+import { AdminGuard } from 'src/guards/admin.guard';
 
 @Controller('api/v1/courses')
+@UseGuards(AuthGuard)
 export class CoursesController {
   constructor(private readonly coursesService: CoursesService) {}
 
   @Get()
-  async getCourses(@AuthUser() user: User) {
+  async getCourses(@AuthUser() user: JwtPayload) {
     try {
       const courses = await this.coursesService.findAll();
       return { status: 'success', data: courses };
@@ -31,10 +37,7 @@ export class CoursesController {
   }
 
   @Get(':id')
-  async getCourse(
-    @AuthUser() user: User,
-    @Param('id', ParseIntPipe) id: number,
-  ) {
+  async getCourse(@Param('id', ParseIntPipe) id: number) {
     try {
       const course = await this.coursesService.findOne(id);
 
@@ -49,12 +52,14 @@ export class CoursesController {
   }
 
   @Post()
+  @UseGuards(TeacherGuard)
   async createCourse(
-    @AuthUser() user: User,
+    @AuthUser() user: JwtPayload,
     @Body() courseData: createCourseDto,
   ) {
     try {
-      const course = await this.coursesService.create(courseData);
+      const { sub: userId } = user;
+      const course = await this.coursesService.create(userId, courseData);
       return {
         status: 'success',
         message: 'Course created successfully',
@@ -66,13 +71,21 @@ export class CoursesController {
   }
 
   @Patch(':id')
+  @UseGuards(TeacherGuard, AdminGuard)
   async updateCourse(
-    @AuthUser() user: User,
+    @AuthUser() user: JwtPayload,
     @Param('id', ParseIntPipe) id: number,
     @Body() courseData: UpdateCourseDto,
   ) {
     try {
-      const course = await this.coursesService.update(id, courseData);
+      const { sub: userId, role } = user;
+
+      const course = await this.coursesService.update(
+        userId,
+        role,
+        id,
+        courseData,
+      );
 
       if (!course) {
         throw new NotFoundException('Course not found');
@@ -89,12 +102,15 @@ export class CoursesController {
   }
 
   @Delete(':id')
+  @UseGuards(TeacherGuard)
   async removeCourse(
-    @AuthUser() user: User,
+    @AuthUser() user: JwtPayload,
     @Param('id', ParseIntPipe) id: number,
   ) {
     try {
-      const course = await this.coursesService.remove(id);
+      const { sub: userId, role } = user;
+
+      const course = await this.coursesService.remove(userId, role, id);
 
       if (!course) {
         throw new NotFoundException('Course not found');

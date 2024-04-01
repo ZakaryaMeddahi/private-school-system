@@ -45,7 +45,7 @@ export class TeachersService {
 
       if (!teacher) throw new NotFoundException('Teacher not found');
 
-      const { password, ...teacherWithoutPassword } = teacher;
+      const { password, userId, ...teacherWithoutPassword } = teacher;
 
       return teacherWithoutPassword;
     } catch (error) {
@@ -76,6 +76,21 @@ export class TeachersService {
         error.message || 'Cannot get teacher',
         error.status || 500,
       );
+    }
+  }
+
+  async findEntityByUserId(userId: number) {
+    try {
+      const teacher = await this.teacherRepository.findOne({
+        where: { user: { id: userId } },
+      });
+
+      if (!teacher) throw new NotFoundException('Teacher not found');
+
+      return teacher;
+    } catch (error) {
+      console.error(error);
+      throw new HttpException('Cannot get teacher', 500);
     }
   }
 

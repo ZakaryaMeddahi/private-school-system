@@ -22,7 +22,7 @@ export class StudentSessionsService {
     studentSessionData: CreateStudentSessionParams,
   ) {
     try {
-      const student = await this.studentsService.findByUserId(userId);
+      const student = await this.studentsService.findEntityByUserId(userId);
 
       if (!student) throw new NotFoundException('Student not found');
 

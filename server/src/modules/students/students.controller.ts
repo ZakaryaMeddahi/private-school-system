@@ -15,14 +15,15 @@ import { StudentsService } from './students.service';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { AuthUser } from 'src/decorators/user.decorator';
 import { JwtPayload } from 'src/shared/types';
+import { AdminGuard } from 'src/guards/admin.guard';
 
 @Controller('api/v1/students')
+@UseGuards(AuthGuard)
 export class StudentsController {
   constructor(private readonly studentsService: StudentsService) {}
 
   @Get('account/me')
-  @UseGuards(AuthGuard)
-  async getUser(@AuthUser() user: JwtPayload) {
+  async myAccount(@AuthUser() user: JwtPayload) {
     const { sub: id } = user;
     try {
       const user = await this.studentsService.findByUserId(id);
@@ -35,6 +36,8 @@ export class StudentsController {
       );
     }
   }
+
+  // TODO: Add update account endpoint
 
   @Get()
   async getStudents() {
@@ -66,6 +69,7 @@ export class StudentsController {
   }
 
   @Delete(':id')
+  @UseGuards(AdminGuard)
   async removeStudent(@Param('id', ParseIntPipe) id: number) {
     try {
       await this.studentsService.remove(id)
