@@ -9,6 +9,7 @@ import {
   Post,
   Query,
   UploadedFile,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { MessagesService } from './messages.service';
@@ -18,14 +19,19 @@ import { v2 as cloudinary } from 'cloudinary';
 import { uploadFile } from 'src/helpers/object-storage';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { FilesService } from '../files/files.service';
+import { AuthGuard } from 'src/guards/auth.guard';
+import { AuthUser } from 'src/decorators/user.decorator';
+import { JwtPayload } from 'src/shared/types';
 
 @Controller('api/v1')
+@UseGuards(AuthGuard)
 export class MessagesController {
   constructor(
     private readonly messagesService: MessagesService,
     private readonly filesService: FilesService,
   ) {}
 
+  // TODO: Add enrollment guard
   @Get('courses/:courseId/chats/:chatId/messages')
   getMessagesForChat(
     @Param('courseId') courseId: number,
@@ -57,12 +63,13 @@ export class MessagesController {
     }
   }
 
+  // TODO: Add enrollment guard
   @Get('courses/:courseId/rooms/:roomId/messages')
   getMessagesForRoom(
-    @Param('courseId') courseId: number,
-    @Param('roomId') roomId: number,
-    @Query('page') page: number,
-    @Query('pageSize') pageSize: number,
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Param('roomId', ParseIntPipe) roomId: number,
+    @Query('page', ParseIntPipe) page: number,
+    @Query('pageSize', ParseIntPipe) pageSize: number,
   ) {
     try {
       const messages = this.messagesService.findByRoomId({
@@ -88,10 +95,12 @@ export class MessagesController {
     }
   }
 
+  // TODO: Add enrollment guard
   @Post('courses/:courseId/chats/:chatId/messages')
   @UseInterceptors(FileInterceptor('file'))
   async sendFileInChat(
-    @Param('chatId') chatId: number,
+    @AuthUser() user: JwtPayload,
+    @Param('chatId', ParseIntPipe) chatId: number,
     @Body() messageData: CreateMessageDto,
     @UploadedFile() file: Express.Multer.File,
   ) {
@@ -120,9 +129,11 @@ export class MessagesController {
     }
   }
 
+  // TODO: Add enrollment guard
   @Post('courses/:courseId/rooms/:roomId/messages')
   @UseInterceptors(FileInterceptor('file'))
   async sendFileInRoom(
+    @AuthUser() user: JwtPayload,
     @Param('roomId', ParseIntPipe) roomId: number,
     @Body() messageData: CreateMessageDto,
     @UploadedFile() file: Express.Multer.File,

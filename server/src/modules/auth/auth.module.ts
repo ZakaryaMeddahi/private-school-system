@@ -13,6 +13,7 @@ import { SocialLinksModule } from '../social-links/social-links.module';
   imports: [
     TypeOrmModule.forFeature([User, Student]),
     JwtModule.register({
+      global: true,
       secret: 'secret',
       signOptions: { expiresIn: '1d' },
     }),

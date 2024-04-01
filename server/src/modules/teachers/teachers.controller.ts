@@ -17,14 +17,15 @@ import { UpdateTeacherDto } from './dto/update-teacher.dto';
 import { AuthUser } from 'src/decorators/user.decorator';
 import { JwtPayload } from 'src/shared/types';
 import { AuthGuard } from 'src/guards/auth.guard';
+import { AdminGuard } from 'src/guards/admin.guard';
 
 @Controller('api/v1/teachers')
+@UseGuards(AuthGuard)
 export class TeachersController {
   constructor(private readonly teachersService: TeachersService) {}
 
   @Get('account/me')
-  @UseGuards(AuthGuard)
-  async getUser(@AuthUser() user: JwtPayload) {
+  async myAccount(@AuthUser() user: JwtPayload) {
     const { sub: id } = user;
     try {
       const user = await this.teachersService.findByUserId(id);
@@ -37,6 +38,8 @@ export class TeachersController {
       );
     }
   }
+
+  // TODO: Add update account endpoint
 
   @Get()
   async getTeachers() {
@@ -68,6 +71,7 @@ export class TeachersController {
   }
 
   @Post()
+  @UseGuards(AdminGuard)
   async createTeacher(@Body() courseData: CreateTeacherDto) {
     try {
       const newTeacher = await this.teachersService.create(courseData);
@@ -79,6 +83,7 @@ export class TeachersController {
   }
 
   @Patch(':id')
+  @UseGuards(AdminGuard)
   async updateTeacher(
     @Param('id', ParseIntPipe) id: number,
     @Body() courseData: UpdateTeacherDto,
@@ -96,6 +101,7 @@ export class TeachersController {
   }
 
   @Delete(':id')
+  @UseGuards(AdminGuard)
   async removeTeacher(@Param('id', ParseIntPipe) id: number) {
     try {
       await this.teachersService.remove(id);

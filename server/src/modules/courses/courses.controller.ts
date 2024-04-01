@@ -9,19 +9,25 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { CoursesService } from './courses.service';
 import { createCourseDto } from './dto/createCourse.dto';
 import { UpdateCourseDto } from './dto/updateCourse.dto';
 import { AuthUser } from 'src/decorators/user.decorator';
 import { User } from 'src/shared/entities/user.entity';
+import { AuthGuard } from 'src/guards/auth.guard';
+import { JwtPayload } from 'src/shared/types';
+import { TeacherGuard } from 'src/guards/teacher.guard';
+import { AdminGuard } from 'src/guards/admin.guard';
 
 @Controller('api/v1/courses')
+@UseGuards(AuthGuard)
 export class CoursesController {
   constructor(private readonly coursesService: CoursesService) {}
 
   @Get()
-  async getCourses(@AuthUser() user: User) {
+  async getCourses(@AuthUser() user: JwtPayload) {
     try {
       const courses = await this.coursesService.findAll();
       return { status: 'success', data: courses };
@@ -32,7 +38,6 @@ export class CoursesController {
 
   @Get(':id')
   async getCourse(
-    @AuthUser() user: User,
     @Param('id', ParseIntPipe) id: number,
   ) {
     try {
@@ -49,8 +54,9 @@ export class CoursesController {
   }
 
   @Post()
+  @UseGuards(TeacherGuard)
   async createCourse(
-    @AuthUser() user: User,
+    @AuthUser() user: JwtPayload,
     @Body() courseData: createCourseDto,
   ) {
     try {
@@ -66,8 +72,9 @@ export class CoursesController {
   }
 
   @Patch(':id')
+  @UseGuards(TeacherGuard, AdminGuard)
   async updateCourse(
-    @AuthUser() user: User,
+    @AuthUser() user: JwtPayload,
     @Param('id', ParseIntPipe) id: number,
     @Body() courseData: UpdateCourseDto,
   ) {
@@ -89,8 +96,9 @@ export class CoursesController {
   }
 
   @Delete(':id')
+  @UseGuards(TeacherGuard)
   async removeCourse(
-    @AuthUser() user: User,
+    @AuthUser() user: JwtPayload,
     @Param('id', ParseIntPipe) id: number,
   ) {
     try {

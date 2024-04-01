@@ -3,14 +3,20 @@ import {
   Controller,
   HttpException,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { CreateSocialLinksDto } from './dto/create-socialLinks.dto';
 import { SocialLinksService } from './social-links.service';
 import { UpdateSocialLinksDto } from './dto/update-socialLinks.dto';
+import { AuthGuard } from 'src/guards/auth.guard';
+import { AuthUser } from 'src/decorators/user.decorator';
+import { JwtPayload } from 'src/shared/types';
 
 @Controller('api/v1/social-links')
+@UseGuards(AuthGuard)
 export class SocialLinksController {
   constructor(private readonly socialLinksService: SocialLinksService) {}
 
@@ -33,7 +39,8 @@ export class SocialLinksController {
 
   @Patch(':id')
   async updateSocialLinks(
-    @Param('id') id: number,
+    @AuthUser() user: JwtPayload,
+    @Param('id', ParseIntPipe) id: number,
     @Body() socialLinksData: UpdateSocialLinksDto,
   ) {
     try {
