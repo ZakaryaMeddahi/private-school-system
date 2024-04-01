@@ -222,7 +222,70 @@ export class RoomsGateway {
   }
 
   // TODO: Event -> join session (use create session from student-sessions service)
+  @SubscribeMessage('join-session')
+  async joinSession(
+    @MessageBody() data: any,
+    @ConnectedSocket() client: Socket,
+  ) {
+    try {
+      // TODO: Extract user id from socket
+      const { sessionId, userId, roomId } = data;
+
+      // TODO: Get student id using userId and add it to student session
+
+      // Create student session
+      const studentSession = await this.studentSessionsService.create(
+        userId,
+        sessionId,
+        { joinDate: new Date() },
+      );
+
+      // Broadcast message to all users in chat
+      client
+        .to(`room-${roomId}`)
+        .emit('user-joined-session', { studentSession });
+
+      return {
+        status: 'success',
+        result: 'Session joined successfully',
+        studentSession,
+      };
+    } catch (error) {
+      console.error(error);
+      return { status: 'error', result: error.message };
+    }
+  }
+
   // TODO: Event -> leave session (use update session from student-sessions service)
+  @SubscribeMessage('leave-session')
+  async leaveSession(
+    @MessageBody() data: any,
+    @ConnectedSocket() client: Socket,
+  ) {
+    try {
+      // TODO: Extract user id from socket
+      const { userId, roomId } = data;
+
+      const studentSession = await this.studentSessionsService.update(
+        userId,
+        { leaveDate: new Date() },
+      );
+
+      // Broadcast message to all users in chat
+      client
+        .to(`room-${roomId}`)
+        .emit('user-left-session', { studentSession });
+
+      return {
+        status: 'success',
+        result: 'Session left successfully',
+        studentSession,
+      };
+    } catch (error) {
+      console.error(error);
+      return { status: 'error', result: error.message };
+    }
+  }
 
   // Event: connection
   handleConnection(client: Socket, ...args: any[]) {
