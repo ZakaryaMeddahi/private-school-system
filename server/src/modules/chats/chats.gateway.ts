@@ -33,7 +33,8 @@ export class ChatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
     try {
       console.log(data);
       // const { id, firstName, lastName, role, profilePicture } = user
-      const { chatId, message } = data;
+      // TODO: Extract user id from socket
+      const { userId, chatId, message } = data;
       // check if chat exist
       const chat = await this.chatsService.findOne(chatId);
       console.log(chat);
@@ -42,6 +43,7 @@ export class ChatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
       }
       // Implement creating message by chat id
       const newMessage = await this.messagesService.createByChatId(
+        userId,
         chatId,
         message,
       );
@@ -66,9 +68,11 @@ export class ChatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @ConnectedSocket() client: Socket,
   ) {
     try {
-      const { chatId, messageId, message } = data;
+      // TODO: Extract user id from socket
+      const { userId, chatId, messageId, message } = data;
 
       const updatedMessage = await this.messagesService.update(
+        userId,
         messageId,
         message,
       );
@@ -96,9 +100,10 @@ export class ChatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @ConnectedSocket() client: Socket,
   ) {
     try {
-      const { chatId, messageId } = data;
+      // TODO: Extract user id from socket
+      const { userId, chatId, messageId } = data;
 
-      await this.messagesService.remove(messageId);
+      await this.messagesService.remove(userId, messageId);
 
       client.to(`chat-${chatId}`).emit('message-removed', { messageId });
 

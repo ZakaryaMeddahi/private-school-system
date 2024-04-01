@@ -39,7 +39,8 @@ export class RoomsGateway {
     try {
       console.log(data);
       // const { id, firstName, lastName, role, profilePicture } = user
-      const { roomId, message } = data;
+      // TODO: Extract user id from socket
+      const { userId, roomId, message } = data;
       // Check if room exist
       const room = await this.roomsService.findOne(roomId);
       console.log(room);
@@ -49,6 +50,7 @@ export class RoomsGateway {
       const chat = await this.chatsService.findByRoomId(room.id);
       // Create message by chat id
       const newMessage = await this.messagesService.createByChatId(
+        userId,
         chat.id,
         message,
       );
@@ -72,9 +74,11 @@ export class RoomsGateway {
     @ConnectedSocket() client: Socket,
   ) {
     try {
-      const { roomId, messageId, message } = data;
+      // TODO: Extract user id from socket
+      const { userId, roomId, messageId, message } = data;
 
       const updatedMessage = await this.messagesService.update(
+        userId,
         messageId,
         message,
       );
@@ -102,9 +106,10 @@ export class RoomsGateway {
     @ConnectedSocket() client: Socket,
   ) {
     try {
-      const { roomId, messageId } = data;
+      // TODO: Extract user id from socket
+      const { userId, roomId, messageId } = data;
 
-      await this.messagesService.remove(messageId);
+      await this.messagesService.remove(userId, messageId);
 
       // Broadcast message to all users in chat
       client.to(`room-${roomId}`).emit('message-removed', messageId);
@@ -266,15 +271,12 @@ export class RoomsGateway {
       // TODO: Extract user id from socket
       const { userId, roomId } = data;
 
-      const studentSession = await this.studentSessionsService.update(
-        userId,
-        { leaveDate: new Date() },
-      );
+      const studentSession = await this.studentSessionsService.update(userId, {
+        leaveDate: new Date(),
+      });
 
       // Broadcast message to all users in chat
-      client
-        .to(`room-${roomId}`)
-        .emit('user-left-session', { studentSession });
+      client.to(`room-${roomId}`).emit('user-left-session', { studentSession });
 
       return {
         status: 'success',

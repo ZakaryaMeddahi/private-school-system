@@ -105,12 +105,17 @@ export class MessagesController {
     @UploadedFile() file: Express.Multer.File,
   ) {
     try {
+      const { sub: userId } = user;
       const newFile = await this.filesService.create(file);
 
-      const newMessage = await this.messagesService.createByChatId(chatId, {
-        ...messageData,
-        file: newFile,
-      });
+      const newMessage = await this.messagesService.createByChatId(
+        userId,
+        chatId,
+        {
+          ...messageData,
+          file: newFile,
+        },
+      );
 
       console.log('--------- File Message (Chat) ---------');
       console.log(newMessage);
@@ -139,14 +144,19 @@ export class MessagesController {
     @UploadedFile() file: Express.Multer.File,
   ) {
     try {
+      const { sub: userId } = user;
       // Create file entity and save it in the database with relation to the message
       const newFile = await this.filesService.create(file);
 
       // Create message
-      const newMessage = await this.messagesService.createByRoomId(roomId, {
-        ...messageData,
-        file: newFile,
-      });
+      const newMessage = await this.messagesService.createByRoomId(
+        userId,
+        roomId,
+        {
+          ...messageData,
+          file: newFile,
+        },
+      );
 
       console.log('--------- File Message (Room) ---------');
       console.log(newMessage);

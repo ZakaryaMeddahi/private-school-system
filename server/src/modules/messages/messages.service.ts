@@ -1,7 +1,11 @@
 import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Message } from 'src/shared/entities/message.entity';
-import { CreateMessageParams, MessagesOptions, UpdateMessageParams } from 'src/shared/types';
+import {
+  CreateMessageParams,
+  MessagesOptions,
+  UpdateMessageParams,
+} from 'src/shared/types';
 import { Repository } from 'typeorm';
 import { ChatsService } from '../chats/chats.service';
 
@@ -18,6 +22,7 @@ export class MessagesService {
       const { courseId, chatId } = options;
       const messages = await this.messagesRepository.find({
         where: { chat: { id: chatId, course: { id: courseId } } },
+        relations: ['sender'],
       });
 
       if (!messages) return null;
@@ -38,6 +43,7 @@ export class MessagesService {
             room: { id: roomId, course: { id: courseId } },
           },
         },
+        relations: ['sender'],
       });
 
       if (!messages) return null;
@@ -50,11 +56,16 @@ export class MessagesService {
   }
 
   // Implement create message
-  async createByChatId(chatId: number, MessageData: CreateMessageParams) {
+  async createByChatId(
+    userId: number,
+    chatId: number,
+    MessageData: CreateMessageParams,
+  ) {
     try {
       const newMessage = this.messagesRepository.create({
         chat: { id: chatId },
         content: MessageData.content,
+        sender: { id: userId },
         file: MessageData.file || null,
       });
 
@@ -67,13 +78,18 @@ export class MessagesService {
     }
   }
 
-  async createByRoomId(roomId: number, MessageData: CreateMessageParams) {
+  async createByRoomId(
+    userId: number,
+    roomId: number,
+    MessageData: CreateMessageParams,
+  ) {
     try {
       const chat = await this.chatsService.findByRoomId(roomId);
 
       const newMessage = this.messagesRepository.create({
         chat: { id: chat.id },
         content: MessageData.content,
+        sender: { id: userId },
         file: MessageData.file || null,
       });
 
@@ -88,13 +104,16 @@ export class MessagesService {
     }
   }
 
-  async update(id: number, MessageData: UpdateMessageParams) {
+  async update(userId: number, id: number, MessageData: UpdateMessageParams) {
     try {
-      const message = await this.messagesRepository.findOne({ where: { id } });
+      const message = await this.messagesRepository.findOne({
+        where: { id, sender: { id: userId } },
+      });
 
       if (!message) throw new NotFoundException('Cannot find message');
 
       message.content = MessageData.content || message.content;
+      message.isPinned = MessageData.isPinned || message.isPinned;
 
       const updatedMessage = await this.messagesRepository.save(message);
 
@@ -105,9 +124,11 @@ export class MessagesService {
     }
   }
 
-  async remove(id: number) {
+  async remove(userId: number, id: number) {
     try {
-      const message = await this.messagesRepository.findOne({ where: { id } });
+      const message = await this.messagesRepository.findOne({
+        where: { id, sender: { id: userId } },
+      });
 
       if (!message) throw new NotFoundException('Cannot find message');
 
