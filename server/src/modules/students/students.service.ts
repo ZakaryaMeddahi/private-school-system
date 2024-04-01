@@ -58,7 +58,7 @@ export class StudentsService {
         .orWhere('user.id = :id', { id: userId })
         .getRawOne();
 
-      if (!studentEntity) throw new NotFoundException('Teacher not found');
+      if (!studentEntity) throw new NotFoundException('Student not found');
 
       const socialLinks = await this.socialLinksService.findByUserId(userId);
 
@@ -68,6 +68,21 @@ export class StudentsService {
     } catch (error) {
       console.error(error);
       throw new HttpException('Cannot get teacher', 500);
+    }
+  }
+
+  async findEntityByUserId(userId: number) {
+    try {
+      const studentEntity = await this.studentRepository.findOne({
+        where: { user: { id: userId } },
+      });
+
+      if (!studentEntity) throw new NotFoundException('Student not found');
+
+      return studentEntity;
+    } catch (error) {
+      console.error(error);
+      throw new HttpException('Cannot get student', 500);
     }
   }
 
