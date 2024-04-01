@@ -27,6 +27,9 @@ export class SocialLinks {
   @Column({ nullable: true })
   youtube: string;
 
+  @Column({ nullable: true })
+  website: string;
+
   @OneToOne(() => User)
   @JoinColumn()
   user: User;
