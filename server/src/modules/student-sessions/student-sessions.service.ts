@@ -44,7 +44,7 @@ export class StudentSessionsService {
   async update(id: number, studentSessionData: UpdateStudentSessionParams) {
     try {
       const studentSession = await this.studentSessionRepository.findOne({
-        where: { id },
+        where: [{ id }, { student: { id } }, { session: { id } }],
       });
 
       if (!studentSession) {
