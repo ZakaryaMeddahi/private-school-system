@@ -16,7 +16,7 @@ import { AuthGuard } from 'src/guards/auth.guard';
 import { AuthUser } from 'src/decorators/user.decorator';
 import { JwtPayload } from 'src/shared/types';
 
-@Controller('students')
+@Controller('api/v1/students')
 export class StudentsController {
   constructor(private readonly studentsService: StudentsService) {}
 
