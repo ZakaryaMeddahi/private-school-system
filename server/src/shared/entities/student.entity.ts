@@ -7,7 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from './user.entity';
-import { StudentSession } from './studentSessions.entity';
+import { StudentSession } from './studentSession.entity';
 import { Enrollment } from './enrollment.entity';
 
 @Entity({ name: 'students' })
