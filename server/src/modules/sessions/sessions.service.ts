@@ -2,7 +2,7 @@ import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Session } from 'src/shared/entities/session.entity';
 import { CreateSessionParams, UpdateSessionParams } from 'src/shared/types';
-import { Repository } from 'typeorm';
+import { Equal, Repository } from 'typeorm';
 
 @Injectable()
 export class SessionsService {
@@ -14,7 +14,7 @@ export class SessionsService {
   // Implement create session
   async create(
     sessionData: CreateSessionParams,
-    roomId: number,
+    // roomId: number,
   ) {
     // implement create session
     try {
@@ -24,7 +24,7 @@ export class SessionsService {
 
       const session = await this.sessionsRepository.save({
         ...newSession,
-        roomId,
+        // room: { id: roomId },
       });
 
       return session;
@@ -37,13 +37,16 @@ export class SessionsService {
   // implement update session
   async update(id: number, sessionData: UpdateSessionParams) {
     try {
-      const session = await this.sessionsRepository.findOne({ where: { id } });
+      const session = await this.sessionsRepository.findOne({
+        where: { id: Equal(id) },
+      });
 
       if (!session) {
         throw new NotFoundException('Session not found');
       }
 
       const updatedSession = await this.sessionsRepository.save({
+        ...session,
         ...sessionData,
       });
 
