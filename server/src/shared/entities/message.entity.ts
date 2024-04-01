@@ -18,7 +18,9 @@ export class Message {
   @Column()
   content: string;
 
-  // TODO: Add isPinned column
+  // Add isPinned column
+  @Column({ type: 'boolean', default: false })
+  isPinned: boolean;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   sentAt: Date;

@@ -115,11 +115,13 @@ export type UpdateEnrollmentParams = {
 
 export type CreateMessageParams = {
   content: string;
+  isPinned?: boolean;
   file: File;
 };
 
 export type UpdateMessageParams = {
   content?: string;
+  isPinned?: boolean;
   file?: File;
 };
 
@@ -185,9 +187,9 @@ export type UpdateSocialLinksParams = {
 export type CreateStudentSessionParams = {
   joinDate: Date;
   leaveDate?: Date;
-}
+};
 
 export type UpdateStudentSessionParams = {
   joinDate?: Date;
   leaveDate?: Date;
-}
+};
