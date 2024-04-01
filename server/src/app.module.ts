@@ -28,6 +28,7 @@ import { FilesModule } from './modules/files/files.module';
 import { File } from './shared/entities/file.entity';
 import { SocialLinksModule } from './modules/social-links/social-links.module';
 import { StudentSessionsModule } from './modules/student-sessions/student-sessions.module';
+import { TopicsModule } from './modules/topics/topics.module';
 
 @Module({
   imports: [
@@ -70,6 +71,7 @@ import { StudentSessionsModule } from './modules/student-sessions/student-sessio
     FilesModule,
     SocialLinksModule,
     StudentSessionsModule,
+    TopicsModule,
   ],
   controllers: [],
   providers: [],
