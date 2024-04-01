@@ -7,6 +7,7 @@ import {
 } from 'src/shared/types';
 import { Repository } from 'typeorm';
 import { CoursesService } from '../courses/courses.service';
+import { StudentsService } from '../students/students.service';
 
 @Injectable()
 export class EnrollmentsService {
@@ -14,6 +15,7 @@ export class EnrollmentsService {
     @InjectRepository(Enrollment)
     private readonly enrollmentRepository: Repository<Enrollment>,
     // private readonly coursesService: CoursesService,
+    private readonly studentsService: StudentsService,
   ) {}
 
   async findAll() {
@@ -50,7 +52,11 @@ export class EnrollmentsService {
     }
   }
 
-  async create(courseId: number, enrollmentData: CreateEnrollmentParams) {
+  async create(
+    userId: number,
+    courseId: number,
+    enrollmentData: CreateEnrollmentParams,
+  ) {
     try {
       // const course = await this.coursesService.findOne(courseId);
 
@@ -60,17 +66,22 @@ export class EnrollmentsService {
       //   );
       // }
 
+      const student = await this.studentsService.findEntityByUserId(userId);
+
       const newEnrollment = this.enrollmentRepository.create({
         ...enrollmentData,
         course: { id: courseId },
+        student: { id: student.id },
       });
 
       await this.enrollmentRepository.save(newEnrollment);
       return newEnrollment;
     } catch (error) {
       console.error(error);
-      if(error.code === '23503') {
-        throw new NotFoundException(`There is no course with the provided id ${courseId}`);
+      if (error.code === '23503') {
+        throw new NotFoundException(
+          `There is no course with the provided id ${courseId}`,
+        );
       }
       throw new HttpException('Cannot enroll in this course', 500);
     }
@@ -98,10 +109,10 @@ export class EnrollmentsService {
     }
   }
 
-  async remove(id: number) {
+  async remove(userId: number, id: number) {
     try {
       const enrollment = await this.enrollmentRepository.findOne({
-        where: { id },
+        where: { id, student: { user: { id: userId } } },
       });
 
       if (!enrollment) {
