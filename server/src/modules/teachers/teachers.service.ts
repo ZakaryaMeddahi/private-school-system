@@ -203,6 +203,29 @@ export class TeachersService {
     }
   }
 
+  async updateProfilePicture(userId: number, image: Express.Multer.File) {
+    try {
+      const teacher = await this.teacherRepository.findOne({
+        where: { user: { id: Equal(userId) } },
+      });
+
+      if (!teacher) throw new NotFoundException('Teacher not found');
+
+      const file = await this.filesService.create(image);
+      teacher.profilePicture = file.url;
+
+      await this.teacherRepository.save(teacher);
+
+      return await this.findByUserId(userId);
+    } catch (error) {
+      console.error(error);
+      throw new HttpException(
+        error.message || 'Cannot update profile picture',
+        error.status || 500,
+      );
+    }
+  }
+
   async remove(id: number) {
     try {
       const teacher = await this.teacherRepository.findOne({

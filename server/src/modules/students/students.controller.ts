@@ -76,6 +76,29 @@ export class StudentsController {
     }
   }
 
+  @Patch('account/me/profile-picture')
+  @UseInterceptors(FileInterceptor('image'))
+  async updateProfilePicture(
+    @AuthUser() user: JwtPayload,
+    @UploadedFile() image: Express.Multer.File,
+  ) {
+    const { sub: id } = user;
+    try {
+      const updatedUser = await this.studentsService.updateProfilePicture(id, image);
+      return {
+        status: 'success',
+        message: 'Profile picture updated successfully',
+        data: updatedUser,
+      };
+    } catch (error) {
+      console.error(error);
+      throw new HttpException(
+        error.message || 'Something went wrong in the server',
+        error.status || 500,
+      );
+    }
+  }
+
   @Get()
   async getStudents() {
     try {
