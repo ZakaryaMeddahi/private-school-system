@@ -102,9 +102,9 @@ export type UpdateChatParams = {
 };
 
 export type CreateEnrollmentParams = {
-  enrollmentStatus: EnrollmentStatus;
-  progress: number;
-  enrollmentDate: Date;
+  enrollmentStatus?: EnrollmentStatus;
+  progress?: number;
+  enrollmentDate?: Date;
 };
 
 export type UpdateEnrollmentParams = {

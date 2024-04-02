@@ -135,9 +135,9 @@ export class TeachersController {
 
   @Post()
   @Roles(Role.ADMIN)
-  async createTeacher(@Body() courseData: CreateTeacherDto) {
+  async createTeacher(@Body() teacherData: CreateTeacherDto) {
     try {
-      const newTeacher = await this.teachersService.create(courseData);
+      const newTeacher = await this.teachersService.create(teacherData);
       return {
         status: 'success',
         message: 'Teacher created successfully',

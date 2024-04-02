@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Delete,
   Get,
@@ -70,7 +71,7 @@ export class EnrollmentsController {
   async enrollStudent(
     @AuthUser() user: JwtPayload,
     @Param('courseId', ParseIntPipe) courseId: number,
-    enrollmentData: CreateEnrollmentDto,
+    @Body() enrollmentData: CreateEnrollmentDto,
   ) {
     try {
       const { sub: userId } = user;
@@ -95,7 +96,7 @@ export class EnrollmentsController {
   @Roles(Role.ADMIN)
   async updateEnrollment(
     @Param('id', ParseIntPipe) id: number,
-    enrollmentData: UpdateEnrollmentDto,
+    @Body() enrollmentData: UpdateEnrollmentDto,
   ) {
     try {
       const updatedEnrollment = await this.enrollmentService.update(

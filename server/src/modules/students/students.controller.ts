@@ -16,12 +16,13 @@ import {
 import { StudentsService } from './students.service';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { AuthUser } from 'src/decorators/user.decorator';
-import { JwtPayload, UpdateStudentParams } from 'src/shared/types';
+import { JwtPayload } from 'src/shared/types';
 import { AdminGuard } from 'src/guards/admin.guard';
 import { Roles } from 'src/decorators/roles.decorator';
 import { Role } from 'src/shared/enums';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { UpdateStudentDto } from './dto/update-student.dto';
 
 @Controller('api/v1/students')
 @UseGuards(AuthGuard, RolesGuard)
@@ -52,7 +53,7 @@ export class StudentsController {
   @UseInterceptors(FileInterceptor('image'))
   async updateMyAccount(
     @AuthUser() user: JwtPayload,
-    @Body() AccountData: UpdateStudentParams,
+    @Body() AccountData: UpdateStudentDto,
     @UploadedFile() image: Express.Multer.File,
   ) {
     const { sub: id } = user;

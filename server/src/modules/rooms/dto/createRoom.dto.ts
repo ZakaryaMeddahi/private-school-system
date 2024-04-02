@@ -1,4 +1,4 @@
-import { IsEnum, IsNotEmpty, IsString } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { RoomStatus } from 'src/shared/enums';
 
 export class CreateRoomDto {
@@ -6,9 +6,12 @@ export class CreateRoomDto {
   @IsString()
   name: string;
 
+  @IsOptional()
+  @IsNotEmpty()
   @IsString()
   slug: string;
 
+  @IsOptional()
   @IsEnum(RoomStatus, { message: 'Invalid room status' })
   status: RoomStatus;
 }

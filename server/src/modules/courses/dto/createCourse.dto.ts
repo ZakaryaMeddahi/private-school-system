@@ -3,7 +3,6 @@ import { Difficulty, DurationUnit } from 'src/shared/enums';
 
 export class createCourseDto {
   @IsNotEmpty()
-  @IsString()
   title: string;
 
   description: string;

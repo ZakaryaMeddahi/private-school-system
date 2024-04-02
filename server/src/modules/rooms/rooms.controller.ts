@@ -66,7 +66,7 @@ export class RoomsController {
   @Roles(Role.TEACHER, Role.ADMIN)
   async updateRoom(
     @Param('id', ParseIntPipe) id: number,
-    roomData: UpdateRoomDto,
+    @Body() roomData: UpdateRoomDto,
   ) {
     try {
       const updatedRoom = await this.roomsService.update(id, roomData);
