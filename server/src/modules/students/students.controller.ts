@@ -16,9 +16,12 @@ import { AuthGuard } from 'src/guards/auth.guard';
 import { AuthUser } from 'src/decorators/user.decorator';
 import { JwtPayload } from 'src/shared/types';
 import { AdminGuard } from 'src/guards/admin.guard';
+import { Roles } from 'src/decorators/roles.decorator';
+import { Role } from 'src/shared/enums';
+import { RolesGuard } from 'src/guards/roles.guard';
 
 @Controller('api/v1/students')
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard, RolesGuard)
 export class StudentsController {
   constructor(private readonly studentsService: StudentsService) {}
 
@@ -56,9 +59,9 @@ export class StudentsController {
   @Get(':id')
   async getStudent(@Param('id', ParseIntPipe) id: number) {
     try {
-      const student = await this.studentsService.findOne(id)
-      if(!student) throw new NotFoundException('Student not found')
-      return { status: 'success', data: student }
+      const student = await this.studentsService.findOne(id);
+      if (!student) throw new NotFoundException('Student not found');
+      return { status: 'success', data: student };
     } catch (error) {
       console.error(error);
       throw new HttpException(
@@ -69,11 +72,11 @@ export class StudentsController {
   }
 
   @Delete(':id')
-  @UseGuards(AdminGuard)
+  @Roles(Role.ADMIN)
   async removeStudent(@Param('id', ParseIntPipe) id: number) {
     try {
-      await this.studentsService.remove(id)
-      return { status: 'success', message: 'Student removed successfully' }
+      await this.studentsService.remove(id);
+      return { status: 'success', message: 'Student removed successfully' };
     } catch (error) {
       console.error(error);
       throw new HttpException(

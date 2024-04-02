@@ -61,7 +61,7 @@ export class SocialLinksService {
     }
   }
 
-  async update(id: number, socialLinksData: UpdateSocialLinksParams) {
+  async update(userId: number, id: number, socialLinksData: UpdateSocialLinksParams) {
     try {
       const socialLinks = await this.socialLinksRepository.findOne({
         where: { id: Equal(id) },
@@ -72,6 +72,7 @@ export class SocialLinksService {
       const updatedSocialLinks = await this.socialLinksRepository.save({
         ...socialLinks,
         ...socialLinksData,
+        user: { id: userId },
       });
 
       return updatedSocialLinks;

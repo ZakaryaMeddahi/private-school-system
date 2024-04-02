@@ -18,9 +18,12 @@ import { TeacherGuard } from 'src/guards/teacher.guard';
 import { AdminGuard } from 'src/guards/admin.guard';
 import { AuthUser } from 'src/decorators/user.decorator';
 import { JwtPayload } from 'src/shared/types';
+import { Roles } from 'src/decorators/roles.decorator';
+import { Role } from 'src/shared/enums';
+import { RolesGuard } from 'src/guards/roles.guard';
 
 @Controller('api/v1/courses/:courseId/rooms')
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard, RolesGuard)
 export class RoomsController {
   constructor(private readonly roomsService: RoomsService) {}
 
@@ -40,7 +43,7 @@ export class RoomsController {
   }
 
   @Post()
-  @UseGuards(TeacherGuard, AdminGuard)
+  @Roles(Role.TEACHER, Role.ADMIN)
   async createRoom(
     @Param('courseId', ParseIntPipe) courseId: number,
     @Body() roomData: CreateRoomDto,
@@ -58,7 +61,7 @@ export class RoomsController {
   }
 
   @Patch(':id')
-  @UseGuards(TeacherGuard, AdminGuard)
+  @Roles(Role.TEACHER, Role.ADMIN)
   async updateRoom(
     @Param('id', ParseIntPipe) id: number,
     roomData: UpdateRoomDto,
@@ -76,7 +79,7 @@ export class RoomsController {
   }
 
   @Delete(':id')
-  @UseGuards(TeacherGuard, AdminGuard)
+  @Roles(Role.TEACHER, Role.ADMIN)
   async removeRoom(@Param('id', ParseIntPipe) id: number) {
     try {
       await this.roomsService.remove(id);

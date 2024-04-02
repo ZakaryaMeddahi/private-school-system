@@ -19,9 +19,12 @@ import { AdminGuard } from 'src/guards/admin.guard';
 import { StudentGuard } from 'src/guards/student.guard';
 import { TeacherGuard } from 'src/guards/teacher.guard';
 import { JwtPayload } from 'src/shared/types';
+import { RolesGuard } from 'src/guards/roles.guard';
+import { Roles } from 'src/decorators/roles.decorator';
+import { Role } from 'src/shared/enums';
 
 @Controller('api/v1/courses')
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard, RolesGuard)
 export class EnrollmentsController {
   constructor(private readonly enrollmentService: EnrollmentsService) {}
 
@@ -44,7 +47,7 @@ export class EnrollmentsController {
 
   // Get Enrollments By Course Id Associated With The Student (Admin, Teacher)
   @Get(':courseId/enrollments')
-  @UseGuards(TeacherGuard, AdminGuard)
+  @Roles(Role.ADMIN, Role.TEACHER)
   async getEnrollmentsByCourseId(
     @Param('courseId', ParseIntPipe) courseId: number,
   ) {
@@ -63,7 +66,7 @@ export class EnrollmentsController {
 
   // Enroll Student In A Course (Student)
   @Post(':courseId/enrollments')
-  @UseGuards(StudentGuard)
+  @Roles(Role.STUDENT)
   async enrollStudent(
     @AuthUser() user: JwtPayload,
     @Param('courseId', ParseIntPipe) courseId: number,
@@ -89,7 +92,7 @@ export class EnrollmentsController {
 
   // Update Enrollment (Admin)
   @Patch('enrollments/:id')
-  @UseGuards(AdminGuard)
+  @Roles(Role.ADMIN)
   async updateEnrollment(
     @Param('id', ParseIntPipe) id: number,
     enrollmentData: UpdateEnrollmentDto,
@@ -112,7 +115,7 @@ export class EnrollmentsController {
 
   // Cancel Enrollment (Student)
   @Delete('enrollments/:id')
-  @UseGuards(StudentGuard)
+  @Roles(Role.STUDENT)
   async cancelEnrollment(
     @AuthUser() user: JwtPayload,
     @Param('id', ParseIntPipe) id: number,

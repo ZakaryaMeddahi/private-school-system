@@ -22,6 +22,7 @@ import { FilesService } from '../files/files.service';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { AuthUser } from 'src/decorators/user.decorator';
 import { JwtPayload } from 'src/shared/types';
+import { RolesGuard } from 'src/guards/roles.guard';
 
 @Controller('api/v1')
 @UseGuards(AuthGuard)

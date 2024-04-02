@@ -20,9 +20,12 @@ import { AuthGuard } from 'src/guards/auth.guard';
 import { JwtPayload } from 'src/shared/types';
 import { TeacherGuard } from 'src/guards/teacher.guard';
 import { AdminGuard } from 'src/guards/admin.guard';
+import { Roles } from 'src/decorators/roles.decorator';
+import { Role } from 'src/shared/enums';
+import { RolesGuard } from 'src/guards/roles.guard';
 
 @Controller('api/v1/courses')
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard, RolesGuard)
 export class CoursesController {
   constructor(private readonly coursesService: CoursesService) {}
 
@@ -52,7 +55,7 @@ export class CoursesController {
   }
 
   @Post()
-  @UseGuards(TeacherGuard)
+  @Roles(Role.TEACHER)
   async createCourse(
     @AuthUser() user: JwtPayload,
     @Body() courseData: createCourseDto,
@@ -71,7 +74,7 @@ export class CoursesController {
   }
 
   @Patch(':id')
-  @UseGuards(TeacherGuard, AdminGuard)
+  @Roles(Role.TEACHER, Role.ADMIN)
   async updateCourse(
     @AuthUser() user: JwtPayload,
     @Param('id', ParseIntPipe) id: number,
@@ -102,7 +105,7 @@ export class CoursesController {
   }
 
   @Delete(':id')
-  @UseGuards(TeacherGuard)
+  @Roles(Role.TEACHER)
   async removeCourse(
     @AuthUser() user: JwtPayload,
     @Param('id', ParseIntPipe) id: number,

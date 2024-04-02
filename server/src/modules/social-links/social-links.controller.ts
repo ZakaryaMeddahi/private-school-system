@@ -44,7 +44,9 @@ export class SocialLinksController {
     @Body() socialLinksData: UpdateSocialLinksDto,
   ) {
     try {
+      const { sub: userId } = user;
       const updatedSocialLinks = await this.socialLinksService.update(
+        userId,
         id,
         socialLinksData,
       );

@@ -13,9 +13,12 @@ import { ChatsService } from './chats.service';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { AdminGuard } from 'src/guards/admin.guard';
 import { TeacherGuard } from 'src/guards/teacher.guard';
+import { RolesGuard } from 'src/guards/roles.guard';
+import { Roles } from 'src/decorators/roles.decorator';
+import { Role } from 'src/shared/enums';
 
 @Controller('api/v1/courses/:courseId/chats')
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard, RolesGuard)
 export class ChatsController {
   constructor(private readonly chatsService: ChatsService) {}
 
@@ -58,7 +61,7 @@ export class ChatsController {
   }
 
   @Patch(':id')
-  @UseGuards(AdminGuard, TeacherGuard)
+  @Roles(Role.TEACHER, Role.ADMIN)
   async updateChat(
     @Param('id', ParseIntPipe) id: number,
     @Body() chatData: UpdateChatDto,

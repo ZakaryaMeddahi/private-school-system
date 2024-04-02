@@ -18,9 +18,12 @@ import { AuthUser } from 'src/decorators/user.decorator';
 import { JwtPayload } from 'src/shared/types';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { AdminGuard } from 'src/guards/admin.guard';
+import { Roles } from 'src/decorators/roles.decorator';
+import { Role } from 'src/shared/enums';
+import { RolesGuard } from 'src/guards/roles.guard';
 
 @Controller('api/v1/teachers')
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard, RolesGuard)
 export class TeachersController {
   constructor(private readonly teachersService: TeachersService) {}
 
@@ -71,7 +74,7 @@ export class TeachersController {
   }
 
   @Post()
-  @UseGuards(AdminGuard)
+  @Roles(Role.ADMIN)
   async createTeacher(@Body() courseData: CreateTeacherDto) {
     try {
       const newTeacher = await this.teachersService.create(courseData);
@@ -83,7 +86,7 @@ export class TeachersController {
   }
 
   @Patch(':id')
-  @UseGuards(AdminGuard)
+  @Roles(Role.ADMIN)
   async updateTeacher(
     @Param('id', ParseIntPipe) id: number,
     @Body() courseData: UpdateTeacherDto,
@@ -101,7 +104,7 @@ export class TeachersController {
   }
 
   @Delete(':id')
-  @UseGuards(AdminGuard)
+  @Roles(Role.ADMIN)
   async removeTeacher(@Param('id', ParseIntPipe) id: number) {
     try {
       await this.teachersService.remove(id);
