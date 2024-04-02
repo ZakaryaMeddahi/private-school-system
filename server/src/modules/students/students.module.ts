@@ -5,6 +5,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Student } from 'src/shared/entities/student.entity';
 import { SocialLinksModule } from '../social-links/social-links.module';
 import { JwtModule } from '@nestjs/jwt';
+import { UsersModule } from '../users/users.module';
+import { FilesModule } from '../files/files.module';
 
 @Module({
   imports: [
@@ -13,7 +15,9 @@ import { JwtModule } from '@nestjs/jwt';
       signOptions: { expiresIn: '1d' },
     }),
     TypeOrmModule.forFeature([Student]),
+    UsersModule,
     SocialLinksModule,
+    FilesModule
   ],
   controllers: [StudentsController],
   providers: [StudentsService],

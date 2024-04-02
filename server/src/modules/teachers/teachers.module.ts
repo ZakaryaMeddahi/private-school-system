@@ -9,6 +9,7 @@ import { MailModule } from '../mail/mail.module';
 import { UsersModule } from '../users/users.module';
 import { SocialLinksModule } from '../social-links/social-links.module';
 import { JwtModule } from '@nestjs/jwt';
+import { FilesModule } from '../files/files.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { JwtModule } from '@nestjs/jwt';
     SocialLinksModule,
     UsersModule,
     MailModule,
+    FilesModule
   ],
   controllers: [TeachersController],
   providers: [TeachersService],

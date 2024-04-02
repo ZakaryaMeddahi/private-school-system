@@ -1,16 +1,20 @@
 import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Student } from 'src/shared/entities/student.entity';
-import { CreateStudentParams } from 'src/shared/types';
+import { CreateStudentParams, UpdateStudentParams } from 'src/shared/types';
 import { Equal, Repository } from 'typeorm';
 import { SocialLinksService } from '../social-links/social-links.service';
+import { UsersService } from '../users/users.service';
+import { FilesService } from '../files/files.service';
 
 @Injectable()
 export class StudentsService {
   constructor(
     @InjectRepository(Student)
     private readonly studentRepository: Repository<Student>,
+    private readonly usersService: UsersService,
     private readonly socialLinksService: SocialLinksService,
+    private readonly filesService: FilesService,
   ) {}
 
   async findAll() {
@@ -106,6 +110,41 @@ export class StudentsService {
     } catch (error) {
       console.error(error);
       throw new HttpException('Cannot create student', 500);
+    }
+  }
+
+  async updateAccount(
+    id: number,
+    studentData: UpdateStudentParams,
+    image: Express.Multer.File,
+  ) {
+    try {
+      const student = await this.studentRepository.findOne({
+        where: { user: { id: Equal(id) } },
+      });
+      if (!student) throw new NotFoundException('Student not found');
+
+      const { biography, ...userData } = studentData;
+
+      const user = await this.usersService.update(id, userData);
+
+      student.user = user;
+      student.biography = biography;
+
+      if (image) {
+        const file = await this.filesService.create(image);
+        student.profilePicture = file.url;
+      }
+
+      await this.studentRepository.save(student);
+
+      return await this.findByUserId(id);
+    } catch (error) {
+      console.error(error);
+      throw new HttpException(
+        error.message || 'Cannot update student',
+        error.status || 500,
+      );
     }
   }
 

@@ -9,6 +9,7 @@ import { Role } from 'src/shared/enums';
 import { hashPassword } from 'src/helpers/bcrypt';
 import generatePassword from 'src/helpers/generate-password';
 import { SocialLinksService } from '../social-links/social-links.service';
+import { FilesService } from '../files/files.service';
 
 @Injectable()
 export class TeachersService {
@@ -17,6 +18,7 @@ export class TeachersService {
     private readonly usersService: UsersService,
     private readonly mailService: MailService,
     private readonly socialLinksService: SocialLinksService,
+    private readonly filesService: FilesService,
   ) {}
 
   async findAll() {
@@ -146,13 +148,52 @@ export class TeachersService {
       if (!teacher) throw new NotFoundException('Teacher not found');
 
       // Get user id from teacher object then update user object
+      const { biography, ...userData } = teacherData;
       const updatedUser = await this.usersService.update(teacher.user.id, {
-        ...teacherData,
+        ...userData,
       });
 
       teacher.user = updatedUser;
 
       return await this.teacherRepository.save(teacher);
+    } catch (error) {
+      console.error(error);
+      throw new HttpException(
+        error.message || 'Cannot update teacher',
+        error.status || 500,
+      );
+    }
+  }
+
+  async updateAccount(
+    userId: number,
+    teacherData: UpdateTeacherParams,
+    image: Express.Multer.File,
+  ) {
+    try {
+      const teacher = await this.teacherRepository.findOne({
+        where: { user: { id: Equal(userId) } },
+      });
+
+      if (!teacher) throw new NotFoundException('Teacher not found');
+
+      // Get user id from teacher object then update user object
+      const { biography, ...userData } = teacherData;
+      const updatedUser = await this.usersService.update(userId, {
+        ...userData,
+      });
+
+      teacher.user = updatedUser;
+      teacher.biography = biography || teacher.biography;
+      
+      if (image) {
+        const file = await this.filesService.create(image);
+        teacher.profilePicture = file.url;
+      }
+
+      await this.teacherRepository.save(teacher);
+
+      return await this.findByUserId(userId);
     } catch (error) {
       console.error(error);
       throw new HttpException(

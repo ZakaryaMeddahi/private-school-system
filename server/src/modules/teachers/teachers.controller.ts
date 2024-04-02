@@ -10,6 +10,8 @@ import {
   ParseIntPipe,
   NotFoundException,
   UseGuards,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 import { TeachersService } from './teachers.service';
 import { CreateTeacherDto } from './dto/create-teacher.dto';
@@ -21,6 +23,7 @@ import { AdminGuard } from 'src/guards/admin.guard';
 import { Roles } from 'src/decorators/roles.decorator';
 import { Role } from 'src/shared/enums';
 import { RolesGuard } from 'src/guards/roles.guard';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('api/v1/teachers')
 @UseGuards(AuthGuard, RolesGuard)
@@ -46,7 +49,30 @@ export class TeachersController {
     }
   }
 
-  // TODO: Add update account endpoint
+  // TODO: Handle profile image file upload
+  @Patch('account/me')
+  @UseInterceptors(FileInterceptor('image'))
+  async updateMyAccount(
+    @AuthUser() user: JwtPayload,
+    @Body() userData: UpdateTeacherDto,
+    @UploadedFile() image: Express.Multer.File,
+  ) {
+    const { sub: id } = user;
+    try {
+      const updatedUser = await this.teachersService.updateAccount(id, userData, image);
+      return {
+        status: 'success',
+        message: 'Account data updated successfully',
+        data: updatedUser,
+      };
+    } catch (error) {
+      console.error(error);
+      throw new HttpException(
+        error.message || 'Something went wrong in the server',
+        error.status || 500,
+      );
+    }
+  }
 
   @Get()
   async getTeachers() {
@@ -104,10 +130,10 @@ export class TeachersController {
   @Roles(Role.ADMIN)
   async updateTeacher(
     @Param('id', ParseIntPipe) id: number,
-    @Body() courseData: UpdateTeacherDto,
+    @Body() teacherData: UpdateTeacherDto,
   ) {
     try {
-      const updatedTeacher = await this.teachersService.update(id, courseData);
+      const updatedTeacher = await this.teachersService.update(id, teacherData);
       return {
         status: 'success',
         message: 'Teacher updated successfully',

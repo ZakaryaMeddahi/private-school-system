@@ -10,15 +10,18 @@ import {
   HttpException,
   NotFoundException,
   UseGuards,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 import { StudentsService } from './students.service';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { AuthUser } from 'src/decorators/user.decorator';
-import { JwtPayload } from 'src/shared/types';
+import { JwtPayload, UpdateStudentParams } from 'src/shared/types';
 import { AdminGuard } from 'src/guards/admin.guard';
 import { Roles } from 'src/decorators/roles.decorator';
 import { Role } from 'src/shared/enums';
 import { RolesGuard } from 'src/guards/roles.guard';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('api/v1/students')
 @UseGuards(AuthGuard, RolesGuard)
@@ -44,7 +47,34 @@ export class StudentsController {
     }
   }
 
-  // TODO: Add update account endpoint
+  // TODO: Handle profile image file upload
+  @Patch('account/me')
+  @UseInterceptors(FileInterceptor('image'))
+  async updateMyAccount(
+    @AuthUser() user: JwtPayload,
+    @Body() AccountData: UpdateStudentParams,
+    @UploadedFile() image: Express.Multer.File,
+  ) {
+    const { sub: id } = user;
+    try {
+      const updatedUser = await this.studentsService.updateAccount(
+        id,
+        AccountData,
+        image,
+      );
+      return {
+        status: 'success',
+        message: 'Account data updated successfully',
+        data: updatedUser,
+      };
+    } catch (error) {
+      console.error(error);
+      throw new HttpException(
+        error.message || 'Something went wrong in the server',
+        error.status || 500,
+      );
+    }
+  }
 
   @Get()
   async getStudents() {
