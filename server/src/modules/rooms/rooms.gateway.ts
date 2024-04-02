@@ -12,6 +12,9 @@ import { ChatsService } from '../chats/chats.service';
 import { SessionsService } from '../sessions/sessions.service';
 import { StudentSessionsService } from '../student-sessions/student-sessions.service';
 import { TopicsService } from '../topics/topics.service';
+import { UseGuards } from '@nestjs/common';
+import { WsAuth } from 'src/guards/ws-auth.guard';
+import { UserSocket } from 'src/shared/interfaces';
 
 // We should have as DS like Map to store user sockets in room
 
@@ -31,16 +34,18 @@ export class RoomsGateway {
     private readonly studentSessionsService: StudentSessionsService,
   ) {}
   // Event: send message
+  @UseGuards(WsAuth)
   @SubscribeMessage('message')
   async handleMessage(
     @MessageBody() data: any,
-    @ConnectedSocket() client: Socket,
+    @ConnectedSocket() client: UserSocket,
   ): Promise<any> {
     try {
       console.log(data);
       // const { id, firstName, lastName, role, profilePicture } = user
       // TODO: Extract user id from socket
-      const { userId, roomId, message } = data;
+      const { sub: userId } = client.user;
+      const { roomId, message } = data;
       // Check if room exist
       const room = await this.roomsService.findOne(roomId);
       console.log(room);
@@ -68,14 +73,16 @@ export class RoomsGateway {
   }
 
   // TODO: Update message
+  @UseGuards(WsAuth)
   @SubscribeMessage('update-message')
   async updateMessage(
     @MessageBody() data: any,
-    @ConnectedSocket() client: Socket,
+    @ConnectedSocket() client: UserSocket,
   ) {
     try {
       // TODO: Extract user id from socket
-      const { userId, roomId, messageId, message } = data;
+      const { sub: userId } = client.user;
+      const { roomId, messageId, message } = data;
 
       const updatedMessage = await this.messagesService.update(
         userId,
@@ -100,14 +107,16 @@ export class RoomsGateway {
   }
 
   // TODO: Remove message
+  @UseGuards(WsAuth)
   @SubscribeMessage('remove-message')
   async removeMessage(
     @MessageBody() data: any,
-    @ConnectedSocket() client: Socket,
+    @ConnectedSocket() client: UserSocket,
   ) {
     try {
       // TODO: Extract user id from socket
-      const { userId, roomId, messageId } = data;
+      const { sub: userId } = client.user;
+      const { roomId, messageId } = data;
 
       await this.messagesService.remove(userId, messageId);
 
@@ -126,6 +135,7 @@ export class RoomsGateway {
   }
 
   // join socket.io room
+  @UseGuards(WsAuth)
   @SubscribeMessage('join-room')
   async joinRoom(@MessageBody() data: any, @ConnectedSocket() client: Socket) {
     try {
@@ -155,6 +165,7 @@ export class RoomsGateway {
 
   // leave socket.io room
   @SubscribeMessage('leave-room')
+  @UseGuards(WsAuth)
   leaveRoom(@MessageBody() data: any, @ConnectedSocket() client: Socket) {
     const { roomId } = data;
 
@@ -168,6 +179,7 @@ export class RoomsGateway {
   }
 
   // TODO: Event -> start session (use create session from sessions service)
+  @UseGuards(WsAuth)
   @SubscribeMessage('start-session')
   async startSession(
     @MessageBody() data: any,
@@ -198,6 +210,7 @@ export class RoomsGateway {
     }
   }
   // TODO: Event -> end session (use update session from sessions service)
+  @UseGuards(WsAuth)
   @SubscribeMessage('end-session')
   async endSession(
     @MessageBody() data: any,
@@ -227,14 +240,16 @@ export class RoomsGateway {
   }
 
   // TODO: Event -> join session (use create session from student-sessions service)
+  @UseGuards(WsAuth)
   @SubscribeMessage('join-session')
   async joinSession(
     @MessageBody() data: any,
-    @ConnectedSocket() client: Socket,
+    @ConnectedSocket() client: UserSocket,
   ) {
     try {
       // TODO: Extract user id from socket
-      const { sessionId, userId, roomId } = data;
+      const { sub: userId } = client.user;
+      const { sessionId, roomId } = data;
 
       // TODO: Get student id using userId and add it to student session
 
@@ -262,14 +277,16 @@ export class RoomsGateway {
   }
 
   // TODO: Event -> leave session (use update session from student-sessions service)
+  @UseGuards(WsAuth)
   @SubscribeMessage('leave-session')
   async leaveSession(
     @MessageBody() data: any,
-    @ConnectedSocket() client: Socket,
+    @ConnectedSocket() client: UserSocket,
   ) {
     try {
       // TODO: Extract user id from socket
-      const { userId, roomId } = data;
+      const { sub: userId } = client.user;
+      const { roomId } = data;
 
       const studentSession = await this.studentSessionsService.update(userId, {
         leaveDate: new Date(),

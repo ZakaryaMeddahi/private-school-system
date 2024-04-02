@@ -10,6 +10,9 @@ import {
 import { Socket } from 'socket.io';
 import { MessagesService } from '../messages/messages.service';
 import { ChatsService } from './chats.service';
+import { UseGuards } from '@nestjs/common';
+import { WsAuth } from 'src/guards/ws-auth.guard';
+import { UserSocket } from 'src/shared/interfaces';
 
 // We should have as DS like Map to store user sockets in chat
 
@@ -25,16 +28,18 @@ export class ChatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
     private readonly messagesService: MessagesService,
   ) {}
   // Event: send message
+  @UseGuards(WsAuth)
   @SubscribeMessage('message')
   async handleMessage(
     @MessageBody() data: any,
-    @ConnectedSocket() client: Socket,
+    @ConnectedSocket() client: UserSocket,
   ): Promise<any> {
     try {
       console.log(data);
       // const { id, firstName, lastName, role, profilePicture } = user
       // TODO: Extract user id from socket
-      const { userId, chatId, message } = data;
+      const { sub: userId } = client.user;
+      const { chatId, message } = data;
       // check if chat exist
       const chat = await this.chatsService.findOne(chatId);
       console.log(chat);
@@ -62,14 +67,16 @@ export class ChatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   // TODO: Update message
+  @UseGuards(WsAuth)
   @SubscribeMessage('update-message')
   async updateMessage(
     @MessageBody() data: any,
-    @ConnectedSocket() client: Socket,
+    @ConnectedSocket() client: UserSocket,
   ) {
     try {
       // TODO: Extract user id from socket
-      const { userId, chatId, messageId, message } = data;
+      const { sub: userId } = client.user;
+      const { chatId, messageId, message } = data;
 
       const updatedMessage = await this.messagesService.update(
         userId,
@@ -94,14 +101,16 @@ export class ChatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   // TODO: Delete message
+  @UseGuards(WsAuth)
   @SubscribeMessage('remove-message')
   async removeMessage(
     @MessageBody() data: any,
-    @ConnectedSocket() client: Socket,
+    @ConnectedSocket() client: UserSocket,
   ) {
     try {
       // TODO: Extract user id from socket
-      const { userId, chatId, messageId } = data;
+      const { sub: userId } = client.user;
+      const { chatId, messageId } = data;
 
       await this.messagesService.remove(userId, messageId);
 
@@ -119,6 +128,7 @@ export class ChatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   // join socket.io room
+  @UseGuards(WsAuth)
   @SubscribeMessage('join-room')
   async joinRoom(@MessageBody() data: any, @ConnectedSocket() client: Socket) {
     try {
@@ -142,6 +152,7 @@ export class ChatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   // leave socket.io room
+  @UseGuards(WsAuth)
   @SubscribeMessage('leave-room')
   leaveRoom(@MessageBody() data: any, @ConnectedSocket() client: Socket) {
     const { chatId } = data;
