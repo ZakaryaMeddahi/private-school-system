@@ -32,7 +32,11 @@ export class TeachersController {
     const { sub: id } = user;
     try {
       const user = await this.teachersService.findByUserId(id);
-      return user;
+      return {
+        status: 'success',
+        message: 'Account data loaded successfully',
+        data: user,
+      };
     } catch (error) {
       console.error(error);
       throw new HttpException(
@@ -48,7 +52,11 @@ export class TeachersController {
   async getTeachers() {
     try {
       const teachers = await this.teachersService.findAll();
-      return { status: 'success', data: teachers };
+      return {
+        status: 'success',
+        message: 'Teachers loaded successfully',
+        data: teachers,
+      };
     } catch (error) {
       console.error(error);
       throw new HttpException(
@@ -62,8 +70,11 @@ export class TeachersController {
   async getTeacher(@Param('id', ParseIntPipe) id: number) {
     try {
       const teacher = await this.teachersService.findOne(id);
-      if (!teacher) throw new NotFoundException('Teacher not found');
-      return { status: 'success', data: teacher };
+      return {
+        status: 'success',
+        message: 'Teacher loaded successfully',
+        data: teacher,
+      };
     } catch (error) {
       console.error(error);
       throw new HttpException(
@@ -78,7 +89,11 @@ export class TeachersController {
   async createTeacher(@Body() courseData: CreateTeacherDto) {
     try {
       const newTeacher = await this.teachersService.create(courseData);
-      return { status: 'success', data: newTeacher };
+      return {
+        status: 'success',
+        message: 'Teacher created successfully',
+        data: newTeacher,
+      };
     } catch (error) {
       console.error(error);
       throw new HttpException(error.message, error.status);
@@ -93,7 +108,11 @@ export class TeachersController {
   ) {
     try {
       const updatedTeacher = await this.teachersService.update(id, courseData);
-      return { status: 'success', data: updatedTeacher };
+      return {
+        status: 'success',
+        message: 'Teacher updated successfully',
+        data: updatedTeacher,
+      };
     } catch (error) {
       console.error(error);
       throw new HttpException(

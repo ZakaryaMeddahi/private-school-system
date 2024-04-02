@@ -45,7 +45,10 @@ export class StudentsService {
       return studentWithoutPassword;
     } catch (error) {
       console.error(error);
-      throw new HttpException('Cannot get student', 500);
+      throw new HttpException(
+        error.message || 'Cannot get student',
+        error.status || 500,
+      );
     }
   }
 
@@ -67,7 +70,10 @@ export class StudentsService {
       return { ...student, socialLinks };
     } catch (error) {
       console.error(error);
-      throw new HttpException('Cannot get teacher', 500);
+      throw new HttpException(
+        error.message || 'Cannot get teacher',
+        error.status || 500,
+      );
     }
   }
 
@@ -82,7 +88,10 @@ export class StudentsService {
       return studentEntity;
     } catch (error) {
       console.error(error);
-      throw new HttpException('Cannot get student', 500);
+      throw new HttpException(
+        error.message || 'Cannot get student',
+        error.status || 500,
+      );
     }
   }
 
@@ -109,7 +118,10 @@ export class StudentsService {
       await this.studentRepository.remove(student);
     } catch (error) {
       console.error(error);
-      throw new HttpException('Cannot get student', 500);
+      throw new HttpException(
+        error.message || 'Cannot get student',
+        error.status || 500,
+      );
     }
   }
 }

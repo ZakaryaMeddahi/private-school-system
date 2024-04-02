@@ -56,6 +56,8 @@ export class ChatsService {
         where: { room: { id: Equal(roomId) } },
       });
 
+      if (!chat) return null;
+
       return chat;
     } catch (error) {
       console.error(error);

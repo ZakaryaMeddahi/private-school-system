@@ -40,7 +40,10 @@ export class FilesService {
       return fileEntity;
     } catch (error) {
       console.error(error);
-      throw new HttpException('Cannot create file', 500);
+      throw new HttpException(
+        error.message || 'Cannot create file',
+        error.status || 500,
+      );
     }
   }
 

@@ -108,7 +108,10 @@ export class TopicsService {
       return updatedTopics;
     } catch (error) {
       console.error(error);
-      throw new HttpException('Cannot update topics', 500);
+      throw new HttpException(
+        error.message || 'Cannot update topics',
+        error.status || 500,
+      );
     }
   }
 

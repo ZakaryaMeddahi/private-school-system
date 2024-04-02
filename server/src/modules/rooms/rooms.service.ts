@@ -26,7 +26,7 @@ export class RoomsService {
       });
     } catch (error) {
       console.error(error);
-      throw new HttpException('Cannot get rooms', 500);
+      throw new HttpException(error.message || 'Cannot get rooms', 500);
     }
   }
 
@@ -41,7 +41,10 @@ export class RoomsService {
       return room;
     } catch (error) {
       console.error(error);
-      throw new HttpException('Cannot get room', 500);
+      throw new HttpException(
+        error.message || 'Cannot get room',
+        error.status || 500,
+      );
     }
   }
 
@@ -71,7 +74,10 @@ export class RoomsService {
           `There is no course with the provided id ${courseId}`,
         );
       }
-      throw new HttpException('Cannot create room', 500);
+      throw new HttpException(
+        error.message || 'Cannot create room',
+        error.status || 500,
+      );
     }
   }
 
@@ -92,7 +98,10 @@ export class RoomsService {
       return updatedRoom;
     } catch (error) {
       console.error(error);
-      throw new HttpException('Cannot update room', 500);
+      throw new HttpException(
+        error.message || 'Cannot update room',
+        error.status || 500,
+      );
     }
   }
 
@@ -107,7 +116,10 @@ export class RoomsService {
       await this.roomsRepository.remove(room);
     } catch (error) {
       console.error(error);
-      throw new HttpException('Cannot remove room', 500);
+      throw new HttpException(
+        error.message || 'Cannot remove room',
+        error.status || 500,
+      );
     }
   }
 }

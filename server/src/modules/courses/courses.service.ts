@@ -110,7 +110,10 @@ export class CoursesService {
 
       return this.coursesRepository.save(course);
     } catch (error) {
-      throw new HttpException('Cannot update course', 500);
+      throw new HttpException(
+        error.message || 'Cannot update course',
+        error.status || 500,
+      );
     }
   }
 

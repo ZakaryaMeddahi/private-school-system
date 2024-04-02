@@ -53,7 +53,10 @@ export class SessionsService {
       return updatedSession;
     } catch (error) {
       console.error(error);
-      throw new HttpException('Cannot update session', 500);
+      throw new HttpException(
+        error.message || 'Cannot update session',
+        error.status || 500,
+      );
     }
   }
 }

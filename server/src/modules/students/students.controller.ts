@@ -30,7 +30,11 @@ export class StudentsController {
     const { sub: id } = user;
     try {
       const user = await this.studentsService.findByUserId(id);
-      return user;
+      return {
+        status: 'success',
+        message: 'Account data loaded successfully',
+        data: user,
+      };
     } catch (error) {
       console.error(error);
       throw new HttpException(
@@ -46,7 +50,11 @@ export class StudentsController {
   async getStudents() {
     try {
       const students = await this.studentsService.findAll();
-      return { status: 'success', data: students };
+      return {
+        status: 'success',
+        message: 'Students loaded successfully',
+        data: students,
+      };
     } catch (error) {
       console.error(error);
       throw new HttpException(
@@ -60,8 +68,11 @@ export class StudentsController {
   async getStudent(@Param('id', ParseIntPipe) id: number) {
     try {
       const student = await this.studentsService.findOne(id);
-      if (!student) throw new NotFoundException('Student not found');
-      return { status: 'success', data: student };
+      return {
+        status: 'success',
+        message: 'Student loaded successfully',
+        data: student,
+      };
     } catch (error) {
       console.error(error);
       throw new HttpException(

@@ -50,7 +50,10 @@ export class TeachersService {
       return teacherWithoutPassword;
     } catch (error) {
       console.error(error);
-      throw new HttpException('Cannot get teacher', 500);
+      throw new HttpException(
+        error.message || 'Cannot get teacher',
+        error.status || 500,
+      );
     }
   }
 
@@ -90,7 +93,10 @@ export class TeachersService {
       return teacher;
     } catch (error) {
       console.error(error);
-      throw new HttpException('Cannot get teacher', 500);
+      throw new HttpException(
+        error.message || 'Cannot get teacher',
+        error.status || 500,
+      );
     }
   }
 
@@ -124,7 +130,10 @@ export class TeachersService {
       return teacher;
     } catch (error) {
       console.error(error);
-      throw new HttpException('Cannot create teacher', 500);
+      throw new HttpException(
+        error.message || 'Cannot create teacher',
+        error.status || 500,
+      );
     }
   }
 
@@ -146,7 +155,10 @@ export class TeachersService {
       return await this.teacherRepository.save(teacher);
     } catch (error) {
       console.error(error);
-      throw new HttpException('Cannot update teacher', 500);
+      throw new HttpException(
+        error.message || 'Cannot update teacher',
+        error.status || 500,
+      );
     }
   }
 
@@ -161,7 +173,10 @@ export class TeachersService {
       return await this.teacherRepository.remove(teacher);
     } catch (error) {
       console.error(error);
-      throw new HttpException('Cannot remove teacher', 500);
+      throw new HttpException(
+        error.message || 'Cannot remove teacher',
+        error.status || 500,
+      );
     }
   }
 }

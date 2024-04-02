@@ -72,13 +72,18 @@ export class UsersService {
       return userWithoutPassword;
     } catch (error) {
       console.error(error);
-      throw new HttpException('Cannot create user', 500);
+      throw new HttpException(
+        error.message || 'Cannot create user',
+        error.status || 500,
+      );
     }
   }
 
   async update(id: number, userData: UpdateUserParams) {
     try {
-      const user = await this.usersRepository.findOne({ where: { id: Equal(id) } });
+      const user = await this.usersRepository.findOne({
+        where: { id: Equal(id) },
+      });
       if (!user) throw new NotFoundException('User not found');
 
       const updatedUser = await this.usersRepository.save({
@@ -90,7 +95,10 @@ export class UsersService {
       return updatedUser;
     } catch (error) {
       console.error(error);
-      throw new HttpException('Cannot update user', 500);
+      throw new HttpException(
+        error.message || 'Cannot update user',
+        error.status || 500,
+      );
     }
   }
 }

@@ -58,7 +58,7 @@ export class SocialLinksController {
       };
     } catch (error) {
       console.error(error);
-      throw new HttpException('Cannot update social links', 500);
+      throw new HttpException(error.message, error.status || 500);
     }
   }
 }

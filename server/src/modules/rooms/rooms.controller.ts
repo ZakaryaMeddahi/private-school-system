@@ -38,7 +38,7 @@ export class RoomsController {
         data: rooms,
       };
     } catch (error) {
-      throw new HttpException(error.message, error.status);
+      throw new HttpException(error.message, error.status || 500);
     }
   }
 
@@ -56,7 +56,7 @@ export class RoomsController {
         data: newRoom,
       };
     } catch (error) {
-      throw new HttpException(error.message, error.status);
+      throw new HttpException(error.message, error.status || 500);
     }
   }
 
@@ -74,7 +74,7 @@ export class RoomsController {
         data: updatedRoom,
       };
     } catch (error) {
-      throw new HttpException(error.message, error.status);
+      throw new HttpException(error.message, error.status || 500);
     }
   }
 
@@ -85,7 +85,7 @@ export class RoomsController {
       await this.roomsService.remove(id);
       return { status: 'success', message: 'Room deleted successfully' };
     } catch (error) {
-      throw new HttpException(error.message, error.status);
+      throw new HttpException(error.message, error.status || 500);
     }
   }
 }

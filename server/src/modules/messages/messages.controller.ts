@@ -60,7 +60,7 @@ export class MessagesController {
       };
     } catch (error) {
       console.error(error);
-      throw new HttpException('Cannot get messages', 500);
+      throw new HttpException(error.message, error.status || 500);
     }
   }
 
@@ -92,7 +92,7 @@ export class MessagesController {
       };
     } catch (error) {
       console.error(error);
-      throw new HttpException('Cannot get messages', 500);
+      throw new HttpException(error.message, error.status || 500);
     }
   }
 
@@ -131,7 +131,7 @@ export class MessagesController {
       };
     } catch (error) {
       console.error(error);
-      throw new HttpException('Cannot upload file', 500);
+      throw new HttpException(error.message, error.status || 500);
     }
   }
 
@@ -172,7 +172,7 @@ export class MessagesController {
       };
     } catch (error) {
       console.error(error);
-      throw new HttpException('Cannot upload file', 500);
+      throw new HttpException(error.message, error.status || 500);
     }
   }
 }

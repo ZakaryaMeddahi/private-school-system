@@ -86,6 +86,8 @@ export class MessagesService {
     try {
       const chat = await this.chatsService.findByRoomId(roomId);
 
+      if (!chat) throw new NotFoundException('Cannot find chat');
+
       const newMessage = this.messagesRepository.create({
         chat: { id: chat.id },
         content: MessageData.content,
@@ -100,7 +102,10 @@ export class MessagesService {
       return messageEntity;
     } catch (error) {
       console.error(error);
-      throw new HttpException('Cannot create message', 500);
+      throw new HttpException(
+        error.message || 'Cannot create message',
+        error.status || 500,
+      );
     }
   }
 
@@ -121,7 +126,10 @@ export class MessagesService {
       return updatedMessage;
     } catch (error) {
       console.error(error);
-      throw new HttpException('Cannot update message', 500);
+      throw new HttpException(
+        error.message || 'Cannot update message',
+        error.status || 500,
+      );
     }
   }
 
@@ -136,7 +144,10 @@ export class MessagesService {
       await this.messagesRepository.remove(message);
     } catch (error) {
       console.error(error);
-      throw new HttpException('Cannot delete message', 500);
+      throw new HttpException(
+        error.message || 'Cannot delete message',
+        error.status || 500,
+      );
     }
   }
 }

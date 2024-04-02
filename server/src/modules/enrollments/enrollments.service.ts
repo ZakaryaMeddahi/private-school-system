@@ -48,7 +48,10 @@ export class EnrollmentsService {
       return enrollments;
     } catch (error) {
       console.error(error);
-      throw new HttpException('Cannot retrieve enrollments', 500);
+      throw new HttpException(
+        error.message || 'Cannot retrieve enrollments',
+        error.status || 500,
+      );
     }
   }
 
@@ -83,7 +86,10 @@ export class EnrollmentsService {
           `There is no course with the provided id ${courseId}`,
         );
       }
-      throw new HttpException('Cannot enroll in this course', 500);
+      throw new HttpException(
+        error.message || 'Cannot enroll in this course',
+        error.status || 500,
+      );
     }
   }
 
@@ -105,7 +111,10 @@ export class EnrollmentsService {
       return updatedEnrollment;
     } catch (error) {
       console.error(error);
-      throw new HttpException('Cannot update enrollment', 500);
+      throw new HttpException(
+        error.message || 'Cannot update enrollment',
+        error.status || 500,
+      );
     }
   }
 
@@ -122,7 +131,10 @@ export class EnrollmentsService {
       await this.enrollmentRepository.delete(id);
     } catch (error) {
       console.error(error);
-      throw new HttpException('Cannot cancel enrollment', 500);
+      throw new HttpException(
+        error.message || 'Cannot cancel enrollment',
+        error.status || 500,
+      );
     }
   }
 }

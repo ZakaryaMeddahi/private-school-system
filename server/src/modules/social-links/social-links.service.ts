@@ -25,7 +25,10 @@ export class SocialLinksService {
       return socialLinks;
     } catch (error) {
       console.error(error);
-      throw new HttpException('Cannot get social links', 500);
+      throw new HttpException(
+        error.message || 'Cannot get social links',
+        error.status || 500,
+      );
     }
   }
 
@@ -40,7 +43,10 @@ export class SocialLinksService {
       return socialLinks;
     } catch (error) {
       console.error(error);
-      throw new HttpException('Cannot get social links', 500);
+      throw new HttpException(
+        error.message || 'Cannot get social links',
+        error.status || 500,
+      );
     }
   }
 
@@ -61,7 +67,11 @@ export class SocialLinksService {
     }
   }
 
-  async update(userId: number, id: number, socialLinksData: UpdateSocialLinksParams) {
+  async update(
+    userId: number,
+    id: number,
+    socialLinksData: UpdateSocialLinksParams,
+  ) {
     try {
       const socialLinks = await this.socialLinksRepository.findOne({
         where: { id: Equal(id) },
@@ -78,7 +88,10 @@ export class SocialLinksService {
       return updatedSocialLinks;
     } catch (error) {
       console.error(error);
-      throw new HttpException('Cannot update social links', 500);
+      throw new HttpException(
+        error.message || 'Cannot update social links',
+        error.status || 500,
+      );
     }
   }
 }

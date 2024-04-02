@@ -37,7 +37,10 @@ export class StudentSessionsService {
       return studentSession;
     } catch (error) {
       console.error(error);
-      throw new HttpException('Cannot create student session', 500);
+      throw new HttpException(
+        error.message || 'Cannot create student session',
+        error.status || 500,
+      );
     }
   }
 
@@ -63,7 +66,10 @@ export class StudentSessionsService {
       return updatedStudentSession;
     } catch (error) {
       console.error(error);
-      throw new HttpException('Cannot update student session', 500);
+      throw new HttpException(
+        error.message || 'Cannot update student session',
+        error.status || 500,
+      );
     }
   }
 }
