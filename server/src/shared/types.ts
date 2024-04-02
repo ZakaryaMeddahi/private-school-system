@@ -157,11 +157,21 @@ export type UpdateTeacherParams = {
   firstName?: string;
   lastName?: string;
   email?: string;
+  address?: string;
+  biography?: string;
 };
 
 export type CreateStudentParams = {
   biography?: string;
   profilePicture?: string;
+};
+
+export type UpdateStudentParams = {
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  address?: string;
+  biography?: string;
 };
 
 export interface CreateFileParams extends Express.Multer.File {}
