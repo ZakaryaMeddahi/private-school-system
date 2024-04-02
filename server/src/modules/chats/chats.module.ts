@@ -7,9 +7,23 @@ import { ChatsGateway } from './chats.gateway';
 import { MessagesService } from '../messages/messages.service';
 import { Message } from 'src/shared/entities/message.entity';
 import { EnrollmentsModule } from '../enrollments/enrollments.module';
+import { JwtModule } from '@nestjs/jwt';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Chat, Message]), EnrollmentsModule],
+  imports: [
+    TypeOrmModule.forFeature([Chat, Message]),
+    JwtModule.registerAsync({
+      imports: [ConfigModule], // Inject ConfigModule
+      useFactory: async (configService: ConfigService) => ({
+        secret: configService.get('JWT_SECRET'),
+        signOptions: { expiresIn: '1d' },
+        isGlobal: true,
+      }),
+      inject: [ConfigService], // Inject ConfigService
+    }),
+    EnrollmentsModule,
+  ],
   controllers: [ChatsController],
   providers: [ChatsService, ChatsGateway, MessagesService],
   exports: [ChatsService],

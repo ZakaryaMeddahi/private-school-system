@@ -10,10 +10,21 @@ import { ChatsService } from '../chats/chats.service';
 import { Room } from 'src/shared/entities/room.entity';
 import { RoomsService } from '../rooms/rooms.service';
 import { TeachersModule } from '../teachers/teachers.module';
+import { JwtModule } from '@nestjs/jwt';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Course, Topic, Chat, Room]),
+    JwtModule.registerAsync({
+      imports: [ConfigModule], // Inject ConfigModule
+      useFactory: async (configService: ConfigService) => ({
+        secret: configService.get('JWT_SECRET'),
+        signOptions: { expiresIn: '1d' },
+        isGlobal: true,
+      }),
+      inject: [ConfigService], // Inject ConfigService
+    }),
     TeachersModule,
   ],
   controllers: [CoursesController],

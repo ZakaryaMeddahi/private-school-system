@@ -12,10 +12,21 @@ import { SessionsModule } from '../sessions/sessions.module';
 import { StudentSessionsModule } from '../student-sessions/student-sessions.module';
 import { TopicsModule } from '../topics/topics.module';
 import { EnrollmentsModule } from '../enrollments/enrollments.module';
+import { JwtModule } from '@nestjs/jwt';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Room, Chat, Message]),
+    JwtModule.registerAsync({
+      imports: [ConfigModule], // Inject ConfigModule
+      useFactory: async (configService: ConfigService) => ({
+        secret: configService.get('JWT_SECRET'),
+        signOptions: { expiresIn: '1d' },
+        isGlobal: true,
+      }),
+      inject: [ConfigService], // Inject ConfigService
+    }),
     TopicsModule,
     SessionsModule,
     StudentSessionsModule,
