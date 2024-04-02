@@ -2,7 +2,7 @@ import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Room } from 'src/shared/entities/room.entity';
 import { CreateRoomParams, UpdateRoomParams } from 'src/shared/types';
-import { Repository } from 'typeorm';
+import { Equal, Repository } from 'typeorm';
 import { CoursesService } from '../courses/courses.service';
 import { ChatsService } from '../chats/chats.service';
 
@@ -22,7 +22,7 @@ export class RoomsService {
       //   throw new NotFoundException(`There is no course with id ${courseId}`);
 
       return await this.roomsRepository.find({
-        where: { course: { id: courseId } },
+        where: { course: { id: Equal(courseId) } },
       });
     } catch (error) {
       console.error(error);
@@ -32,7 +32,9 @@ export class RoomsService {
 
   async findOne(id: number) {
     try {
-      const room = await this.roomsRepository.findOne({ where: { id } });
+      const room = await this.roomsRepository.findOne({
+        where: { id: Equal(id) },
+      });
 
       if (!room) throw new NotFoundException(`There is no room with id ${id}`);
 
@@ -75,7 +77,9 @@ export class RoomsService {
 
   async update(id: number, roomData: UpdateRoomParams) {
     try {
-      const room = await this.roomsRepository.findOne({ where: { id } });
+      const room = await this.roomsRepository.findOne({
+        where: { id: Equal(id) },
+      });
 
       if (!room) throw new NotFoundException(`There is no room with id ${id}`);
 
@@ -94,7 +98,9 @@ export class RoomsService {
 
   async remove(id: number) {
     try {
-      const room = await this.roomsRepository.findOne({ where: { id } });
+      const room = await this.roomsRepository.findOne({
+        where: { id: Equal(id) },
+      });
 
       if (!room) throw new NotFoundException(`There is no room with id ${id}`);
 

@@ -5,7 +5,7 @@ import {
   CreateSocialLinksParams,
   UpdateSocialLinksParams,
 } from 'src/shared/types';
-import { Repository } from 'typeorm';
+import { Equal, Repository } from 'typeorm';
 
 @Injectable()
 export class SocialLinksService {
@@ -17,7 +17,7 @@ export class SocialLinksService {
   async findByUserId(userId: number) {
     try {
       const socialLinks = await this.socialLinksRepository.findOne({
-        where: { user: { id: userId } },
+        where: { user: { id: Equal(userId) } },
       });
 
       if (!socialLinks) throw new NotFoundException('Social links not found');
@@ -32,7 +32,7 @@ export class SocialLinksService {
   async findOne(id: number) {
     try {
       const socialLinks = await this.socialLinksRepository.findOne({
-        where: { id },
+        where: { id: Equal(id) },
       });
 
       if (!socialLinks) throw new NotFoundException('Social links not found');
@@ -64,7 +64,7 @@ export class SocialLinksService {
   async update(id: number, socialLinksData: UpdateSocialLinksParams) {
     try {
       const socialLinks = await this.socialLinksRepository.findOne({
-        where: { id },
+        where: { id: Equal(id) },
       });
 
       if (!socialLinks) throw new NotFoundException('Social links not found');

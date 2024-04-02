@@ -2,7 +2,7 @@ import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Student } from 'src/shared/entities/student.entity';
 import { CreateStudentParams } from 'src/shared/types';
-import { Repository } from 'typeorm';
+import { Equal, Repository } from 'typeorm';
 import { SocialLinksService } from '../social-links/social-links.service';
 
 @Injectable()
@@ -74,7 +74,7 @@ export class StudentsService {
   async findEntityByUserId(userId: number) {
     try {
       const studentEntity = await this.studentRepository.findOne({
-        where: { user: { id: userId } },
+        where: { user: { id: Equal(userId) } },
       });
 
       if (!studentEntity) throw new NotFoundException('Student not found');
@@ -102,7 +102,9 @@ export class StudentsService {
 
   async remove(id: number) {
     try {
-      const student = await this.studentRepository.findOne({ where: { id } });
+      const student = await this.studentRepository.findOne({
+        where: { id: Equal(id) },
+      });
       if (!student) throw new NotFoundException('Student not found');
       await this.studentRepository.remove(student);
     } catch (error) {

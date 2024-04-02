@@ -1,7 +1,7 @@
 import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { StudentSession } from 'src/shared/entities/studentSession.entity';
-import { Repository } from 'typeorm';
+import { Equal, Repository } from 'typeorm';
 import { StudentsService } from '../students/students.service';
 import {
   CreateStudentSessionParams,
@@ -44,7 +44,11 @@ export class StudentSessionsService {
   async update(id: number, studentSessionData: UpdateStudentSessionParams) {
     try {
       const studentSession = await this.studentSessionRepository.findOne({
-        where: [{ id }, { student: { id } }, { session: { id } }],
+        where: [
+          { id: Equal(id) },
+          { student: { id: Equal(id) } },
+          { session: { id: Equal(id) } },
+        ],
       });
 
       if (!studentSession) {

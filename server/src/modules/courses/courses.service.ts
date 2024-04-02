@@ -2,7 +2,7 @@ import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Course } from 'src/shared/entities/course.entity';
 import { CreateCourseParams, UpdateCourseParams } from 'src/shared/types';
-import { Repository } from 'typeorm';
+import { Equal, Repository } from 'typeorm';
 import { TopicsService } from '../topics/topics.service';
 import { ChatsService } from '../chats/chats.service';
 import { RoomsService } from '../rooms/rooms.service';
@@ -34,7 +34,7 @@ export class CoursesService {
   async findOne(id: number) {
     try {
       const course = await this.coursesRepository.findOne({
-        where: { id },
+        where: { id: Equal(id) },
         relations: ['topics'],
       });
 
@@ -60,7 +60,7 @@ export class CoursesService {
       const newCourse = this.coursesRepository.create({
         ...courseData,
         teacher: { id: teacher.id },
-      })
+      });
 
       const course = await this.coursesRepository.save(newCourse);
 
@@ -92,16 +92,16 @@ export class CoursesService {
     try {
       const { topics, ...updatedCourse } = courseData;
 
-      const options = { where: { id } };
+      const options = { where: { id: Equal(id) } };
 
       if (role === Role.TEACHER)
-        options['where']['teacher'] = { user: { id: userId } };
+        options['where']['teacher'] = { user: { id: Equal(userId) } };
 
       let course = await this.coursesRepository.findOne(options);
 
       if (!course) return null;
 
-      course = { ...course, ...updatedCourse, updatedAt: new Date()};
+      course = { ...course, ...updatedCourse, updatedAt: new Date() };
 
       if (topics) {
         const updatedTopics = await this.topicsService.updateMany(topics);
@@ -116,10 +116,10 @@ export class CoursesService {
 
   async remove(userId: number, role: Role, id: number) {
     try {
-      const options = { where: { id } };
+      const options = { where: { id: Equal(id) } };
 
       if (role === Role.TEACHER)
-        options['where']['teacher'] = { user: { id: userId } };
+        options['where']['teacher'] = { user: { id: Equal(userId) } };
 
       const course = await this.coursesRepository.findOne(options);
 

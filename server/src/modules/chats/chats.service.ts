@@ -1,7 +1,7 @@
 import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Chat } from 'src/shared/entities/chat.entity';
-import { Repository } from 'typeorm';
+import { Equal, Repository } from 'typeorm';
 import { CreateChatParams, UpdateChatParams } from 'src/shared/types';
 import { CoursesService } from '../courses/courses.service';
 
@@ -53,7 +53,7 @@ export class ChatsService {
   async findByRoomId(roomId: number) {
     try {
       const chat = await this.chatRepository.findOne({
-        where: { room: { id: roomId } },
+        where: { room: { id: Equal(roomId) } },
       });
 
       return chat;
@@ -79,7 +79,9 @@ export class ChatsService {
         console.log('---------------------');
         console.log(error.code);
         console.log('---------------------');
-        throw new NotFoundException(`There is no course with the provided id ${courseId}`);
+        throw new NotFoundException(
+          `There is no course with the provided id ${courseId}`,
+        );
       }
       throw new HttpException('Cannot create chat', 500);
     }
@@ -103,7 +105,9 @@ export class ChatsService {
 
   async update(id: number, chatData: UpdateChatParams) {
     try {
-      const chat = await this.chatRepository.findOne({ where: { id } });
+      const chat = await this.chatRepository.findOne({
+        where: { id: Equal(id) },
+      });
 
       if (!chat) null;
 

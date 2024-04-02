@@ -13,7 +13,9 @@ export class TopicsService {
 
   async findOne(id: number) {
     try {
-      const topic = await this.topicsRepository.findOne({ where: { id } });
+      const topic = await this.topicsRepository.findOne({
+        where: { id: Equal(id) },
+      });
 
       if (!topic) return null;
 
@@ -112,7 +114,9 @@ export class TopicsService {
 
   async deleteOne(id: number) {
     try {
-      const topic = await this.topicsRepository.findOne({ where: { id } });
+      const topic = await this.topicsRepository.findOne({
+        where: { id: Equal(id) },
+      });
 
       if (!topic) return null;
 

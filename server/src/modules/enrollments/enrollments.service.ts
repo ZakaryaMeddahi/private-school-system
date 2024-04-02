@@ -5,7 +5,7 @@ import {
   CreateEnrollmentParams,
   UpdateEnrollmentParams,
 } from 'src/shared/types';
-import { Repository } from 'typeorm';
+import { Equal, Repository } from 'typeorm';
 import { CoursesService } from '../courses/courses.service';
 import { StudentsService } from '../students/students.service';
 
@@ -90,7 +90,7 @@ export class EnrollmentsService {
   async update(id: number, enrollmentData: UpdateEnrollmentParams) {
     try {
       const enrollment = await this.enrollmentRepository.findOne({
-        where: { id },
+        where: { id: Equal(id) },
       });
 
       if (!enrollment) {
@@ -112,7 +112,7 @@ export class EnrollmentsService {
   async remove(userId: number, id: number) {
     try {
       const enrollment = await this.enrollmentRepository.findOne({
-        where: { id, student: { user: { id: userId } } },
+        where: { id: Equal(id), student: { user: { id: Equal(userId) } } },
       });
 
       if (!enrollment) {

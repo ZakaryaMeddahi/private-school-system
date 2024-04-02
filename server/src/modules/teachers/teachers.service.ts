@@ -2,7 +2,7 @@ import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Teacher } from 'src/shared/entities/teacher.entity';
 import { CreateTeacherParams, UpdateTeacherParams } from 'src/shared/types';
-import { Repository } from 'typeorm';
+import { Equal, Repository } from 'typeorm';
 import { UsersService } from '../users/users.service';
 import { MailService } from '../mail/mail.service';
 import { Role } from 'src/shared/enums';
@@ -82,7 +82,7 @@ export class TeachersService {
   async findEntityByUserId(userId: number) {
     try {
       const teacher = await this.teacherRepository.findOne({
-        where: { user: { id: userId } },
+        where: { user: { id: Equal(userId) } },
       });
 
       if (!teacher) throw new NotFoundException('Teacher not found');
@@ -130,7 +130,9 @@ export class TeachersService {
 
   async update(id: number, teacherData: UpdateTeacherParams) {
     try {
-      const teacher = await this.teacherRepository.findOne({ where: { id } });
+      const teacher = await this.teacherRepository.findOne({
+        where: { id: Equal(id) },
+      });
 
       if (!teacher) throw new NotFoundException('Teacher not found');
 
@@ -150,7 +152,9 @@ export class TeachersService {
 
   async remove(id: number) {
     try {
-      const teacher = await this.teacherRepository.findOne({ where: { id } });
+      const teacher = await this.teacherRepository.findOne({
+        where: { id: Equal(id) },
+      });
 
       if (!teacher) throw new NotFoundException('Teacher not found');
 

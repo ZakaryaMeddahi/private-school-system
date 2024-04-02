@@ -6,7 +6,7 @@ import {
   MessagesOptions,
   UpdateMessageParams,
 } from 'src/shared/types';
-import { Repository } from 'typeorm';
+import { Equal, Repository } from 'typeorm';
 import { ChatsService } from '../chats/chats.service';
 
 @Injectable()
@@ -21,7 +21,7 @@ export class MessagesService {
     try {
       const { courseId, chatId } = options;
       const messages = await this.messagesRepository.find({
-        where: { chat: { id: chatId, course: { id: courseId } } },
+        where: { chat: { id: Equal(chatId), course: { id: Equal(courseId) } } },
         relations: ['sender'],
       });
 
@@ -40,7 +40,7 @@ export class MessagesService {
       const messages = await this.messagesRepository.find({
         where: {
           chat: {
-            room: { id: roomId, course: { id: courseId } },
+            room: { id: Equal(roomId), course: { id: Equal(courseId) } },
           },
         },
         relations: ['sender'],
@@ -107,7 +107,7 @@ export class MessagesService {
   async update(userId: number, id: number, MessageData: UpdateMessageParams) {
     try {
       const message = await this.messagesRepository.findOne({
-        where: { id, sender: { id: userId } },
+        where: { id: Equal(id), sender: { id: Equal(userId) } },
       });
 
       if (!message) throw new NotFoundException('Cannot find message');
@@ -128,7 +128,7 @@ export class MessagesService {
   async remove(userId: number, id: number) {
     try {
       const message = await this.messagesRepository.findOne({
-        where: { id, sender: { id: userId } },
+        where: { id: Equal(id), sender: { id: Equal(userId) } },
       });
 
       if (!message) throw new NotFoundException('Cannot find message');
