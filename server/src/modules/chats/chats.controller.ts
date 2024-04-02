@@ -16,6 +16,7 @@ import { TeacherGuard } from 'src/guards/teacher.guard';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { Roles } from 'src/decorators/roles.decorator';
 import { Role } from 'src/shared/enums';
+import { EnrollmentGuard } from 'src/guards/enrollment.guard';
 
 @Controller('api/v1/courses/:courseId/chats')
 @UseGuards(AuthGuard, RolesGuard)
@@ -24,6 +25,7 @@ export class ChatsController {
 
   @Get()
   // TODO: Add enrollment guard
+  @UseGuards(EnrollmentGuard)
   async getChats(@Param('courseId', ParseIntPipe) courseId: number) {
     try {
       const chats = await this.chatsService.findAll();
@@ -41,6 +43,7 @@ export class ChatsController {
 
   @Get(':id')
   // TODO: Add enrollment guard
+  @UseGuards(EnrollmentGuard)
   async getChat(@Param('id', ParseIntPipe) id: number) {
     try {
       const chat = await this.chatsService.findOne(id);

@@ -6,9 +6,10 @@ import { Chat } from 'src/shared/entities/chat.entity';
 import { ChatsGateway } from './chats.gateway';
 import { MessagesService } from '../messages/messages.service';
 import { Message } from 'src/shared/entities/message.entity';
+import { EnrollmentsModule } from '../enrollments/enrollments.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Chat, Message])],
+  imports: [TypeOrmModule.forFeature([Chat, Message]), EnrollmentsModule],
   controllers: [ChatsController],
   providers: [ChatsService, ChatsGateway, MessagesService],
   exports: [ChatsService],

@@ -23,6 +23,7 @@ import { AuthGuard } from 'src/guards/auth.guard';
 import { AuthUser } from 'src/decorators/user.decorator';
 import { JwtPayload } from 'src/shared/types';
 import { RolesGuard } from 'src/guards/roles.guard';
+import { EnrollmentGuard } from 'src/guards/enrollment.guard';
 
 @Controller('api/v1')
 @UseGuards(AuthGuard)
@@ -34,6 +35,7 @@ export class MessagesController {
 
   // TODO: Add enrollment guard
   @Get('courses/:courseId/chats/:chatId/messages')
+  @UseGuards(EnrollmentGuard)
   getMessagesForChat(
     @Param('courseId') courseId: number,
     @Param('chatId') chatId: number,
@@ -66,6 +68,7 @@ export class MessagesController {
 
   // TODO: Add enrollment guard
   @Get('courses/:courseId/rooms/:roomId/messages')
+  @UseGuards(EnrollmentGuard)
   getMessagesForRoom(
     @Param('courseId', ParseIntPipe) courseId: number,
     @Param('roomId', ParseIntPipe) roomId: number,
@@ -98,6 +101,7 @@ export class MessagesController {
 
   // TODO: Add enrollment guard
   @Post('courses/:courseId/chats/:chatId/messages')
+  @UseGuards(EnrollmentGuard)
   @UseInterceptors(FileInterceptor('file'))
   async sendFileInChat(
     @AuthUser() user: JwtPayload,
@@ -137,6 +141,7 @@ export class MessagesController {
 
   // TODO: Add enrollment guard
   @Post('courses/:courseId/rooms/:roomId/messages')
+  @UseGuards(EnrollmentGuard)
   @UseInterceptors(FileInterceptor('file'))
   async sendFileInRoom(
     @AuthUser() user: JwtPayload,

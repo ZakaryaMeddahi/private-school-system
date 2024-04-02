@@ -21,6 +21,7 @@ import { JwtPayload } from 'src/shared/types';
 import { Roles } from 'src/decorators/roles.decorator';
 import { Role } from 'src/shared/enums';
 import { RolesGuard } from 'src/guards/roles.guard';
+import { EnrollmentGuard } from 'src/guards/enrollment.guard';
 
 @Controller('api/v1/courses/:courseId/rooms')
 @UseGuards(AuthGuard, RolesGuard)
@@ -29,6 +30,7 @@ export class RoomsController {
 
   @Get()
   // TODO: Add enrollment guard
+  @UseGuards(EnrollmentGuard)
   async getRooms(@Param('courseId', ParseIntPipe) courseId: number) {
     try {
       const rooms = await this.roomsService.findAll(courseId);

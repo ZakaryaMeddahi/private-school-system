@@ -11,6 +11,7 @@ import { MessagesService } from '../messages/messages.service';
 import { SessionsModule } from '../sessions/sessions.module';
 import { StudentSessionsModule } from '../student-sessions/student-sessions.module';
 import { TopicsModule } from '../topics/topics.module';
+import { EnrollmentsModule } from '../enrollments/enrollments.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { TopicsModule } from '../topics/topics.module';
     TopicsModule,
     SessionsModule,
     StudentSessionsModule,
+    EnrollmentsModule,
   ],
   controllers: [RoomsController],
   providers: [RoomsService, RoomsGateway, ChatsService, MessagesService],

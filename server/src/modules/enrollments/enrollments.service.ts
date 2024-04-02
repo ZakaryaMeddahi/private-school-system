@@ -8,6 +8,7 @@ import {
 import { Equal, Repository } from 'typeorm';
 import { CoursesService } from '../courses/courses.service';
 import { StudentsService } from '../students/students.service';
+import { EnrollmentStatus } from 'src/shared/enums';
 
 @Injectable()
 export class EnrollmentsService {
@@ -17,6 +18,26 @@ export class EnrollmentsService {
     // private readonly coursesService: CoursesService,
     private readonly studentsService: StudentsService,
   ) {}
+
+  async isEnrolled(userId: number, courseId: number) {
+    try {
+      const enrollment = await this.enrollmentRepository.findOne({
+        where: {
+          course: { id: Equal(courseId) },
+          student: { user: { id: Equal(userId) } },
+          enrollmentStatus: EnrollmentStatus.APPROVED,
+        },
+      });
+
+      return !!enrollment;
+    } catch (error) {
+      console.error(error);
+      throw new HttpException(
+        error.message || 'Cannot check if the user is enrolled in the course',
+        error.status || 500,
+      );
+    }
+  }
 
   async findAll() {
     try {
