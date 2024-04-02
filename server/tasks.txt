@@ -4,3 +4,4 @@
     * [X] Add user into teacher object
     * [X] Add social accounts relation to User
     * [ ] Update endSession when student disconnects
+    * [ ] Setup routes for updating files
