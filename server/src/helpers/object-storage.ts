@@ -1,9 +1,10 @@
 import { v2 as cloudinary } from 'cloudinary';
+import { CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET, CLOUDINARY_CLOUD_NAME } from 'src/shared/constants';
 
 cloudinary.config({
-  cloud_name: 'private-school',
-  api_key: '882521887857124',
-  api_secret: 'v0_yWduxiJpcssVoV_etsv1uHG0',
+  cloud_name: CLOUDINARY_CLOUD_NAME,
+  api_key: CLOUDINARY_API_KEY,
+  api_secret: CLOUDINARY_API_SECRET,
 });
 
 export function uploadFile(file: Express.Multer.File) {
