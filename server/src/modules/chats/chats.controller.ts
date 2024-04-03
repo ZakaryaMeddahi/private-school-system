@@ -4,17 +4,29 @@ import {
   Get,
   HttpException,
   Param,
+  ParseIntPipe,
   Patch,
+  UseGuards,
 } from '@nestjs/common';
 import { UpdateChatDto } from './dto/updateChat.dto';
 import { ChatsService } from './chats.service';
+import { AuthGuard } from 'src/guards/auth.guard';
+import { AdminGuard } from 'src/guards/admin.guard';
+import { TeacherGuard } from 'src/guards/teacher.guard';
+import { RolesGuard } from 'src/guards/roles.guard';
+import { Roles } from 'src/decorators/roles.decorator';
+import { Role } from 'src/shared/enums';
+import { EnrollmentGuard } from 'src/guards/enrollment.guard';
 
 @Controller('api/v1/courses/:courseId/chats')
+@UseGuards(AuthGuard, RolesGuard)
 export class ChatsController {
   constructor(private readonly chatsService: ChatsService) {}
 
   @Get()
-  async getChats(@Param('id') courseId: number) {
+  // TODO: Add enrollment guard
+  @UseGuards(EnrollmentGuard)
+  async getChats(@Param('courseId', ParseIntPipe) courseId: number) {
     try {
       const chats = await this.chatsService.findAll();
 
@@ -30,7 +42,9 @@ export class ChatsController {
   }
 
   @Get(':id')
-  async getChat(@Param('id') id: number) {
+  // TODO: Add enrollment guard
+  @UseGuards(EnrollmentGuard)
+  async getChat(@Param('id', ParseIntPipe) id: number) {
     try {
       const chat = await this.chatsService.findOne(id);
 
@@ -50,7 +64,11 @@ export class ChatsController {
   }
 
   @Patch(':id')
-  async updateChat(@Param('id') id: number, @Body() chatData: UpdateChatDto) {
+  @Roles(Role.TEACHER, Role.ADMIN)
+  async updateChat(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() chatData: UpdateChatDto,
+  ) {
     try {
       const updatedChat = await this.chatsService.update(id, chatData);
 

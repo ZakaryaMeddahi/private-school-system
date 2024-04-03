@@ -2,11 +2,12 @@ import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Course } from 'src/shared/entities/course.entity';
 import { CreateCourseParams, UpdateCourseParams } from 'src/shared/types';
-import { Repository } from 'typeorm';
-import { TopicsService } from './topics/topics.service';
+import { Equal, Repository } from 'typeorm';
+import { TopicsService } from '../topics/topics.service';
 import { ChatsService } from '../chats/chats.service';
 import { RoomsService } from '../rooms/rooms.service';
-import { RoomStatus } from 'src/shared/enums';
+import { Role, RoomStatus } from 'src/shared/enums';
+import { TeachersService } from '../teachers/teachers.service';
 
 @Injectable()
 export class CoursesService {
@@ -16,6 +17,7 @@ export class CoursesService {
     private readonly topicsService: TopicsService,
     private readonly chatsService: ChatsService,
     private readonly roomsService: RoomsService,
+    private readonly teachersService: TeachersService,
   ) {}
 
   async findAll() {
@@ -32,7 +34,7 @@ export class CoursesService {
   async findOne(id: number) {
     try {
       const course = await this.coursesRepository.findOne({
-        where: { id },
+        where: { id: Equal(id) },
         relations: ['topics'],
       });
 
@@ -44,20 +46,27 @@ export class CoursesService {
     }
   }
 
-  async create(courseData: CreateCourseParams) {
+  async create(userId: number, courseData: CreateCourseParams) {
     try {
       const { topics } = courseData;
+
+      const teacher = await this.teachersService.findEntityByUserId(userId);
 
       if (topics) {
         const newTopics = await this.topicsService.createMany(topics);
         courseData.topics = newTopics;
       }
 
-      const newCourse = this.coursesRepository.create(courseData);
+      const newCourse = this.coursesRepository.create({
+        ...courseData,
+        teacher: { id: teacher.id },
+      });
 
       const course = await this.coursesRepository.save(newCourse);
 
-      await this.chatsService.createByCourseId(course.id, { name: 'Global Chat' });
+      await this.chatsService.createByCourseId(course.id, {
+        name: 'Global Chat',
+      });
 
       await this.roomsService.create(
         { name: 'General', slug: 'general', status: RoomStatus.OPEN },
@@ -74,15 +83,25 @@ export class CoursesService {
     }
   }
 
-  async update(id: number, courseData: UpdateCourseParams) {
+  async update(
+    userId: number,
+    role: Role,
+    id: number,
+    courseData: UpdateCourseParams,
+  ) {
     try {
       const { topics, ...updatedCourse } = courseData;
 
-      let course = await this.coursesRepository.findOne({ where: { id } });
+      const options = { where: { id: Equal(id) } };
+
+      if (role === Role.TEACHER)
+        options['where']['teacher'] = { user: { id: Equal(userId) } };
+
+      let course = await this.coursesRepository.findOne(options);
 
       if (!course) return null;
 
-      course = { ...course, ...updatedCourse };
+      course = { ...course, ...updatedCourse, updatedAt: new Date() };
 
       if (topics) {
         const updatedTopics = await this.topicsService.updateMany(topics);
@@ -91,13 +110,21 @@ export class CoursesService {
 
       return this.coursesRepository.save(course);
     } catch (error) {
-      throw new HttpException('Cannot update course', 500);
+      throw new HttpException(
+        error.message || 'Cannot update course',
+        error.status || 500,
+      );
     }
   }
 
-  async remove(id: number) {
+  async remove(userId: number, role: Role, id: number) {
     try {
-      const course = await this.coursesRepository.findBy({ id });
+      const options = { where: { id: Equal(id) } };
+
+      if (role === Role.TEACHER)
+        options['where']['teacher'] = { user: { id: Equal(userId) } };
+
+      const course = await this.coursesRepository.findOne(options);
 
       if (!course) return null;
 

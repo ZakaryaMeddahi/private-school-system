@@ -1,27 +1,9 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
-import { AdminGuard } from 'src/guards/admin.guard';
+import { Controller, UseGuards } from '@nestjs/common';
+import { UsersService } from './users.service';
 import { AuthGuard } from 'src/guards/auth.guard';
 
 @Controller('api/v1/users')
+@UseGuards(AuthGuard)
 export class UsersController {
-  constructor() {}
-
-  @UseGuards(AuthGuard, AdminGuard)
-  @Get()
-  getUsers() {
-    return 'This action returns all users';
-  }
-
-  // create user and send email contains generated password
-  createUser() {
-    return 'This action adds a new user';
-  }
-
-  updateUser() {
-    return 'This action updates a user';
-  }
-
-  removeUser() {
-    return 'This action removes a user';
-  }
+  constructor(private readonly usersService: UsersService) {}
 }

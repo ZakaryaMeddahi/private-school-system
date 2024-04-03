@@ -41,7 +41,7 @@ export class AuthController {
     try {
       const data = await this.authService.loginUser(loginUserDto);
       if (!data) {
-        throw new BadRequestException('Invalid email or password');
+        throw new BadRequestException('Invalid Credentials');
       }
       return {
         status: 'success',

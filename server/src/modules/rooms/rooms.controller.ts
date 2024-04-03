@@ -8,16 +8,29 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { RoomsService } from './rooms.service';
 import { CreateRoomDto } from './dto/createRoom.dto';
 import { UpdateRoomDto } from './dto/updateRoom.dto';
+import { AuthGuard } from 'src/guards/auth.guard';
+import { TeacherGuard } from 'src/guards/teacher.guard';
+import { AdminGuard } from 'src/guards/admin.guard';
+import { AuthUser } from 'src/decorators/user.decorator';
+import { JwtPayload } from 'src/shared/types';
+import { Roles } from 'src/decorators/roles.decorator';
+import { Role } from 'src/shared/enums';
+import { RolesGuard } from 'src/guards/roles.guard';
+import { EnrollmentGuard } from 'src/guards/enrollment.guard';
 
 @Controller('api/v1/courses/:courseId/rooms')
+@UseGuards(AuthGuard, RolesGuard)
 export class RoomsController {
   constructor(private readonly roomsService: RoomsService) {}
 
   @Get()
+  // TODO: Add enrollment guard
+  @UseGuards(EnrollmentGuard)
   async getRooms(@Param('courseId', ParseIntPipe) courseId: number) {
     try {
       const rooms = await this.roomsService.findAll(courseId);
@@ -27,11 +40,12 @@ export class RoomsController {
         data: rooms,
       };
     } catch (error) {
-      throw new HttpException(error.message, error.status);
+      throw new HttpException(error.message, error.status || 500);
     }
   }
 
   @Post()
+  @Roles(Role.TEACHER, Role.ADMIN)
   async createRoom(
     @Param('courseId', ParseIntPipe) courseId: number,
     @Body() roomData: CreateRoomDto,
@@ -44,14 +58,15 @@ export class RoomsController {
         data: newRoom,
       };
     } catch (error) {
-      throw new HttpException(error.message, error.status);
+      throw new HttpException(error.message, error.status || 500);
     }
   }
 
   @Patch(':id')
+  @Roles(Role.TEACHER, Role.ADMIN)
   async updateRoom(
     @Param('id', ParseIntPipe) id: number,
-    roomData: UpdateRoomDto,
+    @Body() roomData: UpdateRoomDto,
   ) {
     try {
       const updatedRoom = await this.roomsService.update(id, roomData);
@@ -61,17 +76,18 @@ export class RoomsController {
         data: updatedRoom,
       };
     } catch (error) {
-      throw new HttpException(error.message, error.status);
+      throw new HttpException(error.message, error.status || 500);
     }
   }
 
   @Delete(':id')
+  @Roles(Role.TEACHER, Role.ADMIN)
   async removeRoom(@Param('id', ParseIntPipe) id: number) {
     try {
       await this.roomsService.remove(id);
       return { status: 'success', message: 'Room deleted successfully' };
     } catch (error) {
-      throw new HttpException(error.message, error.status);
+      throw new HttpException(error.message, error.status || 500);
     }
   }
 }

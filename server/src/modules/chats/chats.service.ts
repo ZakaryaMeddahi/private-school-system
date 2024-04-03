@@ -1,7 +1,7 @@
 import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Chat } from 'src/shared/entities/chat.entity';
-import { Repository } from 'typeorm';
+import { Equal, Repository } from 'typeorm';
 import { CreateChatParams, UpdateChatParams } from 'src/shared/types';
 import { CoursesService } from '../courses/courses.service';
 
@@ -50,6 +50,21 @@ export class ChatsService {
     }
   }
 
+  async findByRoomId(roomId: number) {
+    try {
+      const chat = await this.chatRepository.findOne({
+        where: { room: { id: Equal(roomId) } },
+      });
+
+      if (!chat) return null;
+
+      return chat;
+    } catch (error) {
+      console.error(error);
+      throw new HttpException('Cannot get chats', 500);
+    }
+  }
+
   async createByCourseId(courseId: number, chatData: CreateChatParams) {
     try {
       // const course = await this.coursesService.findOne(courseId);
@@ -66,7 +81,9 @@ export class ChatsService {
         console.log('---------------------');
         console.log(error.code);
         console.log('---------------------');
-        throw new NotFoundException(`There is no course with the provided id ${courseId}`);
+        throw new NotFoundException(
+          `There is no course with the provided id ${courseId}`,
+        );
       }
       throw new HttpException('Cannot create chat', 500);
     }
@@ -90,13 +107,16 @@ export class ChatsService {
 
   async update(id: number, chatData: UpdateChatParams) {
     try {
-      const chat = await this.chatRepository.findOne({ where: { id } });
+      const chat = await this.chatRepository.findOne({
+        where: { id: Equal(id) },
+      });
 
       if (!chat) null;
 
       const updatedChat = await this.chatRepository.save({
         ...chat,
         ...chatData,
+        updatedAt: new Date(),
       });
 
       return updatedChat;

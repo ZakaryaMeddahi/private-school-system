@@ -2,7 +2,7 @@ import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Room } from 'src/shared/entities/room.entity';
 import { CreateRoomParams, UpdateRoomParams } from 'src/shared/types';
-import { Repository } from 'typeorm';
+import { Equal, Repository } from 'typeorm';
 import { CoursesService } from '../courses/courses.service';
 import { ChatsService } from '../chats/chats.service';
 
@@ -22,11 +22,29 @@ export class RoomsService {
       //   throw new NotFoundException(`There is no course with id ${courseId}`);
 
       return await this.roomsRepository.find({
-        where: { course: { id: courseId } },
+        where: { course: { id: Equal(courseId) } },
       });
     } catch (error) {
       console.error(error);
-      throw new HttpException('Cannot get rooms', 500);
+      throw new HttpException(error.message || 'Cannot get rooms', 500);
+    }
+  }
+
+  async findOne(id: number) {
+    try {
+      const room = await this.roomsRepository.findOne({
+        where: { id: Equal(id) },
+      });
+
+      if (!room) throw new NotFoundException(`There is no room with id ${id}`);
+
+      return room;
+    } catch (error) {
+      console.error(error);
+      throw new HttpException(
+        error.message || 'Cannot get room',
+        error.status || 500,
+      );
     }
   }
 
@@ -51,41 +69,57 @@ export class RoomsService {
       return room;
     } catch (error) {
       console.error(error);
-      if(error.code === '23503') {
-        throw new NotFoundException(`There is no course with the provided id ${courseId}`);
+      if (error.code === '23503') {
+        throw new NotFoundException(
+          `There is no course with the provided id ${courseId}`,
+        );
       }
-      throw new HttpException('Cannot create room', 500);
+      throw new HttpException(
+        error.message || 'Cannot create room',
+        error.status || 500,
+      );
     }
   }
 
   async update(id: number, roomData: UpdateRoomParams) {
     try {
-      const room = await this.roomsRepository.findOne({ where: { id } });
+      const room = await this.roomsRepository.findOne({
+        where: { id: Equal(id) },
+      });
 
       if (!room) throw new NotFoundException(`There is no room with id ${id}`);
 
       const updatedRoom = await this.roomsRepository.save({
         ...room,
         ...roomData,
+        updatedAt: new Date(),
       });
 
       return updatedRoom;
     } catch (error) {
       console.error(error);
-      throw new HttpException('Cannot update room', 500);
+      throw new HttpException(
+        error.message || 'Cannot update room',
+        error.status || 500,
+      );
     }
   }
 
   async remove(id: number) {
     try {
-      const room = await this.roomsRepository.findOne({ where: { id } });
+      const room = await this.roomsRepository.findOne({
+        where: { id: Equal(id) },
+      });
 
       if (!room) throw new NotFoundException(`There is no room with id ${id}`);
 
       await this.roomsRepository.remove(room);
     } catch (error) {
       console.error(error);
-      throw new HttpException('Cannot remove room', 500);
+      throw new HttpException(
+        error.message || 'Cannot remove room',
+        error.status || 500,
+      );
     }
   }
 }

@@ -14,13 +14,13 @@ export class Teacher {
   @PrimaryGeneratedColumn({ type: 'bigint' })
   id: number;
 
-  @Column()
+  @Column({ nullable: true })
   biography: string;
 
   @Column({ nullable: true })
   profilePicture: string;
 
-  @OneToOne(() => User)
+  @OneToOne(() => User, { onDelete: 'CASCADE', eager: true })
   @JoinColumn()
   user: User;
 

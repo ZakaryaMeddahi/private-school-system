@@ -1,5 +1,6 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Message } from './message.entity';
+import { Role } from '../enums';
 
 @Entity({ name: 'users' })
 export class User {
@@ -22,12 +23,12 @@ export class User {
   address: string;
 
   @Column()
-  role: string;
+  role: Role;
 
   @Column({ default: true })
   isActive: boolean;
 
-  @Column({ type: 'timestamp' })
+  @Column({ type: 'timestamp', nullable: true })
   lastLogging: Date;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })

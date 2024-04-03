@@ -7,7 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from './user.entity';
-import { StudentSession } from './studentSessions.entity';
+import { StudentSession } from './studentSession.entity';
 import { Enrollment } from './enrollment.entity';
 
 @Entity({ name: 'students' })
@@ -15,13 +15,13 @@ export class Student {
   @PrimaryGeneratedColumn({ type: 'bigint' })
   id: number;
 
-  @Column()
+  @Column({ nullable: true })
   biography: string;
 
   @Column({ nullable: true })
   profilePicture: string;
 
-  @OneToOne(() => User)
+  @OneToOne(() => User, { onDelete: 'CASCADE', eager: true })
   @JoinColumn()
   user: User;
 

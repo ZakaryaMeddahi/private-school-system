@@ -10,12 +10,12 @@ export class StudentSession {
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   joinDate: Date;
 
-  @Column({ type: 'timestamp' })
+  @Column({ type: 'timestamp', default: null })
   leaveDate: Date;
 
   @ManyToOne(() => Student, (student) => student.joinedSessions)
   student: Student;
 
-  @ManyToOne(() => Session, (session) => session.studentSession)
+  @ManyToOne(() => Session, (session) => session.studentSessions)
   session: Session;
 }
