@@ -18,15 +18,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 @Module({
   imports: [
     TypeOrmModule.forFeature([Room, Chat, Message]),
-    JwtModule.registerAsync({
-      imports: [ConfigModule], // Inject ConfigModule
-      useFactory: async (configService: ConfigService) => ({
-        secret: configService.get('JWT_SECRET'),
-        signOptions: { expiresIn: '1d' },
-        isGlobal: true,
-      }),
-      inject: [ConfigService], // Inject ConfigService
-    }),
     TopicsModule,
     SessionsModule,
     StudentSessionsModule,

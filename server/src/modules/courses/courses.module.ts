@@ -16,15 +16,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 @Module({
   imports: [
     TypeOrmModule.forFeature([Course, Topic, Chat, Room]),
-    JwtModule.registerAsync({
-      imports: [ConfigModule], // Inject ConfigModule
-      useFactory: async (configService: ConfigService) => ({
-        secret: configService.get('JWT_SECRET'),
-        signOptions: { expiresIn: '1d' },
-        isGlobal: true,
-      }),
-      inject: [ConfigService], // Inject ConfigService
-    }),
     TeachersModule,
   ],
   controllers: [CoursesController],

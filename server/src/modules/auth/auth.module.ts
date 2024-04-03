@@ -18,8 +18,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       useFactory: async (configService: ConfigService) => ({
         secret: configService.get('JWT_SECRET'),
         signOptions: { expiresIn: '1d' },
-        isGlobal: true,
       }),
+      global: true,
       inject: [ConfigService], // Inject ConfigService
     }),
     StudentsModule,

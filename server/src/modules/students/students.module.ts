@@ -10,10 +10,6 @@ import { FilesModule } from '../files/files.module';
 
 @Module({
   imports: [
-    JwtModule.register({
-      secret: 'secret',
-      signOptions: { expiresIn: '1d' },
-    }),
     TypeOrmModule.forFeature([Student]),
     UsersModule,
     SocialLinksModule,
