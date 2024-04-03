@@ -1,21 +1,22 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { uploadFile } from 'src/helpers/object-storage';
 import { File } from 'src/shared/entities/file.entity';
 import { CreateFileParams } from 'src/shared/types';
 import { Repository } from 'typeorm';
+import { ObjectStorageService } from '../object-storage/object-storage.service';
 
 @Injectable()
 export class FilesService {
   // TODO: Inject ObjectStorage
   constructor(
     @InjectRepository(File) private readonly fileRepository: Repository<File>,
+    private readonly objectStorage: ObjectStorageService,
   ) {}
 
   // Implement file service
   async create(file: CreateFileParams) {
     try {
-      const result = await uploadFile(file);
+      const result = await this.objectStorage.uploadFile(file);
 
       if (!result) throw new HttpException('Cannot upload file', 500);
 

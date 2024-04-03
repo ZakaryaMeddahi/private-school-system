@@ -3,9 +3,10 @@ import {
   MessageBody,
   SubscribeMessage,
   WebSocketGateway,
+  WebSocketServer,
   WsException,
 } from '@nestjs/websockets';
-import { Socket } from 'socket.io';
+import { Server, Socket } from 'socket.io';
 import { MessagesService } from '../messages/messages.service';
 import { RoomsService } from './rooms.service';
 import { ChatsService } from '../chats/chats.service';
@@ -15,6 +16,7 @@ import { TopicsService } from '../topics/topics.service';
 import { UseGuards } from '@nestjs/common';
 import { WsAuth } from 'src/guards/ws-auth.guard';
 import { UserSocket } from 'src/shared/interfaces';
+import { SocketSession } from '../../shared/websocket.session';
 
 // We should have as DS like Map to store user sockets in room
 
@@ -26,6 +28,7 @@ import { UserSocket } from 'src/shared/interfaces';
 })
 export class RoomsGateway {
   constructor(
+    readonly sessions: SocketSession,
     private readonly roomsService: RoomsService,
     private readonly chatsService: ChatsService,
     private readonly messagesService: MessagesService,
@@ -33,6 +36,39 @@ export class RoomsGateway {
     private readonly sessionsService: SessionsService,
     private readonly studentSessionsService: StudentSessionsService,
   ) {}
+
+  @WebSocketServer()
+  server: Server;
+
+  // Event: connection
+  handleConnection(client: UserSocket, ...args: any[]) {
+    console.log('------------------------------------------------');
+    console.log(`Client with id ${client.id} connected`);
+    console.log('------------------------------------------------');
+
+    const { sub: userId } = client.user;
+    // Add user to session
+    this.sessions.setSession(userId, client);
+
+    console.log(this.sessions);
+  }
+
+  // Event: disconnection
+  handleDisconnect(client: UserSocket) {
+    console.log('------------------------------------------------');
+    console.log(`Client with id ${client.id} disconnected`);
+    console.log('------------------------------------------------');
+
+    // Leave all rooms on disconnect
+    client.rooms.forEach((room) => {
+      client.leave(room);
+    });
+
+    // Remove user from session
+    const { sub: userId } = client.user;
+    this.sessions.removeSession(userId);
+  }
+
   // Event: send message
   @UseGuards(WsAuth)
   @SubscribeMessage('message')
@@ -59,8 +95,11 @@ export class RoomsGateway {
         chat.id,
         message,
       );
+
+      console.log('roomId' + roomId);
+
       // Broadcast message to all users in chat
-      client.to(`room-${data.roomId}`).emit('message', { message: newMessage });
+      client.to(`room-${roomId}`).emit('message', { message: newMessage });
       return {
         status: 'success',
         result: 'Message created successfully',
@@ -137,15 +176,20 @@ export class RoomsGateway {
   // join socket.io room
   @UseGuards(WsAuth)
   @SubscribeMessage('join-room')
-  async joinRoom(@MessageBody() data: any, @ConnectedSocket() client: Socket) {
+  async joinRoom(
+    @MessageBody() data: any,
+    @ConnectedSocket() client: UserSocket,
+  ) {
     try {
       const { roomId } = data;
       // Check if room exist
       const room = await this.roomsService.findOne(roomId);
-      console.log(room);
       if (!room) {
         throw new WsException(`There is no room with id ${roomId}`);
       }
+
+      console.log('roomId: ' + roomId);
+      console.log('userId: ' + client.user.sub);
 
       // TODO: check if the user has access to the room
       // Join room
@@ -304,24 +348,5 @@ export class RoomsGateway {
       console.error(error);
       return { status: 'error', result: error.message };
     }
-  }
-
-  // Event: connection
-  handleConnection(client: Socket, ...args: any[]) {
-    console.log('------------------------------------------------');
-    console.log(`Client with id ${client.id} connected`);
-    console.log('------------------------------------------------');
-  }
-
-  // Event: disconnection
-  handleDisconnect(client: Socket) {
-    console.log('------------------------------------------------');
-    console.log(`Client with id ${client.id} disconnected`);
-    console.log('------------------------------------------------');
-
-    // Leave all rooms on disconnect
-    client.rooms.forEach((room) => {
-      client.leave(room);
-    });
   }
 }

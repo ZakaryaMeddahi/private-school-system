@@ -14,16 +14,13 @@ import {
 } from '@nestjs/common';
 import { MessagesService } from './messages.service';
 import { FileInterceptor } from '@nestjs/platform-express';
-
-import { v2 as cloudinary } from 'cloudinary';
-import { uploadFile } from 'src/helpers/object-storage';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { FilesService } from '../files/files.service';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { AuthUser } from 'src/decorators/user.decorator';
 import { JwtPayload } from 'src/shared/types';
-import { RolesGuard } from 'src/guards/roles.guard';
 import { EnrollmentGuard } from 'src/guards/enrollment.guard';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Controller('api/v1')
 @UseGuards(AuthGuard)
@@ -31,6 +28,7 @@ export class MessagesController {
   constructor(
     private readonly messagesService: MessagesService,
     private readonly filesService: FilesService,
+    private readonly eventEmitter: EventEmitter2,
   ) {}
 
   // TODO: Add enrollment guard
@@ -127,6 +125,11 @@ export class MessagesController {
       console.log('---------------------------------------');
 
       // TODO: Send message to the room
+      this.eventEmitter.emit('chat-message.created', {
+        userId,
+        chatId,
+        message: newMessage,
+      });
 
       return {
         status: 'success',
@@ -169,6 +172,11 @@ export class MessagesController {
       console.log('---------------------------------------');
 
       // TODO: Send message to the room
+      this.eventEmitter.emit('room-message.created', {
+        userId,
+        roomId,
+        message: newMessage,
+      });
 
       return {
         status: 'success',

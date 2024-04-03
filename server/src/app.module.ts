@@ -31,6 +31,8 @@ import { StudentSessionsModule } from './modules/student-sessions/student-sessio
 import { TopicsModule } from './modules/topics/topics.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
+import { EventEmitterModule } from '@nestjs/event-emitter';
+import { ObjectStorageModule } from './modules/object-storage/object-storage.module';
 
 @Module({
   imports: [
@@ -65,6 +67,7 @@ import { JwtModule } from '@nestjs/jwt';
       }),
       inject: [ConfigService],
     }),
+    EventEmitterModule.forRoot(),
     AuthModule,
     UsersModule,
     EnrollmentsModule,
@@ -80,6 +83,7 @@ import { JwtModule } from '@nestjs/jwt';
     SocialLinksModule,
     StudentSessionsModule,
     TopicsModule,
+    ObjectStorageModule,
   ],
   controllers: [],
   providers: [],

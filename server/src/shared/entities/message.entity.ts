@@ -15,7 +15,7 @@ export class Message {
   @PrimaryGeneratedColumn({ type: 'bigint' })
   id: number;
 
-  @Column()
+  @Column({ default: null })
   content: string;
 
   // Add isPinned column

@@ -14,6 +14,8 @@ import { TopicsModule } from '../topics/topics.module';
 import { EnrollmentsModule } from '../enrollments/enrollments.module';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { SocketSession } from '../../shared/websocket.session';
+import { RoomsEvents } from './rooms.events';
 
 @Module({
   imports: [
@@ -24,6 +26,14 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     EnrollmentsModule,
   ],
   controllers: [RoomsController],
-  providers: [RoomsService, RoomsGateway, ChatsService, MessagesService],
+  providers: [
+    RoomsService,
+    RoomsGateway,
+    ChatsService,
+    MessagesService,
+    SocketSession,
+    RoomsEvents,
+  ],
+  exports: [SocketSession],
 })
 export class RoomsModule {}

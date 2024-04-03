@@ -13,6 +13,8 @@ import { ChatsService } from './chats.service';
 import { UseGuards } from '@nestjs/common';
 import { WsAuth } from 'src/guards/ws-auth.guard';
 import { UserSocket } from 'src/shared/interfaces';
+import { OnEvent } from '@nestjs/event-emitter';
+import { SocketSession } from '../../shared/websocket.session';
 
 // We should have as DS like Map to store user sockets in chat
 
@@ -24,9 +26,36 @@ import { UserSocket } from 'src/shared/interfaces';
 })
 export class ChatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   constructor(
+    readonly sessions: SocketSession,
     private readonly chatsService: ChatsService,
     private readonly messagesService: MessagesService,
   ) {}
+
+  // Event: connection
+  handleConnection(client: UserSocket, ...args: any[]) {
+    console.log('------------------------------------------------');
+    console.log(`Client with id ${client.id} connected`);
+    console.log('------------------------------------------------');
+
+    const {sub: userId} = client.user;
+    this.sessions.setSession(userId, client);
+  }
+
+  // Event: disconnection
+  handleDisconnect(client: UserSocket) {
+    console.log('------------------------------------------------');
+    console.log(`Client with id ${client.id} disconnected`);
+    console.log('------------------------------------------------');
+
+    // Leave all rooms
+    client.rooms.forEach((room) => {
+      client.leave(room);
+    });
+
+    const {sub: userId} = client.user;
+    this.sessions.removeSession(userId)
+  }
+
   // Event: send message
   @UseGuards(WsAuth)
   @SubscribeMessage('message')
@@ -42,7 +71,6 @@ export class ChatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
       const { chatId, message } = data;
       // check if chat exist
       const chat = await this.chatsService.findOne(chatId);
-      console.log(chat);
       if (!chat) {
         throw new WsException(`There is no chat with id ${chatId}`);
       }
@@ -52,8 +80,12 @@ export class ChatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
         chatId,
         message,
       );
+
+      console.log(chat);
+      console.log(client.user.sub);
+
       // Broadcast message to all users in chat
-      client.to(`chat-${data.chatId}`).emit('message', { message: newMessage });
+      client.to(`chat-${chatId}`).emit('message', { message: newMessage });
 
       return {
         status: 'success',
@@ -130,7 +162,7 @@ export class ChatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   // join socket.io room
   @UseGuards(WsAuth)
   @SubscribeMessage('join-room')
-  async joinRoom(@MessageBody() data: any, @ConnectedSocket() client: Socket) {
+  async joinRoom(@MessageBody() data: any, @ConnectedSocket() client: UserSocket) {
     try {
       const { chatId } = data;
       // Check if chat exist
@@ -143,6 +175,8 @@ export class ChatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
       // Join room
       client.join(`chat-${chatId}`);
+
+      client.to(`chat-${chatId}`).emit('user-joined', { userId: client.user.sub });
 
       return { result: `User with id ${client.id} joined the chat ${chatId}` };
     } catch (error) {
@@ -160,23 +194,5 @@ export class ChatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
     // Leave room
     client.leave(`chat-${chatId}`);
     return { result: `User with id ${client.id} left the chat ${chatId}` };
-  }
-
-  // Event: connection
-  handleConnection(client: Socket, ...args: any[]) {
-    console.log('------------------------------------------------');
-    console.log(`Client with id ${client.id} connected`);
-    console.log('------------------------------------------------');
-  }
-
-  // Event: disconnection
-  handleDisconnect(client: Socket) {
-    console.log('------------------------------------------------');
-    console.log(`Client with id ${client.id} disconnected`);
-    console.log('------------------------------------------------');
-    // Leave all rooms
-    client.rooms.forEach((room) => {
-      client.leave(room);
-    });
   }
 }
