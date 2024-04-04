@@ -50,7 +50,7 @@ const Login = () => {
                         <Image src="/vector5.png" alt="vector5" w='80%'/>
                     </Box>    
                     <Box zIndex={25} pos='absolute' right='250' bottom='100'>
-                        <Image src="/illustration.png" alt="illustration" w='115%' />
+                        <Image src="/illustration.png" alt="illustration" w='110%' />
                     </Box>
                 </Container>
             </Flex>
