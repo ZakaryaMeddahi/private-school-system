@@ -31,25 +31,25 @@ const Login = () => {
                     </Container>
                 </Stack>
                 <Container w='60%' bg='transparent'>
-                    <Box position='absolute' top='97' right='105'>
+                    <Box position='absolute' top='10%' right='5.6%'>
                         <Image src="/vector.png" alt="vector" borderRadius='50px' w='80%'/>
                     </Box>    
-                    <Box position='absolute' bottom='90' right='-42'>
+                    <Box position='absolute' bottom='9.4%' right='-2.25%'>
                         <Image src="/vector1.png" alt="vector1" w='70%' borderBottomEndRadius='50px'/>
                     </Box>
-                    <Box position='absolute' bottom='350' left='650'>
+                    <Box position='absolute' bottom='30%' left='33%'>
                         <Image src="/vector2.png" alt="vector2" />
                     </Box>
-                    <Box position='absolute' bottom='100' right='440'>
+                    <Box position='absolute' bottom='10%' right='25%'>
                         <Image src="/vector3.png" alt="vector3"/>
                     </Box>
-                    <Box position='absolute' top='240' right='152'>
+                    <Box position='absolute' top='25%' right='8%'>
                         <Image src="/vector4.png" alt="vector4" w='80%'/>
                     </Box>    
-                    <Box position='absolute' top='97' right='365'>
+                    <Box position='absolute' top='10%' right='19.5%'>
                         <Image src="/vector5.png" alt="vector5" w='80%'/>
                     </Box>    
-                    <Box zIndex={25} pos='absolute' right='250' bottom='100'>
+                    <Box zIndex={25} pos='absolute' right='15%' bottom='15%'>
                         <Image src="/illustration.png" alt="illustration" w='110%' />
                     </Box>
                 </Container>
