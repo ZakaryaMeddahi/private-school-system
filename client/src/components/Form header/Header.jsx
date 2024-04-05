@@ -1,15 +1,14 @@
-import { Button, Heading, Text, Box, Divider, AbsoluteCenter } from '@chakra-ui/react';
+import { Button, Heading, Text, Box, Divider, AbsoluteCenter, VStack } from '@chakra-ui/react';
 
 const Header = () => {
     return(
-        <>
-            <Heading size='lg' fontSize='50px'>Login</Heading>
-            <Text fontSize='2xl'>Enter your account details</Text>
-            <Button fontSize='16px' size='lg' w='100%' paddingBlock='10' border='none' borderRadius='12' bgColor='#333437' color='white'>
+        <VStack marginBottom='25' spacing='15' align='flex-start' width='100%'>
+            <Heading size='lg' fontSize='50px' marginBottom='25'>Login</Heading>
+            <Text fontSize='18px' color='gray'>Enter your account details</Text>
+            <Button fontSize='16px' size='lg' w='100%' border='none' borderRadius='12' bgColor='#333437' color='white'>
                 Login with Google
             </Button>
-            <Divider />
-        </>
+        </VStack>
     );
 }
 
