@@ -1,21 +1,12 @@
-import { Box, Button, Center, Checkbox, Container, Flex, FormControl, FormLabel, HStack, Heading, Image, Stack, Text, VStack, Wrap, WrapItem } from "@chakra-ui/react";
+import { Button, Checkbox, Container, Flex, Image, Stack, Text, VStack } from "@chakra-ui/react";
 import Header from "@/components/Form header/Header";
 import FormInput from "@/components/Form input/FormInput";
-import FormSwitch from "@/components/Form Switch/Switch";
 
 const Login = () => {
     return(
         <div style={{color: '100%', zIndex: '50', display: 'grid', height: '100%', justifyItems: 'center', alignItems: 'center'}}>
             <Flex color='white' bg='#FCC128' height='90%' w='80%' borderRadius='50px'>
                 <Stack maxW='container.lg' w='650px' height='100%' bg='#1C1D21' p='25' zIndex={1} borderLeftRadius='50px'>
-                    {/* <Wrap spacing={4}>
-                        <WrapItem alignItems='center'>
-                            <Image boxSize='100px' src='/1-removebg-preview.png' />
-                        </WrapItem>
-                        <WrapItem alignItems='center'>
-                            <Heading as='h1' size='lg' fontSize='32px'>Education</Heading>
-                        </WrapItem>
-                    </Wrap> */}
                     <Container w='100%' h='100%' display='flex' justifyContent='center'>
                         <VStack h='100%' w='90%' align='self-start' justifyContent='center'>
                             <Header title='Login' />

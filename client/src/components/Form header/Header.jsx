@@ -1,4 +1,4 @@
-import { Button, Heading, Text, Box, Divider, AbsoluteCenter, VStack } from '@chakra-ui/react';
+import { Button, Heading, Text, VStack } from '@chakra-ui/react';
 
 const Header = () => {
     return(
