@@ -14,6 +14,8 @@ import {
     UnorderedList, 
     ListItem
 } from '@chakra-ui/react';
+import FooterList from '../Footer List/footerList';
+import Item from '../Item/Item';
 
 const Footer = () => {
     return (
@@ -26,31 +28,13 @@ const Footer = () => {
                     </Text>
                 </GridItem>
                 <GridItem colSpan={2}>
-                    <Heading as='h3' fontSize='24px' marginBottom='15px'>Links</Heading>
-                    <UnorderedList listStyleType='none' margin='0' lineHeight='1.7'>
-                        <ListItem color='gray' _hover={{color: 'white'}} transition='all 0.6s ease'><a href='/'>Home</a></ListItem>
-                        <ListItem color='gray' _hover={{color: 'white'}} transition='all 0.6s ease'><a href='/about'>About</a></ListItem>
-                        <ListItem color='gray' _hover={{color: 'white'}} transition='all 0.6s ease'><a href='/courses'>Courses</a></ListItem>
-                        <ListItem color='gray' _hover={{color: 'white'}} transition='all 0.6s ease'><a href='/contact'>Contact</a></ListItem>
-                    </UnorderedList>
+                    <FooterList title='Links' children={[<Item item='Home' />, <Item item='About' />, <Item item='courses' />, <Item item='Contact' />]} />
                 </GridItem>
                 <GridItem colSpan={2}>
-                    <Heading as='h3' fontSize='24px' marginBottom='15px'>Links</Heading>
-                    <UnorderedList listStyleType='none' margin='0' lineHeight='1.7'>
-                        <ListItem color='gray' _hover={{color: 'white'}} transition='all 0.6s ease'><a href='/'>Home</a></ListItem>
-                        <ListItem color='gray' _hover={{color: 'white'}} transition='all 0.6s ease'><a href='/about'>About</a></ListItem>
-                        <ListItem color='gray' _hover={{color: 'white'}} transition='all 0.6s ease'><a href='/courses'>Courses</a></ListItem>
-                        <ListItem color='gray' _hover={{color: 'white'}} transition='all 0.6s ease'><a href='/contact'>Contact</a></ListItem>
-                    </UnorderedList>
+                    <FooterList title='Courses' children={[<Item item='Web Development' />, <Item item='Mobile Development' />, <Item item='Data Science' />, <Item item='Artificial Intelligence' />]} />
                 </GridItem>
                 <GridItem colSpan={2}>
-                    <Heading as='h3' fontSize='24px' marginBottom='15px'>Links</Heading>
-                    <UnorderedList listStyleType='none' margin='0' lineHeight='1.7'>
-                        <ListItem color='gray' _hover={{color: 'white'}} transition='all 0.6s ease'><a href='/'>Home</a></ListItem>
-                        <ListItem color='gray' _hover={{color: 'white'}} transition='all 0.6s ease'><a href='/about'>About</a></ListItem>
-                        <ListItem color='gray' _hover={{color: 'white'}} transition='all 0.6s ease'><a href='/courses'>Courses</a></ListItem>
-                        <ListItem color='gray' _hover={{color: 'white'}} transition='all 0.6s ease'><a href='/contact'>Contact</a></ListItem>
-                    </UnorderedList>
+                    <FooterList title='Contact' children={[<Item item='Address: 1234 Street Name, City Name, United States' />, <Item item='Phone: +123 456 789' />, <Item item='Email: ex@gmail.com' />]} />
                 </GridItem>
             </Grid>
             <Divider marginBlock='20px' />
