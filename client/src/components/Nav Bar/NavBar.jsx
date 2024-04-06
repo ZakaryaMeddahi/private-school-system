@@ -1,18 +1,12 @@
 import { Grid, GridItem, Wrap, WrapItem, Image, Heading, HStack, Button } from '@chakra-ui/react'
 import Link from 'next/link'
+import Logo from '../Logo/Logo';
 
 const NavBar = () => {
     return(
         <Grid templateColumns='repeat(12, 1fr)' gap={6} bg='black' color='white' p={4} alignItems='center'>
             <GridItem colSpan={2}>
-                <Wrap spacing={0}>
-                    <WrapItem alignItems='center'>
-                        <Image boxSize='60px' src='/1-removebg-preview.png' />
-                    </WrapItem>
-                    <WrapItem alignItems='center'>
-                        <Heading as='h1' size='lg' fontSize='24px'>Education</Heading>
-                    </WrapItem>
-                </Wrap>          
+                <Logo />          
             </GridItem>
             <GridItem colSpan={5} alignItems='center' justifyContent='center'>
                 <HStack spacing={4}>
