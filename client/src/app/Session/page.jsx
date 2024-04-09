@@ -1,7 +1,7 @@
 'use client'
 
 import { GridItem, Grid, Container, Box, VStack, Wrap, WrapItem, Center, Text } from '@chakra-ui/react';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { MdOutlineContentPaste, MdOutlineMicNone, MdOutlineMicOff, MdOutlineCall } from "react-icons/md";
 import { CiVideoOn, CiVideoOff } from "react-icons/ci";
 import { RiVoiceprintFill } from "react-icons/ri";
@@ -17,6 +17,11 @@ const Session = () => {
     const [count, setCount] = useState(0);
     const [micOn, setMicOn] = useState(false);
     const [videoOn, setVideoOn] = useState(false);
+
+    useEffect(() => {
+        document.querySelector('.css-19dtx0u').style.display = 'none';
+        document.querySelector('.css-1d814jw').style.display = 'none';
+    }, []);
 
     const onVideoClick = () => {
         setVideoOn(!videoOn);
@@ -42,13 +47,13 @@ const Session = () => {
 
     const changeGrid = () => {
         if(GridItemRef.current && count === 0) {
-            console.log(GridItemRef.current.style);
             GridItemRef.current.style.gridColumn = '1/5';
             GridItemRef.current.style.gridRow = '1/4';
             setCount(1);
         }
-
+        
         if(GridItemRef.current && count === 1) {
+            GridItemRef.current.class = 'css-1xsb7mh';
             GridItemRef.current.style.gridColumn = '1/2';
             GridItemRef.current.style.gridRow = '1/2';
             setCount(0);
@@ -177,7 +182,7 @@ const Session = () => {
                     </Box>
                 </VStack>
             </Box>
-            <Box ref={boxRef} display='none' bgColor='mediumpurple' w='100%' h='100%'></Box>
+            <Box ref={boxRef} display='none' bgColor='gray' w='100%' h='100%'></Box>
         </Container>
 
     );
