@@ -15,20 +15,15 @@ import { FaFacebookF } from "react-icons/fa";
 import { BsInstagram, BsWhatsapp } from "react-icons/bs";
 import RowInput from '@/components/Row Input/RowInput';
 import ContactInput from '@/components/Contact Input/ContactInput';
+import ContactHeader from '@/components/Contact header/ContactHeader';
 
 const Contact = () => {
     return (
         <Container m='0' p='0' maxW='100%' display='flex' flexDirection='column' alignItems='center' marginBlock='50px'>
-            <Box w='100%' textAlign='center'>
-                <Heading color='#F6AF03' fontSize='40'>Contact Us</Heading>
-                <Text color='#717171' fontSize='18' fontWeight='500' marginTop='3'>Any question or remarks? Just write us a message!</Text>
-            </Box>
+            <ContactHeader title='Contact Us' Txt='Any question or remarks? Just write us a message!' textAlign='center' HColor='#F6AF03' HFontSize='40' TColor='#717171' tfW='500'/>
             <Grid templateColumns="auto 1fr" gap={6} width='1196px' height='667' bgColor='#FFFFFF' borderRadius='10' marginBlock='50px' p='5' boxShadow='rgba(0, 0, 0, 0.35) 0px 5px 15px'>
                 <GridItem bgColor='#011C2B' h='100%' w='491px' color='white' borderRadius='10' padding='30px' display='grid' justifyContent='space-between'>
-                    <Box>
-                        <Heading fontSize='28' fontWeight='600'>Contact Information</Heading>
-                        <Text fontSize='18' color='#C9C9C9' marginTop='3'>Feel free to contact us for any question or remarks. We will be happy to help you.</Text>
-                    </Box>
+                    <ContactHeader title='Contact Information' Txt='Feel free to contact us for any question or remarks. We will be happy to help you.' HColor='white' HFontSize='28' TColor='#C9C9C9' hfW='600'/>
                     <Box display='grid'>
                         <Box display='flex' gap='15' flexDir='row' alignItems='center'>
                             <PiPhoneCallFill size='25' />
