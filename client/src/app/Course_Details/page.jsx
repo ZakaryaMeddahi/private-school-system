@@ -13,7 +13,7 @@ const CourseDetails = () => {
 
     return (
         <Container m='0' p='50px' maxW='100%' onClick={printScroll}>
-            <Box display='grid' gridTemplateColumns='repeat(2, 1fr)' gap='25' justifyItems='center'>
+            <Box display='grid' gridTemplateColumns='repeat(2, 1fr)' gap='25' justifyItems='center' maxH='200px'>
                 <Box>
                     <Heading > Web Develpoment </Heading>
                     <Text marginBottom='25px' marginTop='5' lineHeight='1.6'>

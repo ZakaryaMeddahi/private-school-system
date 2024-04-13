@@ -15,7 +15,7 @@ import {
 
 const CourseCard = () => {
     return (
-        <Card maxW='md' position='absolute' right='50'>
+        <Card maxW='md'>
             <CardHeader>
                 <Flex spacing='4'>
                     <Flex flex='1' gap='4' alignItems='center' flexWrap='wrap'>
