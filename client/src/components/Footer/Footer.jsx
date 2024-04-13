@@ -10,9 +10,6 @@ import {
     Spacer, 
     Box, 
     Text, 
-    Heading, 
-    UnorderedList, 
-    ListItem
 } from '@chakra-ui/react';
 import FooterList from '../Footer List/footerList';
 import Item from '../Item/Item';
@@ -28,13 +25,13 @@ const Footer = () => {
                     </Text>
                 </GridItem>
                 <GridItem colSpan={2}>
-                    <FooterList title='Links' children={[<Item item='Home' />, <Item item='About' />, <Item item='courses' />, <Item item='Contact' />]} />
+                    <FooterList title='Links' children={[<Item item='Home' color='gray' _hover={{color: 'white'}} transition='all 0.6s ease' />, <Item item='About' color='gray' _hover={{color: 'white'}} transition='all 0.6s ease' />, <Item item='courses' color='gray' _hover={{color: 'white'}} transition='all 0.6s ease' />, <Item item='Contact' color='gray' _hover={{color: 'white'}} transition='all 0.6s ease' />]} />
                 </GridItem>
                 <GridItem colSpan={2}>
-                    <FooterList title='Courses' children={[<Item item='Web Development' />, <Item item='Mobile Development' />, <Item item='Data Science' />, <Item item='Artificial Intelligence' />]} />
+                    <FooterList title='Courses' children={[<Item item='Web Development' color='gray' _hover={{color: 'white'}} transition='all 0.6s ease' />, <Item item='Mobile Development' color='gray' _hover={{color: 'white'}} transition='all 0.6s ease' />, <Item item='Data Science' color='gray' _hover={{color: 'white'}} transition='all 0.6s ease' />, <Item item='Artificial Intelligence' color='gray' _hover={{color: 'white'}} transition='all 0.6s ease' />]} />
                 </GridItem>
                 <GridItem colSpan={2}>
-                    <FooterList title='Contact' children={[<Item item='Address: 1234 Street Name, City Name, United States' />, <Item item='Phone: +123 456 789' />, <Item item='Email: ex@gmail.com' />]} />
+                    <FooterList title='Contact' children={[<Item item='Address: 1234 Street Name, City Name, United States' color='gray' _hover={{color: 'white'}} transition='all 0.6s ease' />, <Item item='Phone: +123 456 789' color='gray' _hover={{color: 'white'}} transition='all 0.6s ease' />, <Item item='Email: ex@gmail.com' color='gray' _hover={{color: 'white'}} transition='all 0.6s ease' />]} />
                 </GridItem>
             </Grid>
             <Divider marginBlock='20px' />
