@@ -1,9 +1,9 @@
 import { ListItem } from '@chakra-ui/react';
 
-const Item = ({ item }) => {
+const Item = ({ item, color, _hover, transition, mrT }) => {
     return (
-        <ListItem color='gray' _hover={{color: 'white'}} transition='all 0.6s ease'>
-            <a href='/'>{item}</a>
+        <ListItem color={color} _hover={_hover || {}} transition={ transition || ''} marginTop={mrT || '0'}>
+            {item}
         </ListItem>
     );
 }
