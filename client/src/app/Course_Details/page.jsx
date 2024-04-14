@@ -21,6 +21,7 @@ const CourseDetails = () => {
                     </Text>
                 </Box>
                 <CourseCard />
+                {/* kdjalf */}
                 {/* <Box w='500px' h='500px' position='absolute' right='50' bgColor='yellowgreen'></Box> */}
             </Box>
             <Heading > Topics </Heading>

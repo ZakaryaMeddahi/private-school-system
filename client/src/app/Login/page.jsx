@@ -2,6 +2,8 @@ import { Button, Checkbox, Container, Flex, Image, Stack, Text, VStack } from "@
 import Header from "@/components/Form header/Header";
 import FormInput from "@/components/Form input/FormInput";
 
+// no
+
 const Login = () => {
     return(
         <div style={{color: '100%', zIndex: '50', display: 'grid', height: '100%', justifyItems: 'center', alignItems: 'center'}}>

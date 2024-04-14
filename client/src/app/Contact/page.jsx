@@ -19,6 +19,7 @@ import Media from '@/components/Socials/Media';
 const Contact = () => {
     return (
         <Container m='0' p='0' maxW='100%' display='flex' flexDirection='column' alignItems='center' marginBlock='50px'>
+            {/* <ContactHeader title='Contact Us' Txt='Any question or remarks? Just write us a message!' textAlign='center' HColor='#F6AF03' HFontSize='40' TColor='#717171' tfW='500'/> */}
             <ContactHeader title='Contact Us' Txt='Any question or remarks? Just write us a message!' textAlign='center' HColor='#F6AF03' HFontSize='40' TColor='#717171' tfW='500'/>
             <Grid templateColumns="auto 1fr" gap={6} width='1196px' height='667' bgColor='#FFFFFF' borderRadius='10' marginBlock='50px' p='5' boxShadow='rgba(0, 0, 0, 0.35) 0px 5px 15px'>
                 <GridItem bgColor='#011C2B' h='100%' w='491px' color='white' borderRadius='10' padding='30px' display='grid' justifyContent='space-between'>
