@@ -20,11 +20,6 @@ const Session = () => {
     const [micOn, setMicOn] = useState(false);
     const [videoOn, setVideoOn] = useState(false);
 
-    useEffect(() => {
-        document.querySelector('.css-19dtx0u').style.display = 'none';
-        document.querySelector('.css-1d814jw').style.display = 'none';
-    }, []);
-
     const onVideoClick = () => {
         setVideoOn(!videoOn);
     }
