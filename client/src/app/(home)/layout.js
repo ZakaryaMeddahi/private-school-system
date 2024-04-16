@@ -19,7 +19,7 @@ const Layout = ({ children }) => {
                     <MdOutlineKeyboardDoubleArrowLeft color="#898C81" size='25px'/>
                 </Box>
                 <Divider borderColor='#898C81' />
-                <Flex w='100%' h='90%' flexDir='column' justifyContent='space-between'>
+                <Box w='100%' h='89%' display='flex' flexDir='column' justifyContent='space-between'>
                     <Box>
                         <Box w='100%' display='flex' flexDir='row' gap='5' alignItems='center' paddingLeft='30' h='70px' _hover={{bgColor: 'white'}}>
                             <HiOutlineAcademicCap color="#898C81" size='23px' />
@@ -52,7 +52,7 @@ const Layout = ({ children }) => {
                             <Text color='#898C81'>Notification</Text>
                         </Box>
                         <Divider borderColor='#898C81' />
-                        <Box w='100%' display='flex' flexDirection='row' padding='25px' gap='10px' alignItems='center'>
+                        <Box w='100%' display='flex' flexDirection='row' padding='15px' gap='10px' alignItems='center'>
                             <Box w='50px' h='50px' borderRadius='50px' bgColor='#D8D9D4'>
                                 <Center height='100%'>
                                     AS
@@ -64,7 +64,7 @@ const Layout = ({ children }) => {
                             </Box>
                         </Box>
                     </Box>
-                </Flex>
+                </Box>
             </GridItem>
             <GridItem>{children}</GridItem>
         </Grid>
