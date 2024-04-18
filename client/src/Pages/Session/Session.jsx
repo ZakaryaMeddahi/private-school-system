@@ -45,7 +45,7 @@ const Session = () => {
 
     const changeGrid = () => {
         if(GridItemRef.current && count === 0 && ProfileRef.current) {
-            console.log(ProfileRef.current);
+            console.log(GridItemRef);
             ProfileRef.current.style.width = '12%';
             ProfileRef.current.style.height = '25%';
             GridItemRef.current.style.gridColumn = '1/5';
@@ -66,15 +66,15 @@ const Session = () => {
     return(
         <Container ref={gridRef} w="100%" h="100%" maxW="100%" maxH="100%" display='grid' gridTemplateColumns='1fr' p={0} m={0}>
             <Box w='100%' h='100%'>
-                <VStack align='stretch' height='100%' w='100%' justifyContent='space-evenly'>
-                    <Box h='90%'>
+                <VStack align='stretch' height='100%' w='100%' gap={0}>
+                    <Box h='100%'>
                         <Grid templateColumns="repeat(4, 1fr)" templateRows='repeat(3, 1fr)' p='25px' height='100%' gap={4}>
                             <GridItem ref={GridItemRef} onClick={changeGrid} bg="#2F2E2E" h='100%' borderRadius='15px'>
                                 <Center h='100%' w='100%'>
                                     <Box ref={ProfileRef} height='45%' w='30%' borderRadius='50%' bgColor='#D9D9D9'></Box>
                                 </Center>
                             </GridItem>
-                            <GridItem ref={GridItemRef} onClick={changeGrid} bg="#2F2E2E" h='100%' borderRadius='15px'>
+                            <GridItem ref={GridItemRef} onClick={changeGrid} bg="#2F2E2E" h='100%' borderRadius='15px' className='hello'>
                                 <Center h='100%' w='100%'>
                                     <Box ref={ProfileRef} height='45%' w='30%' borderRadius='50%' bgColor='#D9D9D9'></Box>
                                 </Center>
@@ -131,14 +131,14 @@ const Session = () => {
                             </GridItem>
                         </Grid>
                     </Box>
-                    <Box h='px' w='100%' display='flex' justifyContent='space-around'>
+                    <Box w='100%' display='flex' justifyContent='space-around'>
                         {/* <Box > */}
                             <Center h='100%' w='250px' borderRadius='10px' gap='15'>
                                 <MdOutlineContentPaste size='30px'/>
                                 <Text>Ulaklaflahfw</Text>
                             </Center>
                         {/* </Box> */}
-                        <Box display='flex' flexDir='row' alignItems='center' gap='15px' paddingInline='25px' paddingBlock='10px' h='100%' w='fit-content' borderRadius='10px'>
+                        <Box display='flex' flexDir='row' alignItems='center' gap='15px' paddingInline='25px' paddingBlock='10px' bgColor='whitesmoke' h='100px' w='fit-content' borderRadius='10px'>
                             {/* <Box w='50px' height='50px' borderRadius='50px' bgColor='#E6E5E5'> */}
                                 <Center w='50px' height='50px' borderRadius='50px' bgColor='#E6E5E5'>
                                     <RiVoiceprintFill size='30px'/>
@@ -175,7 +175,9 @@ const Session = () => {
                     </Box>
                 </VStack>
             </Box>
-            <Box ref={boxRef} display='none' bgColor='gray' w='100%' h='100%'></Box>
+            <Box ref={boxRef} display='none' bgColor='gray' w='100%' h='100%'>
+                
+            </Box>
         </Container>
 
     );
