@@ -1,6 +1,8 @@
 'use client';
 
+import React from "react";
 import Room from "@/components/Room/Room";
+import MessageInput from "@/components/message-input";
 import {
     Box, 
     Grid, 
@@ -34,9 +36,12 @@ import {
     Input
 } from "@chakra-ui/react";
 
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { CiMenuKebab } from "react-icons/ci";
 import { IoIosSend } from "react-icons/io";
+import { MessageContext } from "@/components/message-input";
+
+export const msgsContext = React.createContext();
 
 const Chat = () => {
 
@@ -46,7 +51,6 @@ const Chat = () => {
     const chatRef = useRef();
     const roomInfoRef = useRef();
     const [count, setCount] = useState(0);
-    const [message, setMessage] = useState('');
     const [messages, setMessages] = useState(msgs);
     const [popover, setPopover] = useState(false);
 
@@ -71,10 +75,6 @@ const Chat = () => {
         if (MenuRef.current) {
             setPopover(true);
         }
-    }
-    
-    const sendMsg = () => {
-        setMessages([message, ...messages]);
     }
 
     return (
@@ -134,14 +134,11 @@ const Chat = () => {
                             })}
                         </Box>
                         {/* write your message */}
-                        <Box paddingInline='3' w='100%' height='8%' bgColor='white' boxShadow='rgba(0, 0, 0, 0.24) 0px 3px 8px' borderRadius='15px' display='grid' gridTemplateColumns='1fr auto' alignItems='center' gap='15'>
-                            <Input placeholder='Basic usage' w='100%'  border='none' onChange={e => setMessage(e.target.value)}/>
-                            <Box w='45px' height='45px' borderRadius='50px' _hover={{bgColor: 'whitesmoke'}} onClick={sendMsg}>
-                                <Center h='100%'>
-                                    <IoIosSend size='25px' color="gray" />
-                                </Center>
+                        <msgsContext.Provider value={{messages, setMessages}}>
+                            <Box paddingInline='3' w='100%' height='8%' bgColor='white' boxShadow='rgba(0, 0, 0, 0.24) 0px 3px 8px' borderRadius='15px' display='grid' gridTemplateColumns='1fr auto' alignItems='center' gap='15'>
+                                <MessageInput />
                             </Box>
-                        </Box>
+                        </msgsContext.Provider>
                     </Box>
                 </GridItem>
                 <GridItem colSpan={3} borderLeft='1px solid gray' boxShadow='rgba(0, 0, 0, 0.24) 0px 3px 8px' ref={roomInfoRef}>
