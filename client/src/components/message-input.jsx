@@ -4,12 +4,12 @@ import {
     Input,
 } from '@chakra-ui/react';
 import { IoIosSend } from 'react-icons/io';
-import { msgsContext } from '@/Pages/Chat/Chat';
+import { chatContext } from '@/Pages/Chat/Chat';
 import React, { useContext, useState } from 'react';
 
 
 const MessageInput = () => {
-    const {messages, setMessages} = useContext(msgsContext);
+    const {messages, setMessages} = useContext(chatContext);
     const [message, setMessage] = useState('');
 
     const sendMsg = () => {

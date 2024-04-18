@@ -13,7 +13,7 @@ import {
     Portal
 } from "@chakra-ui/react";
 import Room from "@/components/Room/Room";
-import { roomInfoContext } from "@/Pages/Chat/Chat";
+import { chatContext } from "@/Pages/Chat/Chat";
 import React, { useRef, useState, useContext } from "react";
 
 const RoomHeader = ({ roomName, ChangeLayout, icon, ShowPopover }) => {
@@ -21,7 +21,7 @@ const RoomHeader = ({ roomName, ChangeLayout, icon, ShowPopover }) => {
     const MenuRef = useRef();
     const [count, setCount] = useState(0);
     const [popover, setPopover] = useState(false);
-    const { roomInfoRef, chatRef } = useContext(roomInfoContext);
+    const { roomInfoRef, chatRef } = useContext(chatContext);
 
     const changeLayout = () => {
         if (chatRef.current && roomInfoRef.current && count === 0) {

@@ -41,9 +41,9 @@ import MessageInput from "@/components/message-input";
 import React , { useContext, useEffect, useRef, useState } from "react";
 import RoomBody from "@/components/chat-room-body";
 import RoomInfo from "@/components/chat-room-info";
+import RoomChat from "@/components/room-chat";
 
-export const msgsContext = React.createContext();
-export const roomInfoContext = React.createContext();
+export const chatContext = React.createContext();
 
 const Chat = () => {
 
@@ -70,22 +70,13 @@ const Chat = () => {
                     </Box>
                 </GridItem>
                 <GridItem ref={chatRef} colSpan={6} borderLeft='1px solid gray' h='100vh'>
-                    <Box h='100%' p='20px' display='flex' flexDirection='column' justifyContent='space-between'>
-                        {/* Room Header */}
-                        <roomInfoContext.Provider value={{roomInfoRef, chatRef}}>
-                            <RoomHeader roomName='Web Devolpoment' ChangeLayout={true} icon={<CiMenuKebab />} ShowPopover={true} />
-                        </roomInfoContext.Provider>
-                        {/* display Messages */}
-                        <RoomBody messages={messages} />
-                        {/* write your message */}
-                        <msgsContext.Provider value={{messages, setMessages}}>
-                            <MessageInput />
-                        </msgsContext.Provider>
-                    </Box>
+                    <chatContext.Provider value={{messages, setMessages, roomInfoRef, chatRef}}>
+                        <RoomChat roomName='Web Devolpoment' ChangeLayout={true} icon={<CiMenuKebab />} ShowPopover={true} />
+                    </chatContext.Provider>
                 </GridItem>
-                <roomInfoContext.Provider value={roomInfoRef}> 
+                <GridItem colSpan={3} borderLeft='1px solid gray' boxShadow='rgba(0, 0, 0, 0.24) 0px 3px 8px' ref={roomInfoRef}>
                     <RoomInfo />
-                </roomInfoContext.Provider>
+                </GridItem>
             </Grid>
         </Container>
     );

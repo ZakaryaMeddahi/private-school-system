@@ -8,6 +8,9 @@ import { RiVoiceprintFill } from "react-icons/ri";
 import { PiScreencast } from "react-icons/pi";
 import { BsChat } from "react-icons/bs";
 import { IoPersonOutline } from "react-icons/io5";
+import RoomHeader from '@/components/room-header';
+import { MdClose } from "react-icons/md";
+import RoomBody from '@/components/chat-room-body';
 
 
 // no
@@ -176,6 +179,8 @@ const Session = () => {
                 </VStack>
             </Box>
             <Box ref={boxRef} display='none' bgColor='gray' w='100%' h='100%'>
+                <RoomHeader roomName='Web Devolpoment' ChangeLayout={false} icon={<MdClose />} ShowPopover={false} />
+                <RoomBody />
                 
             </Box>
         </Container>
