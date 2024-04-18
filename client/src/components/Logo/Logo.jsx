@@ -2,7 +2,7 @@ import { Wrap, WrapItem, Image, Heading } from '@chakra-ui/react';
 
 const Logo = ({ boxSize, fontSize, color, fontWeight }) => {
     return (
-        <Wrap spacing={0}>
+        <Wrap spacing={0} zIndex='1'>
             <WrapItem alignItems='center'>
                 <Image boxSize={boxSize || '60px'} src='/1-removebg-preview.png' />
             </WrapItem>

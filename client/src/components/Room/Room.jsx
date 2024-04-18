@@ -1,9 +1,9 @@
 'use client';
 
-import { Box, Flex, Avatar, Heading, Image, Divider, Text } from "@chakra-ui/react";
+import { Box, Flex, Avatar, Heading, Image, Divider, Text} from "@chakra-ui/react";
 import { useRef } from "react";
 
-const Room = ({ RoomName }) => {
+const Room = ({ RoomName, hover }) => {
 
     const boxRef = useRef();
 
@@ -16,7 +16,7 @@ const Room = ({ RoomName }) => {
     }
 
     return (
-        <Box ref={boxRef} padding='15px' color='black' borderRadius='15px' _hover={{backgroundColor: 'rgba(128, 128, 128, 0.150)'}} onClick={RoomFocus}>
+        <Box ref={boxRef} padding='15px' color='black' borderRadius='15px' _hover={ hover && { backgroundColor: 'rgba(128, 128, 128, 0.150)'}} onClick={ hover && RoomFocus}>
             <Flex direction='row' gap='15' alignItems='center' >
             <Image
                 borderRadius='full'

@@ -23,7 +23,7 @@ const Login = () => {
                         </VStack>
                     </Container>
                 </Stack>
-                <Container flex={1} bg='transparent' display='flex' justifyContent='center' alignItems='center'>
+                <Container flex={1} bg='transparent' display='flex' justifyContent='center' alignItems='center' maxW='100%'>
                  {/* <Box position='absolute' top='5%' right='5.6%'>
                         <Image src="/vector.png" alt="vector" borderRadius='50px' w='80%'/>
                     </Box>    
@@ -42,7 +42,7 @@ const Login = () => {
                     <Box position='absolute' top='5%' right='19.5%'>
                         <Image src="/vector5.png" alt="vector5" w='80%'/>
                     </Box> */}
-                    <Image src="/illustration.png" alt="illustration" w='100%' zIndex='1' />
+                    <Image src="/illustration.png" alt="illustration" w='800px' zIndex='1' />
                 </Container>
             </Flex>
         </div>
