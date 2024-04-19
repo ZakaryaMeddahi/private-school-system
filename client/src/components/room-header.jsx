@@ -15,13 +15,16 @@ import {
 import Room from "@/components/Room/Room";
 import { chatContext } from "@/Pages/Chat/Chat";
 import React, { useRef, useState, useContext } from "react";
+import { ChatContext } from "@/app/providers/ChatProvider";
 
 const RoomHeader = ({ roomName, ChangeLayout, icon, ShowPopover }) => {
 
     const MenuRef = useRef();
     const [count, setCount] = useState(0);
     const [popover, setPopover] = useState(false);
-    const { roomInfoRef, chatRef } = useContext(chatContext);
+    if (ChangeLayout) {
+        var { roomInfoRef, chatRef } = useContext(ChatContext);
+    }
 
     const changeLayout = () => {
         if (chatRef.current && roomInfoRef.current && count === 0) {
@@ -76,7 +79,11 @@ const RoomHeader = ({ roomName, ChangeLayout, icon, ShowPopover }) => {
                         }
                     </Popover>
                     :
-                    {icon}
+                    <Box>
+                        <Center h='100%'>
+                            {icon}
+                        </Center>
+                    </Box>
                 }
             </Box>
         </Box>  

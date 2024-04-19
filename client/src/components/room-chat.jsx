@@ -3,13 +3,9 @@ import {
 } from "@chakra-ui/react";
 import RoomHeader from "./room-header";
 import RoomBody from "./chat-room-body";
-import React, { useContext } from "react";
 import MessageInput from "./message-input";
-import { chatContext } from "@/Pages/Chat/Chat";
 
-const RoomChat = ({roomName, ChangeLayout, icon, ShowPopover}) => {
-    
-    const {messages} = useContext(chatContext);
+const RoomChat = ({roomName, messages, ChangeLayout, icon, ShowPopover}) => {
     
     return (
         <Box h='100%' p='20px' display='flex' flexDirection='column' justifyContent='space-between'>
