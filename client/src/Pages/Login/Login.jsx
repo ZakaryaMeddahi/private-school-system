@@ -8,7 +8,7 @@ const Login = () => {
     return(
         <div style={{color: '100%', zIndex: '50', display: 'grid', height: '100%', justifyItems: 'center', alignItems: 'center'}}>
             <Flex color='white' bg='#FCC128' height='90%' w='80%' borderRadius='50px'>
-                <Stack maxW='container.lg' w='650px' height='100%' bg='#1C1D21' p='25' zIndex={1} borderLeftRadius='50px'>
+                <Stack maxW='container.lg' w='40%' height='100%' bg='#1C1D21' p='25' zIndex={1} borderLeftRadius='50px'>
                     <Container w='100%' h='100%' display='flex' justifyContent='center'>
                         <VStack h='100%' w='90%' align='self-start' justifyContent='center'>
                             <Header title='Login' />
