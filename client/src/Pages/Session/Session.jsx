@@ -52,7 +52,9 @@ const Session = () => {
     const onGridClick = () => {
         if (gridRef.current && boxRef.current && count === 0) {
             gridRef.current.style.gridTemplateColumns = '3fr 1fr';
-            boxRef.current.style.display = 'block';
+            boxRef.current.style.display = 'flex';
+            boxRef.current.style.flexDirection = 'column';
+            boxRef.current.style.height = '100vh';
             setCount(1);
         }
 
@@ -475,7 +477,7 @@ const Session = () => {
             <Box
                 ref={boxRef}
                 display='none'
-                bgColor='gray'
+                bgColor='white'
                 w='100%'
                 h='100%'
             >
@@ -485,7 +487,7 @@ const Session = () => {
                     // messages={msgs}
                     messages={messages}
                     ChangeLayout={false}
-                    icon={<MdClose />}
+                    icon={<MdClose size='25px' color='gray' />}
                     ShowPopover={false}
                 />
             </Box>

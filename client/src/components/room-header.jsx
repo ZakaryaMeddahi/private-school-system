@@ -79,11 +79,9 @@ const RoomHeader = ({ roomName, ChangeLayout, icon, ShowPopover }) => {
                         }
                     </Popover>
                     :
-                    <Box>
-                        <Center h='100%'>
-                            {icon}
-                        </Center>
-                    </Box>
+                    <Center h='100%'>
+                        {icon}
+                    </Center>
                 }
             </Box>
         </Box>  
