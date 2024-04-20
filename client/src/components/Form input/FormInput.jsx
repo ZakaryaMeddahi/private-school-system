@@ -9,8 +9,7 @@ const FormInput = ({ type, placeholder, onchange}) => {
                 placeholder={placeholder} 
                 style={{
                     width: '100%', 
-                    paddingBlock: '10px',
-                    paddingLeft: '10px', 
+                    paddingBlock: '10px', 
                     fontSize: '16px', 
                     color: 'white', 
                     border: 'none', 
