@@ -1,6 +1,6 @@
 import { Box, Center, Input } from '@chakra-ui/react';
 import { IoIosSend } from 'react-icons/io';
-import { chatContext } from '../Pages/Chat/Chat';
+import { chatContext } from '../Pages/Chat';
 import React, { useContext, useState } from 'react';
 import { ChatContext } from '@/app/providers/ChatProvider';
 

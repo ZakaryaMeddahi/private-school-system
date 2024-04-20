@@ -1,11 +1,19 @@
 import { Button, Heading, Text, VStack } from '@chakra-ui/react';
 
-const Header = () => {
+const Header = ({ title }) => {
     return(
-        <VStack marginBottom='25' spacing='15' align='flex-start' width='100%'>
-            <Heading size='lg' fontSize='50px' marginBottom='25'>Login</Heading>
+        <VStack marginBottom='3%' spacing='15' align='flex-start' width='100%'>
+            <Heading size='lg' fontSize='32px'>{title}</Heading>
             <Text fontSize='18px' color='gray'>Enter your account details</Text>
-            <Button fontSize='16px' size='lg' w='100%' border='none' borderRadius='12' bgColor='#333437' color='white'>
+            <Button 
+                fontSize='16px' 
+                size='lg'   
+                w='100%' 
+                border='none' 
+                borderRadius='12' 
+                bgColor='#333437' 
+                color='white'
+            >
                 Login with Google
             </Button>
         </VStack>

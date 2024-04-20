@@ -13,7 +13,7 @@ import {
     Portal
 } from "@chakra-ui/react";
 import Room from "@/components/Room/Room";
-import { chatContext } from "@/Pages/Chat/Chat";
+import { chatContext } from "@/Pages/Chat";
 import React, { useRef, useState, useContext } from "react";
 import { ChatContext } from "@/app/providers/ChatProvider";
 
