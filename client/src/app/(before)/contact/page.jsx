@@ -1,9 +1,9 @@
-import Contact from "@/Pages/Contact";
+import ContactPage from "@/Pages/Contact";
 
-const ContactUs = () => {
+const Contact = () => {
     return (
-        <Contact />
+        <ContactPage />
     );
 }
 
-export default ContactUs;
+export default Contact;

@@ -1,9 +1,9 @@
-import SignUp from "@/Pages/SignUp";
+import SignUpPage from "@/Pages/SignUp";
 
-const SignUpPage = () => {
+const SignUp = () => {
   return (
-    <SignUp />
+    <SignUpPage />
   );
 }
 
-export default SignUpPage;
+export default SignUp;

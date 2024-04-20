@@ -1,9 +1,9 @@
-import Login from "@/Pages/Login";
+import LoginPage from "@/Pages/Login";
 
-const LoggedIn = () => {
+const Login = () => {
     return (
-        <Login />
+        <LoginPage />
     );
 }
 
-export default LoggedIn;
+export default Login;
