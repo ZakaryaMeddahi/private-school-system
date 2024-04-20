@@ -1,9 +1,9 @@
-import Chat from "@/Pages/Chat";
+import ChatPage from "@/Pages/Chat";
 
-const ChatRoute = () => {
+const Chat = () => {
     return (
-        <Chat />
+        <ChatPage />
     );
 }
 
-export default ChatRoute;
+export default Chat;

@@ -1,9 +1,9 @@
-import Session from "@/Pages/Session";
+import SessionPage from "@/Pages/Session";
 
-const SessionPage = () => {
+const Session = () => {
     return (
-        <Session />
+        <SessionPage />
     );
 }
 
-export default SessionPage;
+export default Session;
