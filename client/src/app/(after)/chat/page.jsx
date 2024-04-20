@@ -1,4 +1,4 @@
-import Chat from "@/Pages/Chat/Chat";
+import Chat from "@/Pages/Chat";
 
 const ChatRoute = () => {
     return (

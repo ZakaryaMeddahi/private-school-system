@@ -1,4 +1,4 @@
-import Session from "@/Pages/Session/Session";
+import Session from "@/Pages/Session";
 
 const SessionPage = () => {
     return (
