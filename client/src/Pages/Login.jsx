@@ -7,7 +7,7 @@ import Link from "next/link";
 import { useContext, useState } from "react";
 import { LoginContext } from "@/app/providers/LoginProvider";
 
-const Login = () => {
+const LoginPage = () => {
 
     const {email, setEmail, password, setPassword} = useContext(LoginContext);
 
@@ -90,7 +90,7 @@ const Login = () => {
                             >
                                 Don't have an account? 
                                 <span style={{color: 'blue'}}>
-                                    <Link href='/register'> Register</Link>
+                                    <Link href='/signup'> Register</Link>
                                 </span>
                             </Text>
                         </VStack>
@@ -111,4 +111,4 @@ const Login = () => {
     );
 }
 
-export default Login;
+export default LoginPage;

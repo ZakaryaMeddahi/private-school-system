@@ -32,7 +32,7 @@ import { ChatContext } from '@/app/providers/ChatProvider';
 
 // no
 
-const Session = () => {
+const SessionPage = () => {
     const boxRef = useRef();
     const gridRef = useRef();
     const GridItemRef = useRef();
@@ -495,4 +495,4 @@ const Session = () => {
     );
 };
 
-export default Session;
+export default SessionPage;

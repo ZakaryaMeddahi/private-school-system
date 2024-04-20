@@ -4,33 +4,7 @@ import {
     Box,
     Grid,
     GridItem,
-    Flex,
-    Avatar,
-    Heading,
-    Text,
     Container,
-    Tabs,
-    Tab,
-    TabList,
-    TabPanel,
-    TabPanels,
-    Accordion,
-    AccordionItem,
-    AccordionButton,
-    AccordionPanel,
-    AccordionIcon,
-    Center,
-    Button,
-    Popover,
-    PopoverTrigger,
-    PopoverContent,
-    PopoverArrow,
-    PopoverCloseButton,
-    PopoverHeader,
-    PopoverBody,
-    PopoverFooter,
-    Portal,
-    Input,
 } from '@chakra-ui/react';
 import Room from '@/components/Room/Room';
 
@@ -42,7 +16,7 @@ import RoomInfo from '@/components/chat-room-info';
 import RoomChat from '@/components/room-chat';
 import { ChatContext } from '@/app/providers/ChatProvider';
 
-const Chat = () => {
+const ChatPage = () => {
     const { messages, roomInfoRef, chatRef, setMessages } =
         useContext(ChatContext);
 
@@ -140,4 +114,4 @@ const Chat = () => {
     );
 };
 
-export default Chat;
+export default ChatPage;

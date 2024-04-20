@@ -16,7 +16,7 @@ import ContactHeader from '@/components/Contact header/ContactHeader';
 import ContactInfo from '@/components/Contact info/ContactInfo';
 import Media from '@/components/Socials/Media';
 
-const Contact = () => {
+const ContactPage = () => {
     return (
         <Container m='0' p='0' maxW='100%' display='flex' flexDirection='column' alignItems='center' marginBlock='50px'>
             {/* <ContactHeader title='Contact Us' Txt='Any question or remarks? Just write us a message!' textAlign='center' HColor='#F6AF03' HFontSize='40' TColor='#717171' tfW='500'/> */}
@@ -49,4 +49,4 @@ const Contact = () => {
     );
 }
 
-export default Contact;
+export default ContactPage;

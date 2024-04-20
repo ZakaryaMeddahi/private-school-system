@@ -5,7 +5,7 @@ import Item from '@/components/Item/Item';
 import WhatDoYouLearn from '@/components/What do you learn/WhatDoYouLearn';
 import { Container, Heading, UnorderedList, Text, Box } from '@chakra-ui/react';
 
-const CourseDetails = () => {
+const CourseDetailsPage = () => {
 
     const printScroll = () => {
         console.log(window.innerHeight);
@@ -68,4 +68,4 @@ const CourseDetails = () => {
     );
 }
 
-export default CourseDetails;
+export default CourseDetailsPage;

@@ -7,7 +7,7 @@ import FormInput from '@/components/Form input/FormInput';
 import { useContext } from 'react';
 import { LoginContext } from '@/app/providers/LoginProvider';
 
-const SignUp = () => {
+const SignUpPage = () => {
 
     const {
         email, 
@@ -110,7 +110,7 @@ const SignUp = () => {
                             >
                                 I have already account !! 
                                 <span style={{color: 'blue'}}>
-                                    <Link href='/register'> Sign in</Link>
+                                    <Link href='/login'> Sign in</Link>
                                 </span>
                             </Text>
                         </VStack>
@@ -131,4 +131,4 @@ const SignUp = () => {
     );
 }
 
-export default SignUp;
+export default SignUpPage;
