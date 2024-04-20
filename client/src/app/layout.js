@@ -1,5 +1,5 @@
 import "./globals.css";
-import Providers from "./provider";
+import Providers from "./ChakraProvider";
 import { Poppins } from "next/font/google";
 
 const poppins = Poppins({
