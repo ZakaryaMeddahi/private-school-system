@@ -1,4 +1,4 @@
-import CourseDetails from "@/Pages/Course Details/CourseDetails";
+import CourseDetails from "@/Pages/CourseDetails";
 
 const Course_Details = () => {
     return (
