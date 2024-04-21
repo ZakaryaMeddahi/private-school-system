@@ -5,16 +5,19 @@ import {
     Grid,
     GridItem,
     Container,
+    Divider,
 } from '@chakra-ui/react';
 import Room from '@/components/Room/Room';
 
 import { CiMenuKebab } from 'react-icons/ci';
+import { IoMdArrowBack } from "react-icons/io";
 
 import React, { useContext } from 'react';
 
 import RoomInfo from '@/components/chat-room-info';
 import RoomChat from '@/components/room-chat';
 import { ChatContext } from '@/app/providers/ChatProvider';
+import Link from 'next/link';
 
 const ChatPage = () => {
     const { messages, roomInfoRef, chatRef, setMessages } =
@@ -39,7 +42,6 @@ const ChatPage = () => {
                 <GridItem
                     colSpan={3}
                     overflowY='auto'
-                    paddingTop='15px'
                     borderLeft='1px solid gray'
                     boxShadow='rgba(0, 0, 0, 0.15) 5px -1px 2.6px'
                 >
@@ -49,6 +51,51 @@ const ChatPage = () => {
                         flexDir='column'
                         padding='2'
                     >
+                        <Box
+                            display='flex'
+                            flexDirection='row'
+                            alignItems='center'
+                            justifyContent='flex-start'
+                            paddingBlock='10px'
+                        >
+                            <Link href='/student_dashboard'>
+                                <Box 
+                                    w={'50px'}
+                                    h={'50px'}
+                                    display={'flex'}
+                                    justifyContent={'center'}
+                                    alignItems={'center'}
+                                    borderRadius={'50%'}
+                                    marginLeft={'5px'}
+                                    _hover={{bgColor: 'whiteSmoke'}}
+
+                                >
+                                    <IoMdArrowBack size='28px' />
+                                </Box>
+                            </Link>
+                            <Box
+                                w='100%'
+                                display={'flex'}
+                                flexDirection={'column'}
+                                justifyContent={'center'}
+                                alignItems={'center'}
+                            >
+                                <Box
+                                    fontSize='20px'
+                                    fontWeight='600'
+                                    textAlign='center'
+                                >
+                                    Chat Rooms
+                                </Box>
+                                <Box
+                                    fontSize='14px'
+                                    fontWeight='400'
+                                >
+                                    Select a room to start chat
+                                </Box>
+                            </Box>
+                        </Box>
+                        <Divider borderColor='black' />
                         <Room
                             hover={true}
                             RoomName='Web Devolpoment'
