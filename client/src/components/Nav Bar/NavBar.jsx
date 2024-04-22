@@ -31,7 +31,7 @@ const NavBar = () => {
             </GridItem>
             <GridItem colSpan={5} alignItems='center'>
                 <HStack spacing={12} justifyContent='center' color='GrayText'>
-                    <Link href='/course'>
+                    <Link href='/student_dashboard'>
                         <Text _hover={{color: '#FCC128'}}>    
                             Home
                         </Text>
@@ -41,7 +41,7 @@ const NavBar = () => {
                             About
                         </Text>
                     </Link>
-                    <Link href='/course'>
+                    <Link href='/student_dashboard'>
                         <Text _hover={{color: '#FCC128'}}>    
                             Courses
                         </Text>
