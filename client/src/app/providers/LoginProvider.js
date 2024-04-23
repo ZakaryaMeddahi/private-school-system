@@ -8,7 +8,8 @@ const LoginProvider = ({children}) => {
     
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [username, setUsername] = useState([]);
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     
     return (
@@ -18,8 +19,10 @@ const LoginProvider = ({children}) => {
                 setEmail, 
                 password, 
                 setPassword, 
-                username, 
-                setUsername, 
+                firstName, 
+                setFirstName,
+                lastName,
+                setLastName, 
                 confirmPassword,
                 setConfirmPassword
             }}
