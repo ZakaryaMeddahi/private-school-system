@@ -137,7 +137,7 @@ const Layout = ({ children }) => {
                             <Text color='#898C81'>Chat</Text>
                         </Box>
                     </Link>
-                    <Box
+                    {/* <Box
                         w='100%'
                         display='flex'
                         flexDir='row'
@@ -150,7 +150,7 @@ const Layout = ({ children }) => {
                     >
                         <MdOutlineNotifications color="#898C81" size='23px' />
                         <Text color='#898C81'>Notification</Text>
-                    </Box>
+                    </Box> */}
                     <Box
                         w='100%'
                         display='flex'
