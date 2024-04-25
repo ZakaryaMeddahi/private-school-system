@@ -26,14 +26,14 @@ import {
   Text,
   Textarea,
 } from '@chakra-ui/react';
-import theme from '../themes/courseTheme';
+import theme from '../../themes/courseTheme';
 import { IoAdd, IoAddCircle, IoAddCircleSharp } from 'react-icons/io5';
 import { BsTrash } from 'react-icons/bs';
-import { useId, useState } from 'react';
+import { useEffect, useId, useState } from 'react';
 import Topic from '@/components/Topic';
 import { v4 as uuidv4 } from 'uuid';
 
-function CreateCourse() {
+function UpdateCourse({ params }) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState(0);
@@ -47,7 +47,14 @@ function CreateCourse() {
   const [period, setPeriod] = useState('2 weeks');
   const [enrollmentsLimit, setEnrollmentsLimit] = useState(500);
   const [file, setFile] = useState(null);
+  const [imageUrl, setImageUrl] = useState(
+    './Private-School-default-image.png'
+  );
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const { courseId } = params;
+
+  console.log(courseId);
 
   const addTopic = () => {
     if (topic === '') {
@@ -59,6 +66,7 @@ function CreateCourse() {
     const newTopic = {
       id,
       title: topic,
+      isDeleted: false,
     };
 
     setTopic('');
@@ -85,7 +93,10 @@ function CreateCourse() {
 
     // remove ids from topics
     const newTopics = topics.map((topic) => {
-      delete topic.id;
+      // if topic is newly created
+      if(isNaN(topic.id)) {
+        delete topic.id;
+      }
       return topic;
     });
 
@@ -114,9 +125,9 @@ function CreateCourse() {
     );
 
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/courses`,
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/courses/${courseId}`,
       {
-        method: 'POST',
+        method: 'PATCH',
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -135,6 +146,44 @@ function CreateCourse() {
     setIsSubmitting(false);
   };
 
+  useEffect(() => {
+    const fetchCourse = async () => {
+      const token = localStorage.getItem('token');
+
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/courses/${courseId}`,
+        {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        console.log('error');
+      }
+
+      const { data } = await response.json();
+
+      console.log(data);
+
+      setTitle(data.title);
+      setDescription(data.description);
+      setPrice(data.price);
+      setDeadline(data.deadline);
+      setRequirements(data.requirements);
+      setDifficulty(data.difficulty);
+      setLanguage(data.language);
+      setPeriod(`${data.duration} ${data.durationUnit}`);
+      setEnrollmentsLimit(data.enrollmentsLimit);
+      setTopics(data.topics);
+      setImageUrl(data.file.url);
+    };
+
+    fetchCourse();
+  }, []);
+
   return (
     <ChakraProvider theme={theme}>
       <Container maxW='100%' paddingInline='15%' paddingBlock='40px'>
@@ -145,7 +194,7 @@ function CreateCourse() {
           bgClip='text'
           mb='40px'
         >
-          New Course
+          Modify Course
         </Heading>
 
         <form onSubmit={handleSubmit}>
@@ -161,6 +210,7 @@ function CreateCourse() {
                     Title
                   </FormLabel>
                   <Input
+                    value={title}
                     placeholder='A Complete Node-JS Course'
                     w='80%'
                     onChange={(e) => setTitle(e.currentTarget.value)}
@@ -181,6 +231,7 @@ function CreateCourse() {
                     Description
                   </FormLabel>
                   <Textarea
+                    value={description}
                     placeholder='Description'
                     w='80%'
                     onChange={(e) => setDescription(e.currentTarget.value)}
@@ -196,6 +247,7 @@ function CreateCourse() {
                     Price
                   </FormLabel>
                   <Input
+                    value={price}
                     placeholder='Price'
                     w='80%'
                     onChange={(e) => setPrice(Number(e.currentTarget.value))}
@@ -219,6 +271,7 @@ function CreateCourse() {
                   <Stack flexDirection='row' justifyContent='space-between'>
                     <FormLabel margin='auto 0'>Deadline</FormLabel>
                     <Input
+                      value={deadline}
                       type='date'
                       w='200px'
                       onChange={(e) => setDeadline(e.currentTarget.value)}
@@ -231,6 +284,7 @@ function CreateCourse() {
                     Requirements
                   </FormLabel>
                   <Textarea
+                    value={requirements}
                     placeholder='- Access to a computer with internet connection'
                     style={{ marginBottom: '40px' }}
                     onChange={(e) => setRequirements(e.currentTarget.value)}
@@ -251,26 +305,26 @@ function CreateCourse() {
                     </Button>
                   </Stack>
                   <Box>
-                    {topics.map((topic) => (
-                      <Topic
-                        key={topic.id}
-                        topic={topic}
-                        topics={topics}
-                        setTopics={setTopics}
-                        useSoftDelete={false}
-                      />
-                    ))}
+                    {topics.map((topic) => {
+                      if (topic.isDeleted) return;
+
+                      return (
+                        <Topic
+                          key={topic.id}
+                          topic={topic}
+                          topics={topics}
+                          setTopics={setTopics}
+                          useSoftDelete={true}
+                        />
+                      );
+                    })}
                   </Box>
                 </Box>
               </Stack>
               <Card maxW='sm' height='fit-content'>
                 <CardHeader display='flex' flexDirection='column' gap='10px'>
                   <Image
-                    src={
-                      file
-                        ? URL.createObjectURL(file)
-                        : './Private-School-default-image.png'
-                    }
+                    src={file ? URL.createObjectURL(file) : imageUrl}
                     alt='course image'
                     h='200px'
                     borderRadius='8'
@@ -394,7 +448,7 @@ function CreateCourse() {
                 w='150px'
                 colorScheme='teal'
               >
-                Done
+                Save
               </Button>
             </Stack>
           </FormControl>
@@ -403,4 +457,4 @@ function CreateCourse() {
     </ChakraProvider>
   );
 }
-export default CreateCourse;
+export default UpdateCourse;

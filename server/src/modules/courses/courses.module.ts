@@ -12,13 +12,23 @@ import { RoomsService } from '../rooms/rooms.service';
 import { TeachersModule } from '../teachers/teachers.module';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { FilesService } from '../files/files.service';
+import { File } from 'src/shared/entities/file.entity';
+import { ObjectStorageService } from '../object-storage/object-storage.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Course, Topic, Chat, Room]),
+    TypeOrmModule.forFeature([Course, Topic, Chat, Room, File]),
     TeachersModule,
   ],
   controllers: [CoursesController],
-  providers: [CoursesService, TopicsService, ChatsService, RoomsService],
+  providers: [
+    CoursesService,
+    TopicsService,
+    ChatsService,
+    RoomsService,
+    FilesService,
+    ObjectStorageService
+  ],
 })
 export class CoursesModule {}
