@@ -51,7 +51,7 @@ export type CreateCourseParams = {
   price: number;
   language: string;
   difficulty: Difficulty;
-  enrollmentLimit: number;
+  enrollmentsLimit: number;
   duration: number;
   durationUnit: DurationUnit;
   topics: Topic[];
@@ -63,7 +63,7 @@ export type UpdateCourseParams = {
   price?: number;
   language?: string;
   difficulty?: Difficulty;
-  enrollmentLimit?: number;
+  enrollmentsLimit?: number;
   duration?: number;
   durationUnit?: DurationUnit;
   topics?: Topic[];
@@ -71,7 +71,7 @@ export type UpdateCourseParams = {
 
 export type CreateTopicParams = {
   title: string;
-  startTime: Date;
+  startTime?: Date;
 };
 
 export type UpdateTopicParams = {

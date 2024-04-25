@@ -41,7 +41,7 @@ const SignUpPage = () => {
       }
 
       const response = await fetch(
-        'http://localhost:8080/api/v1/auth/register',
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/auth/register`,
         {
           method: 'POST',
           headers: {

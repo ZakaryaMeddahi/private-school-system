@@ -17,7 +17,7 @@ export class Topic {
   @Column()
   title: string;
 
-  @Column({ type: 'timestamp' })
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   startTime: Date;
 
   @OneToOne(() => Session)

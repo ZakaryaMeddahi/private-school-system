@@ -8,6 +8,7 @@ import { ChatsService } from '../chats/chats.service';
 import { RoomsService } from '../rooms/rooms.service';
 import { Role, RoomStatus } from 'src/shared/enums';
 import { TeachersService } from '../teachers/teachers.service';
+import { File } from 'src/shared/entities/file.entity';
 
 @Injectable()
 export class CoursesService {
@@ -35,7 +36,7 @@ export class CoursesService {
     try {
       const course = await this.coursesRepository.findOne({
         where: { id: Equal(id) },
-        relations: ['topics'],
+        relations: ['topics', 'file'],
       });
 
       if (!course) return null;
@@ -46,7 +47,7 @@ export class CoursesService {
     }
   }
 
-  async create(userId: number, courseData: CreateCourseParams) {
+  async create(userId: number, courseData: CreateCourseParams, file: File) {
     try {
       const { topics } = courseData;
 
@@ -60,6 +61,7 @@ export class CoursesService {
       const newCourse = this.coursesRepository.create({
         ...courseData,
         teacher: { id: teacher.id },
+        file,
       });
 
       const course = await this.coursesRepository.save(newCourse);

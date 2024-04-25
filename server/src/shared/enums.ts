@@ -11,10 +11,10 @@ export enum Difficulty {
 }
 
 export enum DurationUnit {
-  Day = 'day',
-  Week = 'week',
-  Month = 'month',
-  Year = 'year',
+  Day = 'days',
+  Week = 'weeks',
+  Month = 'months',
+  Year = 'years',
 }
 
 export enum EnrollmentStatus {
