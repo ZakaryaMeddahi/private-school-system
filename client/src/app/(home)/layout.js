@@ -1,16 +1,12 @@
 'use client';
 
 import Logo from "@/components/Logo/Logo";
-import { Box,Center, Container, Divider, Flex, Grid, GridItem, Heading, Text, HStack, Input } from "@chakra-ui/react";
-import { MdOutlineKeyboardDoubleArrowLeft } from "react-icons/md";
+import { Box, Divider, Button, Text, Input, Popover, PopoverTrigger, PopoverContent, PopoverHeader, PopoverBody, PopoverFooter, PopoverArrow, PopoverCloseButton, PopoverAnchor } from "@chakra-ui/react";
 import { HiOutlineAcademicCap } from "react-icons/hi2";
 import { IoChatbubblesOutline } from "react-icons/io5";
-import { MdOutlineNotifications } from "react-icons/md";
-import { IoMdSearch } from "react-icons/io";
 import { useRef } from "react";
 import { LuLogOut } from "react-icons/lu";
 import { TbSmartHome } from "react-icons/tb";
-import CourseCard from "@/components/Course Card/CourseCard";
 import { CgProfile } from "react-icons/cg";
 import Link from "next/link";
 import { MdKeyboardArrowDown } from "react-icons/md";
@@ -98,21 +94,7 @@ const Layout = ({ children }) => {
                         _hover={{bgColor: 'whiteSmoke'}}
                     >
                         <HiOutlineAcademicCap color="#898C81" size='23px' />
-                        <Text color='#898C81'>Courses</Text>
-                    </Box>
-                    <Box
-                        w='100%'
-                        display='flex'
-                        flexDir='row'
-                        gap='5'
-                        alignItems='center'
-                        paddingLeft='30'
-                        minH='70px'
-                        maxH='80px'
-                        _hover={{bgColor: 'whiteSmoke'}}
-                    >
-                        <HiOutlineAcademicCap color="#898C81" size='23px' />
-                        <Text color='#898C81'>Courses</Text>
+                        <Text color='#898C81'>Enrollments Courses</Text>
                     </Box>
                 </Box>
                 <Box
@@ -151,20 +133,22 @@ const Layout = ({ children }) => {
                         <MdOutlineNotifications color="#898C81" size='23px' />
                         <Text color='#898C81'>Notification</Text>
                     </Box> */}
-                    <Box
-                        w='100%'
-                        display='flex'
-                        flexDir='row'
-                        gap='5'
-                        alignItems='center'
-                        paddingLeft='30'
-                        minH='70px'
-                        maxH='80px'
-                        _hover={{bgColor: 'whiteSmoke'}}
-                    >
-                        <CgProfile color="#898C81" size='23px' />
-                        <Text color='#898C81'>Profile</Text>
-                    </Box>
+                    <Link href='/student_dashboard/profile'>
+                        <Box
+                            w='100%'
+                            display='flex'
+                            flexDir='row'
+                            gap='5'
+                            alignItems='center'
+                            paddingLeft='30'
+                            minH='70px'
+                            maxH='80px'
+                            _hover={{bgColor: 'whiteSmoke'}}
+                        >
+                            <CgProfile color="#898C81" size='23px' />
+                            <Text color='#898C81'>Profile</Text>
+                        </Box>
+                    </Link>
                     <Divider borderColor='#898C81' />
                     <Box
                         w='100%'
@@ -219,7 +203,19 @@ const Layout = ({ children }) => {
                         >
                             AS
                         </Box>
-                        <MdKeyboardArrowDown color='black' size='20px' />
+                        <Popover>
+                            <PopoverTrigger>
+                                <Box w={'40px'} h={'40px'} display='flex' alignItems='center' justifyContent='center'>
+                                    <MdKeyboardArrowDown color='black' size='20px' />
+                                </Box>
+                            </PopoverTrigger>
+                            <PopoverContent w='180px'>
+                                <PopoverArrow />
+                                <PopoverCloseButton />
+                                <PopoverHeader>Profile</PopoverHeader>
+                                <PopoverHeader>Logout</PopoverHeader>
+                            </PopoverContent>
+                        </Popover>
                     </Box>    
                 </Box>
                 {/* body */}
