@@ -1,6 +1,6 @@
 import { Box, Heading, Text, Badge, Button } from "@chakra-ui/react";
 
-const ProfilePage = () => {
+const ProfilePage = ({FullName, UserName, Bio, Role}) => {
     return (
         <Box
             w='100%'
@@ -35,23 +35,20 @@ const ProfilePage = () => {
                             {/* imgae profile */}
                         </Box>
                         <Box display='flex' flexDir='column'>
-                            <Heading size='lg'>Abdelali Sid Ahmed</Heading>
-                            <Text fontSize={20} >SidAhmed001</Text>
-                            <Badge colorScheme='blue' w={'fit-content'} paddingInline='5px' >Student</Badge>
+                            <Heading size='lg'>{FullName}</Heading>
+                            <Text fontSize={20} >{UserName}</Text>
+                            <Badge colorScheme={Role === "Student"?'blue':'red'} w={'fit-content'} paddingInline='5px' >{Role}</Badge>
                         </Box>
                     </Box>
                     <Box width='50%' display='flex' justifyContent='end' >
-                        <Button colorScheme='blue'>Edit Profile</Button>
+                        <Button colorScheme='red'>Edit Profile</Button>
                     </Box>
                 </Box>
                 <Box
                     marginTop={'20px'}
                     w='95%'
                 >
-                    <Text fontSize={20}>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, 
-                        libero sit amet volutpat hendrerit, nunc sem fermentum felis, nec tincidunt nunc mi ac nunc. 
-                    </Text>
+                    <Text fontSize={20}> {Bio} </Text>
                 </Box>
             </Box>
         </Box>
