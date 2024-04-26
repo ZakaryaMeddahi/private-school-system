@@ -41,7 +41,7 @@ const Layout = ({ children }) => {
                     paddingRight='25px'
                     w='100%'
                 >
-                    <Logo color='black' fontSize='20px' fontWeight='500'/>
+                    <Logo fontSize='20px' fontWeight='500'/>
                 </Box>
                 <Divider borderColor='#898C81' />
                 <Box
