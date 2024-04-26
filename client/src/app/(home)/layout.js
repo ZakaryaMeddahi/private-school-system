@@ -1,7 +1,7 @@
 'use client';
 
 import Logo from "@/components/Logo/Logo";
-import { Box, Divider, Button, Text, Input, Popover, PopoverTrigger, PopoverContent, PopoverHeader, PopoverBody, PopoverFooter, PopoverArrow, PopoverCloseButton, PopoverAnchor } from "@chakra-ui/react";
+import { Box, Divider, Text, Input, Popover, PopoverTrigger, PopoverContent, PopoverHeader, PopoverBody, PopoverFooter, PopoverArrow, PopoverCloseButton, PopoverAnchor } from "@chakra-ui/react";
 import { HiOutlineAcademicCap } from "react-icons/hi2";
 import { IoChatbubblesOutline } from "react-icons/io5";
 import { useRef } from "react";
@@ -119,20 +119,6 @@ const Layout = ({ children }) => {
                             <Text color='#898C81'>Chat</Text>
                         </Box>
                     </Link>
-                    {/* <Box
-                        w='100%'
-                        display='flex'
-                        flexDir='row'
-                        gap='5'
-                        alignItems='center'
-                        paddingLeft='30'
-                        minH='70px'
-                        maxH='80px'
-                        _hover={{bgColor: 'whiteSmoke'}}
-                    >
-                        <MdOutlineNotifications color="#898C81" size='23px' />
-                        <Text color='#898C81'>Notification</Text>
-                    </Box> */}
                     <Link href='/student_dashboard/profile'>
                         <Box
                             w='100%'
@@ -150,22 +136,24 @@ const Layout = ({ children }) => {
                         </Box>
                     </Link>
                     <Divider borderColor='#898C81' />
-                    <Box
-                        w='100%'
-                        display='flex'
-                        flexDir='row'
-                        gap='5'
-                        alignItems='center'
-                        paddingLeft='30'
-                        minH='70px'
-                        maxH='80px'
-                        _hover={{bgColor: 'whiteSmoke'}}
-                    >
-                        <Box transform='scaleX(-1)'>
-                            <LuLogOut color="#898C81" size='23px' transform='scaleX(-1)' />
+                    <Link href='/'>
+                        <Box
+                            w='100%'
+                            display='flex'
+                            flexDir='row'
+                            gap='5'
+                            alignItems='center'
+                            paddingLeft='30'
+                            minH='70px'
+                            maxH='80px'
+                            _hover={{bgColor: 'whiteSmoke'}}
+                        >
+                            <Box transform='scaleX(-1)'>
+                                <LuLogOut color="#898C81" size='23px' transform='scaleX(-1)' />
+                            </Box>
+                            <Text color='#898C81'>Logout</Text>
                         </Box>
-                        <Text color='#898C81'>Logout</Text>
-                    </Box>
+                    </Link>
                 </Box>
             </Box>
             <Box
@@ -212,8 +200,12 @@ const Layout = ({ children }) => {
                             <PopoverContent w='180px'>
                                 <PopoverArrow />
                                 <PopoverCloseButton />
-                                <PopoverHeader>Profile</PopoverHeader>
-                                <PopoverHeader>Logout</PopoverHeader>
+                                <Link href='/student_dashboard/profile'>
+                                    <PopoverHeader>Profile</PopoverHeader>
+                                </Link>
+                                <Link href='/'>
+                                    <PopoverHeader>Logout</PopoverHeader>
+                                </Link>
                             </PopoverContent>
                         </Popover>
                     </Box>    
