@@ -32,7 +32,7 @@ const SignUpPage = () => {
     confirmPassword,
     setConfirmPassword,
   } = useContext(LoginContext);
-  const router = useRouter()
+  const router = useRouter();
 
   const handleSubmit = async (e) => {
     try {
@@ -65,10 +65,12 @@ const SignUpPage = () => {
       console.log(data);
 
       localStorage.setItem('token', data.access_token);
+      localStorage.setItem('userId', data.id);
+      localStorage.setItem('role', data.role);
 
       router.push('/student_dashboard');
 
-    //   console.log(email, password, confirmPassword);
+      //   console.log(email, password, confirmPassword);
     } catch (error) {
       console.error(error);
     }
