@@ -1,11 +1,9 @@
-import CardForCourse from "@/components/CardForCourse";
-import { Box, Container, Heading, Text } from "@chakra-ui/react";
+import Overview from "@/Pages/Overview";
 
-const StudentDashbordPage = () => {
-    return (
-        <>
-        </>
-    );
+const StudentDashbord = () => {
+  return (
+    <Overview />
+  );
 }
 
-export default StudentDashbordPage;
+export default StudentDashbord;

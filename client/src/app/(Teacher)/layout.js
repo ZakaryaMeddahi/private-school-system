@@ -50,7 +50,7 @@ const Layout = ({ children }) => {
                     display='flex'
                     flexDir='column'
                 >
-                    <Link href='/student_dashboard'>
+                    <Link href='/teacher_dashboard'>
                         <Box
                             w='100%'
                             display='flex'
@@ -66,7 +66,7 @@ const Layout = ({ children }) => {
                             <Text color='#898C81'>Overview</Text>
                         </Box>
                     </Link>
-                    <Link href='/student_dashboard/course'>
+                    <Link href='/teacher_dashboard/my_courses'>
                         <Box
                             w='100%'
                             display='flex'
@@ -79,23 +79,9 @@ const Layout = ({ children }) => {
                             _hover={{bgColor: 'whiteSmoke'}}
                             >
                             <HiOutlineAcademicCap color="#898C81" size='23px' />
-                            <Text color='#898C81'>Courses</Text>
+                            <Text color='#898C81'>My Courses</Text>
                         </Box>
                     </Link>
-                    <Box
-                        w='100%'
-                        display='flex'
-                        flexDir='row'
-                        gap='5'
-                        alignItems='center'
-                        paddingLeft='30'
-                        minH='70px'
-                        maxH='80px'
-                        _hover={{bgColor: 'whiteSmoke'}}
-                    >
-                        <HiOutlineAcademicCap color="#898C81" size='23px' />
-                        <Text color='#898C81'>Enrollments Courses</Text>
-                    </Box>
                 </Box>
                 <Box
                     w='100%'
@@ -119,7 +105,7 @@ const Layout = ({ children }) => {
                             <Text color='#898C81'>Chat</Text>
                         </Box>
                     </Link>
-                    <Link href='/student_dashboard/profile'>
+                    <Link href='/teacher_dashboard/profile'>
                         <Box
                             w='100%'
                             display='flex'
