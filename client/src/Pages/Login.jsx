@@ -54,6 +54,9 @@ const LoginPage = () => {
         localStorage.setItem('token', data.access_token);
       }
 
+      localStorage.setItem('userId', data.id);
+      localStorage.setItem('role', data.role);
+
       if (data.role === 'student') {
         console.log('this user is student');
         router.push('/student_dashboard');
