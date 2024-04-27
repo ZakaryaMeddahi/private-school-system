@@ -1,2 +1,1086 @@
 # Private-School
 Online School Provide The Ability For Tutors To Teach Remotely Without The Need For Any Other Platform For Streaming, And Share Resources And Global Chat For Students to Discuss The Course Topics In Simple Words This Platform Is A Combination Of Google Classroom + Google Meet + Chat Application
+
+# API Design
+
+Base URLs:
+
+# Authentication
+
+- HTTP Authentication, scheme: bearer
+
+# Auth
+
+## POST Register
+
+POST /api/v1/auth/register
+
+Create an account for **Students**
+
+> Body Parameters
+
+```json
+{
+  "firstName": "Zakarya",
+  "lastName": "Meddahi",
+  "email": "<email>",
+  "password": "<password>"
+}
+```
+
+### Params
+
+|Name|Location|Type|Required|Description|
+|---|---|---|---|---|
+|body|body|object| no |none|
+|» firstName|body|string| yes |none|
+|» lastName|body|string| yes |none|
+|» email|body|string| yes |none|
+|» password|body|string| yes |none|
+
+> Response Examples
+
+> 200 Response
+
+```json
+{}
+```
+
+### Responses
+
+|HTTP Status Code |Meaning|Description|Data schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
+
+### Responses Data Schema
+
+## POST Login
+
+POST /api/v1/auth/login
+
+**All Users** can login, a user object containing JWT (access_token) should be returned
+
+> Body Parameters
+
+```json
+{
+  "email": "<email>",
+  "password": "<password>"
+}
+```
+
+### Params
+
+|Name|Location|Type|Required|Description|
+|---|---|---|---|---|
+|body|body|object| no |none|
+|» email|body|string| yes |none|
+|» password|body|string| yes |none|
+
+> Response Examples
+
+> 200 Response
+
+```json
+{}
+```
+
+### Responses
+
+|HTTP Status Code |Meaning|Description|Data schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
+
+### Responses Data Schema
+
+# Courses
+
+## POST Create Course
+
+POST /api/v1/courses
+
+- Creating courses can be performed by __Teachers__
+
+> Body Parameters
+
+```json
+{
+  "title": "Node Js Course",
+  "description": "In this course you will learn how to create a backend application using Express js",
+  "price": 100,
+  "language": "English",
+  "difficulty": "easy",
+  "enrollmentLimit": 1000,
+  "duration": 1,
+  "durationUnit": "month",
+  "enrollmentDeadline": "12-12-2024",
+  "topics": [
+    {
+      "title": "Introduction to Node Js",
+      "startTime": "12-12-2024"
+    }
+  ]
+}
+```
+
+### Params
+
+|Name|Location|Type|Required|Description|
+|---|---|---|---|---|
+|body|body|object| no |none|
+|» title|body|string| yes |none|
+|» description|body|string| yes |none|
+|» price|body|integer| yes |none|
+|» language|body|string| yes |none|
+|» difficulty|body|string| yes |none|
+|» enrollmentLimit|body|integer| yes |none|
+|» duration|body|integer| yes |none|
+|» durationUnit|body|string| yes |none|
+|» enrollmentDeadline|body|string| yes |none|
+|» topics|body|[object]| yes |none|
+|»» title|body|string| no |none|
+|»» startTime|body|string| no |none|
+
+> Response Examples
+
+> 200 Response
+
+```json
+{}
+```
+
+### Responses
+
+|HTTP Status Code |Meaning|Description|Data schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
+
+### Responses Data Schema
+
+## GET Get Courses
+
+GET /api/v1/courses
+
+- __All Users__ are allowed to get courses
+
+> Response Examples
+
+> 200 Response
+
+```json
+{}
+```
+
+### Responses
+
+|HTTP Status Code |Meaning|Description|Data schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
+
+### Responses Data Schema
+
+## GET Get One Course
+
+GET /api/v1/courses/2
+
+- __All Users__ are allowed to get a course by id
+
+> Response Examples
+
+> 200 Response
+
+```json
+{}
+```
+
+### Responses
+
+|HTTP Status Code |Meaning|Description|Data schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
+
+### Responses Data Schema
+
+## PATCH Update Course
+
+PATCH /api/v1/courses/25
+
+- __Admin__ and __Course Creator__ (__Teacher__) can update the course
+
+> Body Parameters
+
+```json
+{
+  "title": "Node Js Course",
+  "description": "In this course you will learn how to create a backend application using Express js",
+  "price": 120,
+  "language": "English",
+  "difficulty": "Easy",
+  "enrollmentLimit": 1000,
+  "duration": 2,
+  "durationUnit": "Month",
+  "enrollmentDeadline": "12-12-2024",
+  "topics": [
+    {
+      "id": 5,
+      "title": "Introduction to Node Js",
+      "startTime": "12-12-2024",
+      "isDeleted": false
+    }
+  ]
+}
+```
+
+### Params
+
+|Name|Location|Type|Required|Description|
+|---|---|---|---|---|
+|body|body|object| no |none|
+|» title|body|string| yes |none|
+|» description|body|string| yes |none|
+|» price|body|integer| yes |none|
+|» language|body|string| yes |none|
+|» difficulty|body|string| yes |none|
+|» enrollmentLimit|body|integer| yes |none|
+|» duration|body|integer| yes |none|
+|» durationUnit|body|string| yes |none|
+|» enrollmentDeadline|body|string| yes |none|
+|» topics|body|[object]| yes |none|
+|»» id|body|integer| no |none|
+|»» title|body|string| no |none|
+|»» startTime|body|string| no |none|
+|»» isDeleted|body|boolean| no |none|
+
+> Response Examples
+
+> 200 Response
+
+```json
+{}
+```
+
+### Responses
+
+|HTTP Status Code |Meaning|Description|Data schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
+
+### Responses Data Schema
+
+## DELETE Remove Course
+
+DELETE /api/v1/courses/25
+
+- Only the __Teacher__ is allowed to remove his courses
+
+> Response Examples
+
+> 200 Response
+
+```json
+{}
+```
+
+### Responses
+
+|HTTP Status Code |Meaning|Description|Data schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
+
+### Responses Data Schema
+
+# Rooms
+
+## POST Create Room
+
+POST /api/v1/courses/7/rooms
+
+- __Admin__ and __Course Creator__ (__Teacher__) can create new rooms inside the course
+
+> Body Parameters
+
+```json
+{
+  "name": "new room",
+  "slug": "new-room",
+  "status": "open"
+}
+```
+
+### Params
+
+|Name|Location|Type|Required|Description|
+|---|---|---|---|---|
+|body|body|object| no |none|
+|» name|body|string| yes |none|
+|» slug|body|string| yes |none|
+|» status|body|string| yes |none|
+
+> Response Examples
+
+> 200 Response
+
+```json
+{}
+```
+
+### Responses
+
+|HTTP Status Code |Meaning|Description|Data schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
+
+### Responses Data Schema
+
+## GET Get Rooms
+
+GET /api/v1/courses/25/rooms
+
+- **Course Creator** (**Teacher**) and **Admin** can see rooms
+- **Enrolled Students** with **accepted status** can see rooms of that specific course
+
+> Response Examples
+
+> 200 Response
+
+```json
+{}
+```
+
+### Responses
+
+|HTTP Status Code |Meaning|Description|Data schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
+
+### Responses Data Schema
+
+## PATCH Update Room
+
+PATCH /api/v1/rooms/id
+
+- **Course Creator** and __Admin__ can update rooms
+
+> Body Parameters
+
+```json
+{
+  "name": "new room",
+  "slug": "new-room",
+  "status": "open"
+}
+```
+
+### Params
+
+|Name|Location|Type|Required|Description|
+|---|---|---|---|---|
+|body|body|object| no |none|
+|» name|body|string| yes |none|
+|» slug|body|string| yes |none|
+|» status|body|string| yes |none|
+
+> Response Examples
+
+> 200 Response
+
+```json
+{}
+```
+
+### Responses
+
+|HTTP Status Code |Meaning|Description|Data schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
+
+### Responses Data Schema
+
+## DELETE Remove Room
+
+DELETE /api/v1/rooms/id
+
+> Response Examples
+
+> 200 Response
+
+```json
+{}
+```
+
+### Responses
+
+|HTTP Status Code |Meaning|Description|Data schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
+
+### Responses Data Schema
+
+# Users
+
+## POST Create User
+
+POST /api/v1/users
+
+> Response Examples
+
+> 200 Response
+
+```json
+{}
+```
+
+### Responses
+
+|HTTP Status Code |Meaning|Description|Data schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
+
+### Responses Data Schema
+
+## GET Get Users
+
+GET /api/v1/users
+
+> Response Examples
+
+> 200 Response
+
+```json
+{}
+```
+
+### Responses
+
+|HTTP Status Code |Meaning|Description|Data schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
+
+### Responses Data Schema
+
+## PATCH Update User
+
+PATCH /api/v1/users/id
+
+> Response Examples
+
+> 200 Response
+
+```json
+{}
+```
+
+### Responses
+
+|HTTP Status Code |Meaning|Description|Data schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
+
+### Responses Data Schema
+
+## DELETE Remove User
+
+DELETE /api/v1/users/id
+
+> Response Examples
+
+> 200 Response
+
+```json
+{}
+```
+
+### Responses
+
+|HTTP Status Code |Meaning|Description|Data schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
+
+### Responses Data Schema
+
+# Teachers
+
+## POST Create Teacher
+
+POST /api/v1/teachers
+
+- **Admin** can create accounts for teachers (**Teacher** should receive email with his credentials to use them in login)
+
+> Body Parameters
+
+```json
+{
+  "firstName": "Zakarya",
+  "lastName": "Meddahi",
+  "email": "<email>"
+}
+```
+
+### Params
+
+|Name|Location|Type|Required|Description|
+|---|---|---|---|---|
+|body|body|object| no |none|
+|» firstName|body|string| yes |none|
+|» lastName|body|string| yes |none|
+|» email|body|string| yes |none|
+
+> Response Examples
+
+> 200 Response
+
+```json
+{}
+```
+
+### Responses
+
+|HTTP Status Code |Meaning|Description|Data schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
+
+### Responses Data Schema
+
+## GET Get My Account
+
+GET /api/v1/teachers/account/me
+
+- The extracted userId from JWT will be used in this case to get the __Teacher__ profile
+
+> Response Examples
+
+> 200 Response
+
+```json
+{}
+```
+
+### Responses
+
+|HTTP Status Code |Meaning|Description|Data schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
+
+### Responses Data Schema
+
+## PATCH Update My Account
+
+PATCH /api/v1/teachers/account/me
+
+- The **Teacher** can update his own account info
+
+> Body Parameters
+
+```json
+{
+  "firstName": "Sid Ahmed",
+  "lastName": "Abdelali"
+}
+```
+
+### Params
+
+|Name|Location|Type|Required|Description|
+|---|---|---|---|---|
+|body|body|object| no |none|
+|» firstName|body|string| yes |none|
+|» lastName|body|string| yes |none|
+
+> Response Examples
+
+> 200 Response
+
+```json
+{}
+```
+
+### Responses
+
+|HTTP Status Code |Meaning|Description|Data schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
+
+### Responses Data Schema
+
+## PATCH Update Profile Picture
+
+PATCH /api/v1/teachers/account/me/profile-picture
+
+- **The Teacher** can upload a profile picture (so in this case the file should be sent in the request)
+
+> Body Parameters
+
+```yaml
+Image: string
+
+```
+
+### Params
+
+|Name|Location|Type|Required|Description|
+|---|---|---|---|---|
+|body|body|object| no |none|
+|» Image|body|string(binary)| yes |none|
+
+> Response Examples
+
+> 200 Response
+
+```json
+{}
+```
+
+### Responses
+
+|HTTP Status Code |Meaning|Description|Data schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
+
+### Responses Data Schema
+
+## DELETE Remove Teacher
+
+DELETE /api/v1/teachers/id
+
+- **Admin** can remove **Teachers**
+
+> Response Examples
+
+> 200 Response
+
+```json
+{}
+```
+
+### Responses
+
+|HTTP Status Code |Meaning|Description|Data schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
+
+### Responses Data Schema
+
+# Students
+
+## GET Get My Account
+
+GET /api/v1/students/account/me
+
+- The extracted userId from JWT will be used in this case to get the __Student__ profile
+
+> Response Examples
+
+> 200 Response
+
+```json
+{}
+```
+
+### Responses
+
+|HTTP Status Code |Meaning|Description|Data schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
+
+### Responses Data Schema
+
+## PATCH Update My Account
+
+PATCH /api/v1/students/account/me
+
+- The **Teacher** can update his account info
+
+> Body Parameters
+
+```json
+{
+  "firstName": "Sid Ahmed",
+  "lastName": "Abdelali"
+}
+```
+
+### Params
+
+|Name|Location|Type|Required|Description|
+|---|---|---|---|---|
+|body|body|object| no |none|
+|» firstName|body|string| yes |none|
+|» lastName|body|string| yes |none|
+
+> Response Examples
+
+> 200 Response
+
+```json
+{}
+```
+
+### Responses
+
+|HTTP Status Code |Meaning|Description|Data schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
+
+### Responses Data Schema
+
+## PATCH Update Profile Picture
+
+PATCH /api/v1/students/account/me/profile-picture
+
+- **The Teacher** can upload a profile picture (so in this case the file should be sent in the request)
+
+> Body Parameters
+
+```yaml
+image: string
+
+```
+
+### Params
+
+|Name|Location|Type|Required|Description|
+|---|---|---|---|---|
+|body|body|object| no |none|
+|» image|body|string(binary)| yes |none|
+
+> Response Examples
+
+> 200 Response
+
+```json
+{}
+```
+
+### Responses
+
+|HTTP Status Code |Meaning|Description|Data schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
+
+### Responses Data Schema
+
+## DELETE Remove Student
+
+DELETE /api/v1/students/id
+
+- **Admin** can remove __Students__
+
+> Response Examples
+
+> 200 Response
+
+```json
+{}
+```
+
+### Responses
+
+|HTTP Status Code |Meaning|Description|Data schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
+
+### Responses Data Schema
+
+# Enrollments
+
+## POST Enroll
+
+POST /api/v1/courses/25/enrollments
+
+- __Students__ can enroll in courses
+
+> Body Parameters
+
+```json
+{}
+```
+
+### Params
+
+|Name|Location|Type|Required|Description|
+|---|---|---|---|---|
+|body|body|object| no |none|
+
+> Response Examples
+
+> 200 Response
+
+```json
+{}
+```
+
+### Responses
+
+|HTTP Status Code |Meaning|Description|Data schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
+
+### Responses Data Schema
+
+## GET Get Enrollments
+
+GET /api/v1/courses/enrollments
+
+- **Admin** can see students enrollments of all courses
+
+> Response Examples
+
+> 200 Response
+
+```json
+{}
+```
+
+### Responses
+
+|HTTP Status Code |Meaning|Description|Data schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
+
+### Responses Data Schema
+
+## GET Get Enrollments By Course Id
+
+GET /api/v1/courses/1/enrollments
+
+- __Admin__ and __Teacher__ can see enrollments by course
+
+> Response Examples
+
+> 200 Response
+
+```json
+{}
+```
+
+### Responses
+
+|HTTP Status Code |Meaning|Description|Data schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
+
+### Responses Data Schema
+
+## PATCH Update Enrollment
+
+PATCH /api/v1/enrollments/id
+
+- **Admin** can accept or reject __Students__ enrollments by updating the status property
+
+> Body Parameters
+
+```json
+{
+  "enrollmentStatus": "approved"
+}
+```
+
+### Params
+
+|Name|Location|Type|Required|Description|
+|---|---|---|---|---|
+|body|body|object| no |none|
+|» enrollmentStatus|body|string| yes |none|
+
+> Response Examples
+
+> 200 Response
+
+```json
+{}
+```
+
+### Responses
+
+|HTTP Status Code |Meaning|Description|Data schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
+
+### Responses Data Schema
+
+## DELETE Cancel Enrollment
+
+DELETE /api/v1/courses/enrollments/6
+
+- __Students__ can cancel their enrollments
+
+> Response Examples
+
+> 200 Response
+
+```json
+{}
+```
+
+### Responses
+
+|HTTP Status Code |Meaning|Description|Data schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
+
+### Responses Data Schema
+
+# Chats
+
+## GET Get Chat
+
+GET /api/v1/courses/5/chats/1
+
+- **Admin** and **Course Creator** can see course chat
+- Enrolled **Students** with accepted status can see chat
+
+> Response Examples
+
+> 200 Response
+
+```json
+{}
+```
+
+### Responses
+
+|HTTP Status Code |Meaning|Description|Data schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
+
+### Responses Data Schema
+
+## GET Get Chats
+
+GET /api/v1/courses/courseId/chats
+
+- **Admin** and **Course Creator** can see chats in of course
+- Enrolled Students with accepted status can see chats
+
+> Response Examples
+
+> 200 Response
+
+```json
+{}
+```
+
+### Responses
+
+|HTTP Status Code |Meaning|Description|Data schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
+
+### Responses Data Schema
+
+## PATCH Update Chat
+
+PATCH /api/v1/courses/courseId/chats
+
+- __Admin__ and __Course Creator__ can update chat
+
+> Body Parameters
+
+```json
+{
+  "name": "general chat"
+}
+```
+
+### Params
+
+|Name|Location|Type|Required|Description|
+|---|---|---|---|---|
+|body|body|object| no |none|
+|» name|body|string| yes |none|
+
+> Response Examples
+
+> 200 Response
+
+```json
+{}
+```
+
+### Responses
+
+|HTTP Status Code |Meaning|Description|Data schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
+
+### Responses Data Schema
+
+# File-Messages
+
+## POST Upload File
+
+POST /api/v1/courses/6/chats/2/messages
+
+- __Admin__ and __Course Creator__ can upload file as message (send file message)
+
+> Body Parameters
+
+```yaml
+file: string
+
+```
+
+### Params
+
+|Name|Location|Type|Required|Description|
+|---|---|---|---|---|
+|body|body|object| no |none|
+|» file|body|string(binary)| yes |none|
+
+> Response Examples
+
+> 200 Response
+
+```json
+{}
+```
+
+### Responses
+
+|HTTP Status Code |Meaning|Description|Data schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
+
+### Responses Data Schema
+
+# Social-Accounts
+
+## PATCH Update Social Links
+
+PATCH /api/v1/social-links/3
+
+- __All Users__ can update their social link urls
+
+> Body Parameters
+
+```json
+{
+  "linkedIn": "new linked in url"
+}
+```
+
+### Params
+
+|Name|Location|Type|Required|Description|
+|---|---|---|---|---|
+|body|body|object| no |none|
+|» linkedIn|body|string| yes |none|
+
+> Response Examples
+
+> 200 Response
+
+```json
+{}
+```
+
+### Responses
+
+|HTTP Status Code |Meaning|Description|Data schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
+
+### Responses Data Schema
+
+# Data Schema
+
