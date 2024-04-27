@@ -36,6 +36,18 @@ export class CoursesController {
     private readonly filesService: FilesService,
   ) {}
 
+  // get chats of the teacher route associated with a course
+  @Get('chats')
+  async getChats(@AuthUser() user: JwtPayload) {
+    try {
+      const { sub: userId, role } = user;
+      const courses = await this.coursesService.findCoursesChats(userId, role);
+      return { status: 'success', data: courses };
+    } catch (error) {
+      throw new HttpException(error.message, error.status || 500);
+    }
+  }
+
   @Get()
   async getCourses(@AuthUser() user: JwtPayload) {
     try {
