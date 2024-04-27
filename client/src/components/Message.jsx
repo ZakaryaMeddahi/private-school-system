@@ -127,11 +127,11 @@ function Message({
       // justifyContent='space-between'
       w={isPinned ? '100%' : '48%'}
       padding='14px 15px'
-      bgColor={msg.sender.id === userIdRef.current ? 'blue.100' : 'gray.100'}
-      color={msg.sender.id === userIdRef.current ? 'blue.900' : 'gray.900'}
+      bgColor={msg.sender?.id === userIdRef.current ? 'blue.100' : 'gray.100'}
+      color={msg.sender?.id === userIdRef.current ? 'blue.900' : 'gray.900'}
       borderRadius='10px'
       marginBottom='15px'
-      marginLeft={msg.sender.id === userIdRef.current ? '0' : 'auto'}
+      marginLeft={msg.sender?.id === userIdRef.current ? '0' : 'auto'}
     >
       <Stack
         flexDir='row'
@@ -148,16 +148,16 @@ function Message({
           <Stack alignItems='center' flexDir='row'>
             <Avatar name='private school' src='./logo.png' boxSize='35px' />
             <Text fontSize='sm' fontWeight='bold'>
-              {msg.sender.firstName + ' ' + msg.sender.lastName}
+              {msg.sender?.firstName + ' ' + msg.sender?.lastName}
             </Text>
           </Stack>
 
           <Box
             p='4px'
             bgColor={
-              msg.sender.role === 'admin'
+              msg.sender?.role === 'admin'
                 ? 'red.600'
-                : msg.sender.role === 'teacher'
+                : msg.sender?.role === 'teacher'
                 ? 'blue.600'
                 : 'green'
             }
@@ -166,7 +166,7 @@ function Message({
             // opacity='0.9'
           >
             <Text fontSize='xs' fontWeight='600' textTransform='uppercase'>
-              {msg.sender.role}
+              {msg.sender?.role}
             </Text>
           </Box>
         </Stack>
@@ -182,7 +182,7 @@ function Message({
             border='none'
             _hover={{
               bgColor:
-                msg.sender.id === userIdRef.current ? 'blue.200' : 'gray.200',
+                msg.sender?.id === userIdRef.current ? 'blue.200' : 'gray.200',
             }}
           />
           <MenuList minW='12rem'>
@@ -195,7 +195,7 @@ function Message({
                 Pin
               </MenuItem>
             )}
-            {msg.sender.id === userIdRef.current && (
+            {msg.sender?.id === userIdRef.current && (
               <MenuItem
                 icon={<CgEditBlackPoint />}
                 onClick={() => setUpdateMode(true)}
@@ -203,7 +203,7 @@ function Message({
                 Edit
               </MenuItem>
             )}
-            {msg.sender.id === userIdRef.current && (
+            {msg.sender?.id === userIdRef.current && (
               <MenuItem icon={<CgTrash />} onClick={handleDeleteMessage}>
                 Delete
               </MenuItem>
@@ -227,7 +227,7 @@ function Message({
             target='_blank'
             style={{ display: 'block', padding: '10px' }}
           >
-            {msg.file.name + '.' + msg.file.format}
+            {msg.file?.name + '.' + msg.file?.format}
           </a>
         </Box>
       )}
