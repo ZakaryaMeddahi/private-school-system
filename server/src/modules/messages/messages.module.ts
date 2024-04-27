@@ -8,6 +8,7 @@ import { ChatsModule } from '../chats/chats.module';
 import { EnrollmentsModule } from '../enrollments/enrollments.module';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { UsersModule } from '../users/users.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     FilesModule,
     ChatsModule,
     EnrollmentsModule,
+    UsersModule
   ],
   controllers: [MessagesController],
   providers: [MessagesService],

@@ -1,8 +1,10 @@
 import {
   Column,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Difficulty, DurationUnit } from '../enums';
@@ -10,6 +12,8 @@ import { Topic } from './topic.entity';
 import { Enrollment } from './enrollment.entity';
 import { Room } from './room.entity';
 import { Teacher } from './teacher.entity';
+import { File } from './file.entity';
+import { Chat } from './chat.entity';
 
 @Entity({ name: 'courses' })
 export class Course {
@@ -32,7 +36,7 @@ export class Course {
   difficulty: Difficulty;
 
   @Column()
-  enrollmentLimit: number;
+  enrollmentsLimit: number;
 
   @Column()
   duration: number;
@@ -40,8 +44,11 @@ export class Course {
   @Column()
   durationUnit: DurationUnit;
 
-  @Column({ type: 'timestamp' })
-  enrollmentDeadline: Date;
+  @Column({ nullable: true })
+  requirements: string;
+
+  @Column({ type: 'timestamp', nullable: true })
+  deadline: Date;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
@@ -60,4 +67,12 @@ export class Course {
 
   @OneToMany(() => Room, (room) => room.course)
   rooms: Room[];
+
+  @OneToOne(() => Chat)
+  @JoinColumn()
+  chat: Chat;
+
+  @OneToOne(() => File)
+  @JoinColumn()
+  file: File;
 }

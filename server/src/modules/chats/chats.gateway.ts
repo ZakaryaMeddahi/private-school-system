@@ -21,7 +21,7 @@ import { SocketSession } from '../../shared/websocket.session';
 @WebSocketGateway({
   namespace: 'chats',
   cors: {
-    origin: 'http://localhost:5000',
+    origin: 'http://localhost:3000',
   },
 })
 export class ChatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
@@ -37,7 +37,7 @@ export class ChatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
     console.log(`Client with id ${client.id} connected`);
     console.log('------------------------------------------------');
 
-    const {sub: userId} = client.user;
+    const { sub: userId } = client.user;
     this.sessions.setSession(userId, client);
   }
 
@@ -52,8 +52,8 @@ export class ChatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
       client.leave(room);
     });
 
-    const {sub: userId} = client.user;
-    this.sessions.removeSession(userId)
+    const { sub: userId } = client.user;
+    this.sessions.removeSession(userId);
   }
 
   // Event: send message
@@ -87,11 +87,17 @@ export class ChatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
       // Broadcast message to all users in chat
       client.to(`chat-${chatId}`).emit('message', { message: newMessage });
 
-      return {
+      client.emit('message', {
         status: 'success',
         result: 'Message sent successfully',
         message: newMessage,
-      };
+      });
+
+      // return {
+      //   status: 'success',
+      //   result: 'Message sent successfully',
+      //   message: newMessage,
+      // };
     } catch (error) {
       console.error(error);
       return { status: 'error', result: error.message };
@@ -121,11 +127,17 @@ export class ChatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
         .to(`chat-${chatId}`)
         .emit('message-updated', { message: updatedMessage });
 
-      return {
+      client.emit('message-updated', {
         status: 'success',
         result: 'Message updated successfully',
         message: updatedMessage,
-      };
+      });
+
+      // return {
+      //   status: 'success',
+      //   result: 'Message updated successfully',
+      //   message: updatedMessage,
+      // };
     } catch (error) {
       console.error(error);
       return { status: 'error', result: error.message };
@@ -144,15 +156,23 @@ export class ChatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
       const { sub: userId } = client.user;
       const { chatId, messageId } = data;
 
+      console.log('delete message', userId, messageId);
+
       await this.messagesService.remove(userId, messageId);
 
       client.to(`chat-${chatId}`).emit('message-removed', { messageId });
 
-      return {
+      client.emit('message-removed', {
         status: 'success',
         result: 'Message removed successfully',
         messageId,
-      };
+      });
+
+      // return {
+      //   status: 'success',
+      //   result: 'Message removed successfully',
+      //   messageId,
+      // };
     } catch (error) {
       console.error(error);
       return { status: 'error', result: error.message };
@@ -162,7 +182,10 @@ export class ChatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   // join socket.io room
   @UseGuards(WsAuth)
   @SubscribeMessage('join-room')
-  async joinRoom(@MessageBody() data: any, @ConnectedSocket() client: UserSocket) {
+  async joinRoom(
+    @MessageBody() data: any,
+    @ConnectedSocket() client: UserSocket,
+  ) {
     try {
       const { chatId } = data;
       // Check if chat exist
@@ -176,9 +199,16 @@ export class ChatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
       // Join room
       client.join(`chat-${chatId}`);
 
-      client.to(`chat-${chatId}`).emit('user-joined', { userId: client.user.sub });
+      client
+        .to(`chat-${chatId}`)
+        .emit('user-joined', { userId: client.user.sub });
 
-      return { result: `User with id ${client.id} joined the chat ${chatId}` };
+      client.emit('user-joined', {
+        status: 'success',
+        result: `User with id ${client.user.sub} joined the chat ${chatId}`,
+      });
+
+      // return { result: `User with id ${client.id} joined the chat ${chatId}` };
     } catch (error) {
       console.error(error);
       return { status: 'error', result: error.message };
@@ -188,11 +218,14 @@ export class ChatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   // leave socket.io room
   @UseGuards(WsAuth)
   @SubscribeMessage('leave-room')
-  leaveRoom(@MessageBody() data: any, @ConnectedSocket() client: Socket) {
+  leaveRoom(@MessageBody() data: any, @ConnectedSocket() client: UserSocket) {
     const { chatId } = data;
 
     // Leave room
     client.leave(`chat-${chatId}`);
+
+    client.to(`chat-${chatId}`).emit('user-left', { userId: client.user.sub });
+
     return { result: `User with id ${client.id} left the chat ${chatId}` };
   }
 }

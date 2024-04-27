@@ -16,6 +16,10 @@ export class FilesService {
   // Implement file service
   async create(file: CreateFileParams) {
     try {
+      if (!file) {
+        return null;
+      }
+
       const result = await this.objectStorage.uploadFile(file);
 
       if (!result) throw new HttpException('Cannot upload file', 500);

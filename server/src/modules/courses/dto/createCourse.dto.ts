@@ -19,7 +19,7 @@ export class createCourseDto {
   difficulty: Difficulty;
 
   @IsNumber()
-  enrollmentLimit: number;
+  enrollmentsLimit: number;
 
   @IsNotEmpty()
   @IsNumber()

@@ -51,7 +51,7 @@ export class EnrollmentsService {
 
   async findByCourseId(courseId: number) {
     try {
-      // Check if the course exists in the database
+      // TODO: Check if the course exists in the database
 
       const enrollments = await this.enrollmentRepository
         .createQueryBuilder('enrollment')
@@ -71,6 +71,38 @@ export class EnrollmentsService {
       console.error(error);
       throw new HttpException(
         error.message || 'Cannot retrieve enrollments',
+        error.status || 500,
+      );
+    }
+  }
+
+  async getCourseMembers(courseId: number) {
+    try {
+      // TODO: Check if the course exists in the database
+
+      const enrollments = await this.enrollmentRepository
+        .createQueryBuilder('enrollment')
+        .leftJoinAndSelect('enrollment.student', 'student')
+        .leftJoinAndSelect('student.user', 'user')
+        .where('enrollment.course = :courseId', { courseId })
+        .andWhere('enrollment.enrollmentStatus = :status', {
+          status: EnrollmentStatus.APPROVED,
+        })
+        .getMany();
+
+      const members = enrollments.map((enrollment) => enrollment.student);
+
+      if (!members) {
+        throw new NotFoundException(
+          `There are no members for the course with the id ${courseId}`,
+        );
+      }
+
+      return members;
+    } catch (error) {
+      console.error(error);
+      throw new HttpException(
+        error.message || 'Cannot retrieve members',
         error.status || 500,
       );
     }

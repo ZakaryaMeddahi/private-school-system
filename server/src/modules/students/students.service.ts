@@ -20,11 +20,17 @@ export class StudentsService {
   async findAll() {
     try {
       // TODO: Add user to student object
-      const students = await this.studentRepository
+      let students = await this.studentRepository
         .createQueryBuilder('student')
         .leftJoin('student.user', 'user')
-        .select(['student.id', 'user.email', 'user.firstName', 'user.lastName'])
+        .select('*')
         .getRawMany();
+
+      // remove password
+      students = students.map((student) => {
+        const { password, userId, ...studentData } = student;
+        return studentData;
+      });
       return students;
     } catch (error) {
       console.error(error);
@@ -35,18 +41,18 @@ export class StudentsService {
   async findOne(id: number) {
     try {
       // TODO: Think of a way to get social accounts
-      const student = await this.studentRepository
+      const studentEntity = await this.studentRepository
         .createQueryBuilder('student')
         .leftJoin('student.user', 'user')
         .select('*')
-        .where('student.id = :id', { id })
+        .where('user.id = :id', { id })
         .getRawOne();
 
-      if (!student) throw new NotFoundException('Student not found');
+      if (!studentEntity) throw new NotFoundException('Student not found');
 
-      const { password, ...studentWithoutPassword } = student;
+      const { password, userId, ...student } = studentEntity;
 
-      return studentWithoutPassword;
+      return student;
     } catch (error) {
       console.error(error);
       throw new HttpException(

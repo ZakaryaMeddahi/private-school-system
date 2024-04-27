@@ -9,7 +9,9 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { CoursesService } from './courses.service';
 import { createCourseDto } from './dto/createCourse.dto';
@@ -23,11 +25,28 @@ import { AdminGuard } from 'src/guards/admin.guard';
 import { Roles } from 'src/decorators/roles.decorator';
 import { Role } from 'src/shared/enums';
 import { RolesGuard } from 'src/guards/roles.guard';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { FilesService } from '../files/files.service';
 
 @Controller('api/v1/courses')
 @UseGuards(AuthGuard, RolesGuard)
 export class CoursesController {
-  constructor(private readonly coursesService: CoursesService) {}
+  constructor(
+    private readonly coursesService: CoursesService,
+    private readonly filesService: FilesService,
+  ) {}
+
+  // get chats of the teacher route associated with a course
+  @Get('chats')
+  async getChats(@AuthUser() user: JwtPayload) {
+    try {
+      const { sub: userId, role } = user;
+      const courses = await this.coursesService.findCoursesChats(userId, role);
+      return { status: 'success', data: courses };
+    } catch (error) {
+      throw new HttpException(error.message, error.status || 500);
+    }
+  }
 
   @Get()
   async getCourses(@AuthUser() user: JwtPayload) {
@@ -56,13 +75,22 @@ export class CoursesController {
 
   @Post()
   @Roles(Role.TEACHER)
+  @UseInterceptors(FileInterceptor('file'))
   async createCourse(
     @AuthUser() user: JwtPayload,
-    @Body() courseData: createCourseDto,
+    @Body() courseData: any,
+    @UploadedFile() file: Express.Multer.File,
   ) {
     try {
       const { sub: userId } = user;
-      const course = await this.coursesService.create(userId, courseData);
+
+      const newFile = await this.filesService.create(file);
+
+      const course = await this.coursesService.create(
+        userId,
+        JSON.parse(courseData.data),
+        newFile,
+      );
       return {
         status: 'success',
         message: 'Course created successfully',
@@ -75,19 +103,27 @@ export class CoursesController {
 
   @Patch(':id')
   @Roles(Role.TEACHER, Role.ADMIN)
+  @UseInterceptors(FileInterceptor('file'))
   async updateCourse(
     @AuthUser() user: JwtPayload,
     @Param('id', ParseIntPipe) id: number,
-    @Body() courseData: UpdateCourseDto,
+    @Body() courseData: any,
+    @UploadedFile() file: Express.Multer.File,
   ) {
     try {
       const { sub: userId, role } = user;
+
+      const payloadData = JSON.parse(courseData.data);
+
+      if (file) {
+        payloadData.file = await this.filesService.create(file);
+      }
 
       const course = await this.coursesService.update(
         userId,
         role,
         id,
-        courseData,
+        payloadData,
       );
 
       if (!course) {
