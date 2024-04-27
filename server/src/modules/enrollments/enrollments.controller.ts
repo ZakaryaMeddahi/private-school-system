@@ -65,6 +65,25 @@ export class EnrollmentsController {
     }
   }
 
+  // Get Course members
+  @Get(':courseId/members')
+  // @Roles(Role.ADMIN, Role.TEACHER)
+  async getCourseMembers(
+    @Param('courseId', ParseIntPipe) courseId: number,
+  ) {
+    try {
+      const members = await this.enrollmentService.getCourseMembers(courseId);
+      return {
+        status: 'success',
+        message: 'Course members retrieved successfully',
+        data: members,
+      };
+    } catch (error) {
+      console.error(error);
+      throw new HttpException(error.message, error.status || 500);
+    }
+  }
+
   // Enroll Student In A Course (Student)
   @Post(':courseId/enrollments')
   @Roles(Role.STUDENT)
@@ -93,7 +112,7 @@ export class EnrollmentsController {
 
   // Update Enrollment (Admin)
   @Patch('enrollments/:id')
-  @Roles(Role.ADMIN)
+  // @Roles(Role.ADMIN)
   async updateEnrollment(
     @Param('id', ParseIntPipe) id: number,
     @Body() enrollmentData: UpdateEnrollmentDto,
