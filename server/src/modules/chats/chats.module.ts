@@ -11,11 +11,22 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SocketSession } from '../../shared/websocket.session';
 import { ChatsEvents } from './chats.events';
+import { UsersModule } from '../users/users.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Chat, Message]), EnrollmentsModule],
+  imports: [
+    TypeOrmModule.forFeature([Chat, Message]),
+    EnrollmentsModule,
+    UsersModule,
+  ],
   controllers: [ChatsController],
-  providers: [ChatsService, ChatsGateway, MessagesService, SocketSession, ChatsEvents],
+  providers: [
+    ChatsService,
+    ChatsGateway,
+    MessagesService,
+    SocketSession,
+    ChatsEvents,
+  ],
   exports: [ChatsService],
 })
 export class ChatsModule {}
