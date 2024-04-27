@@ -72,9 +72,14 @@ export class AuthService {
 
   async loginUser(userData: LoginUserParams) {
     try {
-      const user = await this.usersRepository.findOneBy({
-        email: userData.email,
-      });
+      console.log(userData);
+      const user = await this.usersRepository
+        .createQueryBuilder()
+        .addSelect('password')
+        .where('email = :email', { email: userData.email })
+        .getOne();
+
+      console.log(user);
 
       if (!user) return null;
 
@@ -97,6 +102,7 @@ export class AuthService {
 
       return { ...userWithoutPass, access_token };
     } catch (error) {
+      console.error(error);
       throw new HttpException('Something went wrong in the server', 500);
     }
   }
