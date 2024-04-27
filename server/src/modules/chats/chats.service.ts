@@ -12,6 +12,17 @@ export class ChatsService {
     // private readonly coursesService: CoursesService,
   ) {}
 
+  async findByCourseId() {
+    try {
+      const chats = await this.chatRepository.find();
+
+      return chats;
+    } catch (error) {
+      console.error(error);
+      throw new HttpException('Cannot get chats', 500);
+    }
+  }
+
   async findAll() {
     try {
       const chats = await this.chatRepository.find();
