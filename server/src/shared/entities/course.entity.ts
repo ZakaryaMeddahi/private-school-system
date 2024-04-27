@@ -13,6 +13,7 @@ import { Enrollment } from './enrollment.entity';
 import { Room } from './room.entity';
 import { Teacher } from './teacher.entity';
 import { File } from './file.entity';
+import { Chat } from './chat.entity';
 
 @Entity({ name: 'courses' })
 export class Course {
@@ -66,6 +67,10 @@ export class Course {
 
   @OneToMany(() => Room, (room) => room.course)
   rooms: Room[];
+
+  @OneToOne(() => Chat)
+  @JoinColumn()
+  chat: Chat;
 
   @OneToOne(() => File)
   @JoinColumn()
