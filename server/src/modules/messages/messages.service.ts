@@ -8,6 +8,7 @@ import {
 } from 'src/shared/types';
 import { Equal, Repository } from 'typeorm';
 import { ChatsService } from '../chats/chats.service';
+import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class MessagesService {
@@ -15,6 +16,7 @@ export class MessagesService {
     @InjectRepository(Message)
     private readonly messagesRepository: Repository<Message>,
     private readonly chatsService: ChatsService,
+    private readonly usersService: UsersService,
   ) {}
 
   async findByChatId(options: MessagesOptions) {
@@ -22,7 +24,8 @@ export class MessagesService {
       const { courseId, chatId } = options;
       const messages = await this.messagesRepository.find({
         where: { chat: { id: Equal(chatId), course: { id: Equal(courseId) } } },
-        relations: ['sender'],
+        relations: ['sender', 'file'],
+        order: { sentAt: 'ASC' },
       });
 
       if (!messages) return null;
@@ -43,7 +46,8 @@ export class MessagesService {
             room: { id: Equal(roomId), course: { id: Equal(courseId) } },
           },
         },
-        relations: ['sender'],
+        relations: ['sender', 'file'],
+        order: { sentAt: 'ASC' },
       });
 
       if (!messages) return null;
@@ -62,10 +66,13 @@ export class MessagesService {
     MessageData: CreateMessageParams,
   ) {
     try {
+      // Get user
+      const user = await this.usersService.findOne(userId);
+
       const newMessage = this.messagesRepository.create({
         chat: { id: chatId },
         content: MessageData.content,
-        sender: { id: userId },
+        sender: user,
         file: MessageData.file || null,
       });
 
@@ -112,14 +119,19 @@ export class MessagesService {
   async update(userId: number, id: number, MessageData: UpdateMessageParams) {
     try {
       const message = await this.messagesRepository.findOne({
-        where: { id: Equal(id), sender: { id: Equal(userId) } },
+        where: { id: Equal(id) },
+        relations: ['sender', 'file'],
       });
 
       if (!message) throw new NotFoundException('Cannot find message');
 
+      console.log(MessageData);
+
       message.content = MessageData.content || message.content;
-      message.isPinned = MessageData.isPinned || message.isPinned;
+      message.isPinned = MessageData.isPinned;
       message.updatedAt = new Date();
+
+      console.log(message);
 
       const updatedMessage = await this.messagesRepository.save(message);
 
