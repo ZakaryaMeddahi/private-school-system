@@ -55,6 +55,18 @@ export class UsersService {
   //   }
   // }
 
+  async findOne(id: number) {
+    try {
+      const user = await this.usersRepository.findOne({ where: { id } });
+      if (!user) throw new NotFoundException('User not found');
+
+      return user;
+    } catch (error) {
+      console.error(error);
+      throw new HttpException('Cannot get user', 500);
+    }
+  }
+
   async create(userData: CreateUserParams) {
     try {
       const user = await this.usersRepository.findOne({
