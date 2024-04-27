@@ -34,14 +34,14 @@ export class MessagesController {
   // TODO: Add enrollment guard
   @Get('courses/:courseId/chats/:chatId/messages')
   @UseGuards(EnrollmentGuard)
-  getMessagesForChat(
+  async getMessagesForChat(
     @Param('courseId') courseId: number,
     @Param('chatId') chatId: number,
     @Query('page') page: number,
     @Query('pageSize') pageSize: number,
   ) {
     try {
-      const messages = this.messagesService.findByChatId({
+      const messages = await this.messagesService.findByChatId({
         courseId,
         chatId,
         page,
@@ -52,6 +52,8 @@ export class MessagesController {
         throw new NotFoundException(
           'Please double check the course and chat id',
         );
+
+      // console.log(messages);
 
       return {
         status: 'success',
@@ -104,18 +106,23 @@ export class MessagesController {
   async sendFileInChat(
     @AuthUser() user: JwtPayload,
     @Param('chatId', ParseIntPipe) chatId: number,
-    @Body() messageData: CreateMessageDto,
+    @Body() messageData: any,
     @UploadedFile() file: Express.Multer.File,
   ) {
     try {
       const { sub: userId } = user;
+
+      console.log(file);
+      
       const newFile = await this.filesService.create(file);
+
+      const messageContent = messageData.content;
 
       const newMessage = await this.messagesService.createByChatId(
         userId,
         chatId,
         {
-          ...messageData,
+          content: messageContent,
           file: newFile,
         },
       );
