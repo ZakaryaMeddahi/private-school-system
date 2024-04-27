@@ -23,11 +23,16 @@ export class TeachersService {
 
   async findAll() {
     try {
-      const teachers = await this.teacherRepository
+      let teachers = await this.teacherRepository
         .createQueryBuilder('teacher')
         .leftJoin('teacher.user', 'user')
-        .select(['teacher.id', 'user.email', 'user.firstName', 'user.lastName'])
+        .select('*')
         .getRawMany();
+
+        teachers = teachers.map((teacher) => {
+          const { password, userId, ...teacherData } = teacher;
+          return teacherData;
+        });
 
       return teachers;
     } catch (error) {
@@ -42,7 +47,7 @@ export class TeachersService {
         .createQueryBuilder('teacher')
         .leftJoin('teacher.user', 'user')
         .select('*')
-        .where('teacher.id = :id', { id })
+        .where('user.id = :id', { id })
         .getRawOne();
 
       if (!teacher) throw new NotFoundException('Teacher not found');
