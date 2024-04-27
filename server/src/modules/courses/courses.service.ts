@@ -6,7 +6,7 @@ import { Equal, Repository } from 'typeorm';
 import { TopicsService } from '../topics/topics.service';
 import { ChatsService } from '../chats/chats.service';
 import { RoomsService } from '../rooms/rooms.service';
-import { Role, RoomStatus } from 'src/shared/enums';
+import { EnrollmentStatus, Role, RoomStatus } from 'src/shared/enums';
 import { TeachersService } from '../teachers/teachers.service';
 import { File } from 'src/shared/entities/file.entity';
 
@@ -20,6 +20,39 @@ export class CoursesService {
     private readonly roomsService: RoomsService,
     private readonly teachersService: TeachersService,
   ) {}
+
+  async findCoursesChats(id: number, role: Role) {
+    try {
+      let courses: Course[] = [];
+      if (role === Role.TEACHER) {
+        courses = await this.coursesRepository.find({
+          where: { teacher: { user: { id: Equal(id) } } },
+          relations: ['teacher', 'file', 'chat'],
+        });
+      } else {
+        // get course for the enrolled student
+        courses = await this.coursesRepository.find({
+          where: {
+            enrollments: {
+              student: { user: { id: Equal(id) } },
+              enrollmentStatus: EnrollmentStatus.APPROVED,
+            },
+          },
+          relations: ['teacher', 'file', 'chat'],
+        });
+      }
+
+      // remove password
+      courses = courses.map((course) => {
+        delete course.teacher.user.password;
+        return course;
+      });
+
+      return courses;
+    } catch (error) {
+      throw new HttpException('Cannot get chats', 500);
+    }
+  }
 
   async findAll() {
     try {
@@ -66,9 +99,11 @@ export class CoursesService {
 
       const course = await this.coursesRepository.save(newCourse);
 
-      await this.chatsService.createByCourseId(course.id, {
-        name: 'Global Chat',
+      const chat = await this.chatsService.createByCourseId(course.id, {
+        name: course.title,
       });
+
+      await this.coursesRepository.save({ ...newCourse, chat });
 
       await this.roomsService.create(
         { name: 'General', slug: 'general', status: RoomStatus.OPEN },
