@@ -1,9 +1,4 @@
-import {
-  IsEmail,
-  IsNotEmpty,
-  MaxLength,
-  MinLength,
-} from 'class-validator';
+import { IsEmail, IsNotEmpty, MaxLength, MinLength } from 'class-validator';
 
 export class RegisterUserDto {
   @IsNotEmpty()
@@ -12,7 +7,7 @@ export class RegisterUserDto {
   @IsNotEmpty()
   lastName: string;
 
-  @IsEmail()
+  @IsEmail({}, { message: 'Invalid email format' })
   email: string;
 
   @MinLength(8)
