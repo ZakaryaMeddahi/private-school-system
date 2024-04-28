@@ -1,57 +1,87 @@
-import { Box, Heading, Text, Badge, Button } from "@chakra-ui/react";
+import CardForCourse from "@/components/CardForCourse";
+import Media from "@/components/Socials/Media";
+import { Box, Heading, Text, Badge, Button, Image } from "@chakra-ui/react";
+import { FaFacebookF, FaWhatsapp, FaLinkedinIn } from "react-icons/fa"
 
 const ProfilePage = ({FullName, UserName, Bio, Role}) => {
     return (
-        <Box
+        <Box 
             w='100%'
             h='100%'
-            paddingBlock='50px'
-            paddingInline='50px'
-            >
-            <Box
+            paddingInline='200px'
+            display='flex'
+            flexDir='column'
+            gap={5}
+            overflowY='auto'
+        >
+            <Box 
+                h='10%'
                 w='100%'
-                h='100%'
-                padding={50}
+                display='flex'
+                flexDir='column'
+                justifyContent='center'
+                alignItems={'flex-end'}
             >
-                <Box
-                    width='100%'
-                    display='flex'
-                    flexDir='row'
-                    gap='20'
-                    alignItems='center'
+                <Button bgColor='#234C51' color='white' >+ Edit Profile</Button>
+            </Box>
+            <Box h='fit-content'>
+                <Box 
+                    w='100%'
+                    display='grid'
+                    gridTemplateColumns='1fr 0.5fr'
+                    gap={5}
                 >
-                    <Box
+                    <Box 
                         display='flex'
-                        flexDir='row'
-                        gap={5}
-                        alignItems={'center'}
+                        flexDir='column'
+                        gap='10px'
                     >
+                        <Heading size='lg' color='#213E69' >{FullName}</Heading>
+                        {/* <Text fontSize={16} color='#898C81' >{UserName}</Text> */}
+                        <Badge colorScheme={Role === "student"?'blue':'red'} w={'fit-content'} paddingInline='5px' >{Role}</Badge>
                         <Box
-                            width='100px'
-                            h={'100px'}
-                            borderRadius={'50%'}
-                            border='1px solid black'
+                            w='100%'
+                            marginTop='10px'
                         >
-                            {/* imgae profile */}
+                            <Text fontSize={16} w='650px' color='#898C81' > 
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit. 
+                                Inventore quod repudiandae nesciunt aspernatur recusandae cumque 
+                                autem tempora natus corrupti deserunt, consequatur eveniet 
+                                exercitationem quisquam non, suscipit quibusdam, 
+                                laboriosam repellendus ipsum. 
+                            </Text>
                         </Box>
-                        <Box display='flex' flexDir='column'>
-                            <Heading size='lg'>{FullName}</Heading>
-                            <Text fontSize={20} >{UserName}</Text>
-                            <Badge colorScheme={Role === "Student"?'blue':'red'} w={'fit-content'} paddingInline='5px' >{Role}</Badge>
+                        <Box
+                            display='flex'
+                            gap={3}
+                        >
+                            <Media icon={<FaFacebookF />} w='32px' h='32px' bgcolor='transparent' hover={{backgroundColor: 'whiteSmoke'}} />
+                            <Media icon={<FaWhatsapp size='25px' />} w='32px' h='32px' bgcolor='transparent' hover={{backgroundColor: 'whiteSmoke'}} />
+                            <Media icon={<FaLinkedinIn />} w='32px' h='32px' bgcolor='transparent' hover={{backgroundColor: 'whiteSmoke'}} />
                         </Box>
-                    </Box>
-                    <Box width='50%' display='flex' justifyContent='end' >
-                        <Button colorScheme='red'>Edit Profile</Button>
-                    </Box>
                 </Box>
                 <Box
-                    marginTop={'20px'}
-                    w='95%'
+                    h={'300px'}
+                    display='flex'
+                    justifyContent='flex-end'
                 >
-                    <Text fontSize={20}> {Bio} </Text>
+                    <Image src='/profile.jpeg' borderRadius={'15px'} boxShadow='rgb(148 146 146) 6px 7px 8px' />
                 </Box>
             </Box>
         </Box>
+        <Box
+            marginTop='25px'
+            w='100%'
+            display='grid'
+            gridTemplateColumns='repeat(3, 1fr)'
+            gridTemplateRows='1fr'
+            gap={5}
+        >
+            <CardForCourse />
+            <CardForCourse />
+            <CardForCourse />
+        </Box>
+    </Box>
     );
 }
 
