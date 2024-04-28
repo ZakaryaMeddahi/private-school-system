@@ -4,7 +4,7 @@ import Logo from "@/components/Logo/Logo";
 import { Box, Divider, Text, Input, Popover, PopoverTrigger, PopoverContent, PopoverHeader, PopoverBody, PopoverFooter, PopoverArrow, PopoverCloseButton, PopoverAnchor } from "@chakra-ui/react";
 import { HiOutlineAcademicCap } from "react-icons/hi2";
 import { IoChatbubblesOutline } from "react-icons/io5";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { LuLogOut } from "react-icons/lu";
 import { TbSmartHome } from "react-icons/tb";
 import { CgProfile } from "react-icons/cg";
@@ -13,6 +13,12 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 
 
 const Layout = ({ children }) => {
+    
+    const [userId, setUserId] = useState('');
+
+    useEffect(() => {
+        setUserId(localStorage.getItem('userId'));
+    }, []);
 
     const inputRef = useRef();
   
@@ -119,7 +125,7 @@ const Layout = ({ children }) => {
                             <Text color='#898C81'>Chat</Text>
                         </Box>
                     </Link>
-                    <Link href='/student_dashboard/profile'>
+                    <Link href={`/student_dashboard/profile/${userId}`}>
                         <Box
                             w='100%'
                             display='flex'
@@ -200,7 +206,7 @@ const Layout = ({ children }) => {
                             <PopoverContent w='180px'>
                                 <PopoverArrow />
                                 <PopoverCloseButton />
-                                <Link href='/student_dashboard/profile'>
+                                <Link href={`/student_dashboard/profile/${userId}`}>
                                     <PopoverHeader>Profile</PopoverHeader>
                                 </Link>
                                 <Link href='/'>
