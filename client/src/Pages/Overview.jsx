@@ -1,12 +1,28 @@
 'use client';
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Calendar from "react-calendar";
 import { Badge, Box, Heading, Text } from "@chakra-ui/react";
+import { GetUser } from "@/Lib/getUser";
 
 const Overview = () => {
 
     const [value, onChange] = useState(new Date());
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [role, setRole] = useState('');
+
+    useEffect(() => {
+        GetUser()
+            .then(data => {
+                setFirstName(data.firstName);
+                setLastName(data.lastName);
+                setRole(data.role);
+            })
+            .catch(err => console.log(err.message));
+    }, []);
+
+    const FullName = `${firstName} ${lastName}`;
 
     return (
         <Box 
@@ -43,7 +59,7 @@ const Overview = () => {
                             justifyContent={'center'}
                         >
                             <Heading fontSize='64px'>Welcome Back</Heading>
-                            <Text fontSize='24px' fontWeight='500'>Abdelali Sid Ahmed</Text>
+                            <Text fontSize='24px' fontWeight='500'>{FullName}</Text>
                         </Box>
                     </Box>
                     <Box 
@@ -80,9 +96,9 @@ const Overview = () => {
                     >
                         <Box w='32' h='32' border='1px solid black' borderRadius='50%'></Box>
                         <Box textAlign='center'>
-                            <Heading fontSize='32px'>Abdelali Sid ahmed</Heading>
+                            <Heading fontSize='32px'>{FullName}</Heading>
                             <Text>SidAhmed001</Text>
-                            <Badge colorScheme='blue' paddingInline={3}>Student</Badge>
+                            <Badge colorScheme='blue' paddingInline={3}>{role}</Badge>
                         </Box>
                     </Box>
                     <Box 
