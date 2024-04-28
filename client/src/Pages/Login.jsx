@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  Box,
   Button,
   Checkbox,
   Container,
@@ -16,11 +17,14 @@ import Link from 'next/link';
 import { useContext, useState } from 'react';
 import { LoginContext } from '@/app/providers/LoginProvider';
 import { useRouter } from 'next/navigation';
+import ErrorMessage from '@/components/ErrorMessage';
 
 const LoginPage = () => {
   const { email, setEmail, password, setPassword } = useContext(LoginContext);
   const [checkbox, setCheckbox] = useState(false);
   const router = useRouter();
+  const [emailErrorMessage, setEmailErrorMessage] = useState('');
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
 
   const handleCheckbox = () => {
     setCheckbox(!checkbox);
@@ -43,7 +47,8 @@ const LoginPage = () => {
       );
 
       if (!response.ok) {
-        throw new Error('Something went wrong');
+        const data = await response.json();
+        throw new Error(data.message);
       }
 
       const { data } = await response.json();
@@ -63,6 +68,14 @@ const LoginPage = () => {
       }
     } catch (error) {
       console.error(error);
+      error.message
+        .toLowerCase()
+        .split(',')
+        .forEach((message) => {
+          if (message.includes('email')) setEmailErrorMessage(message);
+          if (message.includes('password')) setPasswordErrorMessage(message);
+        });
+      // setErrorMessage(error.message);
     }
 
     console.log(email, password);
@@ -92,19 +105,22 @@ const LoginPage = () => {
           <Container w='100%' h='100%' display='flex' justifyContent='center'>
             <VStack h='100%' w='90%' align='self-start' justifyContent='center'>
               <Header title='Login' />
-              <FormInput
-                type='email'
-                placeholder='Email'
-                onchange={(e) => {
-                  setEmail(e.target.value);
-                  console.log('hello');
-                }}
-              />
-              <FormInput
-                type='password'
-                placeholder='Password'
-                onchange={(e) => setPassword(e.target.value)}
-              />
+              <Box w='100%'>
+                <FormInput
+                  type='text'
+                  placeholder='Email'
+                  onchange={(e) => setEmail(e.target.value)}
+                />
+                <ErrorMessage errorMessage={emailErrorMessage} />
+              </Box>
+              <Box w='100%'>
+                <FormInput
+                  type='password'
+                  placeholder='Password'
+                  onchange={(e) => setPassword(e.target.value)}
+                />
+                <ErrorMessage errorMessage={passwordErrorMessage} />
+              </Box>
               <Stack direction='row' justify='space-between' w='100%'>
                 <Checkbox
                   colorScheme='blue'
