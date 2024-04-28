@@ -1,33 +1,37 @@
+'use client';
+
 import ProfilePage from "@/Pages/profile";
+import { useEffect, useState } from "react";
+import { GetUser } from "../../../../../Lib/getUser";
 
-const profile = async () => {
-
-    const token = localStorage.getItem('token');
-
-    console.log(token);
-
-    const response = await fetch('http://localhost:8080/api/v1/students/account/me', {
-        Authorization: `Bearer ${token}`
-    })
-
-    if (response.status === 200) {
-        const { data } = await response.json();
-        console.log(data);
-    }
-
-    const [FullName, setFullName] = useState('');
+const profile = () => {
+    const [FirstName, setFirstName] = useState('');
+    const [LastName, setLastName] = useState('');
     const [UserName, setUserName] = useState('');
     const [Bio, setBio] = useState('');
     const [Role, setRole] = useState('');
 
+    useEffect(() => {
+        GetUser()
+            .then(data => {
+                setFirstName(data.firstName);
+                setLastName(data.lastName);
+                setBio(data.biography);
+                setRole(data.role);
+
+                console.log(data);
+            })
+            .catch(err => console.log(err.message));
+    }, []);
+    
+
     return (
         <>
             <ProfilePage 
-                FullName='ABDELALI Sid Ahmed' 
+                FullName={`${FirstName} ${LastName}`} 
                 UserName='SidAhmed001' 
-                Bio='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, 
-                libero sit amet volutpat hendrerit, nunc sem fermentum felis, nec tincidunt nunc mi ac nunc.'
-                Role='Student'
+                Bio={!Bio?'': Bio}
+                Role={Role}
             />
         </>
     );
