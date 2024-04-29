@@ -17,6 +17,7 @@ import { UseGuards } from '@nestjs/common';
 import { WsAuth } from 'src/guards/ws-auth.guard';
 import { UserSocket } from 'src/shared/interfaces';
 import { SocketSession } from '../../shared/websocket.session';
+import { v4 as uuidv4 } from 'uuid';
 
 // We should have as DS like Map to store user sockets in room
 
@@ -230,15 +231,24 @@ export class RoomsGateway {
     @ConnectedSocket() client: Socket,
   ) {
     try {
-      const { roomId, topicId } = data;
-      const topic = await this.topicsService.findOne(topicId);
+      // const { roomId, topicId } = data;
+      // const topic = await this.topicsService.findOne(topicId);
+
+      const { roomId } = data;
+
+      const agoraChannel = uuidv4();
 
       const session = await this.sessionsService.create({
-        agoraChannel: `${topic.title}-${topicId}`,
-        agoraToken: 'agora-token',
-      });
+        agoraChannel,
+        agoraToken: null,
+      })
 
-      await this.topicsService.updateOne(topicId, session.id, {});
+      // const session = await this.sessionsService.create({
+      //   agoraChannel: `${topic.title}-${topicId}`,
+      //   agoraToken: null,
+      // });
+
+      // await this.topicsService.updateOne(topicId, session.id, {});
 
       // Broadcast message to all users in chat
       client.to(`room-${roomId}`).emit('session-started', { session });
