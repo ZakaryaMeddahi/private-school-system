@@ -35,8 +35,8 @@ export class Course {
   @Column()
   difficulty: Difficulty;
 
-  @Column()
-  enrollmentsLimit: number;
+  // @Column()
+  // enrollmentsLimit: number;
 
   @Column()
   duration: number;

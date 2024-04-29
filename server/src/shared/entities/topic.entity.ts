@@ -17,12 +17,12 @@ export class Topic {
   @Column()
   title: string;
 
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  startTime: Date;
+  // @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  // startTime: Date;
 
-  @OneToOne(() => Session)
-  @JoinColumn()
-  session: Session;
+  // @OneToOne(() => Session)
+  // @JoinColumn()
+  // session: Session;
 
   @ManyToOne(() => Course, (course) => course.topics)
   course: Course;

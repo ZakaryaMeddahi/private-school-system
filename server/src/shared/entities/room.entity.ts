@@ -1,6 +1,7 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Course } from './course.entity';
 import { RoomStatus } from '../enums';
+import { Session } from './session.entity';
 
 @Entity({ name: 'rooms' })
 export class Room {
@@ -24,4 +25,7 @@ export class Room {
 
   @ManyToOne(() => Course, (course) => course.rooms)
   course: Course;
+
+  @OneToMany(() => Session , (session) => session.room)
+  sessions: Session[];
 }
