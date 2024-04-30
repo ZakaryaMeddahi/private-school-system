@@ -101,11 +101,18 @@ export class RoomsGateway {
 
       // Broadcast message to all users in chat
       client.to(`room-${roomId}`).emit('message', { message: newMessage });
-      return {
+
+      client.emit('message', {
         status: 'success',
         result: 'Message created successfully',
         message: newMessage,
-      };
+      });
+
+      // return {
+      //   status: 'success',
+      //   result: 'Message created successfully',
+      //   message: newMessage,
+      // };
     } catch (error) {
       console.error(error);
       return { status: 'error', result: error.message };
@@ -135,11 +142,17 @@ export class RoomsGateway {
         .to(`room-${roomId}`)
         .emit('message-updated', { message: updatedMessage });
 
-      return {
+      client.emit('message', {
         status: 'success',
         result: 'Message updated successfully',
         message: updatedMessage,
-      };
+      });
+
+      // return {
+      //   status: 'success',
+      //   result: 'Message updated successfully',
+      //   message: updatedMessage,
+      // };
     } catch (error) {
       console.error(error);
       return { status: 'error', result: 'Cannot update message' };
@@ -163,11 +176,17 @@ export class RoomsGateway {
       // Broadcast message to all users in chat
       client.to(`room-${roomId}`).emit('message-removed', messageId);
 
-      return {
+      client.emit('message-removed', {
         status: 'success',
         result: 'Message removed successfully',
         messageId,
-      };
+      });
+
+      // return {
+      //   status: 'success',
+      //   result: 'Message removed successfully',
+      //   messageId,
+      // };
     } catch (error) {
       console.error(error);
       return { status: 'error', result: 'Cannot remove message' };
@@ -199,9 +218,13 @@ export class RoomsGateway {
       // Broadcast Message to all users in room
       client.to(`room-${roomId}`).emit('user-joined', { socketId: client.id });
 
-      return {
+      client.emit('user-joined', {
         result: `User with id ${client.id} joined the room ${roomId}`,
-      };
+      });
+
+      // return {
+      //   result: `User with id ${client.id} joined the room ${roomId}`,
+      // };
     } catch (error) {
       console.error(error);
       return { status: 'error', result: error.message };
@@ -241,7 +264,7 @@ export class RoomsGateway {
       const session = await this.sessionsService.create({
         agoraChannel,
         agoraToken: null,
-      })
+      });
 
       // const session = await this.sessionsService.create({
       //   agoraChannel: `${topic.title}-${topicId}`,
@@ -253,11 +276,17 @@ export class RoomsGateway {
       // Broadcast message to all users in chat
       client.to(`room-${roomId}`).emit('session-started', { session });
 
-      return {
+      client.emit('session-started', {
         status: 'success',
         result: 'Session started successfully',
         session,
-      };
+      });
+
+      // return {
+      //   status: 'success',
+      //   result: 'Session started successfully',
+      //   session,
+      // };
     } catch (error) {
       console.error(error);
       return { status: 'error', result: error.message };
@@ -282,11 +311,17 @@ export class RoomsGateway {
       // Broadcast message to all users in chat
       client.to(`room-${roomId}`).emit('session-ended', { session });
 
-      return {
+      client.emit('session-ended', {
         status: 'success',
         result: 'Session ended successfully',
         session,
-      };
+      });
+
+      // return {
+      //   status: 'success',
+      //   result: 'Session ended successfully',
+      //   session,
+      // };
     } catch (error) {
       console.error(error);
       return { status: 'error', result: error.message };
@@ -319,11 +354,17 @@ export class RoomsGateway {
         .to(`room-${roomId}`)
         .emit('user-joined-session', { studentSession });
 
-      return {
+      client.emit('user-joined-session', {
         status: 'success',
         result: 'Session joined successfully',
         studentSession,
-      };
+      });
+
+      // return {
+      //   status: 'success',
+      //   result: 'Session joined successfully',
+      //   studentSession,
+      // };
     } catch (error) {
       console.error(error);
       return { status: 'error', result: error.message };
@@ -349,11 +390,17 @@ export class RoomsGateway {
       // Broadcast message to all users in chat
       client.to(`room-${roomId}`).emit('user-left-session', { studentSession });
 
-      return {
+      client.emit('user-left-session', {
         status: 'success',
         result: 'Session left successfully',
         studentSession,
-      };
+      });
+
+      // return {
+      //   status: 'success',
+      //   result: 'Session left successfully',
+      //   studentSession,
+      // };
     } catch (error) {
       console.error(error);
       return { status: 'error', result: error.message };
