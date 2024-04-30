@@ -1,4 +1,10 @@
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Course } from './course.entity';
 import { RoomStatus } from '../enums';
 import { Session } from './session.entity';
@@ -23,9 +29,9 @@ export class Room {
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   updatedAt: Date;
 
-  @ManyToOne(() => Course, (course) => course.rooms)
+  @ManyToOne(() => Course, (course) => course.rooms, { onDelete: 'CASCADE' })
   course: Course;
 
-  @OneToMany(() => Session , (session) => session.room)
+  @OneToMany(() => Session, (session) => session.room)
   sessions: Session[];
 }

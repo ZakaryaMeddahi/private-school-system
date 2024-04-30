@@ -1,4 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Course } from './course.entity';
+import { Message } from './message.entity';
 
 @Entity({ name: 'files' })
 export class File {
@@ -25,4 +27,10 @@ export class File {
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   updatedAt: Date;
+
+  @OneToOne(() => Course, { onDelete: 'CASCADE' })
+  course: Course;
+
+  @OneToOne(() => Message, { onDelete: 'CASCADE' })
+  message: Message;
 }

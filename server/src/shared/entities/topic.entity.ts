@@ -24,6 +24,6 @@ export class Topic {
   // @JoinColumn()
   // session: Session;
 
-  @ManyToOne(() => Course, (course) => course.topics)
+  @ManyToOne(() => Course, (course) => course.topics, { onDelete: 'CASCADE' })
   course: Course;
 }
