@@ -15,7 +15,7 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 const Layout = ({ children }) => {
 
     const inputRef = useRef();
-  
+
     const onFocus = () => {
         if(inputRef.current) {
             inputRef.current.style.outline = 'none';
@@ -24,17 +24,17 @@ const Layout = ({ children }) => {
     }
 
     return (
-        <Box 
-            w='100%' 
+        <Box
+            w='100%'
             h='100vh'
-            display='flex' 
+            display='flex'
         >
             {/* Sid bar */}
             <Box
-                w='25%' 
-                h='100%' 
-                bgColor='#F1F2ED' 
-                display='flex' 
+                w='25%'
+                h='100%'
+                bgColor='#F1F2ED'
+                display='flex'
                 flexDir='column'
             >
                 <Box
@@ -66,7 +66,7 @@ const Layout = ({ children }) => {
                             <Text color='#898C81'>Overview</Text>
                         </Box>
                     </Link>
-                    <Link href='/teacher_dashboard/my_courses'>
+                    <Link href='/admin_dashboard/teach'>
                         <Box
                             w='100%'
                             display='flex'
@@ -79,7 +79,7 @@ const Layout = ({ children }) => {
                             _hover={{bgColor: 'whiteSmoke'}}
                             >
                             <HiOutlineAcademicCap color="#898C81" size='23px' />
-                            <Text color='#898C81'>My Courses</Text>
+                            <Text color='#898C81'>Teachers</Text>
                         </Box>
                     </Link>
                 </Box>
@@ -90,7 +90,7 @@ const Layout = ({ children }) => {
                     flexDir='column'
                 >
                     <Link href='/chat'>
-                        <Box 
+                        <Box
                             w='100%'
                             display='flex'
                             flexDir='row'
@@ -149,7 +149,7 @@ const Layout = ({ children }) => {
                 flexDir='column'
             >
                 {/* header bar */}
-                <Box
+                {/* <Box
                     w='100%'
                     h='8%'
                     display='flex'
@@ -194,8 +194,8 @@ const Layout = ({ children }) => {
                                 </Link>
                             </PopoverContent>
                         </Popover>
-                    </Box>    
-                </Box>
+                    </Box>
+                </Box> */}
                 {/* body */}
                 <Box
                     w={'100%'}
