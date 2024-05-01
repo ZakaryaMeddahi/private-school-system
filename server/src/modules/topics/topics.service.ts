@@ -65,7 +65,7 @@ export class TopicsService {
       const updatedTopic = await this.topicsRepository.save({
         ...topic,
         ...topicData,
-        session: { id: sessionId },
+        // session: { id: sessionId },
       });
 
       console.log('update one: ' + updatedTopic.id);

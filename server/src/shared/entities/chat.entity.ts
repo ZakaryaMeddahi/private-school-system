@@ -24,11 +24,11 @@ export class Chat {
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   updatedAt: Date;
 
-  @OneToOne(() => Course)
+  @OneToOne(() => Course, { onDelete: 'CASCADE' })
   @JoinColumn()
   course?: Course;
 
-  @OneToOne(() => Room)
+  @OneToOne(() => Room, { onDelete: 'CASCADE' })
   @JoinColumn()
   room?: Room;
 

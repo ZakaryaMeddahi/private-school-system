@@ -35,8 +35,8 @@ export class Course {
   @Column()
   difficulty: Difficulty;
 
-  @Column()
-  enrollmentsLimit: number;
+  // @Column()
+  // enrollmentsLimit: number;
 
   @Column()
   duration: number;
@@ -56,7 +56,7 @@ export class Course {
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   updatedAt: Date;
 
-  @ManyToOne(() => Teacher, (teacher) => teacher.courses)
+  @ManyToOne(() => Teacher, (teacher) => teacher.courses, { onDelete: 'CASCADE' })
   teacher: Teacher;
 
   @OneToMany(() => Topic, (topic) => topic.course, { cascade: true })

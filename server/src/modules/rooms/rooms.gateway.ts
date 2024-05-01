@@ -17,6 +17,7 @@ import { UseGuards } from '@nestjs/common';
 import { WsAuth } from 'src/guards/ws-auth.guard';
 import { UserSocket } from 'src/shared/interfaces';
 import { SocketSession } from '../../shared/websocket.session';
+import { v4 as uuidv4 } from 'uuid';
 
 // We should have as DS like Map to store user sockets in room
 
@@ -100,11 +101,18 @@ export class RoomsGateway {
 
       // Broadcast message to all users in chat
       client.to(`room-${roomId}`).emit('message', { message: newMessage });
-      return {
+
+      client.emit('message', {
         status: 'success',
         result: 'Message created successfully',
         message: newMessage,
-      };
+      });
+
+      // return {
+      //   status: 'success',
+      //   result: 'Message created successfully',
+      //   message: newMessage,
+      // };
     } catch (error) {
       console.error(error);
       return { status: 'error', result: error.message };
@@ -134,11 +142,17 @@ export class RoomsGateway {
         .to(`room-${roomId}`)
         .emit('message-updated', { message: updatedMessage });
 
-      return {
+      client.emit('message', {
         status: 'success',
         result: 'Message updated successfully',
         message: updatedMessage,
-      };
+      });
+
+      // return {
+      //   status: 'success',
+      //   result: 'Message updated successfully',
+      //   message: updatedMessage,
+      // };
     } catch (error) {
       console.error(error);
       return { status: 'error', result: 'Cannot update message' };
@@ -162,11 +176,17 @@ export class RoomsGateway {
       // Broadcast message to all users in chat
       client.to(`room-${roomId}`).emit('message-removed', messageId);
 
-      return {
+      client.emit('message-removed', {
         status: 'success',
         result: 'Message removed successfully',
         messageId,
-      };
+      });
+
+      // return {
+      //   status: 'success',
+      //   result: 'Message removed successfully',
+      //   messageId,
+      // };
     } catch (error) {
       console.error(error);
       return { status: 'error', result: 'Cannot remove message' };
@@ -198,9 +218,13 @@ export class RoomsGateway {
       // Broadcast Message to all users in room
       client.to(`room-${roomId}`).emit('user-joined', { socketId: client.id });
 
-      return {
+      client.emit('user-joined', {
         result: `User with id ${client.id} joined the room ${roomId}`,
-      };
+      });
+
+      // return {
+      //   result: `User with id ${client.id} joined the room ${roomId}`,
+      // };
     } catch (error) {
       console.error(error);
       return { status: 'error', result: error.message };
@@ -230,24 +254,39 @@ export class RoomsGateway {
     @ConnectedSocket() client: Socket,
   ) {
     try {
-      const { roomId, topicId } = data;
-      const topic = await this.topicsService.findOne(topicId);
+      // const { roomId, topicId } = data;
+      // const topic = await this.topicsService.findOne(topicId);
+
+      const { roomId } = data;
+
+      const agoraChannel = uuidv4();
 
       const session = await this.sessionsService.create({
-        agoraChannel: `${topic.title}-${topicId}`,
-        agoraToken: 'agora-token',
+        agoraChannel,
+        agoraToken: null,
       });
 
-      await this.topicsService.updateOne(topicId, session.id, {});
+      // const session = await this.sessionsService.create({
+      //   agoraChannel: `${topic.title}-${topicId}`,
+      //   agoraToken: null,
+      // });
+
+      // await this.topicsService.updateOne(topicId, session.id, {});
 
       // Broadcast message to all users in chat
       client.to(`room-${roomId}`).emit('session-started', { session });
 
-      return {
+      client.emit('session-started', {
         status: 'success',
         result: 'Session started successfully',
         session,
-      };
+      });
+
+      // return {
+      //   status: 'success',
+      //   result: 'Session started successfully',
+      //   session,
+      // };
     } catch (error) {
       console.error(error);
       return { status: 'error', result: error.message };
@@ -272,11 +311,17 @@ export class RoomsGateway {
       // Broadcast message to all users in chat
       client.to(`room-${roomId}`).emit('session-ended', { session });
 
-      return {
+      client.emit('session-ended', {
         status: 'success',
         result: 'Session ended successfully',
         session,
-      };
+      });
+
+      // return {
+      //   status: 'success',
+      //   result: 'Session ended successfully',
+      //   session,
+      // };
     } catch (error) {
       console.error(error);
       return { status: 'error', result: error.message };
@@ -309,11 +354,17 @@ export class RoomsGateway {
         .to(`room-${roomId}`)
         .emit('user-joined-session', { studentSession });
 
-      return {
+      client.emit('user-joined-session', {
         status: 'success',
         result: 'Session joined successfully',
         studentSession,
-      };
+      });
+
+      // return {
+      //   status: 'success',
+      //   result: 'Session joined successfully',
+      //   studentSession,
+      // };
     } catch (error) {
       console.error(error);
       return { status: 'error', result: error.message };
@@ -339,11 +390,17 @@ export class RoomsGateway {
       // Broadcast message to all users in chat
       client.to(`room-${roomId}`).emit('user-left-session', { studentSession });
 
-      return {
+      client.emit('user-left-session', {
         status: 'success',
         result: 'Session left successfully',
         studentSession,
-      };
+      });
+
+      // return {
+      //   status: 'success',
+      //   result: 'Session left successfully',
+      //   studentSession,
+      // };
     } catch (error) {
       console.error(error);
       return { status: 'error', result: error.message };

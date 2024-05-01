@@ -12,8 +12,8 @@ export class Admin {
   @PrimaryGeneratedColumn({ type: 'bigint' })
   id: number;
 
-  @Column({ nullable: true })
-  profilePicture: string;
+  // @Column({ nullable: true })
+  // profilePicture: string;
 
   @OneToOne(() => User)
   @JoinColumn()
