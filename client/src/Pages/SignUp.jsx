@@ -86,9 +86,10 @@ const SignUpPage = () => {
         .split(',')
         .forEach((message) => {
           if (message.includes('email')) setEmailErrorMessage(message);
-          if (message.includes('password')) setPasswordErrorMessage(message);
-          if (message.includes('firstname')) setFirstNameErrorMessage(message);
-          if (message.includes('lastname')) setLastNameErrorMessage(message);
+          else if (message.includes('password')) setPasswordErrorMessage(message);
+          else if (message.includes('firstname')) setFirstNameErrorMessage(message);
+          else if (message.includes('lastname')) setLastNameErrorMessage(message);
+          else setErrorMessage(message);
         });
       // setErrorMessage(error.message);
     }
@@ -168,6 +169,7 @@ const SignUpPage = () => {
                 placeholder='Confirm Password'
                 onchange={(e) => setConfirmPassword(e.target.value)}
               />
+              <ErrorMessage errorMessage={errorMessage} />
               {/* <ErrorMessage errorMessage={errorMessage} /> */}
               {/* <Stack direction='row' justify='space-between' w='100%'>
                                 <Checkbox colorScheme='blue' size='lg'>Remember me</Checkbox>
@@ -189,7 +191,7 @@ const SignUpPage = () => {
                 Sign Up
               </Button>
               <Text textAlign='center' mt='5'>
-                I have already account !!
+                I already have an account !!
                 <span style={{ color: 'blue' }}>
                   <Link href='/login'> Sign in</Link>
                 </span>

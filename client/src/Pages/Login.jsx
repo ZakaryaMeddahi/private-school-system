@@ -25,6 +25,7 @@ const LoginPage = () => {
   const router = useRouter();
   const [emailErrorMessage, setEmailErrorMessage] = useState('');
   const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleCheckbox = () => {
     setCheckbox(!checkbox);
@@ -73,7 +74,8 @@ const LoginPage = () => {
         .split(',')
         .forEach((message) => {
           if (message.includes('email')) setEmailErrorMessage(message);
-          if (message.includes('password')) setPasswordErrorMessage(message);
+          else if (message.includes('password')) setPasswordErrorMessage(message);
+          else setErrorMessage(message)
         });
       // setErrorMessage(error.message);
     }
@@ -121,6 +123,7 @@ const LoginPage = () => {
                 />
                 <ErrorMessage errorMessage={passwordErrorMessage} />
               </Box>
+              <ErrorMessage errorMessage={errorMessage} />
               <Stack direction='row' justify='space-between' w='100%'>
                 <Checkbox
                   colorScheme='blue'
