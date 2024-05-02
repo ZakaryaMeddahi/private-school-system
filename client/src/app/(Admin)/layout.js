@@ -113,7 +113,7 @@ const Layout = ({ children }) => {
                             <Text color='#898C81'>Courses</Text>
                         </Box>
                     </Link>
-                    <Link href='/admin_dashboard/enrollement'>
+                    <Link href='/admin_dashboard/enrollements'>
                         <Box
                             w='100%'
                             display='flex'
