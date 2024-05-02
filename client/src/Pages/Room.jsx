@@ -47,6 +47,8 @@ import {
 import reducer from '@/reducer';
 import AgoraRTC from 'agora-rtc-sdk-ng';
 import VideosList from '@/components/SessionComponents/VideosList';
+import { useRouter } from 'next/navigation';
+import io from 'socket.io-client';
 
 // no
 
@@ -65,12 +67,33 @@ const options = {
 };
 
 const SessionPage = () => {
+  const {
+    roomInfoRef,
+    chatRef,
+    messages,
+    setMessages,
+    courses,
+    setCourses,
+    selectedCourse,
+    setSelectedCourse,
+    teacherInfo,
+    setTeacherInfo,
+    members,
+    setMembers,
+    pinnedMessages,
+    setPinnedMessages,
+  } = useContext(ChatContext);
+
   // Streaming refs
   const clientRef = useRef();
   const localVideoRef = useRef();
   const localCameraTrackRef = useRef();
   const localScreenTrackRef = useRef();
   const localAudioTrackRef = useRef();
+
+  const chatNamespace = useRef(null);
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
 
   const [state, dispatch] = useReducer(reducer, defaultState);
 
@@ -96,11 +119,42 @@ const SessionPage = () => {
     });
   };
 
+  // const fetchChatMembers = async (courseId) => {
+  //   try {
+  //     const response = await fetch(
+  //       `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/courses/${courseId}/members`,
+  //       {
+  //         method: 'GET',
+  //         headers: {
+  //           Authorization: `Bearer ${localStorage.getItem('token')}`,
+  //         },
+  //       }
+  //     );
+
+  //     if (!response.ok) {
+  //       response.status === 401 && router.push('/login');
+  //       throw new Error('Something went wrong');
+  //     }
+
+  //     const { data } = await response.json();
+
+  //     console.log(data);
+
+  //     setMembers(data);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
   useEffect(() => {
+    // session
     const joinChannel = async () => {
       try {
+        // TODO: create and get session from the server
         const client = AgoraRTC.createClient({ codec: 'vp8', mode: 'rtc' });
         clientRef.current = client;
+        // TODO: use channel name and token form session object
+        // TODO: use userId as UID
         await client.join(options.appId, options.channel, options.token);
         const localVideoTrack = await AgoraRTC.createCameraVideoTrack({});
         const localAudioTrack = await AgoraRTC.createMicrophoneAudioTrack();
@@ -144,10 +198,105 @@ const SessionPage = () => {
         removeUser(user.uid);
       });
     };
-    joinChannel();
-    listen();
+
+    // chat
+    const token = localStorage.getItem('token');
+
+    // ! I need course id and room id
+    // ? I can get course id from selectedCourse
+    // ? I can get room id from params
+    const fetchMessages = async (courseId, roomId) => {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/courses/${courseId}/rooms/${roomId}/messages`,
+          {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+          }
+        );
+
+        if (!response.ok) {
+          response.status === 401 && router.push('/login');
+          const data = await response.json();
+          throw new Error(data.message);
+        }
+
+        const { data } = await response.json();
+
+        console.log(data);
+
+        setMessages(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    chatNamespace.current = io(`${process.env.NEXT_PUBLIC_SERVER_URL}/rooms`, {
+      query: { token: `Bearer ${token}` },
+      transports: ['websocket'],
+    });
+
+    chatNamespace.current.on('connect', () => {
+      console.log('Connected to socket');
+
+      chatNamespace.current.emit('join-room', {
+        chatId: selectedCourse?.chat?.id || 42,
+      });
+
+      chatNamespace.current.on('user-joined', (data) => {
+        console.log('====================================');
+        console.log('Joined Room : ', data);
+        console.log('====================================');
+      });
+
+      chatNamespace.current.on('message', (data) => {
+        console.log('====================================');
+        console.log('FROM Chat : ', data);
+        console.log('====================================');
+        const message = data.message;
+        setMessages((prev) => [...prev, message]);
+        setIsLoading(false);
+      });
+
+      chatNamespace.current.on('message-updated', (data) => {
+        console.log('====================================');
+        console.log('FROM Chat (update message) : ', data);
+        console.log('====================================');
+        const message = data.message;
+        setMessages((prev) => {
+          const index = prev.findIndex((msg) => msg.id === message.id);
+          prev[index] = message;
+          console.log(message);
+          return [...prev];
+        });
+      });
+
+      chatNamespace.current.on('message-removed', (data) => {
+        console.log('====================================');
+        console.log('FROM Chat (delete message) : ', data);
+        console.log('====================================');
+        const messageId = data.messageId;
+        setMessages((prev) => {
+          return prev.filter((msg) => msg.id !== messageId);
+        });
+        setPinnedMessages((prev) => {
+          return prev.filter((msg) => msg.id !== messageId);
+        });
+      });
+    });
+    // joinChannel();
+    // listen();
+    console.log('========================================================================');
+    console.log(selectedCourse);
+    console.log('========================================================================');
     return () => {
       clientRef.current?.leave();
+      chatNamespace.current.emit('leave-room', {
+        chatId: selectedCourse?.chat?.id || 42,
+      });
+      chatNamespace.current.disconnect();
     };
   }, []);
 
@@ -212,8 +361,8 @@ const SessionPage = () => {
   };
 
   // I Add this line 👇🏻
-  const { messages, roomInfoRef, chatRef, setMessages } =
-    useContext(ChatContext);
+  // const { messages, roomInfoRef, chatRef, setMessages } =
+  //   useContext(ChatContext);
 
   return (
     <Container
