@@ -10,6 +10,8 @@ import { TbSmartHome } from "react-icons/tb";
 import { CgProfile } from "react-icons/cg";
 import Link from "next/link";
 import { MdKeyboardArrowDown } from "react-icons/md";
+import { FaChalkboardTeacher } from "react-icons/fa";
+import { PiStudent } from "react-icons/pi";
 
 
 const Layout = ({ children }) => {
@@ -66,7 +68,7 @@ const Layout = ({ children }) => {
                             <Text color='#898C81'>Overview</Text>
                         </Box>
                     </Link>
-                    <Link href='/admin_dashboard/teach'>
+                    <Link href='/admin_dashboard/teachers'>
                         <Box
                             w='100%'
                             display='flex'
@@ -78,8 +80,24 @@ const Layout = ({ children }) => {
                             maxH='80px'
                             _hover={{bgColor: 'whiteSmoke'}}
                             >
-                            <HiOutlineAcademicCap color="#898C81" size='23px' />
+                            <FaChalkboardTeacher color="#898C81" size='23px' />
                             <Text color='#898C81'>Teachers</Text>
+                        </Box>
+                    </Link>
+                    <Link href='/admin_dashboard/students'>
+                        <Box
+                            w='100%'
+                            display='flex'
+                            flexDir='row'
+                            gap='5'
+                            alignItems='center'
+                            paddingLeft='30'
+                            minH='70px'
+                            maxH='80px'
+                            _hover={{bgColor: 'whiteSmoke'}}
+                            >
+                            <PiStudent color="#898C81" size='23px' />
+                            <Text color='#898C81'>students</Text>
                         </Box>
                     </Link>
                 </Box>
