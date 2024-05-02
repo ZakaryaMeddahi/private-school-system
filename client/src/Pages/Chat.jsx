@@ -1,6 +1,13 @@
 'use client';
 
-import { Box, Grid, GridItem, Container, Divider } from '@chakra-ui/react';
+import {
+  Box,
+  Grid,
+  GridItem,
+  Container,
+  Divider,
+  Button,
+} from '@chakra-ui/react';
 import Room from '@/components/Room/Room';
 
 import { CiMenuKebab } from 'react-icons/ci';
@@ -19,31 +26,31 @@ const ChatPage = () => {
   // const { messages, roomInfoRef, chatRef, setMessages } =
   //     useContext(ChatContext);
 
-  const { roomInfoRef, chatRef } = useContext(ChatContext);
+  const {
+    roomInfoRef,
+    chatRef,
+    messages,
+    setMessages,
+    courses,
+    setCourses,
+    selectedCourse,
+    setSelectedCourse,
+    teacherInfo,
+    setTeacherInfo,
+    members,
+    setMembers,
+    pinnedMessages,
+    setPinnedMessages,
+  } = useContext(ChatContext);
 
   // console.log('====================================');
   // console.log('FROM Chat : ', messages);
   // console.log('====================================');
 
   /****************/
-  // const [messages, setMessages] = useState([]);
 
-  // const [chatRooms, setChatRooms] = useState([]);
-
-  // const [selectedChat, setSelectedChat] = useState(null);
-
-  // const [roomMembers, setRoomMembers] = useState([]);
-
-  // const [teacherInfo, setTeacherInfo] = useState({});
-
-  const [courses, setCourses] = useState([]);
-  const [selectedCourse, setSelectedCourse] = useState(null);
-  const [teacherInfo, setTeacherInfo] = useState({});
-  const [members, setMembers] = useState([]);
-  const [messages, setMessages] = useState([]);
-  const [pinnedMessages, setPinnedMessages] = useState([]);
-  const chatNamespace = useRef(null);
   const router = useRouter();
+  const chatNamespace = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
 
   // Get chats by teacher id or student id
