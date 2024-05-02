@@ -1,18 +1,15 @@
 'use client';
 
-import Logo from "@/components/Logo/Logo";
-import { Box, Divider, Text, Input, Popover, PopoverTrigger, PopoverContent, PopoverHeader, PopoverBody, PopoverFooter, PopoverArrow, PopoverCloseButton, PopoverAnchor } from "@chakra-ui/react";
-import { HiOutlineAcademicCap } from "react-icons/hi2";
-import { IoChatbubblesOutline } from "react-icons/io5";
+import Link from "next/link";
 import { useRef } from "react";
 import { LuLogOut } from "react-icons/lu";
-import { TbSmartHome } from "react-icons/tb";
-import { CgProfile } from "react-icons/cg";
-import Link from "next/link";
-import { MdKeyboardArrowDown } from "react-icons/md";
-import { FaChalkboardTeacher } from "react-icons/fa";
+import Logo from "@/components/Logo/Logo";
+import { CgProfile, CgInbox } from "react-icons/cg";
 import { PiStudent } from "react-icons/pi";
-
+import { FaChalkboardTeacher } from "react-icons/fa";
+import { IoChatbubblesOutline } from "react-icons/io5";
+import { TbSmartHome, TbSquareLetterC  } from "react-icons/tb";
+import { Box, Divider, Text, Input, Popover, PopoverTrigger, PopoverContent, PopoverHeader, PopoverBody, PopoverFooter, PopoverArrow, PopoverCloseButton, PopoverAnchor } from "@chakra-ui/react";
 
 const Layout = ({ children }) => {
 
@@ -52,7 +49,7 @@ const Layout = ({ children }) => {
                     display='flex'
                     flexDir='column'
                 >
-                    <Link href='/teacher_dashboard'>
+                    <Link href='/admin_dashboard/'>
                         <Box
                             w='100%'
                             display='flex'
@@ -97,7 +94,39 @@ const Layout = ({ children }) => {
                             _hover={{bgColor: 'whiteSmoke'}}
                             >
                             <PiStudent color="#898C81" size='23px' />
-                            <Text color='#898C81'>students</Text>
+                            <Text color='#898C81'>Students</Text>
+                        </Box>
+                    </Link>
+                    <Link href='/admin_dashboard/courses'>
+                        <Box
+                            w='100%'
+                            display='flex'
+                            flexDir='row'
+                            gap='5'
+                            alignItems='center'
+                            paddingLeft='30'
+                            minH='70px'
+                            maxH='80px'
+                            _hover={{bgColor: 'whiteSmoke'}}
+                            >
+                            <TbSquareLetterC color="#898C81" size='23px' />
+                            <Text color='#898C81'>Courses</Text>
+                        </Box>
+                    </Link>
+                    <Link href='/admin_dashboard/enrollement'>
+                        <Box
+                            w='100%'
+                            display='flex'
+                            flexDir='row'
+                            gap='5'
+                            alignItems='center'
+                            paddingLeft='30'
+                            minH='70px'
+                            maxH='80px'
+                            _hover={{bgColor: 'whiteSmoke'}}
+                            >
+                            <CgInbox color="#898C81" size='23px' />
+                            <Text color='#898C81'>Enrollement Request</Text>
                         </Box>
                     </Link>
                 </Box>

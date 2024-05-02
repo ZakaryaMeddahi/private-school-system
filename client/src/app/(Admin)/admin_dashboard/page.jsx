@@ -1,10 +1,8 @@
-import { Box } from "@chakra-ui/react";
+import Overview from "@/Pages/Overview";
 
 const Admin = () => {
     return (
-        <Box w='100%' h='100%'>
-            <h1>Admin</h1>    
-        </Box>
+        <Overview />
     );
 }
 
