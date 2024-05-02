@@ -259,7 +259,6 @@ const TeachersPage = () => {
                                         teachers.forEach((teacher) => {
                                             teacher.addEventListener('click', (e) => {
                                                 const id = e.target.id;
-                                                console.log(id);
                                                 getTeacher(id);
                                                 openTab();
                                             })
