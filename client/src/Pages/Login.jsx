@@ -67,6 +67,16 @@ const LoginPage = () => {
         console.log('this user is student');
         router.push('/student_dashboard');
       }
+
+      if (data.role === 'teacher') {
+        console.log('this user is teacher');
+        router.push('/teacher_dashboard');
+      }
+
+      if (data.role === 'admin') {
+        console.log('this user is admin');
+        router.push('/admin_dashboard');
+      }
     } catch (error) {
       console.error(error);
       error.message
@@ -74,8 +84,9 @@ const LoginPage = () => {
         .split(',')
         .forEach((message) => {
           if (message.includes('email')) setEmailErrorMessage(message);
-          else if (message.includes('password')) setPasswordErrorMessage(message);
-          else setErrorMessage(message)
+          else if (message.includes('password'))
+            setPasswordErrorMessage(message);
+          else setErrorMessage(message);
         });
       // setErrorMessage(error.message);
     }
