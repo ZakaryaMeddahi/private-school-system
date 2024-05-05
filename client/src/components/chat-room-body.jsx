@@ -51,7 +51,7 @@ const RoomBody = ({
       display='flex'
       // justifyContent='flex-end'
       flexDir='column'
-      // gap='15px'
+      gap='15px'
     >
       {messages.map((msg) => {
         return (
