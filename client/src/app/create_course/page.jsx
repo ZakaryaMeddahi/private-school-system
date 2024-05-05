@@ -45,7 +45,7 @@ function CreateCourse() {
   const [difficulty, setDifficulty] = useState('easy');
   const [language, setLanguage] = useState('English');
   const [period, setPeriod] = useState('2 weeks');
-  const [enrollmentsLimit, setEnrollmentsLimit] = useState(500);
+  // const [enrollmentsLimit, setEnrollmentsLimit] = useState(500);
   const [file, setFile] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -77,7 +77,7 @@ function CreateCourse() {
       requirements,
       difficulty,
       language,
-      enrollmentsLimit,
+      // enrollmentsLimit,
       topics
     );
 
@@ -288,6 +288,7 @@ function CreateCourse() {
                     <Input
                       id='course-file'
                       type='file'
+                      accept='image/*'
                       display='none'
                       onChange={(e) => setFile(e.target.files[0])}
                     />
@@ -364,7 +365,7 @@ function CreateCourse() {
                       <option>French</option>
                     </Select>
                   </Box>
-                  <Box
+                  {/* <Box
                     display='flex'
                     flexDirection='row'
                     justifyContent='space-between'
@@ -383,7 +384,7 @@ function CreateCourse() {
                         setEnrollmentsLimit(e.currentTarget.value)
                       }
                     />
-                  </Box>
+                  </Box> */}
                 </CardBody>
               </Card>
             </Stack>
