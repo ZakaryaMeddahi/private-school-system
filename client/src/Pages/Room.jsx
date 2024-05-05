@@ -11,6 +11,8 @@ import {
   Center,
   Text,
   AspectRatio,
+  Button,
+  Img,
 } from '@chakra-ui/react';
 import {
   createContext,
@@ -66,7 +68,9 @@ const options = {
   token: null,
 };
 
-const SessionPage = () => {
+const APP_ID = process.env.NEXT_PUBLIC_APP_ID;
+
+const SessionPage = ({ roomId }) => {
   const {
     roomInfoRef,
     chatRef,
@@ -94,6 +98,8 @@ const SessionPage = () => {
   const chatNamespace = useRef(null);
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [sessionStarted, setSessionStarted] = useState(false);
+  const uidRef = useRef(null);
 
   const [state, dispatch] = useReducer(reducer, defaultState);
 
@@ -119,94 +125,95 @@ const SessionPage = () => {
     });
   };
 
-  // const fetchChatMembers = async (courseId) => {
-  //   try {
-  //     const response = await fetch(
-  //       `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/courses/${courseId}/members`,
-  //       {
-  //         method: 'GET',
-  //         headers: {
-  //           Authorization: `Bearer ${localStorage.getItem('token')}`,
-  //         },
-  //       }
-  //     );
+  // session
+  const joinChannel = async (session) => {
+    try {
+      const { agoraChannel, agoraToken } = session;
+      const client = AgoraRTC.createClient({ codec: 'vp8', mode: 'rtc' });
+      clientRef.current = client;
+      // TODO: use channel name and token form session object
+      // TODO: use userId as UID
+      await client.join(APP_ID, agoraChannel, agoraToken, uidRef.current);
+      const localVideoTrack = await AgoraRTC.createCameraVideoTrack({});
+      const localAudioTrack = await AgoraRTC.createMicrophoneAudioTrack();
+      localCameraTrackRef.current = localVideoTrack;
+      localAudioTrackRef.current = localAudioTrack;
+      localVideoTrack.play(localVideoRef.current);
+      // mute mic and camera by default
+      localAudioTrack.setMuted(true);
+      localVideoTrack.setMuted(true);
+      await clientRef.current.publish([localAudioTrack, localVideoTrack]);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-  //     if (!response.ok) {
-  //       response.status === 401 && router.push('/login');
-  //       throw new Error('Something went wrong');
-  //     }
+  const listen = () => {
+    clientRef.current?.on('user-published', async (user, mediaType) => {
+      await clientRef.current.subscribe(user, mediaType);
 
-  //     const { data } = await response.json();
-
-  //     console.log(data);
-
-  //     setMembers(data);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
-  useEffect(() => {
-    // session
-    const joinChannel = async () => {
-      try {
-        // TODO: create and get session from the server
-        const client = AgoraRTC.createClient({ codec: 'vp8', mode: 'rtc' });
-        clientRef.current = client;
-        // TODO: use channel name and token form session object
-        // TODO: use userId as UID
-        await client.join(options.appId, options.channel, options.token);
-        const localVideoTrack = await AgoraRTC.createCameraVideoTrack({});
-        const localAudioTrack = await AgoraRTC.createMicrophoneAudioTrack();
-        localCameraTrackRef.current = localVideoTrack;
-        localAudioTrackRef.current = localAudioTrack;
-        localVideoTrack.play(localVideoRef.current);
-        await clientRef.current.publish([localAudioTrack, localVideoTrack]);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    const listen = () => {
-      clientRef.current?.on('user-published', async (user, mediaType) => {
-        await clientRef.current.subscribe(user, mediaType);
-
-        if (mediaType === 'video') {
-          // setUsers((users) => {
-          //   const prevUsers = users.filter((u) => u.uid !== user.uid);
-          //   const newUsers = [...prevUsers, user];
-          //   return newUsers;
-          // });
-          addUser(user);
-        }
-
-        if (mediaType === 'audio') {
-          user.audioTrack.play();
-        }
-      });
-
-      clientRef.current?.on('user-unpublished', (user) => {
-        console.log(user.uid + 'has unpublished from the channel');
-      });
-
-      clientRef.current?.on('user-left', (user) => {
-        console.log(user.uid + 'has left the channel');
+      if (mediaType === 'video') {
         // setUsers((users) => {
-        //   const newUsers = users.filter((u) => u.uid !== user.uid);
+        //   const prevUsers = users.filter((u) => u.uid !== user.uid);
+        //   const newUsers = [...prevUsers, user];
         //   return newUsers;
         // });
-        removeUser(user.uid);
-      });
-    };
+        addUser(user);
+      }
 
+      if (mediaType === 'audio') {
+        user.audioTrack.play();
+      }
+    });
+
+    clientRef.current?.on('user-unpublished', (user) => {
+      console.log(user.uid + 'has unpublished from the channel');
+    });
+
+    clientRef.current?.on('user-left', (user) => {
+      console.log(user.uid + 'has left the channel');
+      // setUsers((users) => {
+      //   const newUsers = users.filter((u) => u.uid !== user.uid);
+      //   return newUsers;
+      // });
+      console.log('user with id: ', user.uid, ' left');
+      removeUser(user.uid);
+    });
+  };
+
+  const startSession = () => {
+    chatNamespace.current.emit('start-session', { roomId });
+    chatNamespace.current.once('session-started', (data) => {
+      const { session } = data;
+      joinChannel(session);
+      listen();
+      setSessionStarted(true);
+    });
+  };
+
+  const joinSession = () => {
+    chatNamespace.current.emit('join-session', { roomId });
+    chatNamespace.current.once('session-joined', (data) => {
+      const {
+        studentSession: { session },
+      } = data;
+      joinChannel(session);
+      listen();
+      setSessionStarted(true);
+    });
+  };
+
+  useEffect(() => {
     // chat
     const token = localStorage.getItem('token');
+    uidRef.current = localStorage.getItem('userId');
 
     // ! I need course id and room id
     // ? I can get course id from selectedCourse
     // ? I can get room id from params
     const fetchMessages = async (courseId, roomId) => {
       try {
+        setMessages([]);
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/courses/${courseId}/rooms/${roomId}/messages`,
           {
@@ -220,16 +227,17 @@ const SessionPage = () => {
         if (!response.ok) {
           response.status === 401 && router.push('/login');
           const data = await response.json();
+          console.log(data);
           throw new Error(data.message);
         }
 
         const { data } = await response.json();
 
-        console.log(data);
+        console.log('messages', data);
 
         setMessages(data);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     };
 
@@ -241,9 +249,7 @@ const SessionPage = () => {
     chatNamespace.current.on('connect', () => {
       console.log('Connected to socket');
 
-      chatNamespace.current.emit('join-room', {
-        chatId: selectedCourse?.chat?.id || 42,
-      });
+      chatNamespace.current.emit('join-room', { roomId });
 
       chatNamespace.current.on('user-joined', (data) => {
         console.log('====================================');
@@ -281,20 +287,22 @@ const SessionPage = () => {
         setMessages((prev) => {
           return prev.filter((msg) => msg.id !== messageId);
         });
-        setPinnedMessages((prev) => {
-          return prev.filter((msg) => msg.id !== messageId);
-        });
       });
     });
     // joinChannel();
     // listen();
-    console.log('========================================================================');
+    fetchMessages(selectedCourse.id, roomId);
+    console.log(
+      '========================================================================'
+    );
     console.log(selectedCourse);
-    console.log('========================================================================');
+    console.log(
+      '========================================================================'
+    );
     return () => {
       clientRef.current?.leave();
       chatNamespace.current.emit('leave-room', {
-        chatId: selectedCourse?.chat?.id || 42,
+        roomId,
       });
       chatNamespace.current.disconnect();
     };
@@ -394,11 +402,12 @@ const SessionPage = () => {
             >
               <GridItem
                 ref={GridItemRef}
-                onClick={() => updateScreen()}
-                // onClick={(e) => changeGrid(e)}
-                bg='#2F2E2E'
-                h='100%'
+                // onClick={() => updateScreen()}
+                onClick={(e) => changeGrid(e)}
+                bg='gray.200'
+                // h='300px'
                 borderRadius='15px'
+                // boxShadow='0px 0px 15px 0px rgba(0,0,0,0.5);'
               >
                 {/* <Center
                                     h='100%'
@@ -412,252 +421,63 @@ const SessionPage = () => {
                                         bgColor='#D9D9D9'
                                     ></Box>
                                 </Center> */}
-                <video
-                  ref={localVideoRef}
-                  autoPlay
-                  playsInline
-                  muted
-                  style={{
-                    // width: state.isScreenFull ? '1000px' : '100%',
-                    height: state.isScreenFull ? '600px' : '100%',
-                    borderRadius: '15px',
-                  }}
-                  //   onClick={() => updateScreen()}
-                  //   onClick={(e) => changeGrid(e)}
-                  //   onClick={() => updateScreen()}
-                ></video>
+                {sessionStarted ? (
+                  <video
+                    ref={localVideoRef}
+                    autoPlay
+                    playsInline
+                    muted
+                    style={{
+                      // width: state.isScreenFull ? '1000px' : '100%',
+                      height: state.isScreenFull ? '600px' : '100%',
+                      borderRadius: '15px',
+                    }}
+                    //   onClick={() => updateScreen()}
+                    //   onClick={(e) => changeGrid(e)}
+                    //   onClick={() => updateScreen()}
+                  ></video>
+                ) : (
+                  <Center h='100%'>
+                    <Img src='../1-removebg-preview.png' boxSize='230px' />
+                  </Center>
+                )}
               </GridItem>
-              <VideosList users={state.users} />
-              {/* <GridItem
-                                ref={GridItemRef}
-                                onClick={changeGrid}
-                                bg='#2F2E2E'
-                                h='100%'
-                                borderRadius='15px'
-                                className='hello'
-                            >
-                                <Center
-                                    h='100%'
-                                    w='100%'
-                                >
-                                    <Box
-                                        ref={ProfileRef}
-                                        height='45%'
-                                        w='30%'
-                                        borderRadius='50%'
-                                        bgColor='#D9D9D9'
-                                    ></Box>
-                                </Center>
-                            </GridItem>
-                            <GridItem
-                                ref={GridItemRef}
-                                onClick={changeGrid}
-                                bg='#2F2E2E'
-                                h='100%'
-                                borderRadius='15px'
-                            >
-                                <Center
-                                    h='100%'
-                                    w='100%'
-                                >
-                                    <Box
-                                        ref={ProfileRef}
-                                        height='45%'
-                                        w='30%'
-                                        borderRadius='50%'
-                                        bgColor='#D9D9D9'
-                                    ></Box>
-                                </Center>
-                            </GridItem>
-                            <GridItem
-                                ref={GridItemRef}
-                                onClick={changeGrid}
-                                bg='#2F2E2E'
-                                h='100%'
-                                borderRadius='15px'
-                            >
-                                <Center
-                                    h='100%'
-                                    w='100%'
-                                >
-                                    <Box
-                                        ref={ProfileRef}
-                                        height='45%'
-                                        w='30%'
-                                        borderRadius='50%'
-                                        bgColor='#D9D9D9'
-                                    ></Box>
-                                </Center>
-                            </GridItem>
-                            <GridItem
-                                ref={GridItemRef}
-                                onClick={changeGrid}
-                                bg='#2F2E2E'
-                                h='100%'
-                                borderRadius='15px'
-                            >
-                                <Center
-                                    h='100%'
-                                    w='100%'
-                                >
-                                    <Box
-                                        ref={ProfileRef}
-                                        height='45%'
-                                        w='30%'
-                                        borderRadius='50%'
-                                        bgColor='#D9D9D9'
-                                    ></Box>
-                                </Center>
-                            </GridItem>
-                            <GridItem
-                                ref={GridItemRef}
-                                onClick={changeGrid}
-                                bg='#2F2E2E'
-                                h='100%'
-                                borderRadius='15px'
-                            >
-                                <Center
-                                    h='100%'
-                                    w='100%'
-                                >
-                                    <Box
-                                        ref={ProfileRef}
-                                        height='45%'
-                                        w='30%'
-                                        borderRadius='50%'
-                                        bgColor='#D9D9D9'
-                                    ></Box>
-                                </Center>
-                            </GridItem>
-                            <GridItem
-                                ref={GridItemRef}
-                                onClick={changeGrid}
-                                bg='#2F2E2E'
-                                h='100%'
-                                borderRadius='15px'
-                            >
-                                <Center
-                                    h='100%'
-                                    w='100%'
-                                >
-                                    <Box
-                                        ref={ProfileRef}
-                                        height='45%'
-                                        w='30%'
-                                        borderRadius='50%'
-                                        bgColor='#D9D9D9'
-                                    ></Box>
-                                </Center>
-                            </GridItem>
-                            <GridItem
-                                ref={GridItemRef}
-                                onClick={changeGrid}
-                                bg='#2F2E2E'
-                                h='100%'
-                                borderRadius='15px'
-                            >
-                                <Center
-                                    h='100%'
-                                    w='100%'
-                                >
-                                    <Box
-                                        ref={ProfileRef}
-                                        height='45%'
-                                        w='30%'
-                                        borderRadius='50%'
-                                        bgColor='#D9D9D9'
-                                    ></Box>
-                                </Center>
-                            </GridItem> */}
-              {/* <GridItem
-                                ref={GridItemRef}
-                                onClick={changeGrid}
-                                bg='#2F2E2E'
-                                h='100%'
-                                borderRadius='15px'
-                            >
-                                <Center
-                                    h='100%'
-                                    w='100%'
-                                >
-                                    <Box
-                                        ref={ProfileRef}
-                                        height='45%'
-                                        w='30%'
-                                        borderRadius='50%'
-                                        bgColor='#D9D9D9'
-                                    ></Box>
-                                </Center>
-                            </GridItem>
-                            <GridItem
-                                ref={GridItemRef}
-                                onClick={changeGrid}
-                                bg='#2F2E2E'
-                                h='100%'
-                                borderRadius='15px'
-                            >
-                                <Center
-                                    h='100%'
-                                    w='100%'
-                                >
-                                    <Box
-                                        ref={ProfileRef}
-                                        height='45%'
-                                        w='30%'
-                                        borderRadius='50%'
-                                        bgColor='#D9D9D9'
-                                    ></Box>
-                                </Center>
-                            </GridItem>
-                            <GridItem
-                                ref={GridItemRef}
-                                onClick={changeGrid}
-                                bg='#2F2E2E'
-                                h='100%'
-                                borderRadius='15px'
-                            >
-                                <Center
-                                    h='100%'
-                                    w='100%'
-                                >
-                                    <Box
-                                        ref={ProfileRef}
-                                        height='45%'
-                                        w='30%'
-                                        borderRadius='50%'
-                                        bgColor='#D9D9D9'
-                                    ></Box>
-                                </Center>
-                            </GridItem>
-                            <GridItem
-                                ref={GridItemRef}
-                                onClick={changeGrid}
-                                bg='#2F2E2E'
-                                h='100%'
-                                borderRadius='15px'
-                            >
-                                <Center
-                                    h='100%'
-                                    w='100%'
-                                >
-                                    <Box
-                                        ref={ProfileRef}
-                                        height='45%'
-                                        w='30%'
-                                        borderRadius='50%'
-                                        bgColor='#D9D9D9'
-                                    ></Box>
-                                </Center>
-                            </GridItem> */}
+              <VideosList
+                users={state.users}
+                GridItemRef={GridItemRef}
+                changeGrid={changeGrid}
+              />
             </Grid>
           </Box>
-          <Box w='100%' display='flex' justifyContent='space-around'>
+          <Box
+            w='100%'
+            display='flex'
+            justifyContent='space-around'
+            alignItems='center'
+          >
             {/* <Box > */}
-            <Center h='100%' w='250px' borderRadius='10px' gap='15'>
+            {/* <Center h='100%' w='250px' borderRadius='10px' gap='15'>
               <MdOutlineContentPaste size='30px' cursor='pointer' />
               <Text>Slug</Text>
-            </Center>
+            </Center> */}
             {/* </Box> */}
+            {localStorage.getItem('role') === 'teacher' ? (
+              <Button
+                colorScheme='teal'
+                isDisabled={sessionStarted}
+                onClick={() => startSession()}
+              >
+                start session
+              </Button>
+            ) : (
+              <Button
+                colorScheme='teal'
+                isDisabled={sessionStarted}
+                onClick={() => joinSession()}
+              >
+                join session
+              </Button>
+            )}
             <StreamingContext.Provider
               value={{
                 clientRef,
@@ -667,6 +487,8 @@ const SessionPage = () => {
                 localAudioTrackRef,
                 state,
                 updateSharing,
+                sessionStarted,
+                setSessionStarted,
               }}
             >
               <ControlPanel />
@@ -698,13 +520,22 @@ const SessionPage = () => {
       </Box>
       <Box ref={boxRef} display='none' bgColor='white' w='100%' h='100%'>
         <RoomChat
-          roomName='Room 1'
+          roomName={selectedCourse.title}
           // look i change this from msgsg to messages i use the ones i got from provider
           // messages={msgs}
           messages={messages}
+          setMessages={setMessages}
+          chatNamespace={chatNamespace}
+          image={selectedCourse?.file?.url || '../logo.png'}
           ChangeLayout={false}
           icon={<MdClose size='25px' color='gray' />}
           ShowPopover={false}
+          selectedCourse={selectedCourse}
+          chatId={selectedCourse.rooms[0].id}
+          isChatSession={true}
+          isLoading={isLoading}
+          setIsLoading={setIsLoading}
+          fileUploading={false}
         />
       </Box>
     </Container>
