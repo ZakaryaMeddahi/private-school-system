@@ -11,7 +11,7 @@ const CoursePage = () => {
             maxW='100%' 
             h='100%'
             display='grid'
-            gridTemplateColumns='repeat(4, 1fr)'
+            gridTemplateColumns='repeat(3, 1fr)'
             gap={5}
             overflowY={'auto'}
         >
