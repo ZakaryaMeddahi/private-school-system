@@ -26,6 +26,8 @@ const RoomBody = ({
   setPinnedMessages,
   chatNamespace,
   selectedCourse,
+  chatId,
+  isChatSession,
 }) => {
   const chatRef = useRef();
   const userIdRef = useRef();
@@ -62,6 +64,8 @@ const RoomBody = ({
             setPinnedMessages={setPinnedMessages}
             chatNamespace={chatNamespace}
             selectedCourse={selectedCourse}
+            chatId={chatId}
+            isChatSession={isChatSession}
             chatRef={chatRef}
           />
         );

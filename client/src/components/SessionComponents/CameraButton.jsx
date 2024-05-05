@@ -1,4 +1,4 @@
-import { StreamingContext } from '@/Pages/Session';
+import { StreamingContext } from '@/Pages/Room';
 import { Center } from '@chakra-ui/react';
 import { useContext, useState } from 'react';
 import { CiVideoOff, CiVideoOn } from 'react-icons/ci';
@@ -8,7 +8,7 @@ function CameraButton() {
   // console.log(StreamingContext);
   const value = useContext(StreamingContext);
   const { localCameraTrackRef, state } = value;
-  const [cam, setCam] = useState(true);
+  const [cam, setCam] = useState(false);
 
   const handleCamera = () => {
     if (localCameraTrackRef.current?.muted) {

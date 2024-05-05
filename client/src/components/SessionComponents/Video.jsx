@@ -2,14 +2,16 @@
 import { GridItem } from '@chakra-ui/react';
 import { useEffect, useRef, useState } from 'react';
 
-function Video({ user }) {
+function Video({ user, changeGrid }) {
   const videoRef = useRef(null);
   const [isScreenFull, setIsScreenFull] = useState(false);
+  const [isSharing, setIsSharing] = useState(false);
 
   useEffect(() => {
     if (user.videoTrack) {
       console.log('****************');
       user.videoTrack.play(videoRef.current);
+      setIsSharing(true);
     }
 
     console.log(user);
@@ -31,18 +33,25 @@ function Video({ user }) {
   });
 
   return (
-    <GridItem>
-      <video
-        // className="video remote-video"
-        ref={videoRef}
-        autoPlay
-        playsInline
-        style={{
-          width: isScreenFull ? '1000px' : '100%',
-          height: isScreenFull ? '600px' : '100%',
-        }}
-        onClick={() => setIsScreenFull(!isScreenFull)}
-      />
+    <GridItem onClick={() => changeGrid()} bg='gray.200' borderRadius='15px'>
+      {isSharing ? (
+        <video
+          // className="video remote-video"
+          ref={videoRef}
+          autoPlay
+          playsInline
+          style={{
+            width: isScreenFull ? '1000px' : '100%',
+            height: isScreenFull ? '600px' : '100%',
+            borderRadius: '15px',
+          }}
+          onClick={() => setIsScreenFull(!isScreenFull)}
+        />
+      ) : (
+        <Center h='100%'>
+          <Img src='../../1-removebg-preview.png' boxSize='230px' />
+        </Center>
+      )}
     </GridItem>
   );
 }

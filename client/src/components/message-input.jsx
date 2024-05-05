@@ -20,8 +20,11 @@ const MessageInput = ({
   setMessages,
   chatNamespace,
   selectedCourse,
+  chatId,
+  isChatSession,
   isLoading,
   setIsLoading,
+  fileUploading,
 }) => {
   // const { messages, setMessages } = useContext(ChatContext);
   const [message, setMessage] = useState({});
@@ -47,9 +50,7 @@ const MessageInput = ({
       }
 
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/courses/${
-          selectedCourse.id
-        }/chats/${selectedCourse.chat?.id || 42}/messages`,
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/courses/${selectedCourse.id}/chats/${chatId}/messages`,
         {
           method: 'POST',
           headers: {
@@ -89,10 +90,11 @@ const MessageInput = ({
       return;
     }
 
-    chatNamespace.current?.emit('message', {
-      message,
-      chatId: 42,
-    });
+    const newMessage = { message };
+
+    isChatSession ? (newMessage.roomId = chatId) : (newMessage.chatId = chatId);
+
+    chatNamespace.current?.emit('message', newMessage);
 
     messageInputRef.current.value = '';
     setMessage({});
@@ -124,26 +126,33 @@ const MessageInput = ({
       <FileCard file={file} setFile={setFile} />
       <form style={{ width: '100%' }} onSubmit={sendMsg}>
         <FormControl w='100%' display='flex' gap='10px'>
-          <FormLabel
-            htmlFor='file'
-            w='45px'
-            h='40px'
-            m='0'
-            marginInline='0'
-            bgColor='gray.200'
-            borderRadius='5px'
-            cursor='pointer'
-          >
-            <Input
-              type='file'
-              id='file'
-              display='none'
-              onChange={(e) => setFile(e.target.files[0])}
-            />
-            <Center h='100%'>
-              <IoIosAttach size='24px' color='gray' />
-            </Center>
-          </FormLabel>
+          {!isChatSession && (
+            <FormLabel
+              htmlFor='file'
+              bgColor='teal'
+              color='#FFF'
+              w='45px'
+              h='40px'
+              m='0'
+              marginInline='0'
+              // bgColor='gray.200'
+              borderRadius='5px'
+              cursor='pointer'
+              _hover={{ bgColor: 'teal.500' }}
+            >
+              <Input
+                type='file'
+                accept='image/*, .pdf'
+                id='file'
+                display='none'
+                onChange={(e) => setFile(e.target.files[0])}
+              />
+              <Center h='100%'>
+                <IoIosAttach size='24px' />
+              </Center>
+            </FormLabel>
+          )}
+
           <Input
             ref={messageInputRef}
             value={message.content || ''}
@@ -151,9 +160,14 @@ const MessageInput = ({
             border='none'
             onChange={(e) => setMessage({ content: e.target.value })}
           />
-          <Button w='40px' type='submit' isLoading={isLoading}>
+          <Button
+            colorScheme='teal'
+            w='40px'
+            type='submit'
+            isLoading={isLoading}
+          >
             <Center h='100%'>
-              <IoIosSend size='24px' color='gray' />
+              <IoIosSend size='24px' />
             </Center>
           </Button>
           {/* <Box

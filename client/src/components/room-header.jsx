@@ -11,16 +11,32 @@ import {
   PopoverBody,
   PopoverFooter,
   Portal,
+  IconButton,
+  Flex,
+  Text,
+  Image,
 } from '@chakra-ui/react';
 import Room from '@/components/Room/Room';
 import { chatContext } from '@/Pages/Chat';
 import React, { useRef, useState, useContext } from 'react';
 import { ChatContext } from '@/app/providers/ChatProvider';
+import { MdRunCircle, MdStart } from 'react-icons/md';
+import { useRouter } from 'next/navigation';
 
-const RoomHeader = ({ roomName, image,ChangeLayout, icon, ShowPopover }) => {
+const RoomHeader = ({
+  roomName,
+  image,
+  ChangeLayout,
+  icon,
+  ShowPopover,
+  roomId,
+  isChatSession,
+}) => {
   const MenuRef = useRef();
   const [count, setCount] = useState(0);
   const [popover, setPopover] = useState(false);
+  const router = useRouter();
+
   if (ChangeLayout) {
     var { roomInfoRef, chatRef } = useContext(ChatContext);
   }
@@ -61,9 +77,28 @@ const RoomHeader = ({ roomName, image,ChangeLayout, icon, ShowPopover }) => {
       borderRadius='15px'
     >
       <Box onClick={ChangeLayout && changeLayout}>
-        <Room RoomName={roomName} image={image} hover={false} />
+        {/* <Room RoomName={roomName} image={image} hover={false} /> */}
+        <Box padding='15px' color='black' borderRadius='7px' cursor='pointer'>
+          <Flex direction='row' gap='15' alignItems='center'>
+            <Image
+              borderRadius='full'
+              boxSize='35px'
+              src={image}
+              alt={roomName}
+            />
+            <Text size='sm'>{roomName}</Text>
+          </Flex>
+        </Box>
       </Box>
-      <Box
+      {!isChatSession && (
+        <IconButton
+          icon={<MdStart />}
+          onClick={() => router.push(`/room/${roomId}`)}
+          colorScheme='teal'
+          marginRight='15px'
+        />
+      )}
+      {/* <Box
         ref={MenuRef}
         onClick={showPopover}
         w='45px'
@@ -94,7 +129,7 @@ const RoomHeader = ({ roomName, image,ChangeLayout, icon, ShowPopover }) => {
         ) : (
           <Center h='100%'>{icon}</Center>
         )}
-      </Box>
+      </Box> */}
     </Box>
   );
 };

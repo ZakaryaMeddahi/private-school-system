@@ -37,16 +37,16 @@ const Room = ({
       ref={boxRef}
       padding='15px'
       color='black'
-      borderRadius='15px'
+      borderRadius='7px'
       cursor='pointer'
       _hover={hover && { backgroundColor: 'rgba(128, 128, 128, 0.150)' }}
       // onClick={hover && RoomFocus}
       onClick={() => {
         setSelectedCourse(course);
         setTeacherInfo(course.teacher);
-        fetchMessages(course.id, course.chat?.id || 42);
+        fetchMessages(course.id, course.chat?.id);
         fetchChatMembers(course.id);
-        switchRoom(course.chat?.id || 42);
+        switchRoom(course.chat?.id);
       }}
     >
       <Flex direction='row' gap='15' alignItems='center'>

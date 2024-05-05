@@ -1,16 +1,18 @@
-import { StreamingContext } from '@/Pages/Session';
+import { StreamingContext } from '@/Pages/Room';
 import { Center } from '@chakra-ui/react';
 import { useContext } from 'react';
 import { MdOutlineCall } from 'react-icons/md';
 
 function LeaveButton() {
   const value = useContext(StreamingContext);
-  
+
   const {
     localCameraTrackRef,
     localScreenTrackRef,
     localAudioTrackRef,
     clientRef,
+    sessionStarted,
+    setSessionStarted,
   } = value;
 
   const endCall = async () => {
@@ -30,7 +32,10 @@ function LeaveButton() {
       borderRadius='50px'
       bgColor='#F95252'
       cursor='pointer'
-      onClick={endCall}
+      onClick={() => {
+        endCall();
+        setSessionStarted(false);
+      }}
     >
       <MdOutlineCall size='30px' />
     </Center>

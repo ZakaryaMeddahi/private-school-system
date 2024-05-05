@@ -1,4 +1,4 @@
-import { StreamingContext } from '@/Pages/Session';
+import { StreamingContext } from '@/Pages/Room';
 import { Center } from '@chakra-ui/react';
 import { AIDenoiserExtension } from 'agora-extension-ai-denoiser';
 import AgoraRTC from 'agora-rtc-sdk-ng';
