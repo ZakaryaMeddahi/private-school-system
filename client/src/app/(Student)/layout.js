@@ -203,8 +203,8 @@ const Layout = ({ children }) => {
                                     <MdKeyboardArrowDown color='black' size='20px' />
                                 </Box>
                             </PopoverTrigger>
-                            <PopoverContent w='180px'>
-                                <PopoverArrow />
+                            <PopoverContent w='180px' left='-60px'>
+                                <PopoverArrow left='43px !important' />
                                 <PopoverCloseButton />
                                 <Link href={`/student_dashboard/profile/${userId}`}>
                                     <PopoverHeader>Profile</PopoverHeader>
