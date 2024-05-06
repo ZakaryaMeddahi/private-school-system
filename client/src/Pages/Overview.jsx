@@ -2,8 +2,11 @@
 
 import { useEffect, useState } from "react";
 // import Calendar from "react-calendar";
-import { Badge, Box, Heading, Text } from "@chakra-ui/react";
+import { Badge, Box, Heading, Text, Divider } from "@chakra-ui/react";
 import { GetUser } from "@/Lib/getUser";
+import { HiOutlineAcademicCap } from "react-icons/hi2";
+import { IoChatbubblesOutline, IoSearch  } from "react-icons/io5";
+import { CgInbox } from "react-icons/cg";
 
 const Overview = () => {
 
@@ -70,10 +73,147 @@ const Overview = () => {
                         gridTemplateRows={'1fr 1fr'}
                         gap={5}
                     >
-                        <Box bgColor={'white'} boxShadow='rgba(0, 0, 0, 0.1) 0px 4px 12px' borderRadius='15px' ></Box>
-                        <Box bgColor={'white'} boxShadow='rgba(0, 0, 0, 0.1) 0px 4px 12px' borderRadius='15px' ></Box>
-                        <Box bgColor={'white'} boxShadow='rgba(0, 0, 0, 0.1) 0px 4px 12px' borderRadius='15px' ></Box>
-                        <Box bgColor={'white'} boxShadow='rgba(0, 0, 0, 0.1) 0px 4px 12px' borderRadius='15px' ></Box>
+                        <Box 
+                            bgColor={'#234C51'} 
+                            padding='15px' 
+                            boxShadow='rgba(0, 0, 0, 0.1) 0px 4px 12px' 
+                            borderRadius='15px' 
+                            display='flex'
+                            flexDirection={'column'}
+                        >
+                            <Heading color={"white"} fontWeight='500' marginBottom='5px' >Courese</Heading>
+                            <Divider borderColor='white' borderWidth='1px' opacity={2} />
+                            <Box
+                                display={'flex'}
+                                flexDir='row'
+                                gap='15px'
+                                justifyContent='center'
+                                flex={1}
+                                alignItems='center'
+                                
+                            >
+                                <Text 
+                                    color={"white"} 
+                                    fontSize='32px' 
+                                    fontWeight={'bold'}
+                                    textAlign='center' 
+                                >
+                                        Explore Our Courses
+                                </Text>
+                                <Box
+                                    display='flex'
+                                    alignItems='center'
+                                    justifyContent='flex-end'
+                                    flex={1}
+                                >
+                                    <HiOutlineAcademicCap color="white" size='150px' />
+                                </Box>
+                            </Box>
+                        </Box>
+                        <Box 
+                            bgColor={'#FCC128'} 
+                            padding='15px' 
+                            boxShadow='rgba(0, 0, 0, 0.1) 0px 4px 12px' 
+                            borderRadius='15px'
+                            display='flex'
+                            flexDirection={'column'} 
+                        >
+                            <Heading color={"white"} fontWeight='500' marginBottom='5px' >Chat</Heading>
+                            <Divider borderColor='white' borderWidth='1px' opacity={2} />
+                            <Box
+                                display={'flex'}
+                                flexDir='row'
+                                gap='15px'
+                                justifyContent='center'
+                                flex={1}
+                                alignItems='center'
+                                
+                            >
+                                <Text color={"white"} fontSize='32px' fontWeight={'bold'} textAlign='center' >Join Us To Disscuss</Text>
+                                <Box
+                                    display='flex'
+                                    alignItems='center'
+                                    justifyContent='flex-end'
+                                    flex={1}
+                                >
+                                    <IoChatbubblesOutline color="white" size='150px' />
+                                </Box>
+                            </Box>
+                        </Box>
+                        <Box 
+                            bgColor={'#FF6647'} 
+                            padding='15px' 
+                            boxShadow='rgba(0, 0, 0, 0.1) 0px 4px 12px' 
+                            borderRadius='15px' 
+                            display='flex'
+                            flexDirection={'column'}
+                        >
+                            <Heading color={"white"} fontWeight='500' marginBottom='5px' >Enrollments</Heading>
+                            <Divider borderColor='white' borderWidth='1px' opacity={2} />
+                            <Box
+                                display={'flex'}
+                                flexDir='row'
+                                gap='15px'
+                                justifyContent='center'
+                                flex={1}
+                                alignItems='center'
+                                
+                            >
+                                <Text 
+                                    color={"white"} 
+                                    fontSize='32px' 
+                                    fontWeight={'bold'}
+                                    textAlign='center' 
+                                >
+                                        See Your Enrollments
+                                </Text>
+                                <Box
+                                    display='flex'
+                                    alignItems='center'
+                                    justifyContent='flex-end'
+                                    flex={1}
+                                >
+                                    <CgInbox color="white" size='150px' />
+                                </Box>
+                            </Box>
+                        </Box>
+                        <Box 
+                            bgColor={'#213E69'} 
+                            padding='15px' 
+                            boxShadow='rgba(0, 0, 0, 0.1) 0px 4px 12px' 
+                            borderRadius='15px'
+                            display='flex'
+                            flexDirection={'column'} 
+                        >
+                            <Heading color={"white"} fontWeight='500' marginBottom='5px' >Search</Heading>
+                            <Divider borderColor='white' borderWidth='1px' opacity={2} />
+                            <Box
+                                display={'flex'}
+                                flexDir='row'
+                                gap='15px'
+                                justifyContent='center'
+                                flex={1}
+                                alignItems='center'
+                                
+                            >
+                                <Text 
+                                    color={"white"} 
+                                    fontSize='32px' 
+                                    fontWeight={'bold'}
+                                    textAlign='center' 
+                                >
+                                        Search For Courses
+                                </Text>
+                                <Box
+                                    display='flex'
+                                    alignItems='center'
+                                    justifyContent='flex-end'
+                                    flex={1}
+                                >
+                                    <IoSearch  color="white" size='150px' />
+                                </Box>
+                            </Box>
+                        </Box>
                     </Box>
                 </Box>
                 <Box
