@@ -25,7 +25,7 @@ import { Roles } from 'src/decorators/roles.decorator';
 import { Role } from 'src/shared/enums';
 
 @Controller('api/v1/courses')
-@UseGuards(AuthGuard, RolesGuard)
+@UseGuards(AuthGuard) // RolesGuard
 export class EnrollmentsController {
   constructor(private readonly enrollmentService: EnrollmentsService) {}
 

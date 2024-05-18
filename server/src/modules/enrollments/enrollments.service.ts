@@ -9,6 +9,7 @@ import { Equal, Repository } from 'typeorm';
 import { CoursesService } from '../courses/courses.service';
 import { StudentsService } from '../students/students.service';
 import { EnrollmentStatus } from 'src/shared/enums';
+import { MailService } from '../mail/mail.service';
 
 @Injectable()
 export class EnrollmentsService {
@@ -17,6 +18,7 @@ export class EnrollmentsService {
     private readonly enrollmentRepository: Repository<Enrollment>,
     // private readonly coursesService: CoursesService,
     private readonly studentsService: StudentsService,
+    private readonly mailService: MailService,
   ) {}
 
   async isEnrolled(userId: number, courseId: number) {
@@ -41,7 +43,10 @@ export class EnrollmentsService {
 
   async findAll() {
     try {
-      const enrollments = await this.enrollmentRepository.find();
+      // add student and user relations
+      const enrollments = await this.enrollmentRepository.find({
+        relations: ['student', 'student.user', 'course'],
+      });
       return enrollments;
     } catch (error) {
       console.error(error);
@@ -149,6 +154,7 @@ export class EnrollmentsService {
   async update(id: number, enrollmentData: UpdateEnrollmentParams) {
     try {
       const enrollment = await this.enrollmentRepository.findOne({
+        relations: ['course', 'student', 'student.user'],
         where: { id: Equal(id) },
       });
 
@@ -160,6 +166,15 @@ export class EnrollmentsService {
         ...enrollment,
         ...enrollmentData,
       });
+
+      await this.mailService.sendEnrollmentStatus(
+        enrollment.student.user,
+        updatedEnrollment.enrollmentStatus,
+        enrollment.course,
+        enrollment.enrollmentStatus === EnrollmentStatus.APPROVED
+          ? 'Congratulation, you are enrolled!'
+          : 'Your enrollment has been rejected.',
+      );
 
       return updatedEnrollment;
     } catch (error) {
