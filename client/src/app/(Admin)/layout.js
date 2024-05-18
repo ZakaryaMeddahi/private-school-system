@@ -152,7 +152,7 @@ const Layout = ({ children }) => {
                             <Text color='#898C81'>Chat</Text>
                         </Box>
                     </Link>
-                    <Link href='/teacher_dashboard/profile'>
+                    {/* <Link href='/teacher_dashboard/profile'>
                         <Box
                             w='100%'
                             display='flex'
@@ -167,7 +167,7 @@ const Layout = ({ children }) => {
                             <CgProfile color="#898C81" size='23px' />
                             <Text color='#898C81'>Profile</Text>
                         </Box>
-                    </Link>
+                    </Link> */}
                     <Divider borderColor='#898C81' />
                     <Link href='/'>
                         <Box

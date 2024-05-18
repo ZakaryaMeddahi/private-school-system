@@ -16,6 +16,7 @@ import {
   DrawerCloseButton,
   Input,
   FormControl,
+  IconButton,
 } from '@chakra-ui/react';
 import { IoMdClose } from 'react-icons/io';
 // import { useDisclosure } from '@chakra-ui/react';
@@ -124,7 +125,8 @@ const StudentsPage = () => {
 
   const getStudent = (id) => {
     students.forEach((student) => {
-      if (student.id === Number(id)) {
+      if (student.id === id) {
+        console.log(student);
         setFirstName(student.firstName);
         setLastName(student.lastName);
         setEmail(student.email);
@@ -162,17 +164,43 @@ const StudentsPage = () => {
     setStudents(newStudents);
   };
 
-  const SearchStudent = (value) => {
-    const newStudents = [];
-    Students.filter((student) => {
-      if (
-        student.firstName.toLowerCase().includes(value.toLowerCase()) ||
-        student.lastName.toLowerCase().includes(value.toLowerCase())
-      ) {
-        newStudents.push(student);
+  const SearchStudent = async (value) => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/students?search=${value}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        response.status === 401 && router.push('/login');
+        const { data } = await response.json();
+        throw new Error(data.message);
       }
-    });
-    setStudents(newStudents);
+
+      const { data } = await response.json();
+
+      console.log(data);
+
+      setStudents(data);
+    } catch (error) {
+      console.error(error);
+    }
+    // const newStudents = [];
+    // Students.filter((student) => {
+    //   if (
+    //     student.firstName.toLowerCase().includes(value.toLowerCase()) ||
+    //     student.lastName.toLowerCase().includes(value.toLowerCase())
+    //   ) {
+    //     newStudents.push(student);
+    //   }
+    // });
+    // setStudents(newStudents);
   };
 
   useEffect(() => {
@@ -197,7 +225,9 @@ const StudentsPage = () => {
 
         const { data } = await response.json();
 
-        setStudents(data.students);
+        console.log(data);
+
+        setStudents(data);
       } catch (error) {
         console.error(error);
       }
@@ -252,6 +282,7 @@ const StudentsPage = () => {
                 borderBottom={'1px solid #E2E8F0'}
                 _hover={{ bgColor: 'whiteSmoke' }}
                 paddingBlock={'10px'}
+                cursor='pointer'
                 onClick={() => {
                   const students = document.querySelectorAll('.student-card');
 
@@ -312,7 +343,7 @@ const StudentsPage = () => {
                       });
                     }}
                   >
-                    <MdDelete fontSize={24} color='red' />
+                    <IconButton icon={<MdDelete fontSize={24} color='red' />} />
                   </Box>
                 </Box>
               </Box>
