@@ -21,6 +21,25 @@ export class EnrollmentsService {
     private readonly mailService: MailService,
   ) {}
 
+  async findOne(userId: number, courseId: number) {
+    try {
+      const enrollment = await this.enrollmentRepository.findOne({
+        where: {
+          course: { id: Equal(courseId) },
+          student: { user: { id: Equal(userId) } },
+        },
+      });
+
+      return enrollment;
+    } catch (error) {
+      console.error(error);
+      throw new HttpException(
+        error.message || 'Cannot check if the user is enrolled in the course',
+        error.status || 500,
+      );
+    }
+  }
+
   async isEnrolled(userId: number, courseId: number) {
     try {
       const enrollment = await this.enrollmentRepository.findOne({
@@ -41,11 +60,12 @@ export class EnrollmentsService {
     }
   }
 
-  async findAll() {
+  async findAll(userId: number) {
     try {
       // add student and user relations
       const enrollments = await this.enrollmentRepository.find({
-        relations: ['student', 'student.user', 'course'],
+        relations: ['student', 'student.user', 'course', 'course.teacher', 'course.file'],
+        where: userId !== 0 ? { student: { user: { id: Equal(userId) } } } : {},
       });
       return enrollments;
     } catch (error) {

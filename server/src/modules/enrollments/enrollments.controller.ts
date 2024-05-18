@@ -34,7 +34,7 @@ export class EnrollmentsController {
   @Get('enrollments')
   async getAllEnrollments() {
     try {
-      const enrollments = await this.enrollmentService.findAll();
+      const enrollments = await this.enrollmentService.findAll(0);
       return {
         status: 'success',
         message: 'Enrollments retrieved successfully',
@@ -46,9 +46,53 @@ export class EnrollmentsController {
     }
   }
 
+  @Get('enrollments/me')
+  async getMyEnrollments(@AuthUser() user: JwtPayload) {
+    try {
+      const { sub: id } = user;
+      const enrollments = await this.enrollmentService.findAll(id);
+      return {
+        status: 'success',
+        message: 'Enrollments retrieved successfully',
+        data: enrollments,
+      };
+    } catch (error) {
+      console.error(error);
+      throw new HttpException(error.message, error.status || 500);
+    }
+  }
+
+  @Get(':courseId/enrollments/status')
+  async isEnrolled(
+    @AuthUser() user: JwtPayload,
+    @Param('courseId') courseId: number,
+  ) {
+    try {
+      const { sub: id } = user;
+      const data = {
+        isEnrolled: false,
+      };
+      const enrollment = await this.enrollmentService.findOne(id, courseId);
+
+      if (enrollment) {
+        data['isEnrolled'] = true;
+        data['status'] = enrollment.enrollmentStatus;
+      }
+
+      return {
+        status: 'success',
+        message: 'Enrollments status retrieved successfully',
+        data,
+      };
+    } catch (error) {
+      console.error(error);
+      throw new HttpException(error.message, error.status || 500);
+    }
+  }
+
   // Get Enrollments By Course Id Associated With The Student (Admin, Teacher)
   @Get(':courseId/enrollments')
-  @Roles(Role.ADMIN, Role.TEACHER)
+  // @Roles(Role.ADMIN, Role.TEACHER)
   async getEnrollmentsByCourseId(
     @Param('courseId', ParseIntPipe) courseId: number,
   ) {
@@ -68,9 +112,7 @@ export class EnrollmentsController {
   // Get Course members
   @Get(':courseId/members')
   // @Roles(Role.ADMIN, Role.TEACHER)
-  async getCourseMembers(
-    @Param('courseId', ParseIntPipe) courseId: number,
-  ) {
+  async getCourseMembers(@Param('courseId', ParseIntPipe) courseId: number) {
     try {
       const members = await this.enrollmentService.getCourseMembers(courseId);
       return {

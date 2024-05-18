@@ -78,7 +78,7 @@ export class CoursesService {
       // }
 
       const courses = await this.coursesRepository.find({
-        relations: ['topics'],
+        relations: ['topics', 'file', 'teacher'],
         where: search
           ? [
               { title: ILike(`%${search}%`) },
@@ -98,7 +98,7 @@ export class CoursesService {
     try {
       const course = await this.coursesRepository.findOne({
         where: { id: Equal(id) },
-        relations: ['topics', 'file'],
+        relations: ['topics', 'file', 'teacher'],
       });
 
       if (!course) return null;
