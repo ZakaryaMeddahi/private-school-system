@@ -136,219 +136,163 @@ function Message({
   const hoverRef = useRef();
 
   return (
-    <Box
-      display='flex'
-      flexDirection='row'
-      gap={'5px'}
-      onMouseMove={() => {
-        if(hoverRef.current) {
-          pinRef.current.style.display = 'flex';
-        }
-      }
-      }
-
-      onMouseLeave={()=>{
-        if(hoverRef.current) {
-          pinRef.current.style.display = 'none';
+    <Stack
+      className='chat'
+      ref={(el) => {
+        chatRef && (chatRef.current = el);
+        console.log(el);
+        // msg.sender.role = 'student';
+        if (chatRef?.current) {
+          chatRef.current.scrollIntoView({
+            behavior: 'smooth',
+            block: 'end',
+            top: chatRef.current.scrollHeight + 15,
+          });
         }
       }}
+      key={msg.id}
+      flexDir='column'
+      justifyContent='space-between'
+      w={isPinned ? '100%' : isChatSession ? '90%' : '48%'}
+      padding='14px 15px'
+      bgColor={msg.sender?.id === userIdRef.current ? 'blue.100' : 'gray.100'}
+      color={msg.sender?.id === userIdRef.current ? 'blue.900' : 'gray.900'}
+      borderRadius={
+        msg.sender?.id === userIdRef.current
+          ? '7px 50px 7px 7px'
+          : '7px 7px 7px 50px'
+      }
+      marginBottom='15px'
+      marginLeft={msg.sender?.id === userIdRef.current ? 'auto' : '0'}
     >
-      <Box
-        ref={hoverRef}
-        display='flex'
-        flexDirection='row'
-        gap='5px'
+      <Stack
+        flexDir='row'
+        justifyContent='space-between'
         alignItems='center'
+        mb='10px'
       >
-        <Avatar name='Dan Abrahmov' src='https://bit.ly/dan-abramov' w='32px' height='32px' />
-        <Box
-          display={'flex'}
-          flexDirection='column'
-          gap='5px'
+        <Stack
+          w='100%'
+          justifyContent='space-between'
+          alignItems='center'
+          flexDir='row'
         >
-          <Text color='GrayText' fontSize='8px'>Abdelali Sid Ahmed</Text>
+          <Stack alignItems='center' flexDir='row'>
+            <Avatar name='private school' src='../logo.png' boxSize='35px' />
+            <Text fontSize='sm' fontWeight='bold'>
+              {msg.sender?.firstName + ' ' + msg.sender?.lastName}
+            </Text>
+          </Stack>
+
           <Box
-            borderRadius={'8px'}
-            minW='100px'
-            padding={'10px 10px 0 10px'}
-            bgColor='whitesmoke'
+            p='3px'
+            bgColor={
+              msg.sender?.role === 'admin'
+                ? 'red.600'
+                : msg.sender?.role === 'teacher'
+                ? 'blue.600'
+                : 'green'
+            }
+            color='white'
+            borderRadius='3px'
+            opacity='0.9'
           >
-            <Text>hello</Text>
-            <Box
-              w={'100%'}
-              display='flex'
-              alignItems='end'
-              justifyContent={'flex-end'}
-            >
-              <Text fontSize='8px' color='GrayText'>12:00</Text>
-            </Box>
+            <Text fontSize='8' fontWeight='600' textTransform='uppercase'>
+              {msg.sender?.role}
+            </Text>
           </Box>
+        </Stack>
+
+        {(showPin() || msg.sender?.id === userIdRef.current) && (
+          <Menu>
+            <MenuButton
+              as={IconButton}
+              aria-label='Options'
+              icon={<BsThreeDotsVertical />}
+              variant='outline'
+              paddingInline='0'
+              minW='10px'
+              border='none'
+              _hover={{
+                bgColor:
+                  msg.sender?.id === userIdRef.current
+                    ? 'blue.200'
+                    : 'gray.200',
+              }}
+            />
+            <MenuList minW='10rem' fontSize='12'>
+              {showPin() &&
+                (msg.isPinned ? (
+                  <MenuItem icon={<PiNeedle />} onClick={handleUnpinMessage}>
+                    Unpin
+                  </MenuItem>
+                ) : (
+                  <MenuItem icon={<PiNeedle />} onClick={handlePinMessage}>
+                    Pin
+                  </MenuItem>
+                ))}
+              {msg.sender?.id === userIdRef.current && (
+                <MenuItem
+                  icon={<CgEditBlackPoint />}
+                  onClick={() => setUpdateMode(true)}
+                >
+                  Edit
+                </MenuItem>
+              )}
+              {msg.sender?.id === userIdRef.current && (
+                <MenuItem icon={<CgTrash />} onClick={handleDeleteMessage}>
+                  Delete
+                </MenuItem>
+              )}
+            </MenuList>
+          </Menu>
+        )}
+      </Stack>
+      {msg.file && (
+        <Box
+          w='100%'
+          minH='45px'
+          bgColor='gray.200'
+          borderRadius='8px'
+          marginBottom='10px'
+          border='2px'
+          borderColor='gray.400'
+        >
+          <a
+            href={msg.file.url}
+            download
+            target='_blank'
+            style={{ display: 'block', padding: '10px' }}
+          >
+            {msg.file?.name + '.' + msg.file?.format}
+          </a>
         </Box>
-      </Box>
-      <Box
-        ref={pinRef}
-        display='none'
-      >
-        <Text _hover={{color: 'red'}}>pin</Text>
-      </Box>
-    </Box>
-    // <Stack
-    //   className='chat'
-    //   ref={(el) => {
-    //     chatRef && (chatRef.current = el);
-    //     // console.log(el);
-    //     // msg.sender.role = 'student';
-    //     if (chatRef?.current) {
-    //       chatRef.current.scrollIntoView({
-    //         behavior: 'smooth',
-    //         // block: 'end',
-    //         top: chatRef.current.scrollHeight + 15,
-    //       });
-    //     }
-    //   }}
-    //   key={msg.id}
-    //   // flexDir='row'
-    //   // justifyContent='space-between'
-    //   w={isPinned ? '100%' : isChatSession ? '90%' : '48%'}
-    //   padding='14px 15px'
-    //   bgColor={msg.sender?.id === userIdRef.current ? 'blue.100' : 'gray.100'}
-    //   color={msg.sender?.id === userIdRef.current ? 'blue.900' : 'gray.900'}
-    //   borderRadius={
-    //     msg.sender?.id === userIdRef.current
-    // //       ? '7px 50px 7px 7px'
-    //       : '7px 7px 7px 50px'
-    //   }
-    //   marginBottom='15px'
-    //   marginLeft={msg.sender?.id === userIdRef.current ? 'auto' : '0'}
-    // >
-    //   <Stack
-    //     flexDir='row'
-    //     justifyContent='space-between'
-    //     // alignItems='center'
-    //     // mb='10px'
-    //   >
-    //     <Stack
-    //       w='100%'
-    //       justifyContent='space-between'
-    //       alignItems='center'
-    //       flexDir='row'
-    //     >
-    //       <Stack alignItems='center' flexDir='row'>
-    //         <Avatar name='private school' src='../logo.png' boxSize='35px' />
-    //         <Text fontSize='sm' fontWeight='bold'>
-    //           {msg.sender?.firstName + ' ' + msg.sender?.lastName}
-    //         </Text>
-    //       </Stack>
-
-    //       <Box
-    //         p='3px'
-    //         bgColor={
-    //           msg.sender?.role === 'admin'
-    // //             ? 'red.600'
-    //             : msg.sender?.role === 'teacher'
-    // //             ? 'blue.600'
-    //             : 'green'
-    //         }
-    //         color='white'
-    //         borderRadius='3px'
-    //         // opacity='0.9'
-    //       >
-    //         <Text fontSize='8' fontWeight='600' textTransform='uppercase'>
-    //           {msg.sender?.role}
-    //         </Text>
-    //       </Box>
-    //     </Stack>
-
-    //     {(showPin() || msg.sender?.id === userIdRef.current) && (
-    //       <Menu>
-    //         <MenuButton
-    //           as={IconButton}
-    //           aria-label='Options'
-    //           icon={<BsThreeDotsVertical />}
-    //           variant='outline'
-    //           paddingInline='0'
-    //           minW='10px'
-    //           border='none'
-    //           _hover={{
-    //             bgColor:
-    //               msg.sender?.id === userIdRef.current
-    //                 ? 'blue.200'
-    //                 : 'gray.200',
-    //           }}
-    //         />
-    //         <MenuList minW='10rem' fontSize='12'>
-    //           {showPin() &&
-    //             (msg.isPinned ? (
-    //               <MenuItem icon={<PiNeedle />} onClick={handleUnpinMessage}>
-    //                 Unpin
-    //               </MenuItem>
-    //             ) : (
-    //               <MenuItem icon={<PiNeedle />} onClick={handlePinMessage}>
-    //                 Pin
-    //               </MenuItem>
-    //             ))}
-    //           {msg.sender?.id === userIdRef.current && (
-    //             <MenuItem
-    //               icon={<CgEditBlackPoint />}
-    //               onClick={() => setUpdateMode(true)}
-    //             >
-    //               Edit
-    //             </MenuItem>
-    //           )}
-    //           {msg.sender?.id === userIdRef.current && (
-    //             <MenuItem icon={<CgTrash />} onClick={handleDeleteMessage}>
-    //               Delete
-    //             </MenuItem>
-    //           )}
-    //         </MenuList>
-    //       </Menu>
-    //     )}
-    //   </Stack>
-    //   {msg.file && (
-    //     <Box
-    //       w='100%'
-    //       minH='45px'
-    //       bgColor='gray.200'
-    //       borderRadius='8px'
-    //       marginBottom='10px'
-    //       border='2px'
-    //       borderColor='gray.400'
-    //     >
-    //       <a
-    //         href={msg.file.url}
-    //         download
-    //         target='_blank'
-    //         style={{ display: 'block', padding: '10px' }}
-    //       >
-    //         {msg.file?.name + '.' + msg.file?.format}
-    //       </a>
-    //     </Box>
-    //   )}
-    //   <Text paddingInline='10px'>{msg.content}</Text>
-    //   <form>
-    //     <FormControl display={updateMode ? 'flex' : 'none'} gap='10px'>
-    //       <Input
-    //         value={updatedMessage}
-    //         borderColor='gray'
-    //         _hover={{ borderColor: 'blue' }}
-    //         onChange={handleUpdateContent}
-    //       />
-    //       <IconButton
-    //         icon={<MdChangeCircle />}
-    //         type='submit'
-    //         onClick={handleUpdateMessage}
-    //       />
-    //     </FormControl>
-    //   </form>
-    //   {/* <Text fontSize='xs' ml='auto'>
-    //     {isPinned
-    // //       ? msg.sentAt.split('T')[0]
-    //       : msg.sentAt.split('T')[1].split('.')[0]}
-    //   </Text>{' '} */}
-    //   <Text fontFamily='monospace' fontSize='10' ml='auto'>
-    //     {convertTime(msg.sentAt)}
-    //   </Text>
-    // </Stack>
+      )}
+      <Text paddingInline='10px'>{msg.content}</Text>
+      <form>
+        <FormControl display={updateMode ? 'flex' : 'none'} gap='10px'>
+          <Input
+            value={updatedMessage}
+            borderColor='gray'
+            _hover={{ borderColor: 'blue' }}
+            onChange={handleUpdateContent}
+          />
+          <IconButton
+            icon={<MdChangeCircle />}
+            type='submit'
+            onClick={handleUpdateMessage}
+          />
+        </FormControl>
+      </form>
+      {/* <Text fontSize='xs' ml='auto'>
+        {isPinned
+          ? msg.sentAt.split('T')[0]
+          : msg.sentAt.split('T')[1].split('.')[0]}
+      </Text>{' '} */}
+      <Text fontFamily='monospace' fontSize='10' ml='auto'>
+        {convertTime(msg.sentAt)}
+      </Text>
+    </Stack>
   );
 }
 export default Message;

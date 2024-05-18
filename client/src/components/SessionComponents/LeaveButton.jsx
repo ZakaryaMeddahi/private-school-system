@@ -13,9 +13,19 @@ function LeaveButton() {
     clientRef,
     sessionStarted,
     setSessionStarted,
+    resetUsers,
   } = value;
 
   const endCall = async () => {
+    const role = localStorage.getItem('role');
+    if (role === 'teacher') {
+      clientRef.current.emit('end-session');
+    } else {
+      clientRef.current.emit('leave-session');
+    }
+
+    resetUsers();
+
     localCameraTrackRef.current?.close();
     localCameraTrackRef.current = null;
     localScreenTrackRef.current?.close();

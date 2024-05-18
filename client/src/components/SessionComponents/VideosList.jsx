@@ -4,6 +4,8 @@ function VideosList({ users }) {
   console.log('*****************************');
   console.log('*****************************');
   console.log('*****************************');
+  console.log('USERS');
+  console.log(users.length);
   console.log(users);
   return (
     <>
