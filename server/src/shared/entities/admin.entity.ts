@@ -15,7 +15,7 @@ export class Admin {
   // @Column({ nullable: true })
   // profilePicture: string;
 
-  @OneToOne(() => User)
+  @OneToOne(() => User, { onDelete: 'CASCADE', eager: true })
   @JoinColumn()
   user: User;
 }

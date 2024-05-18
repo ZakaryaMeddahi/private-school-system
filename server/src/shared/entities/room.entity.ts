@@ -17,8 +17,8 @@ export class Room {
   @Column()
   name: string;
 
-  @Column()
-  slug: string;
+  // @Column()
+  // slug: string;
 
   @Column()
   status: RoomStatus;
