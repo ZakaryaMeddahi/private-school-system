@@ -11,10 +11,24 @@ export class SessionsService {
     private readonly sessionsRepository: Repository<Session>,
   ) {}
 
+  async findRecentSession(roomId: number) {
+    try {
+      const session = await this.sessionsRepository.findOne({
+        where: { room: { id: Equal(roomId) } },
+        order: { startTime: 'DESC' },
+      });
+
+      return session;
+    } catch (error) {
+      console.error(error);
+      throw new HttpException('Cannot find recent session', 500);
+    }
+  }
+
   // Implement create session
   async create(
     sessionData: CreateSessionParams,
-    // roomId: number,
+    roomId: number,
   ) {
     // implement create session
     try {
@@ -24,7 +38,7 @@ export class SessionsService {
 
       const session = await this.sessionsRepository.save({
         ...newSession,
-        // room: { id: roomId },
+        room: { id: roomId },
       });
 
       return session;
