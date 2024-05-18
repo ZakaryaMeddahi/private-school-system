@@ -12,6 +12,7 @@ import {
   UseGuards,
   UseInterceptors,
   UploadedFile,
+  Query,
 } from '@nestjs/common';
 import { TeachersService } from './teachers.service';
 import { CreateTeacherDto } from './dto/create-teacher.dto';
@@ -98,9 +99,9 @@ export class TeachersController {
   }
 
   @Get()
-  async getTeachers() {
+  async getTeachers(@Query('search') search: string) {
     try {
-      const teachers = await this.teachersService.findAll();
+      const teachers = await this.teachersService.findAll(search);
       return {
         status: 'success',
         message: 'Teachers loaded successfully',

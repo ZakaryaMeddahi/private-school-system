@@ -12,6 +12,7 @@ import {
   UseGuards,
   UseInterceptors,
   UploadedFile,
+  Query,
 } from '@nestjs/common';
 import { StudentsService } from './students.service';
 import { AuthGuard } from 'src/guards/auth.guard';
@@ -101,9 +102,9 @@ export class StudentsController {
   }
 
   @Get()
-  async getStudents() {
+  async getStudents(@Query('search') search: string) {
     try {
-      const students = await this.studentsService.findAll();
+      const students = await this.studentsService.findAll(search);
       return {
         status: 'success',
         message: 'Students loaded successfully',

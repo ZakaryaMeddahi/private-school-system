@@ -9,6 +9,7 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Query,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -49,9 +50,9 @@ export class CoursesController {
   }
 
   @Get()
-  async getCourses(@AuthUser() user: JwtPayload) {
+  async getCourses(@AuthUser() user: JwtPayload, @Query('search') search: string) {
     try {
-      const courses = await this.coursesService.findAll();
+      const courses = await this.coursesService.findAll(search);
       return { status: 'success', data: courses };
     } catch (error) {
       throw new HttpException(error.message, error.status || 500);

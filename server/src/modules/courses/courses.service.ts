@@ -2,7 +2,7 @@ import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Course } from 'src/shared/entities/course.entity';
 import { CreateCourseParams, UpdateCourseParams } from 'src/shared/types';
-import { Equal, Repository } from 'typeorm';
+import { Equal, ILike, Repository } from 'typeorm';
 import { TopicsService } from '../topics/topics.service';
 import { ChatsService } from '../chats/chats.service';
 import { RoomsService } from '../rooms/rooms.service';
@@ -27,9 +27,11 @@ export class CoursesService {
       if (role === Role.TEACHER) {
         courses = await this.coursesRepository.find({
           where: { teacher: { user: { id: Equal(id) } } },
-          relations: ['teacher', 'file', 'chat'],
+          relations: ['teacher', 'file', 'chat', 'rooms'],
         });
-      } else {
+      }
+
+      if (role === Role.STUDENT) {
         // get course for the enrolled student
         courses = await this.coursesRepository.find({
           where: {
@@ -38,7 +40,13 @@ export class CoursesService {
               enrollmentStatus: EnrollmentStatus.APPROVED,
             },
           },
-          relations: ['teacher', 'file', 'chat'],
+          relations: ['teacher', 'file', 'chat', 'rooms'],
+        });
+      }
+
+      if (role === Role.ADMIN) {
+        courses = await this.coursesRepository.find({
+          relations: ['teacher', 'file', 'chat', 'rooms'],
         });
       }
 
@@ -54,11 +62,32 @@ export class CoursesService {
     }
   }
 
-  async findAll() {
+  async findAll(search: string) {
     try {
+      // const options = {
+      //   relations: ['topics'],
+      // };
+
+      // if (search) {
+      //   options['where'] = [
+      //     { title: ILike(`%${search}%`)},
+      //     { description: ILike(`%${search}%`) },
+      //     { topics: { title: ILike(`%${search}%`) } },
+      //   ];
+      //   console.log(search);
+      // }
+
       const courses = await this.coursesRepository.find({
         relations: ['topics'],
+        where: search
+          ? [
+              { title: ILike(`%${search}%`) },
+              { description: ILike(`%${search}%`) },
+              { topics: { title: ILike(`%${search}%`) } },
+            ]
+          : {},
       });
+
       return courses;
     } catch (error) {
       throw new HttpException('Cannot get courses', 500);
