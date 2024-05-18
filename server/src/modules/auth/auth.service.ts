@@ -9,12 +9,15 @@ import { Role } from 'src/shared/enums';
 import { MailService } from '../mail/mail.service';
 import { comparePassword, hashPassword } from 'src/helpers/bcrypt';
 import { SocialLinksService } from '../social-links/social-links.service';
+import { Admin } from 'src/shared/entities/admin.entity';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
     @InjectRepository(User) private readonly usersRepository: Repository<User>,
+    @InjectRepository(Admin)
+    private readonly adminRepository: Repository<Admin>,
     private readonly studentsService: StudentsService,
     private readonly mailService: MailService,
     private readonly socialLinksService: SocialLinksService,
@@ -48,6 +51,14 @@ export class AuthService {
 
       if (userEntity.role === Role.STUDENT) {
         await this.studentsService.create(userEntity.id, {});
+      }
+
+      // ! Create Account for Admin
+      if (userEntity.role === Role.ADMIN) {
+        const admin = this.adminRepository.create({
+          user: { id: userEntity.id },
+        });
+        await this.adminRepository.save(admin);
       }
 
       const access_token = this.jwtService.sign({
