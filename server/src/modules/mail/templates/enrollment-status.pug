@@ -3,7 +3,7 @@ html
   head
     meta(charset='utf-8')
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
-    title Account Created
+    title Course Enrollment Status
     style.
       body {
         font-family: Arial, sans-serif;
@@ -27,23 +27,21 @@ html
         color: #555;
         margin-bottom: 10px;
       }
-      ul {
-        list-style-type: none;
-        padding: 0;
-        margin: 10px 0;
+      .status {
+        font-weight: bold;
       }
-      li {
-        margin-bottom: 5px;
-      }
+      /*- img {
+      -   width: 50px;
+      -   height: 50px;
+      - }*/
   body
     .container
-      h1 Account Created
+      //- img(src="../assets/1-removebg-preview.png", alt="")
+      h1 Course Enrollment Status
       p Hello #{user.firstName} #{user.lastName},
-      p Your account has been created successfully. Below are your login details:
-      ul
-        li Email: #{user.email}
-        li Password: #{user.password}
-      p Please use the provided credentials to log in to your account.
+      p Your enrollment request for the course #{course.title} has been #{status}.
+      p If your enrollment was accepted, you can now access the course materials and resources.
+      p If your enrollment was rejected, please contact the administration for further assistance.
       p If you have any questions or concerns, feel free to contact us.
       p Thank you,
       p The Admin Team
