@@ -1,40 +1,80 @@
 'use client';
 
-import ProfilePage from "@/Pages/profile";
-import { useEffect, useState } from "react";
-import { GetUser } from "../../../../../Lib/getUser";
+import ProfilePage from '@/Pages/profile';
+import { useEffect, useState } from 'react';
+import { GetUser } from '../../../../../Lib/getUser';
 
 const profile = () => {
-    const [FirstName, setFirstName] = useState('');
-    const [LastName, setLastName] = useState('');
-    const [UserName, setUserName] = useState('');
-    const [Bio, setBio] = useState('');
-    const [Role, setRole] = useState('');
+  const [id, setId] = useState('');
+  const [FirstName, setFirstName] = useState('');
+  const [LastName, setLastName] = useState('');
+  const [UserName, setUserName] = useState('');
+  const [Bio, setBio] = useState('');
+  const [Role, setRole] = useState('');
+  const [enrollments, setEnrollments] = useState([]);
+  const [courses, setCourses] = useState([]);
 
-    useEffect(() => {
-        GetUser()
-            .then(data => {
-                setFirstName(data.firstName);
-                setLastName(data.lastName);
-                setBio(data.biography);
-                setRole(data.role);
+  useEffect(() => {
+    GetUser()
+      .then((data) => {
+        setFirstName(data.firstName);
+        setLastName(data.lastName);
+        setBio(data.biography);
+        setRole(data.role);
 
-                console.log(data);
-            })
-            .catch(err => console.log(err.message));
-    }, []);
-    
+        console.log(data);
+      })
+      .catch((err) => console.log(err.message));
 
-    return (
-        <>
-            <ProfilePage 
-                FullName={`${FirstName} ${LastName}`} 
-                UserName='SidAhmed001' 
-                Bio={!Bio?'': Bio}
-                Role={Role}
-            />
-        </>
-    );
-}
+    const fetchEnrollments = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/courses/enrollments/me`,
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+          }
+        );
+
+        if (!response.ok) {
+          response.status === 401 && router.push('/login');
+          const { data } = await response.json();
+          throw new Error(data.message);
+        }
+
+        const { data } = await response.json();
+
+        console.log(data);
+
+        setEnrollments(data);
+
+        data.forEach((e) => {
+          setCourses((prev) => {
+            return [...prev, e.course];
+          });
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchEnrollments();
+  }, []);
+
+  return (
+    <>
+      <ProfilePage
+        FullName={`${FirstName} ${LastName}`}
+        UserName={`${FirstName} ${LastName} ${id}`}
+        Bio={!Bio ? '' : Bio}
+        Role={Role}
+        courses={courses}
+      />
+    </>
+  );
+};
 
 export default profile;

@@ -136,34 +136,49 @@ const RoomInfo = ({
             </Accordion> */}
           </TabPanel>
           <TabPanel>
-            <Stack
-              key={selectedCourse?.teacher.id}
-              w='100%'
-              flexDir='row'
-              alignItems='center'
-              gap='15px'
-              padding='10px'
-              borderRadius='10px'
-              cursor='pointer'
-              _hover={{ bgColor: 'gray.100' }}
-            >
-              <Image
-                border='1.2px solid blue'
-                borderRadius='full'
-                boxSize='35px'
-                src={selectedCourse?.teacher.profilePicture || './logo.png'}
-                alt={
-                  selectedCourse?.teacher.user.firstName +
-                  ' ' +
-                  selectedCourse?.teacher.user.lastName
-                }
-              />
-              <Text fontSize='sm' fontWeight='600' color='black.500'>
-                {selectedCourse?.teacher.user.firstName +
-                  ' ' +
-                  selectedCourse?.teacher.user.lastName}
-              </Text>
-            </Stack>
+            {selectedCourse && (
+              <Stack
+                key={selectedCourse?.teacher.id}
+                w='100%'
+                flexDir='row'
+                justifyContent='space-between'
+                alignItems='center'
+                gap='15px'
+                padding='10px'
+                borderRadius='10px'
+                cursor='pointer'
+                _hover={{ bgColor: 'gray.100' }}
+              >
+                <Stack flexDir='row' alignItems='center'>
+                  <Image
+                    border='1.2px solid blue'
+                    borderRadius='full'
+                    boxSize='35px'
+                    src={selectedCourse?.teacher.profilePicture || './logo.png'}
+                    alt={
+                      selectedCourse?.teacher.user.firstName +
+                      ' ' +
+                      selectedCourse?.teacher.user.lastName
+                    }
+                  />
+                  <Text fontSize='sm' fontWeight='600' color='black.500'>
+                    {selectedCourse?.teacher.user.firstName +
+                      ' ' +
+                      selectedCourse?.teacher.user.lastName}
+                  </Text>
+                </Stack>
+                <Text
+                  backgroundColor='blue.500'
+                  borderRadius='4px'
+                  fontSize='11px'
+                  p='5px'
+                  color='#FFF'
+                >
+                  TEACHER
+                </Text>
+              </Stack>
+            )}
+
             {members.map((member) => {
               return (
                 <Stack
