@@ -54,12 +54,13 @@ const SignUpPage = () => {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({
+          body: JSON.stringify({user:{
             email,
             firstName,
             lastName,
             password,
-          }),
+          },
+        }),
         }
       );
 
@@ -183,7 +184,7 @@ const SignUpPage = () => {
                 mt='5'
                 fontSize='16px'
                 border='none'
-                borderRadius='12'
+                borderRadius='7'
                 bgColor='#234C51'
                 color='white'
                 onClick={handleSubmit}

@@ -153,7 +153,7 @@ const LoginPage = () => {
                 mt='5'
                 fontSize='16px'
                 border='none'
-                borderRadius='12'
+                borderRadius='7'
                 bgColor='#234C51'
                 color='white'
                 onClick={handleSubmit}
@@ -163,7 +163,7 @@ const LoginPage = () => {
               <Text textAlign='center' mt='5'>
                 Don't have an account?
                 <span style={{ color: 'blue' }}>
-                  <Link href='/signup'> Register</Link>
+                  <Link href='/signup'>Register</Link>
                 </span>
               </Text>
             </VStack>
