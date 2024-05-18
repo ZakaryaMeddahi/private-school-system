@@ -1,5 +1,6 @@
 'use client';
 
+import CardForCourse from '@/components/CardForCourse';
 import CourseCard from '@/components/Course Card/CourseCard';
 import Item from '@/components/Item/Item';
 import WhatDoYouLearn from '@/components/What do you learn/WhatDoYouLearn';
@@ -20,7 +21,7 @@ const CourseDetailsPage = () => {
                         This course is designed to teach you web development from scratch. We will start with the basics of web development and gradually move on to more advanced topics. By the end of this course, you will be able to build full-stack web applications.
                     </Text>
                 </Box>
-                <CourseCard />
+                <CardForCourse w='450px' />
                 {/* kdjalf */}
                 {/* <Box w='500px' h='500px' position='absolute' right='50' bgColor='yellowgreen'></Box> */}
             </Box>

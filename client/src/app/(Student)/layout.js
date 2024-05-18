@@ -88,20 +88,22 @@ const Layout = ({ children }) => {
                             <Text color='#898C81'>Courses</Text>
                         </Box>
                     </Link>
-                    <Box
-                        w='100%'
-                        display='flex'
-                        flexDir='row'
-                        gap='5'
-                        alignItems='center'
-                        paddingLeft='30'
-                        minH='70px'
-                        maxH='80px'
-                        _hover={{bgColor: 'whiteSmoke'}}
-                    >
-                        <HiOutlineAcademicCap color="#898C81" size='23px' />
-                        <Text color='#898C81'>Enrollments Courses</Text>
-                    </Box>
+                    <Link href='/student_dashboard/enrollments'>
+                        <Box
+                            w='100%'
+                            display='flex'
+                            flexDir='row'
+                            gap='5'
+                            alignItems='center'
+                            paddingLeft='30'
+                            minH='70px'
+                            maxH='80px'
+                            _hover={{bgColor: 'whiteSmoke'}}
+                        >
+                            <HiOutlineAcademicCap color="#898C81" size='23px' />
+                            <Text color='#898C81'>Enrollments Courses</Text>
+                        </Box>
+                    </Link>
                 </Box>
                 <Box
                     w='100%'

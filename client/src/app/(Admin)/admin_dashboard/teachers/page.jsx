@@ -9,8 +9,8 @@ import { IoMdClose } from "react-icons/io";
 const Teachers = [
     {
         id: 1,
-        firstName: 'Abdelali',
-        lastName: 'Sid Ahmed',
+        firstName: 'jhone',
+        lastName: 'jhone',
         email: 'ex@gmail.com',
         adress: 'Tenes,Chlef',
         role: 'Teacher',
@@ -21,10 +21,10 @@ const Teachers = [
     },
     {
         id: 2,
-        firstName: 'Sid',
-        lastName: 'Ahmed',
+        firstName: 'MD',
+        lastName: 'Zakarya',
         email: 'ex@gmail.com',
-        adress: 'Tenes,Chlef',
+        adress: 'Chlef',
         role: 'Teacher',
         status: 'Active',
         lastLogin: '4/30/2024 11:15:35',
@@ -33,57 +33,9 @@ const Teachers = [
     },
     {
         id: 3,
-        firstName: 'Abdelali',
-        lastName: 'Nadir',
+        firstName: 'AB',
+        lastName: 'Sid Ahmed',
         email: 'ex@gmail.com',
-        adress: 'Tenes,Chlef',
-        role: 'Teacher',
-        status: 'Active',
-        lastLogin: '4/30/2024 11:15:35',
-        createdAt: '4/30/2024 11:15:35',
-        updatedAt: '4/30/2024 11:15:35'
-    },
-    {
-        id: 4,
-        firstName: 'Abdelali',
-        lastName: 'Sid Ahmed',
-        email: '    ',
-        adress: 'Tenes,Chlef',
-        role: 'Teacher',
-        status: 'Active',
-        lastLogin: '4/30/2024 11:15:35',
-        createdAt: '4/30/2024 11:15:35',
-        updatedAt: '4/30/2024 11:15:35'
-    },
-    {
-        id: 5,
-        firstName: 'Abdelali',
-        lastName: 'Sid Ahmed',
-        email: '',
-        adress: 'Tenes,Chlef',
-        role: 'Teacher',
-        status: 'Active',
-        lastLogin: '4/30/2024 11:15:35',
-        createdAt: '4/30/2024 11:15:35',
-        updatedAt: '4/30/2024 11:15:35'
-    },
-    {
-        id: 25,
-        firstName: 'Abdelali',
-        lastName: 'Sid Ahmed',
-        email: '',
-        adress: 'Tenes,Chlef',
-        role: 'Teacher',
-        status: 'Active',
-        lastLogin: '4/30/2024 11:15:35',
-        createdAt: '4/30/2024 11:15:35',
-        updatedAt: '4/30/2024 11:15:35'
-    },
-    {
-        id: 55,
-        firstName: 'Abdelali',
-        lastName: 'Sid Ahmed',
-        email: '',
         adress: 'Tenes,Chlef',
         role: 'Teacher',
         status: 'Active',
@@ -342,7 +294,7 @@ const TeachersPage = () => {
                     >
                         <IoMdClose size={'25px'} onClick={closeTab} />
                     </Box>
-                    <Image src='/profile.jpeg' w='100%' />
+                    <Image src='/teacher-unsplash.jpg' w='100%' />
                     <Box
                         paddingRight='50px'
                         display='flex'

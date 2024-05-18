@@ -2,6 +2,7 @@ import CardForCourse from "@/components/CardForCourse";
 import Media from "@/components/Socials/Media";
 import { Box, Heading, Text, Badge, Button, Image } from "@chakra-ui/react";
 import { FaFacebookF, FaWhatsapp, FaLinkedinIn } from "react-icons/fa"
+import { Courses } from "@/app/(Student)/student_dashboard/course/page";
 
 const ProfilePage = ({FullName, UserName, Bio, Role}) => {
     return (
@@ -43,7 +44,7 @@ const ProfilePage = ({FullName, UserName, Bio, Role}) => {
                             w='100%'
                             marginTop='10px'
                         >
-                            <Text fontSize={16} w='650px' color='#898C81' > 
+                            <Text fontSize={16} color='#898C81' > 
                                 Lorem ipsum dolor sit amet consectetur adipisicing elit. 
                                 Inventore quod repudiandae nesciunt aspernatur recusandae cumque 
                                 autem tempora natus corrupti deserunt, consequatur eveniet 
@@ -77,9 +78,9 @@ const ProfilePage = ({FullName, UserName, Bio, Role}) => {
             gridTemplateRows='1fr'
             gap={5}
         >
-            <CardForCourse />
-            <CardForCourse />
-            <CardForCourse />
+            <CardForCourse {...Courses[0]} Role='student' Enroll={true} />
+            <CardForCourse {...Courses[1]} Role='student' Enroll={true} />
+            <CardForCourse {...Courses[2]} Role='student' Enroll={true} />
         </Box>
     </Box>
     );

@@ -49,7 +49,7 @@ const Layout = ({ children }) => {
                     display='flex'
                     flexDir='column'
                 >
-                    <Link href='/admin_dashboard/'>
+                    {/* <Link href='/admin_dashboard/'>
                         <Box
                             w='100%'
                             display='flex'
@@ -64,7 +64,7 @@ const Layout = ({ children }) => {
                             <TbSmartHome color="#898C81" size='23px' />
                             <Text color='#898C81'>Overview</Text>
                         </Box>
-                    </Link>
+                    </Link> */}
                     <Link href='/admin_dashboard/teachers'>
                         <Box
                             w='100%'
