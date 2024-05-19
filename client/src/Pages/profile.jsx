@@ -39,6 +39,7 @@ const ProfilePage = ({ userId, FullName, UserName, Bio, Role, courses }) => {
         <Box w='100%' display='grid' gridTemplateColumns='1fr 0.5fr' gap={5}>
           <Box display='flex' flexDir='column' gap='10px'>
             <Heading size='lg' color='#213E69'>
+              {console.log(FullName)}
               {FullName}
             </Heading>
             {/* <Text fontSize={16} color='#898C81' >{UserName}</Text> */}
@@ -50,7 +51,7 @@ const ProfilePage = ({ userId, FullName, UserName, Bio, Role, courses }) => {
               {Role}
             </Badge>
             <Box w='100%' marginTop='10px'>
-              <Text fontSize={16} w='650px' color='#898C81'>
+              <Text fontSize={16} color='#898C81'>
                 Lorem ipsum dolor sit amet consectetur adipisicing elit.
                 Inventore quod repudiandae nesciunt aspernatur recusandae cumque
                 autem tempora natus corrupti deserunt, consequatur eveniet
@@ -100,7 +101,7 @@ const ProfilePage = ({ userId, FullName, UserName, Bio, Role, courses }) => {
         gap={5}
       >
         {courses.map((course) => {
-          return <CardForCourse key={course.id} course={course} />;
+          return <CardForCourse key={course.id} Course={course} Enroll={true} Role='student'  />;
         })}
       </Box>
     </Box>

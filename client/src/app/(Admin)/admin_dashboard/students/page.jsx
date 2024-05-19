@@ -306,6 +306,9 @@ const StudentsPage = () => {
                     borderRadius={'50%'}
                   >
                     <Text fontSize={18} fontWeight={500}>
+                      {
+                        
+                      }
                       {student.firstName[0]}
                     </Text>
                   </Box>

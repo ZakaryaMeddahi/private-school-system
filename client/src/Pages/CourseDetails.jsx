@@ -1,5 +1,6 @@
 'use client';
 
+import CardForCourse from '@/components/CardForCourse';
 import CourseCard from '@/components/Course Card/CourseCard';
 import Item from '@/components/Item/Item';
 import WhatDoYouLearn from '@/components/What do you learn/WhatDoYouLearn';
