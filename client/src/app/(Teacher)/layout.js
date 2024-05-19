@@ -50,22 +50,7 @@ const Layout = ({ children }) => {
                     display='flex'
                     flexDir='column'
                 >
-                    <Link href='/teacher_dashboard'>
-                        <Box
-                            w='100%'
-                            display='flex'
-                            flexDir='row'
-                            gap='5'
-                            alignItems='center'
-                            paddingLeft='30'
-                            minH='70px'
-                            maxH='80px'
-                            _hover={{bgColor: 'whiteSmoke'}}
-                            >
-                            <TbSmartHome color="#898C81" size='23px' />
-                            <Text color='#898C81'>Overview</Text>
-                        </Box>
-                    </Link>
+                    {/* gi */}
                     <Link href='/teacher_dashboard/my_courses'>
                         <Box
                             w='100%'
