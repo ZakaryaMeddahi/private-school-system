@@ -28,10 +28,12 @@ import {
   AlertDialogCloseButton,
   AlertDialogBody,
   AlertDialogFooter,
+  Center,
 } from '@chakra-ui/react';
 import { useDisclosure } from '@chakra-ui/react';
 import { IoMdClose } from 'react-icons/io';
 import { useRouter } from 'next/navigation';
+import UserCard from '@/components/UserCard';
 
 // const Teachers = [
 //     {
@@ -126,6 +128,7 @@ const TeachersPage = () => {
   const [teacherLastName, setTeacherLastName] = useState('');
   const [teacherEmail, setTeacherEmail] = useState('');
 
+  const [profilePicture, setProfilePicture] = useState(null);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -138,17 +141,11 @@ const TeachersPage = () => {
 
   const [displaySuccessAlert, setDisplaySuccessAlert] = useState(false);
   const [displayErrorAlert, setDisplayErrorAlert] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('Cannot create account');
   const router = useRouter();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = useRef();
-
-  const {
-    isOpen: isDeleteAlertOpen,
-    onOpen: onDeleteAlertOpen,
-    onClose: onDeleteAlertClose,
-  } = useDisclosure();
-  const cancelRef = useRef();
 
   const boxRef = useRef();
   const gridRef = useRef();
@@ -162,6 +159,7 @@ const TeachersPage = () => {
   const getTeacher = (id) => {
     teachers.forEach((teacher) => {
       if (teacher.id === id) {
+        setProfilePicture(teacher.profilePicture);
         setFirstName(teacher.firstName);
         setLastName(teacher.lastName);
         setEmail(teacher.email);
@@ -204,7 +202,7 @@ const TeachersPage = () => {
 
       if (!response.ok) {
         response.status === 401 && router.push('/login');
-        const { data } = await response.json();
+        const data = await response.json();
         // setDisplayErrorAlert(true);
         // setTimeout(() => {
         //   setDisplayErrorAlert(false);
@@ -239,7 +237,7 @@ const TeachersPage = () => {
 
       if (!response.ok) {
         response.status === 401 && router.push('/login');
-        const { data } = await response.json();
+        const data = await response.json();
         throw new Error(data.message);
       }
 
@@ -275,7 +273,7 @@ const TeachersPage = () => {
       }
 
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/teachers'`,
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/teachers`,
         {
           method: 'POST',
           headers: {
@@ -292,7 +290,7 @@ const TeachersPage = () => {
 
       if (!response.ok) {
         response.status === 401 && router.push('/login');
-        const { data } = await response.json();
+        const data = await response.json();
         setDisplayErrorAlert(true);
         setTimeout(() => {
           setDisplayErrorAlert(false);
@@ -338,7 +336,7 @@ const TeachersPage = () => {
 
         if (!response.ok) {
           response.status === 401 && router.push('/login');
-          const { data } = await response.json();
+          const data = await response.json();
           throw new Error(data.message);
         }
 
@@ -348,6 +346,7 @@ const TeachersPage = () => {
 
         setTeachers(data);
       } catch (error) {
+        setErrorMessage(error.message)
         console.error(error);
       }
     };
@@ -396,14 +395,17 @@ const TeachersPage = () => {
           <DrawerBody>
             <FormControl display='flex' flexDirection='column' gap='15px'>
               <Input
+                value={teacherFirstName}
                 placeholder='First Name'
                 onChange={(e) => setTeacherFirstName(e.target.value)}
               />
               <Input
+                value={teacherLastName}
                 placeholder='Last Name'
                 onChange={(e) => setTeacherLastName(e.target.value)}
               />
               <Input
+                value={teacherEmail}
                 type='email'
                 placeholder='Teacher Email'
                 onChange={(e) => setTeacherEmail(e.target.value)}
@@ -450,7 +452,7 @@ const TeachersPage = () => {
                 Application submitted!
               </AlertTitle> */}
                 <AlertDescription maxWidth='sm'>
-                  Cannot create account
+                  {errorMessage}
                 </AlertDescription>
               </Alert>
             )}
@@ -476,7 +478,7 @@ const TeachersPage = () => {
       </Drawer>
       <Box
         ref={gridRef}
-        w='100%'
+        // w='100%'
         h='82vh'
         display='grid'
         gridTemplateColumns='1fr'
@@ -489,124 +491,23 @@ const TeachersPage = () => {
           flexDir='column'
           overflowY={'auto'}
         >
-          {teachers.map((teacher, index) => {
+          {teachers.map((teacher) => {
             const id = teacher.id;
             return (
-              <Box
-                id={id}
-                key={id}
-                className='teacher-card'
-                width={'100%'}
-                display='flex'
-                flexDirection={'row'}
-                justifyContent={'space-between'}
-                borderBottom={'1px solid #E2E8F0'}
-                _hover={{ bgColor: 'whiteSmoke' }}
-                paddingBlock={'10px'}
-                cursor='pointer'
-                onClick={() => {
-                  const teachers = document.querySelectorAll('.teacher-card');
-
-                  teachers.forEach((teacher) => {
-                    teacher.addEventListener('click', (e) => {
-                      const id = e.target.id;
-                      getTeacher(id);
-                      openTab();
-                    });
-                  });
-                }}
-              >
-                <Box display='flex' flexDirection={'row'} gap={5}>
-                  <Box
-                    display='flex'
-                    justifyContent='center'
-                    alignItems='center'
-                    width={'50px'}
-                    height={'50px'}
-                    bgColor={'#E2E8F0'}
-                    borderRadius={'50%'}
-                  >
-                    <Text fontSize={18} fontWeight={500}>
-                      {/* {teacher?.firstName && teacher?.firstName[0]} */}
-                    </Text>
-                  </Box>
-                  <Box
-                    display='flex'
-                    flexDirection='column'
-                    justifyContent='center'
-                  >
-                    <Text
-                      fontSize={18}
-                      fontWeight={500}
-                    >{`${teacher.firstName} ${teacher.lastName}`}</Text>
-                  </Box>
-                </Box>
-                <Box display='flex' flexDirection={'row'} gap={5}>
-                  <Box
-                    className='delete-teacher'
-                    display='flex'
-                    justifyContent='center'
-                    alignItems='center'
-                    width={'50px'}
-                    height={'50px'}
-                    _hover={{ bgColor: 'white' }}
-                    borderRadius={'50%'}
-                    onClick={() => {
-                      const teachers =
-                        document.querySelectorAll('.teacher-card');
-
-                      teachers.forEach((teacher) => {
-                        teacher.addEventListener('click', () => {
-                          const id = teacher.id;
-                          console.log(id);
-                          deleteTeacher(id);
-                        });
-                      });
-                    }}
-                  >
-                    <AlertDialog
-                      motionPreset='slideInBottom'
-                      leastDestructiveRef={cancelRef}
-                      onClose={onDeleteAlertClose}
-                      isOpen={isDeleteAlertOpen}
-                      isCentered
-                    >
-                      <AlertDialogOverlay />
-
-                      <AlertDialogContent>
-                        <AlertDialogHeader>Delete Teacher?</AlertDialogHeader>
-                        <AlertDialogCloseButton />
-                        <AlertDialogBody>
-                          Are you sure you want to remove this teacher account?
-                        </AlertDialogBody>
-                        <AlertDialogFooter>
-                          <Button ref={cancelRef} onClick={onDeleteAlertClose}>
-                            No
-                          </Button>
-                          <Button
-                            colorScheme='red'
-                            ml={3}
-                            onClick={() => deleteTeacher(id)}
-                          >
-                            Yes
-                          </Button>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
-                    <IconButton
-                      icon={<MdDelete fontSize={24} color='red' />}
-                      onClick={onDeleteAlertOpen}
-                    />
-                  </Box>
-                </Box>
-              </Box>
+              <UserCard
+                key={teacher.id}
+                user={teacher}
+                getUser={getTeacher}
+                deleteUser={deleteTeacher}
+                openTab={openTab}
+              />
             );
           })}
         </Box>
         <Box
           display='none'
           ref={boxRef}
-          w='100%'
+          // w='100%'
           h='100%'
           bgColor={'white'}
           flexDir='column'
@@ -620,9 +521,17 @@ const TeachersPage = () => {
             justifyContent='flex-end'
             padding={'10px'}
           >
-            <IoMdClose size={'25px'} onClick={closeTab} />
+            <IoMdClose size={'25px'} cursor='pointer' onClick={closeTab} />
           </Box>
-          <Image src='/profile.jpeg' w='100%' />
+          <Center>
+            <Image
+              h='200px'
+              w='200px'
+              mb='20px'
+              borderRadius='50%'
+              src={profilePicture || '/user.png'}
+            />
+          </Center>
           <Box
             paddingRight='50px'
             display='flex'

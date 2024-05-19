@@ -11,6 +11,7 @@ import Link from 'next/link';
 
 const Overview = () => {
   const [value, onChange] = useState(new Date());
+  const [userId, setUserId] = useState();
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [role, setRole] = useState('');
@@ -18,6 +19,7 @@ const Overview = () => {
   useEffect(() => {
     GetUser()
       .then((data) => {
+        setUserId(data.id);
         setFirstName(data.firstName);
         setLastName(data.lastName);
         setRole(data.role);
@@ -247,7 +249,7 @@ const Overview = () => {
             ></Box>
             <Box textAlign='center'>
               <Heading fontSize='32px'>{FullName}</Heading>
-              <Text>SidAhmed001</Text>
+              <Text textTransform='lowercase'>{FullName}{userId}</Text>
               <Badge colorScheme='blue' paddingInline={3}>
                 {role}
               </Badge>

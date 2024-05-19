@@ -1,9 +1,12 @@
 import CardForCourse from '@/components/CardForCourse';
 import Media from '@/components/Socials/Media';
 import { Box, Heading, Text, Badge, Button, Image } from '@chakra-ui/react';
+import { useRouter } from 'next/navigation';
 import { FaFacebookF, FaWhatsapp, FaLinkedinIn } from 'react-icons/fa';
 
-const ProfilePage = ({ FullName, UserName, Bio, Role, courses }) => {
+const ProfilePage = ({ userId, FullName, UserName, Bio, Role, courses }) => {
+  const router = useRouter()
+
   return (
     <Box
       w='100%'
@@ -22,7 +25,13 @@ const ProfilePage = ({ FullName, UserName, Bio, Role, courses }) => {
         justifyContent='center'
         alignItems={'flex-end'}
       >
-        <Button bgColor='#234C51' color='white'>
+        <Button
+          bgColor='#234C51'
+          color='white'
+          onClick={() => {
+            router.push(`/student_dashboard/profile/${userId}/edit_profile`);
+          }}
+        >
           + Edit Profile
         </Button>
       </Box>

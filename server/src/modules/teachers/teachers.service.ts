@@ -241,7 +241,7 @@ export class TeachersService {
   async remove(id: number) {
     try {
       const teacher = await this.teacherRepository.findOne({
-        where: { id: Equal(id) },
+        where: { user: { id: Equal(id) } },
       });
 
       if (!teacher) throw new NotFoundException('Teacher not found');

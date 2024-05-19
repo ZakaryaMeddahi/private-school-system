@@ -31,10 +31,6 @@ const Layout = ({ children }) => {
   const [userId, setUserId] = useState('');
   const [search, setSearch] = useState('');
 
-  useEffect(() => {
-    setUserId(localStorage.getItem('userId'));
-  }, []);
-
   const inputRef = useRef();
 
   const onFocus = () => {
@@ -43,6 +39,10 @@ const Layout = ({ children }) => {
       console.log(inputRef.current.style);
     }
   };
+
+  useEffect(() => {
+    setUserId(localStorage.getItem('userId'));
+  }, []);
 
   return (
     <Box w='100%' h='100vh' display='flex'>
@@ -97,7 +97,7 @@ const Layout = ({ children }) => {
             _hover={{ bgColor: 'whiteSmoke' }}
           >
             <HiOutlineAcademicCap color='#898C81' size='23px' />
-            <Text color='#898C81'>Enrollments Courses</Text>
+            <Text color='#898C81'>Enrolled in courses</Text>
           </Box>
         </Box>
         <Box w='100%' height='fit-content' display='flex' flexDir='column'>

@@ -4,8 +4,9 @@ import ProfilePage from '@/Pages/profile';
 import { useEffect, useState } from 'react';
 import { GetUser } from '../../../../../Lib/getUser';
 
-const profile = () => {
-  const [id, setId] = useState('');
+const profile = ({ params }) => {
+  const { userId } = params;
+
   const [FirstName, setFirstName] = useState('');
   const [LastName, setLastName] = useState('');
   const [UserName, setUserName] = useState('');
@@ -41,7 +42,7 @@ const profile = () => {
 
         if (!response.ok) {
           response.status === 401 && router.push('/login');
-          const { data } = await response.json();
+          const data = await response.json();
           throw new Error(data.message);
         }
 
@@ -67,8 +68,9 @@ const profile = () => {
   return (
     <>
       <ProfilePage
+      userId={userId}
         FullName={`${FirstName} ${LastName}`}
-        UserName={`${FirstName} ${LastName} ${id}`}
+        UserName={`${FirstName} ${LastName} ${userId}`}
         Bio={!Bio ? '' : Bio}
         Role={Role}
         courses={courses}
