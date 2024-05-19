@@ -56,10 +56,11 @@ const LoginPage = () => {
 
       console.log(data);
 
-      if (checkbox) {
-        localStorage.setItem('token', data.access_token);
-      }
+      // if (checkbox) {
+      //   localStorage.setItem('token', data.access_token);
+      // }
 
+      localStorage.setItem('token', data.access_token);
       localStorage.setItem('userId', data.id);
       localStorage.setItem('role', data.role);
 
@@ -135,7 +136,7 @@ const LoginPage = () => {
                 <ErrorMessage errorMessage={passwordErrorMessage} />
               </Box>
               <ErrorMessage errorMessage={errorMessage} />
-              <Stack direction='row' justify='space-between' w='100%'>
+              {/* <Stack direction='row' justify='space-between' w='100%'>
                 <Checkbox
                   colorScheme='blue'
                   size='lg'
@@ -146,14 +147,14 @@ const LoginPage = () => {
                 <Link href='/forgot-password'>
                   <Text color='blue'>Forgot password?</Text>
                 </Link>
-              </Stack>
+              </Stack> */}
               <Button
                 size='lg'
                 w='100%'
                 mt='5'
                 fontSize='16px'
                 border='none'
-                borderRadius='12'
+                borderRadius='7'
                 bgColor='#234C51'
                 color='white'
                 onClick={handleSubmit}
@@ -163,7 +164,7 @@ const LoginPage = () => {
               <Text textAlign='center' mt='5'>
                 Don't have an account?
                 <span style={{ color: 'blue' }}>
-                  <Link href='/signup'> Register</Link>
+                  <Link href='/signup'>Register</Link>
                 </span>
               </Text>
             </VStack>

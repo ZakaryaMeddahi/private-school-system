@@ -47,6 +47,8 @@ const SignUpPage = () => {
         throw new Error('Passwords do not match');
       }
 
+      console.log(firstName);
+
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/auth/register`,
         {
@@ -55,10 +57,10 @@ const SignUpPage = () => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            email,
-            firstName,
-            lastName,
-            password,
+              email,
+              firstName,
+              lastName,
+              password,
           }),
         }
       );
@@ -72,11 +74,7 @@ const SignUpPage = () => {
 
       console.log(data);
 
-      localStorage.setItem('token', data.access_token);
-      localStorage.setItem('userId', data.id);
-      localStorage.setItem('role', data.role);
-
-      router.push('/student_dashboard');
+      router.push('/login');
 
       //   console.log(email, password, confirmPassword);
     } catch (error) {
@@ -86,9 +84,12 @@ const SignUpPage = () => {
         .split(',')
         .forEach((message) => {
           if (message.includes('email')) setEmailErrorMessage(message);
-          else if (message.includes('password')) setPasswordErrorMessage(message);
-          else if (message.includes('firstname')) setFirstNameErrorMessage(message);
-          else if (message.includes('lastname')) setLastNameErrorMessage(message);
+          else if (message.includes('password'))
+            setPasswordErrorMessage(message);
+          else if (message.includes('firstname'))
+            setFirstNameErrorMessage(message);
+          else if (message.includes('lastname'))
+            setLastNameErrorMessage(message);
           else setErrorMessage(message);
         });
       // setErrorMessage(error.message);
@@ -183,7 +184,7 @@ const SignUpPage = () => {
                 mt='5'
                 fontSize='16px'
                 border='none'
-                borderRadius='12'
+                borderRadius='7'
                 bgColor='#234C51'
                 color='white'
                 onClick={handleSubmit}

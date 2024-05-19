@@ -9,6 +9,7 @@ import { Equal, Repository } from 'typeorm';
 import { CoursesService } from '../courses/courses.service';
 import { StudentsService } from '../students/students.service';
 import { EnrollmentStatus } from 'src/shared/enums';
+import { MailService } from '../mail/mail.service';
 
 @Injectable()
 export class EnrollmentsService {
@@ -17,7 +18,27 @@ export class EnrollmentsService {
     private readonly enrollmentRepository: Repository<Enrollment>,
     // private readonly coursesService: CoursesService,
     private readonly studentsService: StudentsService,
+    private readonly mailService: MailService,
   ) {}
+
+  async findOne(userId: number, courseId: number) {
+    try {
+      const enrollment = await this.enrollmentRepository.findOne({
+        where: {
+          course: { id: Equal(courseId) },
+          student: { user: { id: Equal(userId) } },
+        },
+      });
+
+      return enrollment;
+    } catch (error) {
+      console.error(error);
+      throw new HttpException(
+        error.message || 'Cannot check if the user is enrolled in the course',
+        error.status || 500,
+      );
+    }
+  }
 
   async isEnrolled(userId: number, courseId: number) {
     try {
@@ -39,9 +60,13 @@ export class EnrollmentsService {
     }
   }
 
-  async findAll() {
+  async findAll(userId: number) {
     try {
-      const enrollments = await this.enrollmentRepository.find();
+      // add student and user relations
+      const enrollments = await this.enrollmentRepository.find({
+        relations: ['student', 'student.user', 'course', 'course.teacher', 'course.file'],
+        where: userId !== 0 ? { student: { user: { id: Equal(userId) } } } : {},
+      });
       return enrollments;
     } catch (error) {
       console.error(error);
@@ -149,6 +174,7 @@ export class EnrollmentsService {
   async update(id: number, enrollmentData: UpdateEnrollmentParams) {
     try {
       const enrollment = await this.enrollmentRepository.findOne({
+        relations: ['course', 'student', 'student.user'],
         where: { id: Equal(id) },
       });
 
@@ -160,6 +186,15 @@ export class EnrollmentsService {
         ...enrollment,
         ...enrollmentData,
       });
+
+      await this.mailService.sendEnrollmentStatus(
+        enrollment.student.user,
+        updatedEnrollment.enrollmentStatus,
+        enrollment.course,
+        enrollment.enrollmentStatus === EnrollmentStatus.APPROVED
+          ? 'Congratulation, you are enrolled!'
+          : 'Your enrollment has been rejected.',
+      );
 
       return updatedEnrollment;
     } catch (error) {

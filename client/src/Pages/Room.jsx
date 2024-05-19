@@ -43,6 +43,7 @@ import ControlPanel from '@/components/SessionComponents/ControlPanel';
 import {
   ADD_USER,
   REMOVE_USER,
+  RESET_USERS,
   UPDATE_SCREEN,
   UPDATE_SHARING,
 } from '@/actions';
@@ -103,6 +104,10 @@ const SessionPage = ({ roomId }) => {
 
   const [state, dispatch] = useReducer(reducer, defaultState);
 
+  const resetUsers = () => {
+    dispatch({ type: RESET_USERS });
+  };
+
   const addUser = (user) => {
     dispatch({ type: ADD_USER, payload: { user } });
   };
@@ -141,7 +146,7 @@ const SessionPage = ({ roomId }) => {
       localVideoTrack.play(localVideoRef.current);
       // mute mic and camera by default
       localAudioTrack.setMuted(true);
-      localVideoTrack.setMuted(true);
+      // localVideoTrack.setMuted(true);
       await clientRef.current.publish([localAudioTrack, localVideoTrack]);
     } catch (error) {
       console.error(error);
@@ -162,7 +167,7 @@ const SessionPage = ({ roomId }) => {
       }
 
       if (mediaType === 'audio') {
-        user.audioTrack.play();
+        user.audioTrack?.play();
       }
     });
 
@@ -193,13 +198,16 @@ const SessionPage = ({ roomId }) => {
 
   const joinSession = () => {
     chatNamespace.current.emit('join-session', { roomId });
-    chatNamespace.current.once('session-joined', (data) => {
+    chatNamespace.current.once('joined-session', (data) => {
       const {
-        studentSession: { session },
+        data: { session },
       } = data;
+      console.log(data);
+      console.log(session);
       joinChannel(session);
       listen();
       setSessionStarted(true);
+      console.log('session joined');
     });
   };
 
@@ -431,6 +439,9 @@ const SessionPage = ({ roomId }) => {
                       // width: state.isScreenFull ? '1000px' : '100%',
                       height: state.isScreenFull ? '600px' : '100%',
                       borderRadius: '15px',
+                      transform: state.isScreenSharing
+                        ? 'rotateY(0deg)'
+                        : 'rotateY(180deg)',
                     }}
                     //   onClick={() => updateScreen()}
                     //   onClick={(e) => changeGrid(e)}
@@ -489,6 +500,7 @@ const SessionPage = ({ roomId }) => {
                 updateSharing,
                 sessionStarted,
                 setSessionStarted,
+                resetUsers,
               }}
             >
               <ControlPanel />

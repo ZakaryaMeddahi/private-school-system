@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 // import Calendar from "react-calendar";
 import { Badge, Box, Heading, Text, Divider, Image } from "@chakra-ui/react";
 import { GetUser } from "@/Lib/getUser";
@@ -11,23 +11,22 @@ import OverviewCard from "@/components/OverviewCard";
 import Link from "next/link";
 
 const Overview = () => {
+  const [value, onChange] = useState(new Date());
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [role, setRole] = useState('');
 
-    const [value, onChange] = useState(new Date());
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [role, setRole] = useState('');
+  useEffect(() => {
+    GetUser()
+      .then((data) => {
+        setFirstName(data.firstName);
+        setLastName(data.lastName);
+        setRole(data.role);
+      })
+      .catch((err) => console.log(err.message));
+  }, []);
 
-    useEffect(() => {
-        GetUser()
-            .then(data => {
-                setFirstName(data.firstName);
-                setLastName(data.lastName);
-                setRole(data.role);
-            })
-            .catch(err => console.log(err.message));
-    }, []);
-
-    const FullName = `${firstName} ${lastName}`;
+  const FullName = `${firstName} ${lastName}`;
 
     return (
         <Box 

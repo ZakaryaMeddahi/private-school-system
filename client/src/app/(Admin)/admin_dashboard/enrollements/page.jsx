@@ -14,165 +14,165 @@ const Enrollments = [
     },
     {
         id: 2,
-        student: "Jane Doe",
-        course: "Science",
+        student: "Sid Ahmed",
+        course: "Database Design",
         grade: "B",
         date: '5/2/2024 7:57:55'
     },
     {
         id: 3,
-        student: "John Smith",
-        course: "History",
+        student: "Zakarya",
+        course: "System Design",
         grade: "C",
         date: '5/2/2024 7:57:55'
     },
-    {
-        id: 3,
-        student: "John Smith",
-        course: "History",
-        grade: "C",
-        date: '5/2/2024 7:57:55'
-    },
-    {
-        id: 3,
-        student: "John Smith",
-        course: "History",
-        grade: "C",
-        date: '5/2/2024 7:57:55'
-    },
-    {
-        id: 3,
-        student: "John Smith",
-        course: "History",
-        grade: "C",
-        date: '5/2/2024 7:57:55'
-    },
-    {
-        id: 3,
-        student: "John Smith",
-        course: "History",
-        grade: "C",
-        date: '5/2/2024 7:57:55'
-    },
-    {
-        id: 3,
-        student: "John Smith",
-        course: "History",
-        grade: "C",
-        date: '5/2/2024 7:57:55'
-    },
-    {
-        id: 3,
-        student: "John Smith",
-        course: "History",
-        grade: "C",
-        date: '5/2/2024 7:57:55'
-    },
-    {
-        id: 3,
-        student: "John Smith",
-        course: "History",
-        grade: "C",
-        date: '5/2/2024 7:57:55'
-    },
-    {
-        id: 3,
-        student: "John Smith",
-        course: "History",
-        grade: "C",
-        date: '5/2/2024 7:57:55'
-    },
-    {
-        id: 3,
-        student: "John Smith",
-        course: "History",
-        grade: "C",
-        date: '5/2/2024 7:57:55'
-    },
-    {
-        id: 3,
-        student: "John Smith",
-        course: "History",
-        grade: "C",
-        date: '5/2/2024 7:57:55'
-    },
-    {
-        id: 3,
-        student: "John Smith",
-        course: "History",
-        grade: "C",
-        date: '5/2/2024 7:57:55'
-    },
-    {
-        id: 3,
-        student: "John Smith",
-        course: "History",
-        grade: "C",
-        date: '5/2/2024 7:57:55'
-    },
-    {
-        id: 3,
-        student: "John Smith",
-        course: "History",
-        grade: "C",
-        date: '5/2/2024 7:57:55'
-    },
-    {
-        id: 3,
-        student: "John Smith",
-        course: "History",
-        grade: "C",
-        date: '5/2/2024 7:57:55'
-    },
-    {
-        id: 3,
-        student: "John Smith",
-        course: "History",
-        grade: "C",
-        date: '5/2/2024 7:57:55'
-    },
-    {
-        id: 3,
-        student: "John Smith",
-        course: "History",
-        grade: "C",
-        date: '5/2/2024 7:57:55'
-    },
-    {
-        id: 3,
-        student: "John Smith",
-        course: "History",
-        grade: "C",
-        date: '5/2/2024 7:57:55'
-    },
-    {
-        id: 3,
-        student: "John Smith",
-        course: "History",
-        grade: "C",
-        date: '5/2/2024 7:57:55'
-    },
-    {
-        id: 3,
-        student: "John Smith",
-        course: "History",
-        grade: "C",
-        date: '5/2/2024 7:57:55'
-    },
-    {
-        id: 3,
-        student: "John Smith",
-        course: "History",
-        grade: "C",
-        date: '5/2/2024 7:57:55'
-    },
-    {
-        id: 3,
-        student: "John Smith",
-        course: "History",
-        grade: "C",
-        date: '5/2/2024 7:57:55'
-    },
+    // {
+    //     id: 3,
+    //     student: "John Smith",
+    //     course: "History",
+    //     grade: "C",
+    //     date: '5/2/2024 7:57:55'
+    // },
+    // {
+    //     id: 3,
+    //     student: "John Smith",
+    //     course: "History",
+    //     grade: "C",
+    //     date: '5/2/2024 7:57:55'
+    // },
+    // {
+    //     id: 3,
+    //     student: "John Smith",
+    //     course: "History",
+    //     grade: "C",
+    //     date: '5/2/2024 7:57:55'
+    // },
+    // {
+    //     id: 3,
+    //     student: "John Smith",
+    //     course: "History",
+    //     grade: "C",
+    //     date: '5/2/2024 7:57:55'
+    // },
+    // {
+    //     id: 3,
+    //     student: "John Smith",
+    //     course: "History",
+    //     grade: "C",
+    //     date: '5/2/2024 7:57:55'
+    // },
+    // {
+    //     id: 3,
+    //     student: "John Smith",
+    //     course: "History",
+    //     grade: "C",
+    //     date: '5/2/2024 7:57:55'
+    // },
+    // {
+    //     id: 3,
+    //     student: "John Smith",
+    //     course: "History",
+    //     grade: "C",
+    //     date: '5/2/2024 7:57:55'
+    // },
+    // {
+    //     id: 3,
+    //     student: "John Smith",
+    //     course: "History",
+    //     grade: "C",
+    //     date: '5/2/2024 7:57:55'
+    // },
+    // {
+    //     id: 3,
+    //     student: "John Smith",
+    //     course: "History",
+    //     grade: "C",
+    //     date: '5/2/2024 7:57:55'
+    // },
+    // {
+    //     id: 3,
+    //     student: "John Smith",
+    //     course: "History",
+    //     grade: "C",
+    //     date: '5/2/2024 7:57:55'
+    // },
+    // {
+    //     id: 3,
+    //     student: "John Smith",
+    //     course: "History",
+    //     grade: "C",
+    //     date: '5/2/2024 7:57:55'
+    // },
+    // {
+    //     id: 3,
+    //     student: "John Smith",
+    //     course: "History",
+    //     grade: "C",
+    //     date: '5/2/2024 7:57:55'
+    // },
+    // {
+    //     id: 3,
+    //     student: "John Smith",
+    //     course: "History",
+    //     grade: "C",
+    //     date: '5/2/2024 7:57:55'
+    // },
+    // {
+    //     id: 3,
+    //     student: "John Smith",
+    //     course: "History",
+    //     grade: "C",
+    //     date: '5/2/2024 7:57:55'
+    // },
+    // {
+    //     id: 3,
+    //     student: "John Smith",
+    //     course: "History",
+    //     grade: "C",
+    //     date: '5/2/2024 7:57:55'
+    // },
+    // {
+    //     id: 3,
+    //     student: "John Smith",
+    //     course: "History",
+    //     grade: "C",
+    //     date: '5/2/2024 7:57:55'
+    // },
+    // {
+    //     id: 3,
+    //     student: "John Smith",
+    //     course: "History",
+    //     grade: "C",
+    //     date: '5/2/2024 7:57:55'
+    // },
+    // {
+    //     id: 3,
+    //     student: "John Smith",
+    //     course: "History",
+    //     grade: "C",
+    //     date: '5/2/2024 7:57:55'
+    // },
+    // {
+    //     id: 3,
+    //     student: "John Smith",
+    //     course: "History",
+    //     grade: "C",
+    //     date: '5/2/2024 7:57:55'
+    // },
+    // {
+    //     id: 3,
+    //     student: "John Smith",
+    //     course: "History",
+    //     grade: "C",
+    //     date: '5/2/2024 7:57:55'
+    // },
+    // {
+    //     id: 3,
+    //     student: "John Smith",
+    //     course: "History",
+    //     grade: "C",
+    //     date: '5/2/2024 7:57:55'
+    // },
 ]
 
 const EnrollmentPage = () => {
@@ -202,11 +202,12 @@ const EnrollmentPage = () => {
             </Box>
             <Box
                 w='100%'
-                flex={1}
+                // flex={1}
                 display='grid'
                 gridTemplateColumns={'1fr 1fr'}
                 gap={'10px'}
                 overflowY={'auto'}
+                padding={5}
             >
                 {
                     Enrollments.map((enrollment, index) => (  

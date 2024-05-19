@@ -10,7 +10,7 @@ export class Session {
   @Column()
   agoraChannel: string;
 
-  @Column()
+  @Column({nullable: true})
   agoraToken: string;
 
   // @Column({ default: null })

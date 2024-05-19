@@ -146,6 +146,7 @@ const MessageInput = ({
                 id='file'
                 display='none'
                 onChange={(e) => setFile(e.target.files[0])}
+                isDisabled={selectedCourse ? false : true}
               />
               <Center h='100%'>
                 <IoIosAttach size='24px' />
@@ -159,6 +160,7 @@ const MessageInput = ({
             placeholder='Hello, world'
             border='none'
             onChange={(e) => setMessage({ content: e.target.value })}
+            isDisabled={selectedCourse ? false : true}
           />
           <Button
             colorScheme='teal'

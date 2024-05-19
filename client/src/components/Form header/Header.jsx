@@ -6,11 +6,11 @@ const Header = ({ title }) => {
             <Heading size='lg' fontSize='32px'>{title}</Heading>
             <Text fontSize='18px' color='gray'>Enter your account details</Text>
             <Button 
-                fontSize='16px' 
+                fontSize='15px' 
                 size='lg'   
                 w='100%' 
                 border='none' 
-                borderRadius='12' 
+                borderRadius='7' 
                 bgColor='#333437' 
                 color='white'
             >

@@ -18,6 +18,7 @@ export class AuthController {
   async register(@Body() registerUserDto: RegisterUserDto) {
     try {
       const role = Role.STUDENT;
+      // const role = Role.ADMIN;
       const data = await this.authService.registerUser({
         ...registerUserDto,
         role,

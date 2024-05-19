@@ -18,6 +18,7 @@ import { WsAuth } from 'src/guards/ws-auth.guard';
 import { UserSocket } from 'src/shared/interfaces';
 import { SocketSession } from '../../shared/websocket.session';
 import { v4 as uuidv4 } from 'uuid';
+import { Role } from 'src/shared/enums';
 
 // We should have as DS like Map to store user sockets in room
 
@@ -142,7 +143,7 @@ export class RoomsGateway {
         .to(`room-${roomId}`)
         .emit('message-updated', { message: updatedMessage });
 
-      client.emit('message', {
+      client.emit('message-updated', {
         status: 'success',
         result: 'Message updated successfully',
         message: updatedMessage,
@@ -264,7 +265,7 @@ export class RoomsGateway {
       const session = await this.sessionsService.create({
         agoraChannel,
         agoraToken: null,
-      });
+      }, roomId);
 
       // const session = await this.sessionsService.create({
       //   agoraChannel: `${topic.title}-${topicId}`,
@@ -337,27 +338,38 @@ export class RoomsGateway {
   ) {
     try {
       // TODO: Extract user id from socket
-      const { sub: userId } = client.user;
-      const { sessionId, roomId } = data;
+      const { sub: userId, role } = client.user;
+      // const { sessionId, roomId } = data;
+      const { roomId } = data;
+
+      // Get session id using roomId
+      const session = await this.sessionsService.findRecentSession(+roomId);
+
+      console.log(session);
+
+      const sessionData = { session };
 
       // TODO: Get student id using userId and add it to student session
 
       // Create student session
-      const studentSession = await this.studentSessionsService.create(
-        userId,
-        sessionId,
-        { joinDate: new Date() },
-      );
+      if (role === Role.STUDENT) {
+        const studentSession = await this.studentSessionsService.create(
+          userId,
+          session,
+          { joinDate: new Date() },
+        );
+        sessionData['studentSession'] = studentSession;
+      }
 
       // Broadcast message to all users in chat
       client
         .to(`room-${roomId}`)
-        .emit('user-joined-session', { studentSession });
+        .emit('user-joined-session', sessionData);
 
-      client.emit('user-joined-session', {
+      client.emit('joined-session', {
         status: 'success',
         result: 'Session joined successfully',
-        studentSession,
+        data: sessionData,
       });
 
       // return {
@@ -380,20 +392,25 @@ export class RoomsGateway {
   ) {
     try {
       // TODO: Extract user id from socket
-      const { sub: userId } = client.user;
+      const { sub: userId, role } = client.user;
       const { roomId } = data;
 
-      const studentSession = await this.studentSessionsService.update(userId, {
-        leaveDate: new Date(),
-      });
+      const sessionData = {}
+
+      if(role === Role.STUDENT) {
+        const studentSession = await this.studentSessionsService.update(userId, {
+          leaveDate: new Date(),
+        });
+        sessionData['studentSession'] = studentSession;
+      }
 
       // Broadcast message to all users in chat
-      client.to(`room-${roomId}`).emit('user-left-session', { studentSession });
+      client.to(`room-${roomId}`).emit('user-left-session', sessionData);
 
       client.emit('user-left-session', {
         status: 'success',
         result: 'Session left successfully',
-        studentSession,
+        sessionData,
       });
 
       // return {

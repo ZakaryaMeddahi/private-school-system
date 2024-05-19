@@ -10,7 +10,7 @@ const Student = ({price, Enroll}) => {
             alignItems='center'
             justifyContent={Enroll? 'flex-end':'space-between'}
         >
-            {Enroll? 
+            {Enroll?
                 <Button bgColor='#234C51' color='white'>Join Room</Button>
                 :
                 <>
@@ -30,7 +30,7 @@ const Teacher = () => {
             flexDirection='row'
             alignItems='center'
             justifyContent={'space-between'}
-        > 
+        >
             <Button bgColor='#234C51' color='white'>Delete Course</Button>
             <Button bgColor='#234C51' color='white'>View Course Detials</Button>
         </Box>
@@ -58,10 +58,10 @@ const CardForCourse = ({ w, teacher, Course, Role, Enroll }) => {
                 }}
             >
                 <Box display='flex' alignItems='center' justifyContent='center'>
-                    <Image 
+                    <Image
                         src={Course.img}
-                        h={'300px'} 
-                        borderRadius='25px'  
+                        h={'300px'}
+                        borderRadius='25px'
                     />
                 </Box>
                 <Box
@@ -82,13 +82,13 @@ const CardForCourse = ({ w, teacher, Course, Role, Enroll }) => {
                     >
                         A
                     </Box>
-                    <Text fontWeight='500'>{teacher.Name}</Text>
+                    {/* <Text fontWeight='500'>{`${Course.teacher.user.firstName} ${Course.teacher.user.lastName}`}</Text> */}
                 </Box>
                 <Text fontSize='32px' fontWeight='bold' color='#213E69'>{Course.title}</Text>
                 <Text
                     color='GrayText'
                 >
-                    {Course.description.slice(0, 100) + '...'} 
+                    {Course.description.slice(0, 100) + '...'}
                 </Text>
                 {
                     Role === 'student' ? <Student price={Course.price} Enroll={Enroll} />

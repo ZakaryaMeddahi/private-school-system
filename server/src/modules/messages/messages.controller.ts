@@ -68,15 +68,15 @@ export class MessagesController {
 
   // TODO: Add enrollment guard
   @Get('courses/:courseId/rooms/:roomId/messages')
-  @UseGuards(EnrollmentGuard)
-  getMessagesForRoom(
-    @Param('courseId', ParseIntPipe) courseId: number,
-    @Param('roomId', ParseIntPipe) roomId: number,
-    @Query('page', ParseIntPipe) page: number,
-    @Query('pageSize', ParseIntPipe) pageSize: number,
+  // @UseGuards(EnrollmentGuard)
+  async getMessagesForRoom(
+    @Param('courseId') courseId: number,
+    @Param('roomId') roomId: number,
+    @Query('page') page: number,
+    @Query('pageSize') pageSize: number,
   ) {
     try {
-      const messages = this.messagesService.findByRoomId({
+      const messages = await this.messagesService.findByRoomId({
         courseId,
         roomId,
         page,
@@ -113,7 +113,7 @@ export class MessagesController {
       const { sub: userId } = user;
 
       console.log(file);
-      
+
       const newFile = await this.filesService.create(file);
 
       const messageContent = messageData.content;

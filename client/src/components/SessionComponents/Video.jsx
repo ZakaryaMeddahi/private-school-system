@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { GridItem } from '@chakra-ui/react';
+import { Center, GridItem, Img } from '@chakra-ui/react';
 import { useEffect, useRef, useState } from 'react';
 
 function Video({ user, changeGrid }) {
@@ -10,7 +10,10 @@ function Video({ user, changeGrid }) {
   useEffect(() => {
     if (user.videoTrack) {
       console.log('****************');
-      user.videoTrack.play(videoRef.current);
+      if (videoRef.current) {
+        user.videoTrack.play(videoRef.current);
+        console.log('---------------------create video tag---------------');
+      }
       setIsSharing(true);
     }
 

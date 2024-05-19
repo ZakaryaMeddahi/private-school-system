@@ -7,6 +7,7 @@ import {
   CreateStudentSessionParams,
   UpdateStudentSessionParams,
 } from 'src/shared/types';
+import { Session } from 'src/shared/entities/session.entity';
 
 @Injectable()
 export class StudentSessionsService {
@@ -18,7 +19,7 @@ export class StudentSessionsService {
 
   async create(
     userId: number,
-    sessionId: number,
+    session: Session,
     studentSessionData: CreateStudentSessionParams,
   ) {
     try {
@@ -29,7 +30,7 @@ export class StudentSessionsService {
       const studentSession = this.studentSessionRepository.create({
         ...studentSessionData,
         student: { id: student.id },
-        session: { id: sessionId },
+        session,
       });
 
       await this.studentSessionRepository.save(studentSession);
