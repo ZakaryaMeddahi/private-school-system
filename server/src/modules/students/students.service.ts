@@ -17,14 +17,21 @@ export class StudentsService {
     private readonly filesService: FilesService,
   ) {}
 
-  async findAll() {
+  async findAll(search: string) {
     try {
       // TODO: Add user to student object
-      let students = await this.studentRepository
+      let queryBuilder = await this.studentRepository
         .createQueryBuilder('student')
         .leftJoin('student.user', 'user')
-        .select('*')
-        .getRawMany();
+        .select('*');
+
+      if (search) {
+        queryBuilder = queryBuilder
+          .where('user.firstName ILIKE :search', { search: `%${search}%` })
+          .orWhere('user.lastName ILIKE :search', { search: `%${search}%` });
+      }
+
+      let students = await queryBuilder.getRawMany();
 
       // remove password
       students = students.map((student) => {

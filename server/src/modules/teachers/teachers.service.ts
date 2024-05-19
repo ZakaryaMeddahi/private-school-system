@@ -21,18 +21,25 @@ export class TeachersService {
     private readonly filesService: FilesService,
   ) {}
 
-  async findAll() {
+  async findAll(search: string) {
     try {
-      let teachers = await this.teacherRepository
+      let queryBuilder = await this.teacherRepository
         .createQueryBuilder('teacher')
         .leftJoin('teacher.user', 'user')
-        .select('*')
-        .getRawMany();
+        .select('*');
 
-        teachers = teachers.map((teacher) => {
-          const { password, userId, ...teacherData } = teacher;
-          return teacherData;
-        });
+      if (search) {
+        queryBuilder = queryBuilder
+          .where('user.firstName ILIKE :search', { search: `%${search}%` })
+          .orWhere('user.lastName ILIKE :search', { search: `%${search}%` });
+      }
+
+      let teachers = await queryBuilder.getRawMany();
+
+      teachers = teachers.map((teacher) => {
+        const { password, userId, ...teacherData } = teacher;
+        return teacherData;
+      });
 
       return teachers;
     } catch (error) {
@@ -190,7 +197,7 @@ export class TeachersService {
 
       teacher.user = updatedUser;
       teacher.biography = biography || teacher.biography;
-      
+
       if (image) {
         const file = await this.filesService.create(image);
         teacher.profilePicture = file.url;
@@ -234,7 +241,7 @@ export class TeachersService {
   async remove(id: number) {
     try {
       const teacher = await this.teacherRepository.findOne({
-        where: { id: Equal(id) },
+        where: { user: { id: Equal(id) } },
       });
 
       if (!teacher) throw new NotFoundException('Teacher not found');

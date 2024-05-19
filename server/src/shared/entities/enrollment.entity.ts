@@ -17,9 +17,13 @@ export class Enrollment {
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   enrollmentDate: Date;
 
-  @ManyToOne(() => Student, (student) => student.enrollments)
+  @ManyToOne(() => Student, (student) => student.enrollments, {
+    onDelete: 'CASCADE',
+  })
   student: Student;
 
-  @ManyToOne(() => Course, (course) => course.enrollments)
+  @ManyToOne(() => Course, (course) => course.enrollments, {
+    onDelete: 'SET NULL',
+  })
   course: Course;
 }

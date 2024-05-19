@@ -1,7 +1,8 @@
-import { StreamingContext } from '@/Pages/Session';
+import { StreamingContext } from '@/Pages/Room';
 import { Center } from '@chakra-ui/react';
 import AgoraRTC from 'agora-rtc-sdk-ng';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
+import { LuScreenShare, LuScreenShareOff } from 'react-icons/lu';
 import { PiScreencast } from 'react-icons/pi';
 
 function ScreenButton() {
@@ -14,6 +15,7 @@ function ScreenButton() {
     state,
     updateSharing,
   } = value;
+  const [isSharing, setIsSharing] = useState(false);
 
   const handleScreenSharing = async () => {
     if (!state.isScreenSharing) {
@@ -26,6 +28,7 @@ function ScreenButton() {
       localScreenTrackRef.current = screenTrack;
       localScreenTrackRef.current?.play(localVideoRef.current);
       await clientRef.current?.publish([screenTrack]);
+      setIsSharing(true);
     } else {
       await clientRef.current?.unpublish([localScreenTrackRef.current]);
       // dispatch({ type: UPDATE_SHARING, payload: { isSharing: false } });
@@ -36,6 +39,7 @@ function ScreenButton() {
       localCameraTrackRef.current = cameraTrack;
       localCameraTrackRef.current?.play(localVideoRef.current);
       await clientRef.current?.publish([cameraTrack]);
+      setIsSharing(false);
     }
   };
 
@@ -48,7 +52,8 @@ function ScreenButton() {
       cursor='pointer'
       onClick={handleScreenSharing}
     >
-      <PiScreencast size='30px' />
+      {isSharing ? <LuScreenShare size='25px' /> : <LuScreenShareOff size='25px' />}
+      
     </Center>
   );
 }

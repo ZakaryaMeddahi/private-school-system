@@ -1,4 +1,4 @@
-import { StreamingContext } from '@/Pages/Session';
+import { StreamingContext } from '@/Pages/Room';
 import { Center } from '@chakra-ui/react';
 import { useContext, useState } from 'react';
 import { MdOutlineMicNone, MdOutlineMicOff } from 'react-icons/md';
@@ -6,7 +6,7 @@ import { MdOutlineMicNone, MdOutlineMicOff } from 'react-icons/md';
 function MicButton() {
   const value = useContext(StreamingContext);
   const { localAudioTrackRef } = value;
-  const [mic, setMic] = useState(true);
+  const [mic, setMic] = useState(false);
 
   const handleMicrophone = async () => {
     if (localAudioTrackRef.current.muted) {

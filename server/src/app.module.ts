@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Admin } from 'typeorm';
+import { Admin } from './shared/entities/admin.entity';
 import { User } from './shared/entities/user.entity';
 import { CoursesModule } from './modules/courses/courses.module';
 import { Course } from './shared/entities/course.entity';
@@ -72,9 +72,9 @@ import { ObjectStorageModule } from './modules/object-storage/object-storage.mod
     UsersModule,
     EnrollmentsModule,
     CoursesModule,
-    RoomsModule,
     SessionsModule,
     MessagesModule,
+    RoomsModule,
     ChatsModule,
     TeachersModule,
     StudentsModule,

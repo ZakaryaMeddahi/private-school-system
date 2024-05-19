@@ -1,6 +1,13 @@
 'use client';
 
-import { Box, Grid, GridItem, Container, Divider } from '@chakra-ui/react';
+import {
+  Box,
+  Grid,
+  GridItem,
+  Container,
+  Divider,
+  Button,
+} from '@chakra-ui/react';
 import Room from '@/components/Room/Room';
 
 import { CiMenuKebab } from 'react-icons/ci';
@@ -19,31 +26,31 @@ const ChatPage = () => {
   // const { messages, roomInfoRef, chatRef, setMessages } =
   //     useContext(ChatContext);
 
-  const { roomInfoRef, chatRef } = useContext(ChatContext);
+  const {
+    roomInfoRef,
+    chatRef,
+    messages,
+    setMessages,
+    courses,
+    setCourses,
+    selectedCourse,
+    setSelectedCourse,
+    teacherInfo,
+    setTeacherInfo,
+    members,
+    setMembers,
+    pinnedMessages,
+    setPinnedMessages,
+  } = useContext(ChatContext);
 
   // console.log('====================================');
   // console.log('FROM Chat : ', messages);
   // console.log('====================================');
 
   /****************/
-  // const [messages, setMessages] = useState([]);
 
-  // const [chatRooms, setChatRooms] = useState([]);
-
-  // const [selectedChat, setSelectedChat] = useState(null);
-
-  // const [roomMembers, setRoomMembers] = useState([]);
-
-  // const [teacherInfo, setTeacherInfo] = useState({});
-
-  const [courses, setCourses] = useState([]);
-  const [selectedCourse, setSelectedCourse] = useState(null);
-  const [teacherInfo, setTeacherInfo] = useState({});
-  const [members, setMembers] = useState([]);
-  const [messages, setMessages] = useState([]);
-  const [pinnedMessages, setPinnedMessages] = useState([]);
-  const chatNamespace = useRef(null);
   const router = useRouter();
+  const chatNamespace = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
 
   // Get chats by teacher id or student id
@@ -54,11 +61,11 @@ const ChatPage = () => {
   const switchRoom = (chatId) => {
     console.log('Switching room');
     chatNamespace.current.emit('leave-room', {
-      chatId: chatId || 42,
+      chatId: chatId,
     });
 
     chatNamespace.current.emit('join-room', {
-      chatId: chatId || 42,
+      chatId: chatId,
     });
   };
 
@@ -85,6 +92,7 @@ const ChatPage = () => {
       console.log(data);
 
       setMessages(data);
+      setPinnedMessages([]);
       data.map((message) => {
         console.log(
           '==================================================================================================================================================='
@@ -137,6 +145,9 @@ const ChatPage = () => {
 
       console.log(data);
 
+      const teacher = selectedCourse?.teacher;
+
+      // setMembers(data);
       setMembers(data);
     } catch (error) {
       console.log(error);
@@ -145,64 +156,10 @@ const ChatPage = () => {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
+    if(!token) router.push('/login');
     chatNamespace.current = io(`${process.env.NEXT_PUBLIC_SERVER_URL}/chats`, {
       query: { token: `Bearer ${token}` },
       transports: ['websocket'],
-    });
-
-    chatNamespace.current.on('connect', () => {
-      console.log('Connected to socket');
-
-      chatNamespace.current.emit('join-room', {
-        chatId: selectedCourse?.chat?.id || 42,
-      });
-
-      chatNamespace.current.on('user-joined', (data) => {
-        console.log('====================================');
-        console.log('Joined Room : ', data);
-        console.log('====================================');
-      });
-
-      chatNamespace.current.on('message', (data) => {
-        console.log('====================================');
-        console.log('FROM Chat : ', data);
-        console.log('====================================');
-        const message = data.message;
-        setMessages((prev) => [...prev, message]);
-        setIsLoading(false);
-      });
-
-      chatNamespace.current.on('message-updated', (data) => {
-        console.log('====================================');
-        console.log('FROM Chat (update message) : ', data);
-        console.log('====================================');
-        const message = data.message;
-        setMessages((prev) => {
-          const index = prev.findIndex((msg) => msg.id === message.id);
-          prev[index] = message;
-          console.log(message);
-          return [...prev];
-        });
-        setPinnedMessages((prev) => {
-          const index = prev.findIndex((msg) => msg.id === message.id);
-          prev[index] = message;
-          console.log(message);
-          return [...prev];
-        });
-      });
-
-      chatNamespace.current.on('message-removed', (data) => {
-        console.log('====================================');
-        console.log('FROM Chat (delete message) : ', data);
-        console.log('====================================');
-        const messageId = data.messageId;
-        setMessages((prev) => {
-          return prev.filter((msg) => msg.id !== messageId);
-        });
-        setPinnedMessages((prev) => {
-          return prev.filter((msg) => msg.id !== messageId);
-        });
-      });
     });
 
     const fetchChatRooms = async () => {
@@ -242,17 +199,95 @@ const ChatPage = () => {
         //   setTeacherInfo(teacher);
         // });
 
-        await fetchMessages(data[0].id, data[0].chat?.id || 42);
+        chatNamespace.current.emit('join-room', {
+          chatId: data[0].chat.id,
+        });
+
+        await fetchMessages(data[0].id, data[0].chat?.id);
         await fetchChatMembers(data[0].id);
       } catch (error) {
         console.log(error);
       }
     };
-    fetchChatRooms();
 
+    const handleWebsocketEvents = () => {
+      chatNamespace.current.on('connect', async () => {
+        console.log('Connected to socket');
+
+        console.log(selectedCourse);
+
+        await fetchChatRooms();
+
+        // let currentCourse = null;
+
+        // get the value of chat inside selectedCourse , i don't want to get null
+        // setSelectedCourse((course) => {
+        //   currentCourse = course;
+        //   return course;
+        // });
+
+        chatNamespace.current.on('user-joined', (data) => {
+          console.log('====================================');
+          console.log('Joined Room : ', data);
+          console.log('====================================');
+        });
+
+        chatNamespace.current.on('message', (data) => {
+          console.log('====================================');
+          console.log('FROM Chat : ', data);
+          console.log('====================================');
+          const message = data.message;
+          setMessages((prev) => [...prev, message]);
+          setIsLoading(false);
+        });
+
+        console.log('websocket events');
+
+        chatNamespace.current.on('message-updated', (data) => {
+          console.log('====================================');
+          console.log('FROM Chat (update message) : ', data);
+          console.log('====================================');
+          const message = data.message;
+          setMessages((prev) => {
+            const index = prev.findIndex((msg) => msg.id === message.id);
+            prev[index] = message;
+            console.log(message);
+            return [...prev];
+          });
+          // setPinnedMessages([])
+          setPinnedMessages((prev) => {
+            const index = prev.findIndex((msg) => msg.id === message.id);
+            if (index !== -1) {
+              message.isPinned
+                ? (prev[index] = message)
+                : prev.splice(index, 1);
+              return [...prev];
+            }
+            if (message.isPinned) return [...prev, message];
+            // console.log(message);
+            return [...prev];
+          });
+        });
+
+        chatNamespace.current.on('message-removed', (data) => {
+          console.log('====================================');
+          console.log('FROM Chat (delete message) : ', data);
+          console.log('====================================');
+          const messageId = data.messageId;
+          setMessages((prev) => {
+            return prev.filter((msg) => msg.id !== messageId);
+          });
+          setPinnedMessages((prev) => {
+            return prev.filter((msg) => msg.id !== messageId);
+          });
+        });
+      });
+    };
+
+    handleWebsocketEvents();
     return () => {
       chatNamespace.current.emit('leave-room', {
-        chatId: selectedCourse?.chat?.id || 42,
+        chatId: selectedCourse?.chat?.id,
       });
       chatNamespace.current.disconnect();
     };
@@ -348,6 +383,7 @@ const ChatPage = () => {
             icon={<CiMenuKebab />}
             ShowPopover={true}
             selectedCourse={selectedCourse}
+            chatId={selectedCourse?.chat.id}
             pinnedMessages={pinnedMessages}
             setPinnedMessages={setPinnedMessages}
             isLoading={isLoading}

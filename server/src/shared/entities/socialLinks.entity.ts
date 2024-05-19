@@ -30,7 +30,7 @@ export class SocialLinks {
   @Column({ nullable: true })
   website: string;
 
-  @OneToOne(() => User)
+  @OneToOne(() => User, { onDelete: 'CASCADE' })
   @JoinColumn()
   user: User;
 }

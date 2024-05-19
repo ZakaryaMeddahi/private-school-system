@@ -342,6 +342,7 @@ function UpdateCourse({ params }) {
                     <Input
                       id='course-file'
                       type='file'
+                      accept='image/*'
                       display='none'
                       onChange={(e) => setFile(e.target.files[0])}
                     />

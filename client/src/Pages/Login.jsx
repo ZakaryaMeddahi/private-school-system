@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  Box,
   Button,
   Checkbox,
   Container,
@@ -16,11 +17,15 @@ import Link from 'next/link';
 import { useContext, useState } from 'react';
 import { LoginContext } from '@/app/providers/LoginProvider';
 import { useRouter } from 'next/navigation';
+import ErrorMessage from '@/components/ErrorMessage';
 
 const LoginPage = () => {
   const { email, setEmail, password, setPassword } = useContext(LoginContext);
   const [checkbox, setCheckbox] = useState(false);
   const router = useRouter();
+  const [emailErrorMessage, setEmailErrorMessage] = useState('');
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleCheckbox = () => {
     setCheckbox(!checkbox);
@@ -43,17 +48,19 @@ const LoginPage = () => {
       );
 
       if (!response.ok) {
-        throw new Error('Something went wrong');
+        const data = await response.json();
+        throw new Error(data.message);
       }
 
       const { data } = await response.json();
 
       console.log(data);
 
-      if (checkbox) {
-        localStorage.setItem('token', data.access_token);
-      }
+      // if (checkbox) {
+      //   localStorage.setItem('token', data.access_token);
+      // }
 
+      localStorage.setItem('token', data.access_token);
       localStorage.setItem('userId', data.id);
       localStorage.setItem('role', data.role);
 
@@ -61,8 +68,28 @@ const LoginPage = () => {
         console.log('this user is student');
         router.push('/student_dashboard');
       }
+
+      if (data.role === 'teacher') {
+        console.log('this user is teacher');
+        router.push('/teacher_dashboard');
+      }
+
+      if (data.role === 'admin') {
+        console.log('this user is admin');
+        router.push('/admin_dashboard');
+      }
     } catch (error) {
       console.error(error);
+      error.message
+        .toLowerCase()
+        .split(',')
+        .forEach((message) => {
+          if (message.includes('email')) setEmailErrorMessage(message);
+          else if (message.includes('password'))
+            setPasswordErrorMessage(message);
+          else setErrorMessage(message);
+        });
+      // setErrorMessage(error.message);
     }
 
     console.log(email, password);
@@ -92,20 +119,24 @@ const LoginPage = () => {
           <Container w='100%' h='100%' display='flex' justifyContent='center'>
             <VStack h='100%' w='90%' align='self-start' justifyContent='center'>
               <Header title='Login' />
-              <FormInput
-                type='email'
-                placeholder='Email'
-                onchange={(e) => {
-                  setEmail(e.target.value);
-                  console.log('hello');
-                }}
-              />
-              <FormInput
-                type='password'
-                placeholder='Password'
-                onchange={(e) => setPassword(e.target.value)}
-              />
-              <Stack direction='row' justify='space-between' w='100%'>
+              <Box w='100%'>
+                <FormInput
+                  type='text'
+                  placeholder='Email'
+                  onchange={(e) => setEmail(e.target.value)}
+                />
+                <ErrorMessage errorMessage={emailErrorMessage} />
+              </Box>
+              <Box w='100%'>
+                <FormInput
+                  type='password'
+                  placeholder='Password'
+                  onchange={(e) => setPassword(e.target.value)}
+                />
+                <ErrorMessage errorMessage={passwordErrorMessage} />
+              </Box>
+              <ErrorMessage errorMessage={errorMessage} />
+              {/* <Stack direction='row' justify='space-between' w='100%'>
                 <Checkbox
                   colorScheme='blue'
                   size='lg'
@@ -116,14 +147,14 @@ const LoginPage = () => {
                 <Link href='/forgot-password'>
                   <Text color='blue'>Forgot password?</Text>
                 </Link>
-              </Stack>
+              </Stack> */}
               <Button
                 size='lg'
                 w='100%'
                 mt='5'
                 fontSize='16px'
                 border='none'
-                borderRadius='12'
+                borderRadius='7'
                 bgColor='#234C51'
                 color='white'
                 onClick={handleSubmit}
@@ -133,7 +164,7 @@ const LoginPage = () => {
               <Text textAlign='center' mt='5'>
                 Don't have an account?
                 <span style={{ color: 'blue' }}>
-                  <Link href='/signup'> Register</Link>
+                  <Link href='/signup'>Register</Link>
                 </span>
               </Text>
             </VStack>

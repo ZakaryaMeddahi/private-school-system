@@ -26,6 +26,8 @@ const RoomBody = ({
   setPinnedMessages,
   chatNamespace,
   selectedCourse,
+  chatId,
+  isChatSession,
 }) => {
   const chatRef = useRef();
   const userIdRef = useRef();
@@ -49,7 +51,7 @@ const RoomBody = ({
       display='flex'
       // justifyContent='flex-end'
       flexDir='column'
-      // gap='15px'
+      gap='15px'
     >
       {messages.map((msg) => {
         return (
@@ -62,6 +64,8 @@ const RoomBody = ({
             setPinnedMessages={setPinnedMessages}
             chatNamespace={chatNamespace}
             selectedCourse={selectedCourse}
+            chatId={chatId}
+            isChatSession={isChatSession}
             chatRef={chatRef}
           />
         );

@@ -1,36 +1,82 @@
-import ProfilePage from "@/Pages/profile";
+'use client';
 
-const profile = async () => {
+import ProfilePage from '@/Pages/profile';
+import { useEffect, useState } from 'react';
+import { GetUser } from '../../../../../Lib/getUser';
 
-    const token = localStorage.getItem('token');
+const profile = ({ params }) => {
+  const { userId } = params;
 
-    console.log(token);
+  const [FirstName, setFirstName] = useState('');
+  const [LastName, setLastName] = useState('');
+  const [UserName, setUserName] = useState('');
+  const [Bio, setBio] = useState('');
+  const [Role, setRole] = useState('');
+  const [enrollments, setEnrollments] = useState([]);
+  const [courses, setCourses] = useState([]);
 
-    const response = await fetch('http://localhost:8080/api/v1/students/account/me', {
-        Authorization: `Bearer ${token}`
-    })
+  useEffect(() => {
+    GetUser()
+      .then((data) => {
+        setFirstName(data.firstName);
+        setLastName(data.lastName);
+        setBio(data.biography);
+        setRole(data.role);
 
-    if (response.status === 200) {
-        const { data } = await response.json();
         console.log(data);
-    }
+      })
+      .catch((err) => console.log(err.message));
 
-    const [FullName, setFullName] = useState('');
-    const [UserName, setUserName] = useState('');
-    const [Bio, setBio] = useState('');
-    const [Role, setRole] = useState('');
+    const fetchEnrollments = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/courses/enrollments/me`,
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+          }
+        );
 
-    return (
-        <>
-            <ProfilePage 
-                FullName='ABDELALI Sid Ahmed' 
-                UserName='SidAhmed001' 
-                Bio='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, 
-                libero sit amet volutpat hendrerit, nunc sem fermentum felis, nec tincidunt nunc mi ac nunc.'
-                Role='Student'
-            />
-        </>
-    );
-}
+        if (!response.ok) {
+          response.status === 401 && router.push('/login');
+          const data = await response.json();
+          throw new Error(data.message);
+        }
+
+        const { data } = await response.json();
+
+        console.log(data);
+
+        setEnrollments(data);
+
+        data.forEach((e) => {
+          setCourses((prev) => {
+            return [...prev, e.course];
+          });
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchEnrollments();
+  }, []);
+
+  return (
+    <>
+      <ProfilePage
+      userId={userId}
+        FullName={`${FirstName} ${LastName}`}
+        UserName={`${FirstName} ${LastName} ${userId}`}
+        Bio={!Bio ? '' : Bio}
+        Role={Role}
+        courses={courses}
+      />
+    </>
+  );
+};
 
 export default profile;

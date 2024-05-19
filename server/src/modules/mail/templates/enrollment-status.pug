@@ -1,0 +1,47 @@
+doctype html
+html
+  head
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    title Course Enrollment Status
+    style.
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+      }
+      .container {
+        max-width: 600px;
+        margin: 20px auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        color: #333;
+        text-align: center;
+      }
+      p {
+        color: #555;
+        margin-bottom: 10px;
+      }
+      .status {
+        font-weight: bold;
+      }
+      /*- img {
+      -   width: 50px;
+      -   height: 50px;
+      - }*/
+  body
+    .container
+      //- img(src="../assets/1-removebg-preview.png", alt="")
+      h1 Course Enrollment Status
+      p Hello #{user.firstName} #{user.lastName},
+      p Your enrollment request for the course #{course.title} has been #{status}.
+      p If your enrollment was accepted, you can now access the course materials and resources.
+      p If your enrollment was rejected, please contact the administration for further assistance.
+      p If you have any questions or concerns, feel free to contact us.
+      p Thank you,
+      p The Admin Team

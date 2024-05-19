@@ -12,10 +12,10 @@ export class Admin {
   @PrimaryGeneratedColumn({ type: 'bigint' })
   id: number;
 
-  @Column({ nullable: true })
-  profilePicture: string;
+  // @Column({ nullable: true })
+  // profilePicture: string;
 
-  @OneToOne(() => User)
+  @OneToOne(() => User, { onDelete: 'CASCADE', eager: true })
   @JoinColumn()
   user: User;
 }

@@ -15,10 +15,13 @@ const RoomChat = ({
   icon,
   ShowPopover,
   selectedCourse,
+  chatId,
+  isChatSession,
   pinnedMessages,
   setPinnedMessages,
   isLoading,
-  setIsLoading
+  setIsLoading,
+  fileUploading,
 }) => {
   console.log('====================================');
   console.log('FROM RoomChat : ', messages);
@@ -38,6 +41,8 @@ const RoomChat = ({
         ChangeLayout={ChangeLayout}
         icon={icon}
         ShowPopover={ShowPopover}
+        roomId={selectedCourse?.rooms[0].id}
+        isChatSession={isChatSession}
       />
       <RoomBody
         messages={messages}
@@ -45,14 +50,19 @@ const RoomChat = ({
         setPinnedMessages={setPinnedMessages}
         chatNamespace={chatNamespace}
         selectedCourse={selectedCourse}
+        chatId={chatId}
+        isChatSession={isChatSession}
       />
       <MessageInput
         messages={messages}
         setMessages={setMessages}
         chatNamespace={chatNamespace}
         selectedCourse={selectedCourse}
+        chatId={chatId}
+        isChatSession={isChatSession}
         isLoading={isLoading}
         setIsLoading={setIsLoading}
+        fileUploading={fileUploading}
       />
     </Box>
   );

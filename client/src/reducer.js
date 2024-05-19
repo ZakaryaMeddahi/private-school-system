@@ -3,9 +3,13 @@ import {
   REMOVE_USER,
   UPDATE_SCREEN,
   UPDATE_SHARING,
+  RESET_USERS,
 } from './actions';
 
 const reducer = (state, action) => {
+  if (action.type === RESET_USERS) {
+    return { ...state, users: [] };
+  }
   if (action.type === ADD_USER) {
     const { user } = action.payload;
     const prevUsers = state.users.filter((u) => u.uid !== user.uid);

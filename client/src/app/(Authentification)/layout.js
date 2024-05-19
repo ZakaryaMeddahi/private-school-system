@@ -6,9 +6,9 @@ import LoginProvider from "../providers/LoginProvider";
 const Layout = ({ children }) => {
     return (
         <>
-            <NavBar />
+            {/* <NavBar /> */}
             <LoginProvider>{children}</LoginProvider>
-            <Footer />
+            {/* <Footer /> */}
         </>
     );
 }

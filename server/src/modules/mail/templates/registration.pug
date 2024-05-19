@@ -1,6 +1,49 @@
-h2 Registration 
-  h3 Welcome Sir those are your credentials you can use to login into your account 
-  p Email: 
-    strong #{user.email}
-  p Password: 
-    strong #{user.password}
+doctype html
+html
+  head
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    title Account Created
+    style.
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+      }
+      .container {
+        max-width: 600px;
+        margin: 20px auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        color: #333;
+        text-align: center;
+      }
+      p {
+        color: #555;
+        margin-bottom: 10px;
+      }
+      ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 10px 0;
+      }
+      li {
+        margin-bottom: 5px;
+      }
+  body
+    .container
+      h1 Account Created
+      p Hello #{user.firstName} #{user.lastName},
+      p Your account has been created successfully. Below are your login details:
+      ul
+        li Email: #{user.email}
+        li Password: #{user.password}
+      p Please use the provided credentials to log in to your account.
+      p If you have any questions or concerns, feel free to contact us.
+      p Thank you,
+      p The Admin Team

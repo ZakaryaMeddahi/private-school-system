@@ -1,44 +1,102 @@
-import { Box, Text } from '@chakra-ui/react';
+import { Box, Image, Text, Button, Heading } from '@chakra-ui/react';
+import Link from 'next/link';
 
-const CardForCourse = ({ course }) => {
+const Student = ({price, Enroll}) => {
     return (
-        <Box 
+        <Box
             w='100%'
-            h='100%'
-            bgColor={'#F5F5F5'}
-            borderRadius='10px'
-            p={15}
             display='flex'
-            flexDir={'column'}
-            gap={3}
+            flexDirection='row'
+            alignItems='center'
+            justifyContent={Enroll? 'flex-end':'space-between'}
         >
-            <Box>
-                <Text fontWeight={700} fontSize={20}>Web Developoment</Text>
-                <Text>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Laboriosam suscipit at nihil veritatis quo, atque nemo</Text>
-            </Box>
-            <Box
-                gap={5}
-                display='flex'
-                flexDirection='row'
-                alignItems='center'
-            >
-                <Box
-                    w={'35px'}
-                    h={'35px'}
-                    borderRadius={'50%'}
-                    bgColor={'yellowgreen'}
-                    display={'flex'}
-                    justifyContent={'center'}
-                    alignItems={'center'}
-                >
-                    As
-                </Box>
-                <Box>
-                    <Text fontWeight={500}>Asabeneh Yetayeh</Text>
-                    <Text>Teacher</Text>
-                </Box>
-            </Box>
+            {Enroll?
+                <Button bgColor='#234C51' color='white'>Join Room</Button>
+                :
+                <>
+                    <Button bgColor='#234C51' color='white'>Enroll</Button>
+                    <Text fontWeight='bold' color={'#FCC128'}>{price == 0? "free": `${price} DZ`}</Text>
+                </>
+            }
         </Box>
+    );
+}
+
+const Teacher = () => {
+    return (
+        <Box
+            w='100%'
+            display='flex'
+            flexDirection='row'
+            alignItems='center'
+            justifyContent={'space-between'}
+        >
+            <Button bgColor='#234C51' color='white'>Delete Course</Button>
+            <Button bgColor='#234C51' color='white'>View Course Detials</Button>
+        </Box>
+    );
+}
+
+const CardForCourse = ({ w, teacher, Course, Role, Enroll }) => {
+
+    return (
+        <Link href='/course_details'>
+            <Box
+                w={ w || 'fit-content'}
+                height={'fit-content'}
+                borderRadius='25px'
+                paddingBlock='25px'
+                paddingInline='15px'
+                bgColor={'white'}
+                display='flex'
+                flexDirection='column'
+                gap='15px'
+                boxShadow='rgba(0, 0, 0, 0.1) 0px 0px 14px 1px'
+                _hover={{
+                    transform: 'scale(1.05)',
+                    transition: 'transform 0.5s'
+                }}
+            >
+                <Box display='flex' alignItems='center' justifyContent='center'>
+                    <Image
+                        src={Course.img}
+                        h={'300px'}
+                        borderRadius='25px'
+                    />
+                </Box>
+                <Box
+                    w='100%'
+                    display='flex'
+                    flexDirection='row'
+                    alignItems='center'
+                    gap='15px'
+                >
+                    <Box
+                        w='32px'
+                        h='32px'
+                        borderRadius='50%'
+                        bgColor='whitesmoke'
+                        display={'flex'}
+                        alignItems='center'
+                        justifyContent='center'
+                    >
+                        A
+                    </Box>
+                    {/* <Text fontWeight='500'>{`${Course.teacher.user.firstName} ${Course.teacher.user.lastName}`}</Text> */}
+                </Box>
+                <Text fontSize='32px' fontWeight='bold' color='#213E69'>{Course.title}</Text>
+                <Text
+                    color='GrayText'
+                >
+                    {Course.description.slice(0, 100) + '...'}
+                </Text>
+                {
+                    Role === 'student' ? <Student price={Course.price} Enroll={Enroll} />
+                    :
+                    <Teacher />
+                }
+            </Box>
+        </Link>
     );
 }
 

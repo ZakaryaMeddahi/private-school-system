@@ -13,7 +13,9 @@ export class StudentSession {
   @Column({ type: 'timestamp', default: null })
   leaveDate: Date;
 
-  @ManyToOne(() => Student, (student) => student.joinedSessions)
+  @ManyToOne(() => Student, (student) => student.joinedSessions, {
+    onDelete: 'CASCADE',
+  })
   student: Student;
 
   @ManyToOne(() => Session, (session) => session.studentSessions)

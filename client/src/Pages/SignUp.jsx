@@ -11,6 +11,7 @@ import {
   Link,
   Button,
   Image,
+  Box,
 } from '@chakra-ui/react';
 import Header from '@/components/Form header/Header';
 import FormInput from '@/components/Form input/FormInput';
@@ -18,6 +19,7 @@ import { useContext } from 'react';
 import { LoginContext } from '@/app/providers/LoginProvider';
 import { redirect, useRouter } from 'next/navigation';
 import { TbRosetteNumber0 } from 'react-icons/tb';
+import ErrorMessage from '@/components/ErrorMessage';
 
 const SignUpPage = () => {
   const {
@@ -33,12 +35,19 @@ const SignUpPage = () => {
     setConfirmPassword,
   } = useContext(LoginContext);
   const router = useRouter();
+  const [errorMessage, setErrorMessage] = useState('');
+  const [emailErrorMessage, setEmailErrorMessage] = useState('');
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
+  const [firstNameErrorMessage, setFirstNameErrorMessage] = useState('');
+  const [lastNameErrorMessage, setLastNameErrorMessage] = useState('');
 
   const handleSubmit = async (e) => {
     try {
       if (password !== confirmPassword) {
         throw new Error('Passwords do not match');
       }
+
+      console.log(firstName);
 
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/auth/register`,
@@ -48,31 +57,42 @@ const SignUpPage = () => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            email,
-            firstName,
-            lastName,
-            password,
+              email,
+              firstName,
+              lastName,
+              password,
           }),
         }
       );
 
       if (!response.ok) {
-        throw new Error('Something went wrong');
+        const data = await response.json();
+        throw new Error(data.message);
       }
 
       const { data } = await response.json();
 
       console.log(data);
 
-      localStorage.setItem('token', data.access_token);
-      localStorage.setItem('userId', data.id);
-      localStorage.setItem('role', data.role);
-
-      router.push('/student_dashboard');
+      router.push('/login');
 
       //   console.log(email, password, confirmPassword);
     } catch (error) {
-      console.error(error);
+      console.error(error.message.split(','));
+      error.message
+        .toLowerCase()
+        .split(',')
+        .forEach((message) => {
+          if (message.includes('email')) setEmailErrorMessage(message);
+          else if (message.includes('password'))
+            setPasswordErrorMessage(message);
+          else if (message.includes('firstname'))
+            setFirstNameErrorMessage(message);
+          else if (message.includes('lastname'))
+            setLastNameErrorMessage(message);
+          else setErrorMessage(message);
+        });
+      // setErrorMessage(error.message);
     }
   };
 
@@ -107,37 +127,51 @@ const SignUpPage = () => {
           <Container w='100%' h='100%' display='flex' justifyContent='center'>
             <VStack h='100%' w='90%' align='self-start' justifyContent='center'>
               <Header title='Sign Up' />
-              <FormInput
-                type='text'
-                placeholder='First Name'
-                onchange={(e) => {
-                  setFirstName(e.target.value);
-                }}
-              />
-              <FormInput
-                type='text'
-                placeholder='Last Name'
-                onchange={(e) => {
-                  setLastName(e.target.value);
-                }}
-              />
-              <FormInput
-                type='email'
-                placeholder='Email'
-                onchange={(e) => {
-                  setEmail(e.target.value);
-                }}
-              />
-              <FormInput
-                type='password'
-                placeholder='Password'
-                onchange={(e) => setPassword(e.target.value)}
-              />
+              <Box w='100%'>
+                <FormInput
+                  type='text'
+                  placeholder='First Name'
+                  onchange={(e) => {
+                    setFirstName(e.target.value);
+                  }}
+                />
+                <ErrorMessage errorMessage={firstNameErrorMessage} />
+              </Box>
+              <Box w='100%'>
+                <FormInput
+                  type='text'
+                  placeholder='Last Name'
+                  onchange={(e) => {
+                    setLastName(e.target.value);
+                  }}
+                />
+                <ErrorMessage errorMessage={lastNameErrorMessage} />
+              </Box>
+              <Box w='100%'>
+                <FormInput
+                  type='email'
+                  placeholder='Email'
+                  onchange={(e) => {
+                    setEmail(e.target.value);
+                  }}
+                />
+                <ErrorMessage errorMessage={emailErrorMessage} />
+              </Box>
+              <Box w='100%'>
+                <FormInput
+                  type='password'
+                  placeholder='Password'
+                  onchange={(e) => setPassword(e.target.value)}
+                />
+                <ErrorMessage errorMessage={passwordErrorMessage} />
+              </Box>
               <FormInput
                 type='password'
                 placeholder='Confirm Password'
                 onchange={(e) => setConfirmPassword(e.target.value)}
               />
+              <ErrorMessage errorMessage={errorMessage} />
+              {/* <ErrorMessage errorMessage={errorMessage} /> */}
               {/* <Stack direction='row' justify='space-between' w='100%'>
                                 <Checkbox colorScheme='blue' size='lg'>Remember me</Checkbox>
                                 <Link href='/forgot-password'>
@@ -150,7 +184,7 @@ const SignUpPage = () => {
                 mt='5'
                 fontSize='16px'
                 border='none'
-                borderRadius='12'
+                borderRadius='7'
                 bgColor='#234C51'
                 color='white'
                 onClick={handleSubmit}
@@ -158,7 +192,7 @@ const SignUpPage = () => {
                 Sign Up
               </Button>
               <Text textAlign='center' mt='5'>
-                I have already account !!
+                I already have an account !!
                 <span style={{ color: 'blue' }}>
                   <Link href='/login'> Sign in</Link>
                 </span>

@@ -16,6 +16,7 @@ import {
   Text,
   Image,
   Stack,
+  TabIndicator,
 } from '@chakra-ui/react';
 import Room from '@/components/Room/Room';
 import { useEffect, useRef } from 'react';
@@ -52,9 +53,14 @@ const RoomInfo = ({
         <TabList h='70px' mb='5px'>
           <Tab>Pinned Resources</Tab>
           <Tab>Members</Tab>
-          <Tab>Teacher</Tab>
+          {/* <Tab>Teacher</Tab> */}
         </TabList>
-
+        {/* <TabIndicator
+          mt='-1.5px'
+          height='2px'
+          bg='blue.500'
+          borderRadius='1px'
+        /> */}
         <TabPanels>
           <TabPanel h='calc(100vh - 95px)' overflowY='auto'>
             {/* <Box h='100%' w='100%' overflowY='auto'> */}
@@ -130,6 +136,49 @@ const RoomInfo = ({
             </Accordion> */}
           </TabPanel>
           <TabPanel>
+            {selectedCourse && (
+              <Stack
+                key={selectedCourse?.teacher.id}
+                w='100%'
+                flexDir='row'
+                justifyContent='space-between'
+                alignItems='center'
+                gap='15px'
+                padding='10px'
+                borderRadius='10px'
+                cursor='pointer'
+                _hover={{ bgColor: 'gray.100' }}
+              >
+                <Stack flexDir='row' alignItems='center'>
+                  <Image
+                    border='1.2px solid blue'
+                    borderRadius='full'
+                    boxSize='35px'
+                    src={selectedCourse?.teacher.profilePicture || './logo.png'}
+                    alt={
+                      selectedCourse?.teacher.user.firstName +
+                      ' ' +
+                      selectedCourse?.teacher.user.lastName
+                    }
+                  />
+                  <Text fontSize='sm' fontWeight='600' color='black.500'>
+                    {selectedCourse?.teacher.user.firstName +
+                      ' ' +
+                      selectedCourse?.teacher.user.lastName}
+                  </Text>
+                </Stack>
+                <Text
+                  backgroundColor='blue.500'
+                  borderRadius='4px'
+                  fontSize='11px'
+                  p='5px'
+                  color='#FFF'
+                >
+                  TEACHER
+                </Text>
+              </Stack>
+            )}
+
             {members.map((member) => {
               return (
                 <Stack
@@ -146,18 +195,18 @@ const RoomInfo = ({
                   <Image
                     border='1.2px solid blue'
                     borderRadius='full'
-                    boxSize='38px'
+                    boxSize='35px'
                     src={member.profilePicture || './logo.png'}
                     alt={member.user.firstName + ' ' + member.user.lastName}
                   />
-                  <Text fontWeight='700' color='black.500'>
+                  <Text fontSize='sm' fontWeight='600' color='black.500'>
                     {member.user.firstName + ' ' + member.user.lastName}
                   </Text>
                 </Stack>
               );
             })}
           </TabPanel>
-          <TabPanel>
+          {/* <TabPanel>
             <Stack
               w='100%'
               alignItems='center'
@@ -187,11 +236,7 @@ const RoomInfo = ({
                   teacherInfo?.user?.lastName}
               </Text>
               <Text fontSize='xs'>{teacherInfo?.user?.email}</Text>
-              <Stack
-                bgColor='blue.100'
-                p='20px'
-                borderRadius='10px'
-              >
+              <Stack bgColor='blue.100' p='20px' borderRadius='10px'>
                 <Text color='blue.700' fontSize='md' fontWeight='bold'>
                   Bio
                 </Text>
@@ -207,7 +252,7 @@ const RoomInfo = ({
                 )}
               </Stack>
             </Stack>
-          </TabPanel>
+          </TabPanel> */}
         </TabPanels>
       </Tabs>
     </Box>

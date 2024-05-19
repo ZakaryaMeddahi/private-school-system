@@ -9,15 +9,16 @@ import { MailModule } from '../mail/mail.module';
 import { StudentsModule } from '../students/students.module';
 import { SocialLinksModule } from '../social-links/social-links.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { Admin } from 'src/shared/entities/admin.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User, Student]),
+    TypeOrmModule.forFeature([User, Student, Admin]),
     JwtModule.registerAsync({
       imports: [ConfigModule], // Inject ConfigModule
       useFactory: async (configService: ConfigService) => ({
         secret: configService.get('JWT_SECRET'),
-        signOptions: { expiresIn: '1d' },
+        signOptions: { expiresIn: configService.get('JWT_EXPIRES_IN') },
       }),
       global: true,
       inject: [ConfigService], // Inject ConfigService
