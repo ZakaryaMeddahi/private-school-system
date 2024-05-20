@@ -123,6 +123,8 @@ import UserCard from '@/components/UserCard';
 // ]
 
 const TeachersPage = () => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const [teachers, setTeachers] = useState([]);
   const [teacherFirstName, setTeacherFirstName] = useState('');
   const [teacherLastName, setTeacherLastName] = useState('');
@@ -272,6 +274,8 @@ const TeachersPage = () => {
         throw new Error('Please fill all fields');
       }
 
+      setIsSubmitting(true);
+
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/teachers`,
         {
@@ -312,10 +316,13 @@ const TeachersPage = () => {
 
       setDisplaySuccessAlert(true);
 
+      setIsSubmitting(false);
+
       setTimeout(() => {
         setDisplaySuccessAlert(false);
       }, 3000);
     } catch (error) {
+      setIsSubmitting(false);
       console.error(error);
     }
   };
@@ -346,7 +353,7 @@ const TeachersPage = () => {
 
         setTeachers(data);
       } catch (error) {
-        setErrorMessage(error.message)
+        setErrorMessage(error.message);
         console.error(error);
       }
     };
@@ -466,6 +473,8 @@ const TeachersPage = () => {
                 Cancel
               </Button>
               <Button
+                isLoading={isSubmitting ? true : false}
+                loadingText='Saving'
                 colorScheme='blue'
                 paddingInline='20px'
                 onClick={createTeacher}

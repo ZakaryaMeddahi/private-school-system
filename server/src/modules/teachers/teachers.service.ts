@@ -141,7 +141,14 @@ export class TeachersService {
 
       const teacher = await this.teacherRepository.save(newTeacher);
 
-      return teacher;
+      const teacherEntity = await this.teacherRepository
+        .createQueryBuilder('teacher')
+        .leftJoin('teacher.user', 'user')
+        .select('*')
+        .where('teacher.id = :id', { id: teacher.id })
+        .getRawOne();
+
+      return teacherEntity;
     } catch (error) {
       console.error(error);
       throw new HttpException(
