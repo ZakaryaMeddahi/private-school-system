@@ -122,6 +122,12 @@ import UserCard from '@/components/UserCard';
 //     },
 // ]
 
+// time util
+export const convertTime = (time) => {
+  const date = new Date(time);
+  return date.toLocaleString().replace(',', '');
+};
+
 const TeachersPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
