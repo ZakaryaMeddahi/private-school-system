@@ -40,12 +40,15 @@ const SignUpPage = () => {
   const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
   const [firstNameErrorMessage, setFirstNameErrorMessage] = useState('');
   const [lastNameErrorMessage, setLastNameErrorMessage] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e) => {
     try {
       if (password !== confirmPassword) {
         throw new Error('Passwords do not match');
       }
+
+      setIsSubmitting(true);
 
       console.log(firstName);
 
@@ -57,10 +60,10 @@ const SignUpPage = () => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-              email,
-              firstName,
-              lastName,
-              password,
+            email,
+            firstName,
+            lastName,
+            password,
           }),
         }
       );
@@ -78,6 +81,7 @@ const SignUpPage = () => {
 
       //   console.log(email, password, confirmPassword);
     } catch (error) {
+      setIsSubmitting(false);
       console.error(error.message.split(','));
       error.message
         .toLowerCase()
@@ -187,6 +191,7 @@ const SignUpPage = () => {
                 borderRadius='7'
                 bgColor='#234C51'
                 color='white'
+                isLoading={isSubmitting ? true : false}
                 onClick={handleSubmit}
               >
                 Sign Up

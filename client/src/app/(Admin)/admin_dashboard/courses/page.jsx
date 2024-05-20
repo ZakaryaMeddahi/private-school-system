@@ -90,7 +90,7 @@ const CoursePage = () => {
         onChange={(e) => SearchTeacher(e.target.value)}
       />
       {courses.map((course) => {
-        return <CardForCourse key={course.id} course={course} />;
+        return <CardForCourse key={course.id} Course={course} />;
       })}
     </Container>
   );

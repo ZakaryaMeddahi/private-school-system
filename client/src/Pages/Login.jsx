@@ -26,6 +26,7 @@ const LoginPage = () => {
   const [emailErrorMessage, setEmailErrorMessage] = useState('');
   const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleCheckbox = () => {
     setCheckbox(!checkbox);
@@ -33,6 +34,8 @@ const LoginPage = () => {
 
   const handleSubmit = async (e) => {
     try {
+      setIsSubmitting(true);
+
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/auth/login`,
         {
@@ -79,6 +82,7 @@ const LoginPage = () => {
         router.push('/admin_dashboard');
       }
     } catch (error) {
+      setIsSubmitting(false);
       console.error(error);
       error.message
         .toLowerCase()
@@ -157,6 +161,7 @@ const LoginPage = () => {
                 borderRadius='7'
                 bgColor='#234C51'
                 color='white'
+                isLoading={isSubmitting ? true : false}
                 onClick={handleSubmit}
               >
                 Login

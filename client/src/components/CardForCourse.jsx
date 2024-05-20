@@ -39,6 +39,8 @@ const Teacher = () => {
 
 const CardForCourse = ({ w, teacher, Course, Role, Enroll }) => {
 
+    console.log(Course);
+
     return (
         <Link href='/course_details'>
             <Box
@@ -59,7 +61,7 @@ const CardForCourse = ({ w, teacher, Course, Role, Enroll }) => {
             >
                 <Box display='flex' alignItems='center' justifyContent='center'>
                     <Image
-                        src={Course.img}
+                        src={Course?.file?.url1 || '../Private-School-default-image.png'}
                         h={'300px'}
                         borderRadius='25px'
                     />
