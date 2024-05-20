@@ -44,55 +44,67 @@ const CoursePage = () => {
     fetchCourses();
   }, [search]);
 
-  //   const searchCourses = async (value) => {
-  //     try {
-  //       const response = await fetch(
-  //         `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/courses?search=${value}`,
-  //         {
-  //           method: 'GET',
-  //           headers: {
-  //             'Content-Type': 'application/json',
-  //             Authorization: `Bearer ${localStorage.getItem('token')}`,
-  //           },
-  //         }
-  //       );
+  const searchCourses = async (value) => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/courses?search=${value}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        }
+      );
 
-  //       if (!response.ok) {
-  //         response.status === 401 && router.push('/login');
-  //         const { data } = await response.json();
-  //         throw new Error(data.message);
-  //       }
+      if (!response.ok) {
+        response.status === 401 && router.push('/login');
+        const { data } = await response.json();
+        throw new Error(data.message);
+      }
 
-  //       const { data } = await response.json();
+      const { data } = await response.json();
 
-  //       console.log(data);
+      console.log(data);
 
-  //       setCourses(data);
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   };
+      setCourses(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
-    <Container
-      padding={25}
-      maxW='100%'
-      h='100%'
-      display='grid'
-      gridTemplateColumns='repeat(3, 1fr)'
-      gap={5}
-      overflowY={'auto'}
-    >
-      <Input
-        placeholder='Search Teacher'
-        w='500px'
-        borderColor='black'
-        onChange={(e) => SearchTeacher(e.target.value)}
-      />
-      {courses.map((course) => {
-        return <CardForCourse key={course.id} course={course} />;
-      })}
-    </Container>
+    <Box h={'100%'} paddingInline='50px'>
+      <Box
+        w={'100%'}
+        h={'10%'}
+        display={'flex'}
+        flexDirection={'row'}
+        alignItems={'center'}
+        justifyContent={'flex-start'}
+      >
+        <Input
+          placeholder='Search Course'
+          w='500px'
+          borderColor='black'
+          onChange={(e) => searchCourses(e.target.value)}
+        />
+      </Box>
+      <Container
+        padding={25}
+        maxW='100%'
+        h='100%'
+        display={'grid'}
+        gridTemplateColumns='repeat(3, 1fr)'
+        gap={5}
+        overflowY={'auto'}
+      >
+        {courses.map((course) => {
+          console.log(course);
+          return <CardForCourse key={course.id} Course={course} teacher={course.teacher} Role='admin' />;
+        })}
+      </Container>
+    </Box>
   );
 };
 
