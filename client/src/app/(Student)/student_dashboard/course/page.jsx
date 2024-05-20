@@ -83,7 +83,7 @@ const CoursePage = () => {
       overflowY={'auto'}
     >
         {courses.map(course => {
-            return <CardForCourse key={course.id} Course={course}  Role='student' />;
+            return <CardForCourse key={course.id} teacher={course.teacher} Course={course}  Role='student' />;
         })}
     </Container>
   );

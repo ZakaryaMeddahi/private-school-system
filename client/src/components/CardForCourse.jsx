@@ -1,5 +1,6 @@
 import { Box, Image, Text, Button, Heading } from '@chakra-ui/react';
 import Link from 'next/link';
+import { useState } from 'react';
 
 const Admin = ({To}) => {
     return (
@@ -16,7 +17,8 @@ const Admin = ({To}) => {
         </Box>
     );
 }
-const Student = ({price, Enroll}) => {
+
+const Student = ({price, Enroll, post}) => {
     return (
         <Box
             w='100%'
@@ -29,7 +31,7 @@ const Student = ({price, Enroll}) => {
                 <Button bgColor='#234C51' color='white'>Join Room</Button>
                 :
                 <>
-                    <Button bgColor='#234C51' color='white'>Enroll</Button>
+                    <Button bgColor='#234C51' color='white' onClick={post}>Enroll</Button>
                     <Text fontWeight='bold' color={'#FCC128'}>{price == 0? "free": `${price} DZ`}</Text>
                 </>
             }
@@ -54,8 +56,43 @@ const Teacher = ({To}) => {
     );
 }
 
+
 const CardForCourse = ({ w, teacher, Course, Role, Enroll }) => {
+    
+    const [enrollment, setEnrollment] = useState({});
+    const [isDisabled, setIsDisabled] = useState(false);
+
+    const sendEnroll = async () => {
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/courses/${Course.id}/enrollments`,
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+              },
+            }
+          );
+  
+          if (!response.ok) {
+            response.status === 401 && router.push('/login');
+            const { data } = await response.json();
+            throw new Error(data.message);
+          }
+  
+          const { data } = await response.json();
+  
+          console.log(data);
+          setEnrollment(data);
+          setIsDisabled(true);
+        } catch (error) {
+          console.error(error);
+        }
+    };
+
     const course_details = `/course_details/${Course.id}`;
+    
     return (
         <Link href={course_details}>
             <Box
@@ -109,7 +146,11 @@ const CardForCourse = ({ w, teacher, Course, Role, Enroll }) => {
                 </Text>
                 {
                     Role === 'student' ? (
-                        <Student price={Course.price} Enroll={Enroll} />
+                        <Student 
+                            price={Course.price} 
+                            Enroll={Enroll} 
+                            post={sendEnroll} 
+                        />
                     ): Role === 'teacher' ? (
                         <Teacher To={course_details} />
                     ) : (
