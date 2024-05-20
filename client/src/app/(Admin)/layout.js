@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useRef } from 'react';
+import { useRouter } from 'next/navigation';
 import { LuLogOut } from 'react-icons/lu';
 import Logo from '@/components/Logo/Logo';
 import { CgProfile, CgInbox } from 'react-icons/cg';
@@ -25,17 +26,23 @@ import {
   PopoverAnchor,
 } from '@chakra-ui/react';
 
-
 const Layout = ({ children }) => {
 
-  const inputRef = useRef();
+    const inputRef = useRef();
 
-  const onFocus = () => {
-    if (inputRef.current) {
-      inputRef.current.style.outline = 'none';
-      console.log(inputRef.current.style);
-    }
-  };
+    const router = useRouter();
+
+    const Logout = () => {
+        localStorage.removeItem('token');
+        router.push('/login');
+    };
+
+    const onFocus = () => {
+        if (inputRef.current) {
+        inputRef.current.style.outline = 'none';
+        console.log(inputRef.current.style);
+        }
+    };
 
     return (
         <Box
@@ -184,24 +191,23 @@ const Layout = ({ children }) => {
                         </Box>
                     </Link> */}
           <Divider borderColor='#898C81' />
-          <Link href='/'>
             <Box
-              w='100%'
-              display='flex'
-              flexDir='row'
-              gap='5'
-              alignItems='center'
-              paddingLeft='30'
-              minH='70px'
-              maxH='80px'
-              _hover={{ bgColor: 'whiteSmoke' }}
+                w='100%'
+                display='flex'
+                flexDir='row'
+                gap='5'
+                alignItems='center'
+                paddingLeft='30'
+                minH='70px'
+                maxH='80px'
+                _hover={{ bgColor: 'whiteSmoke', cursor: 'pointer'}}
+                onClick={Logout}
             >
-              <Box transform='scaleX(-1)'>
-                <LuLogOut color='#898C81' size='23px' transform='scaleX(-1)' />
-              </Box>
-              <Text color='#898C81'>Logout</Text>
+                <Box transform='scaleX(-1)'>
+                    <LuLogOut color='#898C81' size='23px' transform='scaleX(-1)' />
+                </Box>
+                <Text color='#898C81'>Logout</Text>
             </Box>
-          </Link>
         </Box>
       </Box>
       <Box w='100%' h='100%' display='flex' flexDir='column'>

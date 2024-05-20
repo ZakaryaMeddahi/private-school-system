@@ -24,6 +24,7 @@ import { TbSmartHome } from 'react-icons/tb';
 import { CgProfile } from 'react-icons/cg';
 import Link from 'next/link';
 import { MdKeyboardArrowDown } from 'react-icons/md';
+import { useRouter } from "next/navigation";
 
 export const StudentContext = createContext();
 
@@ -32,6 +33,13 @@ const Layout = ({ children }) => {
   const [search, setSearch] = useState('');
 
   const inputRef = useRef();
+
+  const router = useRouter();
+
+    const Logout = () => {
+        localStorage.removeItem('token');
+        router.push('/login');
+    };
 
   const onFocus = () => {
     if (inputRef.current) {
@@ -134,24 +142,23 @@ const Layout = ({ children }) => {
             </Box>
           </Link>
           <Divider borderColor='#898C81' />
-          <Link href='/'>
-            <Box
-              w='100%'
-              display='flex'
-              flexDir='row'
-              gap='5'
-              alignItems='center'
-              paddingLeft='30'
-              minH='70px'
-              maxH='80px'
-              _hover={{ bgColor: 'whiteSmoke' }}
-            >
-              <Box transform='scaleX(-1)'>
-                <LuLogOut color='#898C81' size='23px' transform='scaleX(-1)' />
-              </Box>
-              <Text color='#898C81'>Logout</Text>
+          <Box
+            w='100%'
+            display='flex'
+            flexDir='row'
+            gap='5'
+            alignItems='center'
+            paddingLeft='30'
+            minH='70px'
+            maxH='80px'
+            _hover={{ bgColor: 'whiteSmoke', cursor: 'pointer'}}
+            onClick={Logout}
+          >
+            <Box transform='scaleX(-1)'>
+              <LuLogOut color='#898C81' size='23px' transform='scaleX(-1)' />
             </Box>
-          </Link>
+            <Text color='#898C81'>Logout</Text>
+          </Box>
         </Box>
       </Box>
       <Box w='100%' h='100%' display='flex' flexDir='column'>
@@ -203,9 +210,7 @@ const Layout = ({ children }) => {
                 <Link href={`/student_dashboard/profile/${userId}`}>
                   <PopoverHeader>Profile</PopoverHeader>
                 </Link>
-                <Link href='/'>
-                  <PopoverHeader>Logout</PopoverHeader>
-                </Link>
+                <PopoverHeader onClick={Logout} _hover={{cursor: 'pointer'}}>Logout</PopoverHeader>
               </PopoverContent>
             </Popover>
           </Box>
