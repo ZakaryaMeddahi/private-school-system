@@ -32,6 +32,7 @@ import { BsTrash } from 'react-icons/bs';
 import { useId, useState } from 'react';
 import Topic from '@/components/Topic';
 import { v4 as uuidv4 } from 'uuid';
+import { useRouter } from 'next/navigation';
 
 function CreateCourse() {
   const [title, setTitle] = useState('');
@@ -48,6 +49,7 @@ function CreateCourse() {
   // const [enrollmentsLimit, setEnrollmentsLimit] = useState(500);
   const [file, setFile] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const router = useRouter();
 
   const addTopic = () => {
     if (topic === '') {
@@ -132,6 +134,7 @@ function CreateCourse() {
 
     console.log(data);
 
+    router.push('/teacher_dashboard/my_courses');
     setIsSubmitting(false);
   };
 

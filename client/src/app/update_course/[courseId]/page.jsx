@@ -32,6 +32,7 @@ import { BsTrash } from 'react-icons/bs';
 import { useEffect, useId, useState } from 'react';
 import Topic from '@/components/Topic';
 import { v4 as uuidv4 } from 'uuid';
+import { useRouter } from 'next/navigation';
 
 function UpdateCourse({ params }) {
   const [title, setTitle] = useState('');
@@ -51,6 +52,7 @@ function UpdateCourse({ params }) {
     './Private-School-default-image.png'
   );
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const router = useRouter()
 
   const { courseId } = params;
 
@@ -142,6 +144,8 @@ function UpdateCourse({ params }) {
     const data = await response.json();
 
     console.log(data);
+
+    router.push('/teacher_dashboard/my_courses')
 
     setIsSubmitting(false);
   };

@@ -158,6 +158,13 @@ const TeachersPage = () => {
   const boxRef = useRef();
   const gridRef = useRef();
 
+  // time util
+  const convertTime = (time) => {
+    if (!time) return null;
+    const date = new Date(time);
+    return date.toLocaleString().replace(',', '');
+  };
+
   const getTeacher = (id) => {
     teachers.forEach((teacher) => {
       if (teacher.id === id) {
@@ -583,11 +590,16 @@ const TeachersPage = () => {
               <span style={{ fontWeight: '700' }}> Status: </span>{' '}
               {isActive ? 'Active' : 'Inactive'}
             </Text>
-            <Text>
-              {' '}
-              <span style={{ fontWeight: '700' }}> Last login date: </span>{' '}
-              {convertTime(lastLogin)}
-            </Text>
+            {lastLogin && (
+              <Text>
+                {' '}
+                <span style={{ fontWeight: '700' }}>
+                  {' '}
+                  Last login date:{' '}
+                </span>{' '}
+                {convertTime(lastLogin)}
+              </Text>
+            )}
             <Text>
               {' '}
               <span style={{ fontWeight: '700' }}> Created at: </span>{' '}
