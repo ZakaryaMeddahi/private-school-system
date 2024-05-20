@@ -122,6 +122,12 @@ import UserCard from '@/components/UserCard';
 //     },
 // ]
 
+// time util
+export const convertTime = (time) => {
+  const date = new Date(time);
+  return date.toLocaleString().replace(',', '');
+};
+
 const TeachersPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -151,12 +157,6 @@ const TeachersPage = () => {
 
   const boxRef = useRef();
   const gridRef = useRef();
-
-  // time util
-  const convertTime = (time) => {
-    const date = new Date(time);
-    return date.toLocaleString().replace(',', '');
-  };
 
   const getTeacher = (id) => {
     teachers.forEach((teacher) => {

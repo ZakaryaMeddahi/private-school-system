@@ -4,6 +4,8 @@ import { MdDelete } from "react-icons/md";
 
 function UserCard({ user, getUser, deleteUser, openTab }) {
 
+  const userRole = user.role[0].toUpperCase() + user.role.slice(1);
+
   const {
     isOpen: isDeleteAlertOpen,
     onOpen: onDeleteAlertOpen,
@@ -23,10 +25,10 @@ function UserCard({ user, getUser, deleteUser, openTab }) {
         <AlertDialogOverlay />
 
         <AlertDialogContent>
-          <AlertDialogHeader>Delete Teacher?</AlertDialogHeader>
+          <AlertDialogHeader>Delete {userRole}?</AlertDialogHeader>
           <AlertDialogCloseButton />
           <AlertDialogBody>
-            Are you sure you want to remove this teacher account?
+            Are you sure you want to remove this {user.role} account?
           </AlertDialogBody>
           <AlertDialogFooter>
             <Button ref={cancelRef} onClick={onDeleteAlertClose}>
@@ -40,7 +42,6 @@ function UserCard({ user, getUser, deleteUser, openTab }) {
       </AlertDialog>
 
       <Box
-        className='teacher-card'
         width={'100%'}
         display='flex'
         flexDirection={'row'}
@@ -77,7 +78,6 @@ function UserCard({ user, getUser, deleteUser, openTab }) {
         </Box>
         <Box display='flex' flexDirection={'row'} gap={5}>
           <Box
-            className='delete-teacher'
             display='flex'
             justifyContent='center'
             alignItems='center'

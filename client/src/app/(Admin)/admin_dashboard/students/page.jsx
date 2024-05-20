@@ -19,94 +19,8 @@ import {
   IconButton,
 } from '@chakra-ui/react';
 import { IoMdClose } from 'react-icons/io';
-// import { useDisclosure } from '@chakra-ui/react';
-
-// const Students = [
-//   {
-//     id: 1,
-//     firstName: 'Abdelali',
-//     lastName: 'Sid Ahmed',
-//     email: 'ex@gmail.com',
-//     adress: 'Tenes,Chlef',
-//     role: 'Student',
-//     status: 'Active',
-//     lastLogin: '4/30/2024 11:15:35',
-//     createdAt: '4/30/2024 11:15:35',
-//     updatedAt: '4/30/2024 11:15:35',
-//   },
-//   {
-//     id: 2,
-//     firstName: 'Sid',
-//     lastName: 'Ahmed',
-//     email: 'ex@gmail.com',
-//     adress: 'Tenes,Chlef',
-//     role: 'Student',
-//     status: 'Active',
-//     lastLogin: '4/30/2024 11:15:35',
-//     createdAt: '4/30/2024 11:15:35',
-//     updatedAt: '4/30/2024 11:15:35',
-//   },
-//   {
-//     id: 3,
-//     firstName: 'Abdelali',
-//     lastName: 'Nadir',
-//     email: 'ex@gmail.com',
-//     adress: 'Tenes,Chlef',
-//     role: 'Student',
-//     status: 'Active',
-//     lastLogin: '4/30/2024 11:15:35',
-//     createdAt: '4/30/2024 11:15:35',
-//     updatedAt: '4/30/2024 11:15:35',
-//   },
-//   {
-//     id: 4,
-//     firstName: 'Abdelali',
-//     lastName: 'Sid Ahmed',
-//     email: '    ',
-//     adress: 'Tenes,Chlef',
-//     role: 'Student',
-//     status: 'Active',
-//     lastLogin: '4/30/2024 11:15:35',
-//     createdAt: '4/30/2024 11:15:35',
-//     updatedAt: '4/30/2024 11:15:35',
-//   },
-//   {
-//     id: 5,
-//     firstName: 'Abdelali',
-//     lastName: 'Sid Ahmed',
-//     email: '',
-//     adress: 'Tenes,Chlef',
-//     role: 'Student',
-//     status: 'Active',
-//     lastLogin: '4/30/2024 11:15:35',
-//     createdAt: '4/30/2024 11:15:35',
-//     updatedAt: '4/30/2024 11:15:35',
-//   },
-//   {
-//     id: 25,
-//     firstName: 'Abdelali',
-//     lastName: 'Sid Ahmed',
-//     email: '',
-//     adress: 'Tenes,Chlef',
-//     role: 'Student',
-//     status: 'Active',
-//     lastLogin: '4/30/2024 11:15:35',
-//     createdAt: '4/30/2024 11:15:35',
-//     updatedAt: '4/30/2024 11:15:35',
-//   },
-//   {
-//     id: 55,
-//     firstName: 'Abdelali',
-//     lastName: 'Sid Ahmed',
-//     email: '',
-//     adress: 'Tenes,Chlef',
-//     role: 'Student',
-//     status: 'Active',
-//     lastLogin: '4/30/2024 11:15:35',
-//     createdAt: '4/30/2024 11:15:35',
-//     updatedAt: '4/30/2024 11:15:35',
-//   },
-// ];
+import UserCard from '@/components/UserCard';
+import { convertTime } from '@/app/(Admin)/admin_dashboard/teachers/page';
 
 const StudentsPage = () => {
   const [students, setStudents] = useState([]);
@@ -132,8 +46,8 @@ const StudentsPage = () => {
         setEmail(student.email);
         setAddress(student.adress);
         setRole(student.role);
-        setStatus(student.status);
-        setLastLogin(student.lastLogin);
+        setStatus(student.isActive);
+        setLastLogin(student.lastLogging);
         setCreatedAt(student.createdAt);
         setUpdatedAt(student.updatedAt);
       }
@@ -271,87 +185,14 @@ const StudentsPage = () => {
           {students?.map((student, index) => {
             const id = student.id;
             return (
-              <Box
-                id={id}
-                key={id}
-                className='student-card'
-                width={'100%'}
-                display='flex'
-                flexDirection={'row'}
-                justifyContent={'space-between'}
-                borderBottom={'1px solid #E2E8F0'}
-                _hover={{ bgColor: 'whiteSmoke' }}
-                paddingBlock={'10px'}
-                cursor='pointer'
-                onClick={() => {
-                  const students = document.querySelectorAll('.student-card');
-
-                  students.forEach((student) => {
-                    student.addEventListener('click', (e) => {
-                      const id = e.target.id;
-                      getStudent(id);
-                      openTab();
-                    });
-                  });
-                }}
-              >
-                <Box display='flex' flexDirection={'row'} gap={5}>
-                  <Box
-                    display='flex'
-                    justifyContent='center'
-                    alignItems='center'
-                    width={'50px'}
-                    height={'50px'}
-                    bgColor={'#E2E8F0'}
-                    borderRadius={'50%'}
-                  >
-                    <Text fontSize={18} fontWeight={500}>
-                      {
-                        
-                      }
-                      {student.firstName[0]}
-                    </Text>
-                  </Box>
-                  <Box
-                    display='flex'
-                    flexDirection='column'
-                    justifyContent='center'
-                  >
-                    <Text
-                      fontSize={18}
-                      fontWeight={500}
-                    >{`${student.firstName} ${student.lastName}`}</Text>
-                  </Box>
-                </Box>
-                <Box display='flex' flexDirection={'row'} gap={5}>
-                  <Box
-                    className='delete-student'
-                    display='flex'
-                    justifyContent='center'
-                    alignItems='center'
-                    width={'50px'}
-                    height={'50px'}
-                    _hover={{ bgColor: 'white' }}
-                    borderRadius={'50%'}
-                    onClick={() => {
-                      const students =
-                        document.querySelectorAll('.student-card');
-
-                      students.forEach((student) => {
-                        student.addEventListener('click', () => {
-                          const id = student.id;
-                          console.log(id);
-                          deleteStudent(id);
-                        });
-                      });
-                    }}
-                  >
-                    <IconButton icon={<MdDelete fontSize={24} color='red' />} />
-                  </Box>
-                </Box>
-              </Box>
-            );
-          })}
+              <UserCard
+                key={student.id}
+                user={student}
+                getUser={getStudent}
+                deleteUser={deleteStudent}
+                openTab={openTab}
+              />
+            );})}
         </Box>
         <Box
           display='none'
@@ -412,22 +253,23 @@ const StudentsPage = () => {
             </Text>
             <Text>
               {' '}
-              <span style={{ fontWeight: '700' }}> Status: </span> {status}
+              <span style={{ fontWeight: '700' }}> Status: </span> {' '}
+              {status ? 'Active' : 'Inactive'}
             </Text>
             <Text>
               {' '}
               <span style={{ fontWeight: '700' }}> Last Login: </span>{' '}
-              {lastLogin}
+              {convertTime(lastLogin)}
             </Text>
             <Text>
               {' '}
               <span style={{ fontWeight: '700' }}> Created At: </span>{' '}
-              {createdAt}
+              {convertTime(createdAt)}
             </Text>
             <Text>
               {' '}
               <span style={{ fontWeight: '700' }}> Updated At: </span>{' '}
-              {updatedAt}
+              {convertTime(updatedAt)}
             </Text>
             <Box
               display='flex'
