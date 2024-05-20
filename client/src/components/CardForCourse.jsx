@@ -1,6 +1,21 @@
 import { Box, Image, Text, Button, Heading } from '@chakra-ui/react';
 import Link from 'next/link';
 
+const Admin = ({To}) => {
+    return (
+        <Box
+            w='100%'
+            display='flex'
+            flexDirection='row'
+            alignItems='center'
+            justifyContent={'flex-end'}
+        >
+            <Link href={To}>
+                <Button bgColor='#234C51' color='white'>Course Detials</Button>
+            </Link>
+        </Box>
+    );
+}
 const Student = ({price, Enroll}) => {
     return (
         <Box
@@ -22,7 +37,7 @@ const Student = ({price, Enroll}) => {
     );
 }
 
-const Teacher = () => {
+const Teacher = ({To}) => {
     return (
         <Box
             w='100%'
@@ -32,17 +47,17 @@ const Teacher = () => {
             justifyContent={'space-between'}
         >
             <Button colorScheme={'red'} color='white'>Delete Course</Button>
-            <Button bgColor='#234C51' color='white'>Course Detials</Button>
+            <Link href={To}>
+                <Button bgColor='#234C51' color='white'>Course Detials</Button>
+            </Link>
         </Box>
     );
 }
 
 const CardForCourse = ({ w, teacher, Course, Role, Enroll }) => {
-
-    console.log(Course);
-
+    const course_details = `/course_details/${Course.id}`;
     return (
-        <Link href='/course_details'>
+        <Link href={course_details}>
             <Box
                 w={ w || 'fit-content'}
                 height={'fit-content'}
@@ -93,9 +108,13 @@ const CardForCourse = ({ w, teacher, Course, Role, Enroll }) => {
                     {Course.description.slice(0, 100) + '...'}
                 </Text>
                 {
-                    Role === 'student' ? <Student price={Course.price} Enroll={Enroll} />
-                    :
-                    <Teacher />
+                    Role === 'student' ? (
+                        <Student price={Course.price} Enroll={Enroll} />
+                    ): Role === 'teacher' ? (
+                        <Teacher To={course_details} />
+                    ) : (
+                        <Admin To={course_details} />
+                    )
                 }
             </Box>
         </Link>
