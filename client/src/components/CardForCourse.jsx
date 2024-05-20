@@ -32,7 +32,7 @@ const Teacher = () => {
             justifyContent={'space-between'}
         >
             <Button colorScheme={'red'} color='white'>Delete Course</Button>
-            <Button bgColor='#234C51' color='white'>View Course Detials</Button>
+            <Button bgColor='#234C51' color='white'>Course Detials</Button>
         </Box>
     );
 }
