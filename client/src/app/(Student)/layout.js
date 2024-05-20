@@ -93,20 +93,22 @@ const Layout = ({ children }) => {
               <Text color='#898C81'>Courses</Text>
             </Box>
           </Link>
-          <Box
-            w='100%'
-            display='flex'
-            flexDir='row'
-            gap='5'
-            alignItems='center'
-            paddingLeft='30'
-            minH='70px'
-            maxH='80px'
-            _hover={{ bgColor: 'whiteSmoke' }}
-          >
-            <HiOutlineAcademicCap color='#898C81' size='23px' />
-            <Text color='#898C81'>Enrolled in courses</Text>
-          </Box>
+          <Link href={`/student_dashboard/enrollment_courses`}>
+            <Box
+              w='100%'
+              display='flex'
+              flexDir='row'
+              gap='5'
+              alignItems='center'
+              paddingLeft='30'
+              minH='70px'
+              maxH='80px'
+              _hover={{ bgColor: 'whiteSmoke' }}
+            >
+              <HiOutlineAcademicCap color='#898C81' size='23px' />
+              <Text color='#898C81'>Enrolled in courses</Text>
+            </Box>
+          </Link>
         </Box>
         <Box w='100%' height='fit-content' display='flex' flexDir='column'>
           <Link href='/chat'>
