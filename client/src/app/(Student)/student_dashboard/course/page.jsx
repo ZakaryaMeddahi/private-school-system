@@ -86,8 +86,8 @@ const CoursePage = () => {
         return (
           <CardForCourse
             key={course.id}
-            Course={course}
             teacher={course.teacher}
+            Course={course}
             Role='student'
           />
         );
