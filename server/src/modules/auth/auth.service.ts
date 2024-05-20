@@ -38,7 +38,7 @@ export class AuthService {
       const newUser = this.usersRepository.create({
         ...userData,
         password: hash,
-        lastLogging: new Date(),
+        lastLogging: Date.now(),
       });
       console.log(newUser);
 
@@ -100,7 +100,7 @@ export class AuthService {
 
       const updatedUser = await this.usersRepository.save({
         ...user,
-        lastLogging: new Date(),
+        lastLogging: Date.now(),
       });
 
       const access_token = this.jwtService.sign({
