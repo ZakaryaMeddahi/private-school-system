@@ -36,7 +36,7 @@ function Video({ user, changeGrid }) {
   });
 
   return (
-    <GridItem onClick={() => changeGrid()} bg='gray.200' borderRadius='15px'>
+    <GridItem onClick={(e) => changeGrid(e)} bg='gray.200' borderRadius='15px' height={'fit-content'}>
       {isSharing ? (
         <video
           // className="video remote-video"
@@ -44,8 +44,7 @@ function Video({ user, changeGrid }) {
           autoPlay
           playsInline
           style={{
-            width: isScreenFull ? '1000px' : '100%',
-            height: isScreenFull ? '600px' : '100%',
+            width: '100%',
             borderRadius: '15px',
           }}
           onClick={() => setIsScreenFull(!isScreenFull)}

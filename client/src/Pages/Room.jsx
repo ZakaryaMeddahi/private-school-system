@@ -348,15 +348,15 @@ const SessionPage = ({ roomId }) => {
   const changeGrid = (e) => {
     if (state.isScreenFull) {
       console.log('minimize size');
-      e.currentTarget.style.gridColumn = '1/2';
-      e.currentTarget.style.gridRow = '1/2';
+      console.log(e.currentTarget.style);
+      e.currentTarget.style.gridArea = '';
+      state.isScreenFull = false;
     } else {
       //   e.currentTarget.class = 'css-1xsb7mh';
-      e.currentTarget.style.gridColumn = '1/5';
+      e.currentTarget.style.gridColumn = '1/4';
       e.currentTarget.style.gridRow = '1/4';
+      state.isScreenFull = true;
     }
-
-    updateScreen();
     // if (GridItemRef.current && count === 0 && ProfileRef.current) {
     //   console.log(GridItemRef);
     //   ProfileRef.current.style.width = '12%';
@@ -396,13 +396,7 @@ const SessionPage = ({ roomId }) => {
         <VStack align='stretch' height='100%' w='100%' gap={0}>
           <Box h='100%'>
             <Grid
-              templateColumns={[
-                'repeat(1, 1fr)',
-                'repeat(2, 1fr)',
-                'repeat(3, 1fr)',
-                'repeat(3, 1fr)',
-                'repeat(4, 1fr)',
-              ]}
+              templateColumns={'repeat(4, 1fr)'}
               templateRows='repeat(3, 1fr)'
               p='25px'
               height='100%'
@@ -415,6 +409,7 @@ const SessionPage = ({ roomId }) => {
                 bg='gray.200'
                 // h='300px'
                 borderRadius='15px'
+                height={'fit-content'}
                 // boxShadow='0px 0px 15px 0px rgba(0,0,0,0.5);'
               >
                 {/* <Center
@@ -437,7 +432,7 @@ const SessionPage = ({ roomId }) => {
                     muted
                     style={{
                       // width: state.isScreenFull ? '1000px' : '100%',
-                      height: state.isScreenFull ? '600px' : '100%',
+                      width: '100%',
                       borderRadius: '15px',
                       transform: state.isScreenSharing
                         ? 'rotateY(0deg)'

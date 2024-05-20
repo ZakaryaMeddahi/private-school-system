@@ -1,6 +1,6 @@
 import Video from './Video';
 
-function VideosList({ users }) {
+function VideosList({ users, changeGrid }) {
   console.log('*****************************');
   console.log('*****************************');
   console.log('*****************************');
@@ -10,7 +10,7 @@ function VideosList({ users }) {
   return (
     <>
       {users.map((user) => (
-        <Video key={user.uid} user={user} />
+        <Video key={user.uid} user={user} changeGrid={changeGrid} />
       ))}
     </>
   );
