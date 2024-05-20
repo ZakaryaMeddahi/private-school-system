@@ -7,7 +7,7 @@ import { StudentContext } from '../../layout';
 
 const CoursePage = () => {
   const [courses, setCourses] = useState([]);
-  const {search, setSearch} = useContext(StudentContext);
+  const { search, setSearch } = useContext(StudentContext);
 
   // fetch courses
   useEffect(() => {
@@ -43,34 +43,34 @@ const CoursePage = () => {
     fetchCourses();
   }, [search]);
 
-//   const searchCourses = async (value) => {
-//     try {
-//       const response = await fetch(
-//         `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/courses?search=${value}`,
-//         {
-//           method: 'GET',
-//           headers: {
-//             'Content-Type': 'application/json',
-//             Authorization: `Bearer ${localStorage.getItem('token')}`,
-//           },
-//         }
-//       );
+  //   const searchCourses = async (value) => {
+  //     try {
+  //       const response = await fetch(
+  //         `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/courses?search=${value}`,
+  //         {
+  //           method: 'GET',
+  //           headers: {
+  //             'Content-Type': 'application/json',
+  //             Authorization: `Bearer ${localStorage.getItem('token')}`,
+  //           },
+  //         }
+  //       );
 
-//       if (!response.ok) {
-//         response.status === 401 && router.push('/login');
-//         const { data } = await response.json();
-//         throw new Error(data.message);
-//       }
+  //       if (!response.ok) {
+  //         response.status === 401 && router.push('/login');
+  //         const { data } = await response.json();
+  //         throw new Error(data.message);
+  //       }
 
-//       const { data } = await response.json();
+  //       const { data } = await response.json();
 
-//       console.log(data);
+  //       console.log(data);
 
-//       setCourses(data);
-//     } catch (error) {
-//       console.error(error);
-//     }
-//   };
+  //       setCourses(data);
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   };
 
   return (
     <Container
@@ -82,9 +82,16 @@ const CoursePage = () => {
       gap={5}
       overflowY={'auto'}
     >
-        {courses.map(course => {
-            return <CardForCourse key={course.id} Course={course}  Role='student' />;
-        })}
+      {courses.map((course) => {
+        return (
+          <CardForCourse
+            key={course.id}
+            Course={course}
+            teacher={course.teacher}
+            Role='student'
+          />
+        );
+      })}
     </Container>
   );
 };

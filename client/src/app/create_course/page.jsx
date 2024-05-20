@@ -79,7 +79,6 @@ function CreateCourse() {
       requirements,
       difficulty,
       language,
-      // enrollmentsLimit,
       topics
     );
 
@@ -102,15 +101,13 @@ function CreateCourse() {
       JSON.stringify({
         title,
         description,
-        price,
-        //startDate,
         deadline,
         requirements,
         difficulty,
+        price,
         language,
         duration: Number(period.split(' ')[0]),
         durationUnit: period.split(' ')[1],
-        enrollmentsLimit,
         topics: newTopics,
       })
     );
@@ -246,6 +243,7 @@ function CreateCourse() {
                       Topics
                     </FormLabel>
                     <Input
+                      value={topic}
                       placeholder='Introduction to Node-JS'
                       onChange={(e) => setTopic(e.currentTarget.value)}
                     />

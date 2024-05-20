@@ -16,14 +16,15 @@ import {
   Stack,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const CourseCard = ({ courseId, course }) => {
   const { difficulty, duration, durationUnit, language, teacher, file } =
     course;
-  const [enrollment, setEnrollment] = useState(false);
+  const [enrollment, setEnrollment] = useState({});
   const [enrolled, setEnrolled] = useState(false);
   const router = useRouter();
+  const roleRef = useRef();
 
   const enroll = async () => {
     try {
@@ -55,6 +56,7 @@ const CourseCard = ({ courseId, course }) => {
   };
 
   useEffect(() => {
+    roleRef.current = localStorage.getItem('role');
     const checkEnrollment = async () => {
       try {
         const response = await fetch(
@@ -70,7 +72,7 @@ const CourseCard = ({ courseId, course }) => {
 
         if (!response.ok) {
           response.status === 401 && router.push('/login');
-          const { data } = await response.json();
+          const data = await response.json();
           throw new Error(data.message);
         }
 
@@ -136,45 +138,46 @@ const CourseCard = ({ courseId, course }) => {
           </Stack>
         </Box>
       </CardBody>
-
-      <CardFooter justifyContent='end'>
-        {!enrollment.isEnrolled ? (
-          <Button
-            bgColor='#234C51'
-            color='white'
-            w='180px'
-            textAlign='center'
-            _hover={{ bgColor: '#234C5180' }}
-            onClick={enroll}
-          >
-            Enroll
-          </Button>
-        ) : enrollment.status === 'approved' ? (
-          <Button
-            bgColor='#234C51'
-            color='white'
-            w='180px'
-            textAlign='center'
-            _hover={{ bgColor: '#234C5150' }}
-            onClick={() => {
-              router.push(`/chat`);
-            }}
-          >
-            chat rooms
-          </Button>
-        ) : (
-          <Button
-            bgColor='#234C51'
-            color='white'
-            w='180px'
-            textAlign='center'
-            isDisabled={true}
-            _hover={{ bgColor: '#234C51' }}
-          >
-            {enrollment.status}
-          </Button>
-        )}
-      </CardFooter>
+      {roleRef.current === 'student' && (
+        <CardFooter justifyContent='end'>
+          {!enrollment.isEnrolled ? (
+            <Button
+              bgColor='#234C51'
+              color='white'
+              w='180px'
+              textAlign='center'
+              _hover={{ bgColor: '#234C5180' }}
+              onClick={enroll}
+            >
+              Enroll
+            </Button>
+          ) : enrollment.status === 'approved' ? (
+            <Button
+              bgColor='#234C51'
+              color='white'
+              w='180px'
+              textAlign='center'
+              _hover={{ bgColor: '#234C5150' }}
+              onClick={() => {
+                router.push(`/chat`);
+              }}
+            >
+              chat rooms
+            </Button>
+          ) : (
+            <Button
+              bgColor='#234C51'
+              color='white'
+              w='180px'
+              textAlign='center'
+              isDisabled={true}
+              _hover={{ bgColor: '#234C51' }}
+            >
+              {enrollment.status}
+            </Button>
+          )}
+        </CardFooter>
+      )}
     </Card>
   );
 };
