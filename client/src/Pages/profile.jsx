@@ -102,11 +102,21 @@ const ProfilePage = ({ userId, FullName, UserName, Bio, Role, courses }) => {
         gridTemplateRows='1fr'
         gap={5}
       >
-        {console.log(courses)}
-        {console.log(courses[0])}
-          <CardForCourse key={courses[0].id} Course={courses[0]} teacher={courses[0].teacher} Enroll={true} Role={Role}  />;
+        {courses.map((course) => {
+          return (
+            <CardForCourse
+              key={course.id}
+              teacher={course.teacher}
+              Course={course}
+              Role='student'
+              Enroll={true}
+            />
+          );
+        }
+        )}
+          {/* <CardForCourse key={courses[0].id} Course={courses[0]} teacher={courses[0].teacher} Enroll={true} Role={Role}  />;
           <CardForCourse key={courses[1].id} Course={courses[1]} teacher={courses[1].teacher} Enroll={true} Role={Role}  />;
-          <CardForCourse key={courses[2].id} Course={courses[2]} teacher={courses[2].teacher} Enroll={true} Role={Role}  />;
+          <CardForCourse key={courses[2].id} Course={courses[2]} teacher={courses[2].teacher} Enroll={true} Role={Role}  />; */}
       </Box>
     </Box>
   );

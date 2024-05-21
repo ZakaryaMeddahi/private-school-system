@@ -12,9 +12,12 @@ import Link from "next/link";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { Logout } from "../(Admin)/layout";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 
 const Layout = ({ children }) => {
+
+    const [teacherId, setTeacherId] = useState('');
 
     const inputRef = useRef();
   
@@ -31,6 +34,12 @@ const Layout = ({ children }) => {
         localStorage.removeItem('token');
         router.push('/login');
     };
+
+    useEffect(() => {
+        setTeacherId(localStorage.getItem('userId'));
+    }, []);
+
+    const teacherProfile = `/teacher_dashboard/profile/${teacherId}`;
 
     return (
         <Box 
@@ -99,7 +108,7 @@ const Layout = ({ children }) => {
                             <Text color='#898C81'>Chat</Text>
                         </Box>
                     </Link>
-                    <Link href='/teacher_dashboard/profile'>
+                    <Link href={teacherProfile}>
                         <Box
                             w='100%'
                             display='flex'
@@ -180,7 +189,7 @@ const Layout = ({ children }) => {
                             <PopoverContent w='180px'>
                                 <PopoverArrow />
                                 <PopoverCloseButton />
-                                <Link href='/student_dashboard/profile'>
+                                <Link href={teacherProfile}>
                                     <PopoverHeader>Profile</PopoverHeader>
                                 </Link>
                                 <PopoverHeader onClick={Logout} _hover={{cursor: 'pointer'}}>Logout</PopoverHeader>

@@ -85,6 +85,7 @@ const CoursePage = () => {
       {courses.map((course) => {
         return (
           <CardForCourse
+            w='100%'
             key={course.id}
             teacher={course.teacher}
             Course={course}

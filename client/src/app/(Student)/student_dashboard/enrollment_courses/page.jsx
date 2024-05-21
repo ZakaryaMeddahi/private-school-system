@@ -8,65 +8,39 @@ const enrollmentCourse = () => {
 
     const [enrollments, setEnrollments] = useState([]);
     const [enrollStatus, setEnrollStatus] = useState(false);
-    
-    const fetchEnrollments = async () => {
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/courses/enrollments/me`,
-          {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
-            },
+
+    useEffect(() => {
+      const fetchEnrollments = async () => {
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/courses/enrollments/me`,
+            {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+              },
+            }
+          );
+  
+          if (!response.ok) {
+            response.status === 401 && router.push('/login');
+            const { data } = await response.json();
+            throw new Error(data.message);
           }
-        );
-
-        if (!response.ok) {
-          response.status === 401 && router.push('/login');
+  
           const { data } = await response.json();
-          throw new Error(data.message);
+  
+          console.log(data);
+          setEnrollments(data);
+        } catch (error) {
+          console.error(error);
         }
-
-        const { data } = await response.json();
-
-        console.log(data);
-        setEnrollments(data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    
-  fetchEnrollments();
-
-  const getCourseById = async (id) => {
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/courses/${id}`,
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        }
-      );
-
-      if (!response.ok) {
-        response.status === 401 && router.push('/login');
-        const { data } = await response.json();
-        throw new Error(data.message);
-      }
-
-      const { data } = await response.json();
-
-      // console.log(data);
-      return data;
-    } catch (error) {
-      console.error(error);
-    }
-  }
+      };
+  
+      
+    fetchEnrollments();
+    }, [])
 
     return (
         <Container
@@ -79,7 +53,7 @@ const enrollmentCourse = () => {
             overflowY={'auto'}
         >
             {enrollments.map(enrollment => {
-              if (!enrollment.enrollmentStatus === "pending") {
+              // if (!enrollment.enrollmentStatus === "pending") {
                 return (
                       <CardForCourse 
                           key={enrollment.course.id} 
@@ -89,7 +63,7 @@ const enrollmentCourse = () => {
                           Enroll={true} 
                       />
                     );
-              }
+              // }
 
             })}
         </Container>
