@@ -199,7 +199,7 @@ export class EnrollmentsService {
         enrollment.student.user,
         updatedEnrollment.enrollmentStatus,
         enrollment.course,
-        enrollment.enrollmentStatus === EnrollmentStatus.APPROVED
+        updatedEnrollment.enrollmentStatus === EnrollmentStatus.APPROVED
           ? 'Congratulation, you are enrolled!'
           : 'Your enrollment has been rejected.',
       );
