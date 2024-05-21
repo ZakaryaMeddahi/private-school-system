@@ -64,7 +64,13 @@ export class EnrollmentsService {
     try {
       // add student and user relations
       const enrollments = await this.enrollmentRepository.find({
-        relations: ['student', 'student.user', 'course', 'course.teacher', 'course.file'],
+        relations: [
+          'student',
+          'student.user',
+          'course',
+          'course.teacher',
+          'course.file',
+        ],
         where: userId !== 0 ? { student: { user: { id: Equal(userId) } } } : {},
       });
       return enrollments;
@@ -186,6 +192,8 @@ export class EnrollmentsService {
         ...enrollment,
         ...enrollmentData,
       });
+
+      console.log(updatedEnrollment);
 
       await this.mailService.sendEnrollmentStatus(
         enrollment.student.user,
