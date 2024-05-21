@@ -1,9 +1,21 @@
-import { AlertDialog, AlertDialogBody, AlertDialogCloseButton, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, IconButton, Text, useDisclosure } from "@chakra-ui/react";
-import { useRef } from "react";
-import { MdDelete } from "react-icons/md";
+import {
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogCloseButton,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogOverlay,
+  Box,
+  Button,
+  IconButton,
+  Text,
+  useDisclosure,
+} from '@chakra-ui/react';
+import { useRef } from 'react';
+import { MdDelete } from 'react-icons/md';
 
 function UserCard({ user, getUser, deleteUser, openTab }) {
-
   const userRole = user.role[0].toUpperCase() + user.role.slice(1);
 
   const {
@@ -34,7 +46,14 @@ function UserCard({ user, getUser, deleteUser, openTab }) {
             <Button ref={cancelRef} onClick={onDeleteAlertClose}>
               No
             </Button>
-            <Button colorScheme='red' ml={3} onClick={() => deleteUser(user.id)}>
+            <Button
+              colorScheme='red'
+              ml={3}
+              onClick={() => {
+                deleteUser(user.id);
+                onDeleteAlertClose();
+              }}
+            >
               Yes
             </Button>
           </AlertDialogFooter>

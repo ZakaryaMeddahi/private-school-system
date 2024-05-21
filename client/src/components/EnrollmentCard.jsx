@@ -12,10 +12,10 @@ function EnrollmentCard({ enrollment, enrollments, setEnrollments }) {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${localStorage.getItem('token')}`,
-            body: JSON.stringify({
-              enrollmentStatus: status
-            })
           },
+          body: JSON.stringify({
+            enrollmentStatus: status,
+          }),
         }
       );
 

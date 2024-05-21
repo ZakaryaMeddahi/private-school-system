@@ -187,7 +187,7 @@ export class StudentsService {
   async remove(id: number) {
     try {
       const student = await this.studentRepository.findOne({
-        where: { id: Equal(id) },
+        where: { user: { id: Equal(id) } },
       });
       if (!student) throw new NotFoundException('Student not found');
       await this.studentRepository.remove(student);
