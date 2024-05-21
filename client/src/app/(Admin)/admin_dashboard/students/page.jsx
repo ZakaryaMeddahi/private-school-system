@@ -68,14 +68,39 @@ const StudentsPage = () => {
     }
   };
 
-  const deleteStudent = (id) => {
-    const newStudents = [];
-    students.filter((student) => {
-      if (student.id !== Number(id)) {
-        newStudents.push(student);
+  const deleteStudent = async (id) => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/students/${id}`,
+        {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        response.status === 401 && router.push('/login');
+        const data = await response.json();
+        // setDisplayErrorAlert(true);
+        // setTimeout(() => {
+        //   setDisplayErrorAlert(false);
+        // }, 3000);
+        throw new Error(data.message);
       }
-    });
-    setStudents(newStudents);
+
+      const newStudents = [];
+      students.filter((student) => {
+        if (student.id !== id) {
+          newStudents.push(student);
+        }
+      });
+      setStudents(newStudents);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const SearchStudent = async (value) => {
@@ -192,7 +217,8 @@ const StudentsPage = () => {
                 deleteUser={deleteStudent}
                 openTab={openTab}
               />
-            );})}
+            );
+          })}
         </Box>
         <Box
           display='none'
@@ -253,7 +279,7 @@ const StudentsPage = () => {
             </Text>
             <Text>
               {' '}
-              <span style={{ fontWeight: '700' }}> Status: </span> {' '}
+              <span style={{ fontWeight: '700' }}> Status: </span>{' '}
               {status ? 'Active' : 'Inactive'}
             </Text>
             <Text>
@@ -271,7 +297,7 @@ const StudentsPage = () => {
               <span style={{ fontWeight: '700' }}> Updated At: </span>{' '}
               {convertTime(updatedAt)}
             </Text>
-            <Box
+            {/* <Box
               display='flex'
               flexDir='row'
               justifyContent='space-between'
@@ -281,13 +307,13 @@ const StudentsPage = () => {
               <Button
                 colorScheme='red'
                 onClick={() => {
-                  console.log('Delete stuent');
+                  console.log('Delete student');
                 }}
               >
                 Delete student
               </Button>
               <Button colorScheme='blue'>View Profile</Button>
-            </Box>
+            </Box> */}
           </Box>
         </Box>
       </Box>

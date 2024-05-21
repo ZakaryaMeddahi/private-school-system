@@ -91,7 +91,7 @@ const MyCourses = () => {
           `${course.teacher.user.firstName} ${course.teacher.user.lastName}`
         );
         setCourseStatus(course.status);
-        setCourseImage(course.file.url);
+        setCourseImage(course.file?.url || null);
         setCourseCreatedAt(course.createdAt);
         setCourseUpdatedAt(course.updatedAt);
       }
