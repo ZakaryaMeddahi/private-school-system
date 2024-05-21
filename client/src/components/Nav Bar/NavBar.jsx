@@ -4,10 +4,11 @@ import { Grid, GridItem, HStack, Button, Text } from '@chakra-ui/react';
 import Link from 'next/link';
 import Logo from '../Logo/Logo';
 import { IoMdSearch } from 'react-icons/io';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 
 const NavBar = () => {
+  const tokenRef = useRef(null)
   const inputRef = useRef();
   const router = useRouter();
 
@@ -17,6 +18,10 @@ const NavBar = () => {
       console.log(inputRef.current.style);
     }
   };
+
+  useEffect(() => {
+    tokenRef.current = localStorage.getItem('token')
+  })
 
   return (
     <Grid
@@ -75,7 +80,7 @@ const NavBar = () => {
         </HStack>
       </GridItem> */}
       <GridItem colSpan={2} display='grid' justifyItems='center'>
-        {localStorage.getItem('token') ? (
+        {tokenRef.current ? (
           <Button
             bgColor='#234C51'
             color='white'
