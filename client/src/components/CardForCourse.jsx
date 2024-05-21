@@ -220,7 +220,7 @@ const CardForCourse = ({ w, teacher, Course, Role, Enroll }) => {
           <Text fontWeight='500'>{`${teacher?.user.firstName} ${teacher?.user.lastName}`}</Text>
         </Box>
         <Text fontSize='32px' fontWeight='bold' color='#213E69'>
-          {Course.title}
+          {Course?.title}
         </Text>
         <Text color='GrayText'>
           {Course?.description.slice(0, 100) + '...'}
