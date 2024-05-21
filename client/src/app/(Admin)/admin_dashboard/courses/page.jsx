@@ -101,7 +101,7 @@ const CoursePage = () => {
       >
         {courses.map((course) => {
           console.log(course);
-          return <CardForCourse key={course.id} Course={course} teacher={course.teacher} Role='admin' />;
+          return <CardForCourse key={course.id} w={'100%'} h={'100%'} Course={course} teacher={course.teacher} Role='admin' />;
         })}
       </Container>
     </Box>

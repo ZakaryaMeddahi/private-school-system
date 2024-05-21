@@ -1,3 +1,5 @@
+'use client';
+
 import { Box, Image, Text, Button, Heading } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -170,7 +172,7 @@ const Teacher = ({ To }) => {
   );
 };
 
-const CardForCourse = ({ w, teacher, Course, Role, Enroll }) => {
+const CardForCourse = ({ w, h, teacher, Course, Role, Enroll }) => {
   const course_details = `/course_details/${Course.id}`;
   return (
     <Link href={course_details}>

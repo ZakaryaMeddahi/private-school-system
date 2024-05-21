@@ -1,3 +1,5 @@
+'use client';
+
 import CardForCourse from '@/components/CardForCourse';
 import Media from '@/components/Socials/Media';
 import { Box, Heading, Text, Badge, Button, Image } from '@chakra-ui/react';
@@ -100,9 +102,11 @@ const ProfilePage = ({ userId, FullName, UserName, Bio, Role, courses }) => {
         gridTemplateRows='1fr'
         gap={5}
       >
-        {courses.map((course) => {
-          return <CardForCourse key={course.id} Course={course} Enroll={true} Role='student'  />;
-        })}
+        {console.log(courses)}
+        {console.log(courses[0])}
+          <CardForCourse key={courses[0].id} Course={courses[0]} teacher={courses[0].teacher} Enroll={true} Role={Role}  />;
+          <CardForCourse key={courses[1].id} Course={courses[1]} teacher={courses[1].teacher} Enroll={true} Role={Role}  />;
+          <CardForCourse key={courses[2].id} Course={courses[2]} teacher={courses[2].teacher} Enroll={true} Role={Role}  />;
       </Box>
     </Box>
   );
