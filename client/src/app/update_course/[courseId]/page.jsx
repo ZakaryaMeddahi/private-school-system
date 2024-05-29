@@ -48,9 +48,7 @@ function UpdateCourse({ params }) {
   const [period, setPeriod] = useState('2 weeks');
   const [enrollmentsLimit, setEnrollmentsLimit] = useState(500);
   const [file, setFile] = useState(null);
-  const [imageUrl, setImageUrl] = useState(
-    './Private-School-default-image.png'
-  );
+  const [imageUrl, setImageUrl] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter()
 
@@ -182,7 +180,7 @@ function UpdateCourse({ params }) {
       setPeriod(`${data.duration} ${data.durationUnit}`);
       setEnrollmentsLimit(data.enrollmentsLimit);
       setTopics(data.topics);
-      setImageUrl(data.file.url);
+      setImageUrl(data.file?.url || '../../Private-School-default-image.png');
     };
 
     fetchCourse();
