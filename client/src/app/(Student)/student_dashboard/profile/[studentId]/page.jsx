@@ -4,7 +4,7 @@ import ProfilePage from '@/Pages/profile';
 import { useEffect, useState } from 'react';
 import { GetUser } from '../../../../../Lib/getUser';
 
-const profile = ({ params }) => {
+const Profile = ({ params }) => {
   const { userId } = params;
 
   const [FirstName, setFirstName] = useState('');
@@ -79,4 +79,4 @@ const profile = ({ params }) => {
   );
 };
 
-export default profile;
+export default Profile;

@@ -4,7 +4,7 @@ import { Container } from '@chakra-ui/react';
 import CardForCourse from '@/components/CardForCourse';
 import { useState, useEffect } from 'react';
 
-const enrollmentCourse = () => {
+const EnrollmentCourse = () => {
 
     const [enrollments, setEnrollments] = useState([]);
     const [enrollStatus, setEnrollStatus] = useState(false);
@@ -70,4 +70,4 @@ const enrollmentCourse = () => {
     );
 }
 
-export default enrollmentCourse;
+export default EnrollmentCourse;
