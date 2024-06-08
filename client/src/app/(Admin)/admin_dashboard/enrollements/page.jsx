@@ -250,6 +250,7 @@ const EnrollmentPage = () => {
       >
         {enrollments.map((enrollment) => (
           <EnrollmentCard
+            key={enrollment.id}
             enrollment={enrollment}
             enrollments={enrollments}
             setEnrollments={setEnrollments}
