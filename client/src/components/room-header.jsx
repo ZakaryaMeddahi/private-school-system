@@ -36,10 +36,11 @@ const RoomHeader = ({
   const [count, setCount] = useState(0);
   const [popover, setPopover] = useState(false);
   const router = useRouter();
+  const { roomInfoRef, chatRef } = useContext(ChatContext);
 
-  if (ChangeLayout) {
-    var { roomInfoRef, chatRef } = useContext(ChatContext);
-  }
+  // if (ChangeLayout) {
+  //   var { roomInfoRef, chatRef } = useContext(ChatContext);
+  // }
 
   const changeLayout = () => {
     if (chatRef.current && roomInfoRef.current && count === 0) {
