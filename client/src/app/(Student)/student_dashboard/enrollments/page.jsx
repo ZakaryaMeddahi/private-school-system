@@ -1,3 +1,5 @@
+'use client';
+
 import { Box } from '@chakra-ui/react';
 import CardForCourse from '@/components/CardForCourse';
 import { Courses } from '@/app/(Student)/student_dashboard/course/page';
