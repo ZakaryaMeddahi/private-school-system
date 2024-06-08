@@ -404,7 +404,7 @@ const TeachersPage = () => {
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
-          <DrawerHeader>Create teacher's account</DrawerHeader>
+          <DrawerHeader>Create teacher&#39;s account</DrawerHeader>
 
           <DrawerBody>
             <FormControl display='flex' flexDirection='column' gap='15px'>

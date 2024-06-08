@@ -167,7 +167,7 @@ const LoginPage = () => {
                 Login
               </Button>
               <Text textAlign='center' mt='5'>
-                Don't have an account?
+                Don&#39;t have an account?
                 <span style={{ color: 'blue' }}>
                   <Link href='/signup'>Register</Link>
                 </span>
