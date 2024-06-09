@@ -1640,7 +1640,7 @@ file: string
 
 ## PATCH Update Social Links
 
-PATCH /api/v1/social-links/3
+PATCH /api/v1/social-links/1
 
 - __All Users__ can update their social link urls
 
@@ -1648,7 +1648,7 @@ PATCH /api/v1/social-links/3
 
 ```json
 {
-  "linkedIn": "new linked in url"
+  "linkedIn": "https://www.linkedin.com/in/zakarya-meddahi"
 }
 ```
 
@@ -1664,7 +1664,22 @@ PATCH /api/v1/social-links/3
 > 200 Response
 
 ```json
-{}
+{
+  "status": "success",
+  "message": "Social links updated successfully",
+  "data": {
+    "id": "1",
+    "linkedIn": "https://www.linkedin.com/in/zakarya-meddahi",
+    "facebook": null,
+    "twitter": null,
+    "github": null,
+    "youtube": null,
+    "website": null,
+    "user": {
+        "id": "1"
+    }
+  }
+}
 ```
 
 ### Responses
@@ -1673,7 +1688,7 @@ PATCH /api/v1/social-links/3
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
 
-### Responses Data Schema
+<!-- ### Responses Data Schema -->
 
-# Data Schema
+<!-- # Data Schema -->
 
