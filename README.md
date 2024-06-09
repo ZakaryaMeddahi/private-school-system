@@ -1448,11 +1448,11 @@ DELETE /api/v1/courses/enrollments/1
 
 <!-- ### Responses Data Schema -->
 
-# Chats
+# Chat Rooms
 
-## GET Get Chat
+## GET Get Chat Room
 
-GET /api/v1/courses/5/chats/1
+GET /api/v1/courses/1/chats/1
 
 - **Admin** and **Course Creator** can see course chat
 - Enrolled **Students** with accepted status can see chat
@@ -1462,7 +1462,18 @@ GET /api/v1/courses/5/chats/1
 > 200 Response
 
 ```json
-{}
+{
+  "status": "success",
+  "message": "Chat room loaded successfully",
+  "data": {
+    "id": "1",
+    "name": "General",
+    "createdAt": "2024-06-09T20:25:31.858Z",
+    "updatedAt": "2024-06-09T20:25:31.858Z",
+    "courseId": null,
+    "roomId": "1"
+  }
+}
 ```
 
 ### Responses
@@ -1471,11 +1482,11 @@ GET /api/v1/courses/5/chats/1
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
 
-### Responses Data Schema
+<!-- ### Responses Data Schema -->
 
-## GET Get Chats
+## GET Get Chat Rooms
 
-GET /api/v1/courses/courseId/chats
+GET /api/v1/courses/1/chats
 
 - **Admin** and **Course Creator** can see chats in of course
 - Enrolled Students with accepted status can see chats
@@ -1485,7 +1496,18 @@ GET /api/v1/courses/courseId/chats
 > 200 Response
 
 ```json
-{}
+{
+  "status": "success",
+  "message": "Loaded chat rooms successfully",
+  "data": [
+    {
+      "id": "1",
+      "name": "General",
+      "createdAt": "2024-06-09T20:25:31.858Z",
+      "updatedAt": "2024-06-09T20:25:31.858Z"
+    }
+  ]
+}
 ```
 
 ### Responses
@@ -1494,9 +1516,9 @@ GET /api/v1/courses/courseId/chats
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
 
-### Responses Data Schema
+<!-- ### Responses Data Schema -->
 
-## PATCH Update Chat
+## PATCH Update Chat Room
 
 PATCH /api/v1/courses/courseId/chats
 
@@ -1522,7 +1544,16 @@ PATCH /api/v1/courses/courseId/chats
 > 200 Response
 
 ```json
-{}
+{
+  "status": "success",
+  "message": "Chat room updated successfully",
+  "data": {
+    "id": "1",
+    "name": "general chat",
+    "createdAt": "2024-06-09T20:25:31.858Z",
+    "updatedAt": "2024-06-09T22:49:14.188Z"
+  }
+}
 ```
 
 ### Responses
@@ -1531,7 +1562,7 @@ PATCH /api/v1/courses/courseId/chats
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
 
-### Responses Data Schema
+<!-- ### Responses Data Schema -->
 
 # File-Messages
 
@@ -1545,7 +1576,6 @@ POST /api/v1/courses/6/chats/2/messages
 
 ```yaml
 file: string
-
 ```
 
 ### Params
@@ -1569,7 +1599,7 @@ file: string
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
 
-### Responses Data Schema
+<!-- ### Responses Data Schema -->
 
 # Social-Accounts
 
