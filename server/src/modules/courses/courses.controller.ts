@@ -43,17 +43,28 @@ export class CoursesController {
     try {
       const { sub: userId, role } = user;
       const courses = await this.coursesService.findCoursesChats(userId, role);
-      return { status: 'success', data: courses };
+      return {
+        status: 'success',
+        message: 'Chat Rooms retrieved successfully',
+        data: courses,
+      };
     } catch (error) {
       throw new HttpException(error.message, error.status || 500);
     }
   }
 
   @Get()
-  async getCourses(@AuthUser() user: JwtPayload, @Query('search') search: string) {
+  async getCourses(
+    @AuthUser() user: JwtPayload,
+    @Query('search') search: string,
+  ) {
     try {
       const courses = await this.coursesService.findAll(search);
-      return { status: 'success', data: courses };
+      return {
+        status: 'success',
+        message: 'Courses retrieved successfully',
+        data: courses,
+      };
     } catch (error) {
       throw new HttpException(error.message, error.status || 500);
     }
@@ -68,7 +79,11 @@ export class CoursesController {
         throw new NotFoundException('Course not found');
       }
 
-      return { status: 'success', data: course };
+      return {
+        status: 'success',
+        message: 'Course retrieved successfully',
+        data: course,
+      };
     } catch (error) {
       throw new HttpException(error.message, error.status || 500);
     }
@@ -156,7 +171,7 @@ export class CoursesController {
         throw new NotFoundException('Course not found');
       }
 
-      return { status: 'success', message: 'Course removed successfully' };
+      return { status: 'success', message: 'Course deleted successfully' };
     } catch (error) {
       throw new HttpException(error.message, error.status || 500);
     }

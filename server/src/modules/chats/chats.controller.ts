@@ -32,7 +32,7 @@ export class ChatsController {
 
       return {
         status: 'success',
-        message: 'Loaded chats successfully',
+        message: 'Loaded chat rooms successfully',
         data: chats,
       };
     } catch (error) {
@@ -54,7 +54,7 @@ export class ChatsController {
 
       return {
         status: 'success',
-        message: 'Chat loaded successfully',
+        message: 'Chat room loaded successfully',
         data: chat,
       };
     } catch (error) {
@@ -78,7 +78,7 @@ export class ChatsController {
 
       return {
         status: 'success',
-        message: 'Chat updated successfully',
+        message: 'Chat room updated successfully',
         data: updatedChat,
       };
     } catch (error) {

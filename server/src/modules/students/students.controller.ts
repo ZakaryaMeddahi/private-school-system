@@ -86,7 +86,10 @@ export class StudentsController {
   ) {
     const { sub: id } = user;
     try {
-      const updatedUser = await this.studentsService.updateProfilePicture(id, image);
+      const updatedUser = await this.studentsService.updateProfilePicture(
+        id,
+        image,
+      );
       return {
         status: 'success',
         message: 'Profile picture updated successfully',
@@ -142,7 +145,10 @@ export class StudentsController {
   async removeStudent(@Param('id', ParseIntPipe) id: number) {
     try {
       await this.studentsService.remove(id);
-      return { status: 'success', message: 'Student removed successfully' };
+      return {
+        status: 'success',
+        message: 'Student account removed successfully',
+      };
     } catch (error) {
       console.error(error);
       throw new HttpException(
