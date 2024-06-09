@@ -169,7 +169,7 @@ const LoginPage = () => {
               <Text textAlign='center' mt='5'>
                 Don&#39;t have an account?
                 <span style={{ color: 'blue' }}>
-                  <Link href='/signup'>Register</Link>
+                  <Link href='/signup'> Register</Link>
                 </span>
               </Text>
             </VStack>

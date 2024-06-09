@@ -131,26 +131,29 @@ const SignUpPage = () => {
           <Container w='100%' h='100%' display='flex' justifyContent='center'>
             <VStack h='100%' w='90%' align='self-start' justifyContent='center'>
               <Header title='Sign Up' />
-              <Box w='100%'>
-                <FormInput
-                  type='text'
-                  placeholder='First Name'
-                  onchange={(e) => {
-                    setFirstName(e.target.value);
-                  }}
-                />
-                <ErrorMessage errorMessage={firstNameErrorMessage} />
-              </Box>
-              <Box w='100%'>
-                <FormInput
-                  type='text'
-                  placeholder='Last Name'
-                  onchange={(e) => {
-                    setLastName(e.target.value);
-                  }}
-                />
-                <ErrorMessage errorMessage={lastNameErrorMessage} />
-              </Box>
+              <Stack w='100%' flexDir='row' justifyContent='space-between'>
+                <Box w='48%'>
+                  <FormInput
+                    type='text'
+                    placeholder='First Name'
+                    onchange={(e) => {
+                      setFirstName(e.target.value);
+                    }}
+                  />
+                  <ErrorMessage errorMessage={firstNameErrorMessage} />
+                </Box>
+                <Box w='48%'>
+                  <FormInput
+                    type='text'
+                    placeholder='Last Name'
+                    onchange={(e) => {
+                      setLastName(e.target.value);
+                    }}
+                  />
+                  <ErrorMessage errorMessage={lastNameErrorMessage} />
+                </Box>
+              </Stack>
+              {/* <Box w='100%'></Box> */}
               <Box w='100%'>
                 <FormInput
                   type='email'
