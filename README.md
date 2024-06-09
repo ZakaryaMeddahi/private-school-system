@@ -19,7 +19,7 @@ Create an account for **Students**
 
 ```json
 {
-  "firstName": "Zakarya",
+  "firstName": "Zakaria",
   "lastName": "Meddahi",
   "email": "<email>",
   "password": "<password>"
@@ -47,7 +47,7 @@ Create an account for **Students**
   "data": {
     "id": "1",
     "email": "<email>",
-    "firstName": "Zakarya",
+    "firstName": "Zakaria",
     "lastName": "Meddahi",
     "role": "student",
     "address": null,
@@ -102,7 +102,7 @@ POST /api/v1/auth/login
   "data": {
     "id": "1",
     "email": "<email>",
-    "firstName": "Zakarya",
+    "firstName": "Zakaria",
     "lastName": "Meddahi",
     "role": "student",
     "address": null,
@@ -110,7 +110,7 @@ POST /api/v1/auth/login
     "lastLogging": "2024-06-09T10:04:12.973Z",
     "createdAt": "2024-04-01T03:57:30.858Z",
     "updatedAt": "2024-04-02T19:23:53.494Z",
-    "access_token": "token"
+    "access_token": "<token>"
   }
 }
 ```
@@ -943,7 +943,33 @@ GET /api/v1/students/account/me
 > 200 Response
 
 ```json
-{}
+{
+  "status": "success",
+  "message": "Account data loaded successfully",
+  "data": {
+    "id": "1",
+    "firstName": "Zakarya",
+    "lastName": "Meddahi",
+    "email": "<email>",
+    "role": "student",
+    "biography": null,
+    "profilePicture": null,
+    "address": null,
+    "isActive": true,
+    "lastLogging": "2024-06-09T21:20:52.191Z",
+    "createdAt": "2024-04-28T13:44:01.045Z",
+    "updatedAt": "2024-04-28T13:44:01.045Z",
+    "socialLinks": {
+      "id": "1",
+      "linkedIn": null,
+      "facebook": null,
+      "twitter": null,
+      "github": null,
+      "youtube": null,
+      "website": null
+    }
+  }
+}
 ```
 
 ### Responses
@@ -952,20 +978,20 @@ GET /api/v1/students/account/me
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
 
-### Responses Data Schema
+<!-- ### Responses Data Schema -->
 
 ## PATCH Update My Account
 
 PATCH /api/v1/students/account/me
 
-- The **Teacher** can update his account info
+- The **Student** can update his account info
 
 > Body Parameters
 
 ```json
 {
-  "firstName": "Sid Ahmed",
-  "lastName": "Abdelali"
+  "firstName": "Zakarya",
+  "lastName": "Meddahi"
 }
 ```
 
@@ -982,7 +1008,33 @@ PATCH /api/v1/students/account/me
 > 200 Response
 
 ```json
-{}
+{
+  "status": "success",
+  "message": "Account data loaded successfully",
+  "data": {
+    "id": "1",
+    "firstName": "Zakarya",
+    "lastName": "Meddahi",
+    "email": "<email>",
+    "role": "student",
+    "biography": null,
+    "profilePicture": null,
+    "address": null,
+    "isActive": true,
+    "lastLogging": "2024-06-09T21:20:52.191Z",
+    "createdAt": "2024-04-28T13:44:01.045Z",
+    "updatedAt": "2024-04-28T13:44:01.045Z",
+    "socialLinks": {
+      "id": "1",
+      "linkedIn": null,
+      "facebook": null,
+      "twitter": null,
+      "github": null,
+      "youtube": null,
+      "website": null
+    }
+  }
+}
 ```
 
 ### Responses
@@ -991,7 +1043,7 @@ PATCH /api/v1/students/account/me
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
 
-### Responses Data Schema
+<!-- ### Responses Data Schema -->
 
 ## PATCH Update Profile Picture
 
@@ -1003,7 +1055,6 @@ PATCH /api/v1/students/account/me/profile-picture
 
 ```yaml
 image: string
-
 ```
 
 ### Params
@@ -1018,7 +1069,33 @@ image: string
 > 200 Response
 
 ```json
-{}
+{
+  "status": "success",
+  "message": "Account data loaded successfully",
+  "data": {
+    "id": "1",
+    "firstName": "Zakarya",
+    "lastName": "Meddahi",
+    "email": "<email>",
+    "role": "student",
+    "biography": null,
+    "profilePicture": "http://res.cloudinary.com/private-school/image/upload/v1717968607/businessman_506134.png",
+    "address": null,
+    "isActive": true,
+    "lastLogging": "2024-06-09T21:20:52.191Z",
+    "createdAt": "2024-04-28T13:44:01.045Z",
+    "updatedAt": "2024-04-28T13:44:01.045Z",
+    "socialLinks": {
+      "id": "1",
+      "linkedIn": null,
+      "facebook": null,
+      "twitter": null,
+      "github": null,
+      "youtube": null,
+      "website": null
+    }
+  }
+}
 ```
 
 ### Responses
@@ -1027,7 +1104,7 @@ image: string
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
 
-### Responses Data Schema
+<!-- ### Responses Data Schema -->
 
 ## DELETE Remove Student
 
@@ -1040,7 +1117,10 @@ DELETE /api/v1/students/id
 > 200 Response
 
 ```json
-{}
+{
+  "status": "success",
+  "message": "Student account removed successfully"
+}
 ```
 
 ### Responses
@@ -1049,7 +1129,7 @@ DELETE /api/v1/students/id
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
 
-### Responses Data Schema
+<!-- ### Responses Data Schema -->
 
 # Enrollments
 
@@ -1166,7 +1246,7 @@ PATCH /api/v1/enrollments/id
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
 
-### Responses Data Schema
+<!-- ### Responses Data Schema -->
 
 ## DELETE Cancel Enrollment
 
