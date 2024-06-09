@@ -445,7 +445,6 @@ POST /api/v1/courses/1/rooms
 ```json
 {
   "name": "new room",
-  "slug": "new-room",
   "status": "open"
 }
 ```
@@ -461,23 +460,36 @@ POST /api/v1/courses/1/rooms
 
 > Response Examples
 
-> 200 Response
+> 201 Response
 
 ```json
-{}
+{
+  "status": "success",
+  "message": "Room created successfully",
+  "data": {
+    "name": "new room",
+    "status": "open",
+    "course": {
+      "id": 1
+    },
+    "id": "1",
+    "createdAt": "2024-06-09T20:26:41.799Z",
+    "updatedAt": "2024-06-09T20:26:41.799Z"
+  }
+}
 ```
 
 ### Responses
 
 |HTTP Status Code |Meaning|Description|Data schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
+|201|[CREATED](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
 
-### Responses Data Schema
+<!-- ### Responses Data Schema -->
 
 ## GET Get Rooms
 
-GET /api/v1/courses/25/rooms
+GET /api/v1/courses/1/rooms
 
 - **Course Creator** (**Teacher**) and **Admin** can see rooms
 - **Enrolled Students** with **accepted status** can see rooms of that specific course
@@ -487,7 +499,26 @@ GET /api/v1/courses/25/rooms
 > 200 Response
 
 ```json
-{}
+{
+  "status": "success",
+  "message": "Loaded rooms successfully",
+  "data": [
+    {
+      "id": "1",
+      "name": "new room",
+      "status": "open",
+      "createdAt": "2024-06-09T20:25:31.852Z",
+      "updatedAt": "2024-06-09T20:25:31.852Z"
+    },
+    {
+      "id": "2",
+      "name": "General",
+      "status": "open",
+      "createdAt": "2024-06-09T20:26:41.799Z",
+      "updatedAt": "2024-06-09T20:26:41.799Z"
+    }
+  ]
+}
 ```
 
 ### Responses
@@ -496,11 +527,11 @@ GET /api/v1/courses/25/rooms
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
 
-### Responses Data Schema
+<!-- ### Responses Data Schema -->
 
-## PATCH Update Room
+<!-- ## PATCH Update Room
 
-PATCH /api/v1/rooms/id
+PATCH /api/v1/rooms/1
 
 - **Course Creator** and __Admin__ can update rooms
 
@@ -509,7 +540,6 @@ PATCH /api/v1/rooms/id
 ```json
 {
   "name": "new room",
-  "slug": "new-room",
   "status": "open"
 }
 ```
@@ -537,9 +567,9 @@ PATCH /api/v1/rooms/id
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
 
-### Responses Data Schema
+### Responses Data Schema -->
 
-## DELETE Remove Room
+<!-- ## DELETE Remove Room
 
 DELETE /api/v1/rooms/id
 
@@ -557,9 +587,9 @@ DELETE /api/v1/rooms/id
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
 
-### Responses Data Schema
+### Responses Data Schema -->
 
-# Users
+<!-- # Users
 
 ## POST Create User
 
@@ -639,7 +669,7 @@ DELETE /api/v1/users/id
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
 
-### Responses Data Schema
+### Responses Data Schema -->
 
 # Teachers
 
@@ -653,8 +683,8 @@ POST /api/v1/teachers
 
 ```json
 {
-  "firstName": "Zakarya",
-  "lastName": "Meddahi",
+  "firstName": "Sid Ahmed",
+  "lastName": "Abdelali",
   "email": "<email>"
 }
 ```
@@ -670,19 +700,36 @@ POST /api/v1/teachers
 
 > Response Examples
 
-> 200 Response
+> 201 Response
 
 ```json
-{}
+{
+  "status": "success",
+  "message": "Teacher created successfully",
+  "data": {
+    "id": "2",
+    "firstName": "Sid Ahmed",
+    "lastName": "Abdelali",
+    "email": "<email>",
+    "role": "teacher",
+    "biography": null,
+    "profilePicture": null,
+    "address": null,
+    "isActive": true,
+    "lastLogging": null,
+    "createdAt": "2024-06-09T20:38:19.978Z",
+    "updatedAt": "2024-06-09T20:38:19.978Z"
+  }
+}
 ```
 
 ### Responses
 
 |HTTP Status Code |Meaning|Description|Data schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
+|201|[CREATED](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
 
-### Responses Data Schema
+<!-- ### Responses Data Schema -->
 
 ## GET Get My Account
 
@@ -695,7 +742,33 @@ GET /api/v1/teachers/account/me
 > 200 Response
 
 ```json
-{}
+{
+  "status": "success",
+  "message": "Account data loaded successfully",
+  "data": {
+    "id": "1",
+    "firstName": "Sid Ahmed",
+    "lastName": "Abdelali",
+    "email": "<email>",
+    "role": "teacher",
+    "biography": null,
+    "profilePicture": "https://res.cloudinary.com/private-school/image/upload/v1714805559/e7d1510bbbae907bf2d24a4c9a2c10960d503b10.png",
+    "address": null,
+    "isActive": true,
+    "lastLogging": "2024-06-09T10:04:12.973Z",
+    "createdAt": "2024-04-01T03:57:30.858Z",
+    "updatedAt": "2024-04-02T19:23:53.494Z",
+    "socialLinks": {
+      "id": "1",
+      "linkedIn": null,
+      "facebook": null,
+      "twitter": null,
+      "github": null,
+      "youtube": null,
+      "website": null
+    }
+  }
+}
 ```
 
 ### Responses
@@ -704,7 +777,7 @@ GET /api/v1/teachers/account/me
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
 
-### Responses Data Schema
+<!-- ### Responses Data Schema -->
 
 ## PATCH Update My Account
 
@@ -717,7 +790,7 @@ PATCH /api/v1/teachers/account/me
 ```json
 {
   "firstName": "Sid Ahmed",
-  "lastName": "Abdelali"
+  "lastName": "Abdellali"
 }
 ```
 
@@ -734,7 +807,33 @@ PATCH /api/v1/teachers/account/me
 > 200 Response
 
 ```json
-{}
+{
+  "status": "success",
+  "message": "Account data updated successfully",
+  "data": {
+    "id": "1",
+    "firstName": "Sid Ahmed",
+    "lastName": "Abdellali",
+    "email": "<email>",
+    "role": "teacher",
+    "biography": null,
+    "profilePicture": "https://res.cloudinary.com/private-school/image/upload/v1714805559/e7d1510bbbae907bf2d24a4c9a2c10960d503b10.png",
+    "address": null,
+    "isActive": true,
+    "lastLogging": "2024-06-09T10:04:12.973Z",
+    "createdAt": "2024-04-01T03:57:30.858Z",
+    "updatedAt": "2024-06-09T20:52:57.651Z",
+    "socialLinks": {
+      "id": "1",
+      "linkedIn": null,
+      "facebook": null,
+      "twitter": null,
+      "github": null,
+      "youtube": null,
+      "website": null
+    }
+  }
+}
 ```
 
 ### Responses
@@ -743,19 +842,18 @@ PATCH /api/v1/teachers/account/me
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
 
-### Responses Data Schema
+<!-- ### Responses Data Schema -->
 
 ## PATCH Update Profile Picture
 
 PATCH /api/v1/teachers/account/me/profile-picture
 
-- **The Teacher** can upload a profile picture (so in this case the file should be sent in the request)
+- **The Teacher** can upload a profile picture (so in this case the file should be sent in the request body as form data)
 
 > Body Parameters
 
 ```yaml
-Image: string
-
+image: string
 ```
 
 ### Params
@@ -770,7 +868,33 @@ Image: string
 > 200 Response
 
 ```json
-{}
+{
+  "status": "success",
+  "message": "Profile picture updated successfully",
+  "data": {
+    "id": "1",
+    "firstName": "Sid Ahmed",
+    "lastName": "Abdellali",
+    "email": "<email>",
+    "role": "teacher",
+    "biography": null,
+    "profilePicture": "http://res.cloudinary.com/private-school/image/upload/v1717967295/Apex.png",
+    "address": null,
+    "isActive": true,
+    "lastLogging": "2024-06-09T10:04:12.973Z",
+    "createdAt": "2024-04-01T03:57:30.858Z",
+    "updatedAt": "2024-06-09T20:52:57.651Z",
+    "socialLinks": {
+      "id": "1",
+      "linkedIn": null,
+      "facebook": null,
+      "twitter": null,
+      "github": null,
+      "youtube": null,
+      "website": null
+    }
+  }
+}
 ```
 
 ### Responses
@@ -779,7 +903,7 @@ Image: string
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
 
-### Responses Data Schema
+<!-- ### Responses Data Schema -->
 
 ## DELETE Remove Teacher
 
@@ -792,7 +916,10 @@ DELETE /api/v1/teachers/id
 > 200 Response
 
 ```json
-{}
+{
+  "status": "success",
+  "message": "Teacher account removed successfully"
+}
 ```
 
 ### Responses
@@ -801,7 +928,7 @@ DELETE /api/v1/teachers/id
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
 
-### Responses Data Schema
+<!-- ### Responses Data Schema -->
 
 # Students
 
