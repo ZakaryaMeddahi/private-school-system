@@ -907,7 +907,7 @@ image: string
 
 ## DELETE Remove Teacher
 
-DELETE /api/v1/teachers/id
+DELETE /api/v1/teachers/1
 
 - **Admin** can remove **Teachers**
 
@@ -1108,7 +1108,7 @@ image: string
 
 ## DELETE Remove Student
 
-DELETE /api/v1/students/id
+DELETE /api/v1/students/1
 
 - **Admin** can remove __Students__
 
@@ -1135,7 +1135,7 @@ DELETE /api/v1/students/id
 
 ## POST Enroll
 
-POST /api/v1/courses/25/enrollments
+POST /api/v1/courses/1/enrollments
 
 - __Students__ can enroll in courses
 
@@ -1153,19 +1153,34 @@ POST /api/v1/courses/25/enrollments
 
 > Response Examples
 
-> 200 Response
+> 201 Response
 
 ```json
-{}
+{
+  "status": "success",
+  "message": "Enrolled successfully",
+  "data": {
+    "student": {
+      "id": "1"
+    },
+    "course": {
+      "id": "1"
+    },
+    "id": "1",
+    "enrollmentStatus": "pending",
+    "progress": 0,
+    "enrollmentDate": "2024-06-09T22:15:52.654Z"
+  }
+}
 ```
 
 ### Responses
 
 |HTTP Status Code |Meaning|Description|Data schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
+|201|[CREATED](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
 
-### Responses Data Schema
+<!-- ### Responses Data Schema -->
 
 ## GET Get Enrollments
 
@@ -1178,7 +1193,67 @@ GET /api/v1/courses/enrollments
 > 200 Response
 
 ```json
-{}
+{
+  "status": "success",
+  "message": "Enrollments retrieved successfully",
+  "data": [
+    {
+      "id": "1",
+      "enrollmentStatus": "pending",
+      "progress": 0,
+      "enrollmentDate": "2024-06-09T22:15:52.654Z",
+      "student": {
+          "id": "1",
+          "biography": null,
+          "profilePicture": null,
+          "user": {
+            "id": "1",
+            "email": "<email>",
+            "firstName": "Zakarya",
+            "lastName": "Meddahi",
+            "address": null,
+            "role": "student",
+            "isActive": true,
+            "lastLogging": "2024-06-09T21:20:52.191Z",
+            "createdAt": "2024-04-28T13:44:01.045Z",
+            "updatedAt": "2024-04-28T13:44:01.045Z"
+          }
+      },
+      "course": {
+        "id": "1",
+        "title": "Node Js Course",
+        "description": "In this course you will learn how to create APIs using Express js and MongoDB",
+        "price": 120,
+        "language": "English",
+        "difficulty": "Easy",
+        "duration": 2,
+        "durationUnit": "Month",
+        "requirements": null,
+        "deadline": "2024-12-11T23:00:00.000Z",
+        "createdAt": "2024-06-09T20:25:31.811Z",
+        "updatedAt": "2024-06-09T20:25:31.811Z",
+        "teacher": {
+          "id": "1",
+          "biography": null,
+          "profilePicture": "http://res.cloudinary.com/private-school/image/upload/v1717968607/businessman_506134.png",
+          "user": {
+            "id": "2",
+            "email": "<email>",
+            "firstName": "Sid Ahmed",
+            "lastName": "Abdellali",
+            "address": null,
+            "role": "teacher",
+            "isActive": true,
+            "lastLogging": "2024-06-09T10:04:12.973Z",
+            "createdAt": "2024-04-01T03:57:30.858Z",
+            "updatedAt": "2024-06-09T20:52:57.651Z"
+          }
+        },
+        "file": null
+      }
+    }
+  ]
+}
 ```
 
 ### Responses
@@ -1187,7 +1262,7 @@ GET /api/v1/courses/enrollments
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
 
-### Responses Data Schema
+<!-- ### Responses Data Schema -->
 
 ## GET Get Enrollments By Course Id
 
@@ -1200,7 +1275,67 @@ GET /api/v1/courses/1/enrollments
 > 200 Response
 
 ```json
-{}
+{
+  "status": "success",
+  "message": "Enrollments retrieved successfully",
+  "data": [
+    {
+      "id": "1",
+      "enrollmentStatus": "pending",
+      "progress": 0,
+      "enrollmentDate": "2024-06-09T22:15:52.654Z",
+      "student": {
+          "id": "1",
+          "biography": null,
+          "profilePicture": null,
+          "user": {
+            "id": "1",
+            "email": "<email>",
+            "firstName": "Zakarya",
+            "lastName": "Meddahi",
+            "address": null,
+            "role": "student",
+            "isActive": true,
+            "lastLogging": "2024-06-09T21:20:52.191Z",
+            "createdAt": "2024-04-28T13:44:01.045Z",
+            "updatedAt": "2024-04-28T13:44:01.045Z"
+          }
+      },
+      "course": {
+        "id": "1",
+        "title": "Node Js Course",
+        "description": "In this course you will learn how to create APIs using Express js and MongoDB",
+        "price": 120,
+        "language": "English",
+        "difficulty": "Easy",
+        "duration": 2,
+        "durationUnit": "Month",
+        "requirements": null,
+        "deadline": "2024-12-11T23:00:00.000Z",
+        "createdAt": "2024-06-09T20:25:31.811Z",
+        "updatedAt": "2024-06-09T20:25:31.811Z",
+        "teacher": {
+          "id": "1",
+          "biography": null,
+          "profilePicture": "http://res.cloudinary.com/private-school/image/upload/v1717968607/businessman_506134.png",
+          "user": {
+            "id": "2",
+            "email": "<email>",
+            "firstName": "Sid Ahmed",
+            "lastName": "Abdellali",
+            "address": null,
+            "role": "teacher",
+            "isActive": true,
+            "lastLogging": "2024-06-09T10:04:12.973Z",
+            "createdAt": "2024-04-01T03:57:30.858Z",
+            "updatedAt": "2024-06-09T20:52:57.651Z"
+          }
+        },
+        "file": null
+      }
+    }
+  ]
+}
 ```
 
 ### Responses
@@ -1209,11 +1344,11 @@ GET /api/v1/courses/1/enrollments
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
 
-### Responses Data Schema
+<!-- ### Responses Data Schema -->
 
 ## PATCH Update Enrollment
 
-PATCH /api/v1/enrollments/id
+PATCH /api/v1/enrollments/1
 
 - **Admin** can accept or reject __Students__ enrollments by updating the status property
 
@@ -1237,7 +1372,47 @@ PATCH /api/v1/enrollments/id
 > 200 Response
 
 ```json
-{}
+{
+  "status": "success",
+  "message": "Enrollment updated successfully",
+  "data": {
+    "id": "1",
+    "enrollmentStatus": "approved",
+    "progress": 0,
+    "enrollmentDate": "2024-06-09T22:15:52.654Z",
+    "course": {
+      "id": "1",
+      "title": "Node Js Course",
+      "description": "In this course you will learn how to create APIs using Express js and MongoDB",
+      "price": 120,
+      "language": "English",
+      "difficulty": "Easy",
+      "duration": 2,
+      "durationUnit": "Month",
+      "requirements": null,
+      "deadline": "2024-12-11T23:00:00.000Z",
+      "createdAt": "2024-06-09T20:25:31.811Z",
+      "updatedAt": "2024-06-09T20:25:31.811Z"
+    },
+    "student": {
+      "id": "1",
+      "biography": null,
+      "profilePicture": null,
+      "user": {
+        "id": "1",
+        "email": "<email>",
+        "firstName": "Zakarya",
+        "lastName": "Meddahi",
+        "address": null,
+        "role": "student",
+        "isActive": true,
+        "lastLogging": "2024-06-09T21:20:52.191Z",
+        "createdAt": "2024-04-28T13:44:01.045Z",
+        "updatedAt": "2024-04-28T13:44:01.045Z"
+      }
+    }
+  }
+}
 ```
 
 ### Responses
@@ -1250,7 +1425,7 @@ PATCH /api/v1/enrollments/id
 
 ## DELETE Cancel Enrollment
 
-DELETE /api/v1/courses/enrollments/6
+DELETE /api/v1/courses/enrollments/1
 
 - __Students__ can cancel their enrollments
 
@@ -1259,7 +1434,10 @@ DELETE /api/v1/courses/enrollments/6
 > 200 Response
 
 ```json
-{}
+{
+  "status": "success",
+  "message": "Enrollment canceled successfully"
+}
 ```
 
 ### Responses
@@ -1268,7 +1446,7 @@ DELETE /api/v1/courses/enrollments/6
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
 
-### Responses Data Schema
+<!-- ### Responses Data Schema -->
 
 # Chats
 
