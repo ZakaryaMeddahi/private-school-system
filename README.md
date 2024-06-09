@@ -3,8 +3,6 @@ Online School Provide The Ability For Tutors To Teach Remotely Without The Need 
 
 # API Design
 
-Base URLs:
-
 # Authentication
 
 - HTTP Authentication, scheme: bearer
@@ -40,19 +38,35 @@ Create an account for **Students**
 
 > Response Examples
 
-> 200 Response
+> 201 Response
 
 ```json
-{}
+{
+  "status": "success",
+  "message": "User Registered successfully",
+  "data": {
+    "id": "1",
+    "email": "<email>",
+    "firstName": "Zakarya",
+    "lastName": "Meddahi",
+    "role": "student",
+    "address": null,
+    "isActive": true,
+    "lastLogging": "2024-06-09T10:01:44.308Z",
+    "createdAt": "2024-06-09T10:01:44.318Z",
+    "updatedAt": "2024-06-09T10:01:44.318Z",
+    "access_token": "<token>"
+  }
+}
 ```
 
 ### Responses
 
 |HTTP Status Code |Meaning|Description|Data schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
+|201|[CREATED](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
 
-### Responses Data Schema
+<!-- ### Responses Data Schema -->
 
 ## POST Login
 
@@ -79,19 +93,35 @@ POST /api/v1/auth/login
 
 > Response Examples
 
-> 200 Response
+> 201 Response
 
 ```json
-{}
+{
+  "status": "success",
+  "message": "User logged in successfully",
+  "data": {
+    "id": "1",
+    "email": "<email>",
+    "firstName": "Zakarya",
+    "lastName": "Meddahi",
+    "role": "student",
+    "address": null,
+    "isActive": true,
+    "lastLogging": "2024-06-09T10:04:12.973Z",
+    "createdAt": "2024-04-01T03:57:30.858Z",
+    "updatedAt": "2024-04-02T19:23:53.494Z",
+    "access_token": "token"
+  }
+}
 ```
 
 ### Responses
 
 |HTTP Status Code |Meaning|Description|Data schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
+|201|[CREATED](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
 
-### Responses Data Schema
+<!-- ### Responses Data Schema -->
 
 # Courses
 
@@ -106,14 +136,14 @@ POST /api/v1/courses
 ```json
 {
   "title": "Node Js Course",
-  "description": "In this course you will learn how to create a backend application using Express js",
+  "description": "In this course you will learn how to create APIs using Express js and MongoDB",
   "price": 100,
   "language": "English",
-  "difficulty": "easy",
+  "difficulty": "Easy",
   "enrollmentLimit": 1000,
-  "duration": 1,
-  "durationUnit": "month",
-  "enrollmentDeadline": "12-12-2024",
+  "duration": 2,
+  "durationUnit": "Month",
+  "deadline": "12-12-2024",
   "topics": [
     {
       "title": "Introduction to Node Js",
@@ -136,26 +166,53 @@ POST /api/v1/courses
 |» enrollmentLimit|body|integer| yes |none|
 |» duration|body|integer| yes |none|
 |» durationUnit|body|string| yes |none|
-|» enrollmentDeadline|body|string| yes |none|
+|» deadline|body|string| yes |none|
 |» topics|body|[object]| yes |none|
 |»» title|body|string| no |none|
 |»» startTime|body|string| no |none|
 
 > Response Examples
 
-> 200 Response
+> 201 Response
 
 ```json
-{}
+{
+  "status": "success",
+  "message": "Course created successfully",
+  "data": {
+    "id": "1",
+    "title": "Node Js Course",
+    "description": "In this course you will learn how to create APIs using Express js and MongoDB",
+    "price": 100,
+    "language": "English",
+    "difficulty": "Easy",
+    "duration": 2,
+    "durationUnit": "Month",
+    "deadline": "12-12-2024",
+    "file": null,
+    "requirements": null,
+    "teacher": {
+      "id": "1"
+    },
+    "topics": [
+      {
+        "id": "1",
+        "title": "Introduction to Node Js"
+      }
+    ],
+    "createdAt": "2024-06-09T10:14:25.740Z",
+    "updatedAt": "2024-06-09T10:14:25.740Z"
+  }
+}
 ```
 
 ### Responses
 
 |HTTP Status Code |Meaning|Description|Data schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
+|201|[CREATED](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
 
-### Responses Data Schema
+<!-- ### Responses Data Schema -->
 
 ## GET Get Courses
 
@@ -168,7 +225,36 @@ GET /api/v1/courses
 > 200 Response
 
 ```json
-{}
+{
+  "status": "success",
+  "message": "Courses retrieved successfully",
+  "data": [
+    {
+      "id": "1",
+      "title": "Node Js Course",
+      "description": "In this course you will learn how to create APIs using Express js and MongoDB",
+      "price": 100,
+      "language": "English",
+      "difficulty": "Easy",
+      "duration": 2,
+      "durationUnit": "Month",
+      "deadline": "12-12-2024",
+      "file": null,
+      "requirements": null,
+      "teacher": {
+        "id": "1"
+      },
+      "topics": [
+        {
+          "id": "1",
+          "title": "Introduction to Node Js"
+        }
+      ],
+      "createdAt": "2024-06-09T10:14:25.740Z",
+      "updatedAt": "2024-06-09T10:14:25.740Z"
+    }
+  ]
+}
 ```
 
 ### Responses
@@ -177,11 +263,11 @@ GET /api/v1/courses
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
 
-### Responses Data Schema
+<!-- ### Responses Data Schema -->
 
 ## GET Get One Course
 
-GET /api/v1/courses/2
+GET /api/v1/courses/1
 
 - __All Users__ are allowed to get a course by id
 
@@ -190,7 +276,34 @@ GET /api/v1/courses/2
 > 200 Response
 
 ```json
-{}
+{
+  "status": "success",
+  "message": "Course created successfully",
+  "data": {
+    "id": "1",
+    "title": "Node Js Course",
+    "description": "In this course you will learn how to create APIs using Express js and MongoDB",
+    "price": 100,
+    "language": "English",
+    "difficulty": "Easy",
+    "duration": 2,
+    "durationUnit": "Month",
+    "deadline": "12-12-2024",
+    "file": null,
+    "requirements": null,
+    "teacher": {
+      "id": "1"
+    },
+    "topics": [
+      {
+        "id": "1",
+        "title": "Introduction to Node Js"
+      }
+    ],
+    "createdAt": "2024-06-09T10:14:25.740Z",
+    "updatedAt": "2024-06-09T10:14:25.740Z"
+  }
+}
 ```
 
 ### Responses
@@ -199,11 +312,11 @@ GET /api/v1/courses/2
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
 
-### Responses Data Schema
+<!-- ### Responses Data Schema -->
 
 ## PATCH Update Course
 
-PATCH /api/v1/courses/25
+PATCH /api/v1/courses/1
 
 - __Admin__ and __Course Creator__ (__Teacher__) can update the course
 
@@ -212,17 +325,17 @@ PATCH /api/v1/courses/25
 ```json
 {
   "title": "Node Js Course",
-  "description": "In this course you will learn how to create a backend application using Express js",
+  "description": "In this course you will learn how to create APIs using Express js and MongoDB",
   "price": 120,
   "language": "English",
-  "difficulty": "Easy",
+  "difficulty": "Medium",
   "enrollmentLimit": 1000,
-  "duration": 2,
+  "duration": 3,
   "durationUnit": "Month",
-  "enrollmentDeadline": "12-12-2024",
+  "deadline": "12-12-2024",
   "topics": [
     {
-      "id": 5,
+      "id": 1,
       "title": "Introduction to Node Js",
       "startTime": "12-12-2024",
       "isDeleted": false
@@ -244,7 +357,7 @@ PATCH /api/v1/courses/25
 |» enrollmentLimit|body|integer| yes |none|
 |» duration|body|integer| yes |none|
 |» durationUnit|body|string| yes |none|
-|» enrollmentDeadline|body|string| yes |none|
+|» deadline|body|string| yes |none|
 |» topics|body|[object]| yes |none|
 |»» id|body|integer| no |none|
 |»» title|body|string| no |none|
@@ -256,7 +369,34 @@ PATCH /api/v1/courses/25
 > 200 Response
 
 ```json
-{}
+{
+  "status": "success",
+  "message": "Course created successfully",
+  "data": {
+    "id": "1",
+    "title": "Node Js Course",
+    "description": "In this course you will learn how to create APIs using Express js and MongoDB",
+    "price": 120,
+    "language": "English",
+    "difficulty": "Easy",
+    "duration": 3,
+    "durationUnit": "Month",
+    "deadline": "12-12-2024",
+    "file": null,
+    "requirements": null,
+    "teacher": {
+      "id": "1"
+    },
+    "topics": [
+      {
+        "id": "1",
+        "title": "Introduction to Node Js"
+      }
+    ],
+    "createdAt": "2024-06-09T10:14:25.740Z",
+    "updatedAt": "2024-06-09T10:14:25.740Z"
+  }
+}
 ```
 
 ### Responses
@@ -265,11 +405,11 @@ PATCH /api/v1/courses/25
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
 
-### Responses Data Schema
+<!-- ### Responses Data Schema -->
 
 ## DELETE Remove Course
 
-DELETE /api/v1/courses/25
+DELETE /api/v1/courses/1
 
 - Only the __Teacher__ is allowed to remove his courses
 
@@ -278,7 +418,10 @@ DELETE /api/v1/courses/25
 > 200 Response
 
 ```json
-{}
+{
+  "status": "success",
+  "message": "Course deleted successfully"
+}
 ```
 
 ### Responses
@@ -287,15 +430,15 @@ DELETE /api/v1/courses/25
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
 
-### Responses Data Schema
+<!-- ### Responses Data Schema -->
 
 # Rooms
 
 ## POST Create Room
 
-POST /api/v1/courses/7/rooms
+POST /api/v1/courses/1/rooms
 
-- __Admin__ and __Course Creator__ (__Teacher__) can create new rooms inside the course
+- __Admin__ and __Course Creator__ (__Teacher__) can create new rooms for course
 
 > Body Parameters
 
