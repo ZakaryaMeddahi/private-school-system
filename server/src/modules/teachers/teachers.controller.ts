@@ -60,7 +60,11 @@ export class TeachersController {
   ) {
     const { sub: id } = user;
     try {
-      const updatedUser = await this.teachersService.updateAccount(id, userData, image);
+      const updatedUser = await this.teachersService.updateAccount(
+        id,
+        userData,
+        image,
+      );
       return {
         status: 'success',
         message: 'Account data updated successfully',
@@ -83,7 +87,10 @@ export class TeachersController {
   ) {
     const { sub: id } = user;
     try {
-      const updatedUser = await this.teachersService.updateProfilePicture(id, image);
+      const updatedUser = await this.teachersService.updateProfilePicture(
+        id,
+        image,
+      );
       return {
         status: 'success',
         message: 'Profile picture updated successfully',
@@ -177,7 +184,10 @@ export class TeachersController {
   async removeTeacher(@Param('id', ParseIntPipe) id: number) {
     try {
       await this.teachersService.remove(id);
-      return { status: 'success', message: 'Teacher removed successfully' };
+      return {
+        status: 'success',
+        message: 'Teacher account removed successfully',
+      };
     } catch (error) {
       console.error(error);
       throw new HttpException(
