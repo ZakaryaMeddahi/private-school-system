@@ -1587,44 +1587,44 @@ file: string
 
 > Response Examples
 
-> 200 Response
+> 201 Response
 
 ```json
 {
-    "status": "success",
-    "message": "Message sent successfully",
-    "data": {
+  "status": "success",
+  "message": "Message sent successfully",
+  "data": {
+    "id": "1",
+    "sender": {
       "id": "1",
-      "sender": {
-        "id": "1",
-        "email": "<email>",
-        "firstName": "Sid Ahmed",
-        "lastName": "Abdellali",
-        "address": null,
-        "role": "teacher",
-        "isActive": true,
-        "lastLogging": "2024-06-09T10:04:12.973Z",
-        "createdAt": "2024-04-01T03:57:30.858Z",
-        "updatedAt": "2024-06-09T20:52:57.651Z"
-      },
-      "chat": {
-        "id": 1
-      },
-      "file": {
-        "id": "3",
-        "name": "DB-Design",
-        "url": "http://res.cloudinary.com/private-school/image/upload/v1711819791/DB-Design.png",
-        "type": "image",
-        "format": "png",
-        "size": 95810,
-        "createdAt": "2024-06-09T22:52:19.381Z",
-        "updatedAt": "2024-06-09T22:52:19.381Z"
-      },
-      "content": null,
-      "isPinned": false,
-      "sentAt": "2024-06-09T22:52:19.420Z",
-      "updatedAt": "2024-06-09T22:52:19.420Z"
-    }
+      "email": "<email>",
+      "firstName": "Sid Ahmed",
+      "lastName": "Abdellali",
+      "address": null,
+      "role": "teacher",
+      "isActive": true,
+      "lastLogging": "2024-06-09T10:04:12.973Z",
+      "createdAt": "2024-04-01T03:57:30.858Z",
+      "updatedAt": "2024-06-09T20:52:57.651Z"
+    },
+    "chat": {
+      "id": 1
+    },
+    "file": {
+      "id": "3",
+      "name": "DB-Design",
+      "url": "http://res.cloudinary.com/private-school/image/upload/v1711819791/DB-Design.png",
+      "type": "image",
+      "format": "png",
+      "size": 95810,
+      "createdAt": "2024-06-09T22:52:19.381Z",
+      "updatedAt": "2024-06-09T22:52:19.381Z"
+    },
+    "content": null,
+    "isPinned": false,
+    "sentAt": "2024-06-09T22:52:19.420Z",
+    "updatedAt": "2024-06-09T22:52:19.420Z"
+  }
 }
 ```
 
@@ -1632,7 +1632,7 @@ file: string
 
 |HTTP Status Code |Meaning|Description|Data schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
+|201|[CREATED](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|Inline|
 
 <!-- ### Responses Data Schema -->
 
