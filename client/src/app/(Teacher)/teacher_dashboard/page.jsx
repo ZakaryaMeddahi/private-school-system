@@ -1,15 +1,15 @@
-'use client'
+'use client';
 
-import Overview from "@/Pages/Overview"
-import { useRouter } from "next/navigation"
+import Overview from '@/Pages/Overview';
+import Loading from '@/components/Loading';
 
 const TeacherDashboard = () => {
-    const router = useRouter()
-    router.replace('/teacher_dashboard/my_courses')
-    return (
-        <></>
-        // <Overview />
-    )
-}
+  return (
+    <div>
+      <Loading page='/teacher_dashboard/my_courses' />
+    </div>
+    // <Overview />
+  );
+};
 
-export default TeacherDashboard
+export default TeacherDashboard;
