@@ -3,7 +3,7 @@
 import Overview from "@/Pages/Overview";
 import { useRouter } from "next/navigation";
 
-const Admin = () => {
+const AdminDashboard = () => {
     const router = useRouter()
     router.replace('/admin_dashboard/teachers')
     return (
@@ -12,4 +12,4 @@ const Admin = () => {
     );
 }
 
-export default Admin;
+export default AdminDashboard;
