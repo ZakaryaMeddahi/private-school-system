@@ -51,6 +51,7 @@ const ChatPage = () => {
 
   const router = useRouter();
   const chatNamespace = useRef(null);
+  const userRole = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
 
   // Get chats by teacher id or student id
@@ -156,7 +157,8 @@ const ChatPage = () => {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    if(!token) router.push('/login');
+    userRole.current = localStorage.getItem('role');
+    if (!token) router.push('/login');
     chatNamespace.current = io(`${process.env.NEXT_PUBLIC_SERVER_URL}/chats`, {
       query: { token: `Bearer ${token}` },
       transports: ['websocket'],
@@ -313,7 +315,15 @@ const ChatPage = () => {
               justifyContent='flex-start'
               paddingBlock='10px'
             >
-              <Link href='/student_dashboard'>
+              <Link
+                href={
+                  userRole.current === 'admin'
+                    ? '/admin_dashboard'
+                    : userRole.current === 'teacher'
+                    ? '/teacher_dashboard'
+                    : '/student_dashboard'
+                }
+              >
                 <Box
                   w={'50px'}
                   h={'50px'}
