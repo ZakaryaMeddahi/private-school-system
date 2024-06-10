@@ -2,7 +2,7 @@ import { Center, Image, ScaleFade, keyframes } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
-function Loading() {
+function Loading({ page }) {
   const router = useRouter();
   const scale = keyframes`
     0% {
@@ -17,14 +17,18 @@ function Loading() {
   `;
   useEffect(() => {
     const id = setTimeout(() => {
-      router.replace('/login');
+      router.replace(page);
     }, 2000);
 
     return () => clearTimeout(id);
   }, []);
   return (
     <Center height='90vh'>
-      <Image src='./logo.png' boxSize='14rem' animation={`${scale} 2s infinite`} />
+      <Image
+        src='./logo.png'
+        boxSize='14rem'
+        animation={`${scale} 2s infinite`}
+      />
     </Center>
   );
 }
