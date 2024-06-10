@@ -183,13 +183,9 @@ const ChatPage = () => {
 
         console.log(data);
 
-        setCourses((selectedCourse) => {
-          return [...selectedCourse, ...data];
-        });
+        setCourses(data);
 
-        setSelectedCourse((selectedCourse) => {
-          return data[0];
-        });
+        setSelectedCourse(data[0]);
 
         setTeacherInfo(data[0].teacher);
 
