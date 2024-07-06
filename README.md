@@ -1,5 +1,4 @@
 # Private-School
-Online School Provide The Ability For Tutors To Teach Remotely Without The Need For Any Other Platform For Streaming, And Share Resources And Global Chat For Students to Discuss The Course Topics In Simple Words This Platform Is A Combination Of Google Classroom + Google Meet + Chat Application
 
 # API Design
 
@@ -11,7 +10,7 @@ Online School Provide The Ability For Tutors To Teach Remotely Without The Need 
 
 ## POST Register
 
-POST /api/v1/auth/register
+POST `/api/v1/auth/register`
 
 Create an account for **Students**
 
@@ -70,7 +69,7 @@ Create an account for **Students**
 
 ## POST Login
 
-POST /api/v1/auth/login
+POST `/api/v1/auth/login`
 
 **All Users** can login, a user object containing JWT (access_token) should be returned
 
@@ -127,7 +126,7 @@ POST /api/v1/auth/login
 
 ## POST Create Course
 
-POST /api/v1/courses
+POST `/api/v1/courses`
 
 - Creating courses can be performed by __Teachers__
 
@@ -216,7 +215,7 @@ POST /api/v1/courses
 
 ## GET Get Courses
 
-GET /api/v1/courses
+GET `/api/v1/courses`
 
 - __All Users__ are allowed to get courses
 
@@ -267,7 +266,7 @@ GET /api/v1/courses
 
 ## GET Get One Course
 
-GET /api/v1/courses/1
+GET `/api/v1/courses/1`
 
 - __All Users__ are allowed to get a course by id
 
@@ -316,7 +315,7 @@ GET /api/v1/courses/1
 
 ## PATCH Update Course
 
-PATCH /api/v1/courses/1
+PATCH `/api/v1/courses/1`
 
 - __Admin__ and __Course Creator__ (__Teacher__) can update the course
 
@@ -409,7 +408,7 @@ PATCH /api/v1/courses/1
 
 ## DELETE Remove Course
 
-DELETE /api/v1/courses/1
+DELETE `/api/v1/courses/1`
 
 - Only the __Teacher__ is allowed to remove his courses
 
@@ -436,7 +435,7 @@ DELETE /api/v1/courses/1
 
 ## POST Create Room
 
-POST /api/v1/courses/1/rooms
+POST `/api/v1/courses/1/rooms`
 
 - __Admin__ and __Course Creator__ (__Teacher__) can create new rooms for course
 
@@ -489,7 +488,7 @@ POST /api/v1/courses/1/rooms
 
 ## GET Get Rooms
 
-GET /api/v1/courses/1/rooms
+GET `/api/v1/courses/1/rooms`
 
 - **Course Creator** (**Teacher**) and **Admin** can see rooms
 - **Enrolled Students** with **accepted status** can see rooms of that specific course
@@ -675,7 +674,7 @@ DELETE /api/v1/users/id
 
 ## POST Create Teacher
 
-POST /api/v1/teachers
+POST `/api/v1/teachers`
 
 - **Admin** can create accounts for teachers (**Teacher** should receive email with his credentials to use them in login)
 
@@ -733,7 +732,7 @@ POST /api/v1/teachers
 
 ## GET Get My Account
 
-GET /api/v1/teachers/account/me
+GET `/api/v1/teachers/account/me`
 
 - The extracted userId from JWT will be used in this case to get the __Teacher__ profile
 
@@ -781,7 +780,7 @@ GET /api/v1/teachers/account/me
 
 ## PATCH Update My Account
 
-PATCH /api/v1/teachers/account/me
+PATCH `/api/v1/teachers/account/me`
 
 - The **Teacher** can update his own account info
 
@@ -846,7 +845,7 @@ PATCH /api/v1/teachers/account/me
 
 ## PATCH Update Profile Picture
 
-PATCH /api/v1/teachers/account/me/profile-picture
+PATCH `/api/v1/teachers/account/me/profile-picture`
 
 - **The Teacher** can upload a profile picture (so in this case the file should be sent in the request body as form data)
 
@@ -907,7 +906,7 @@ image: string
 
 ## DELETE Remove Teacher
 
-DELETE /api/v1/teachers/1
+DELETE `/api/v1/teachers/1`
 
 - **Admin** can remove **Teachers**
 
@@ -934,7 +933,7 @@ DELETE /api/v1/teachers/1
 
 ## GET Get My Account
 
-GET /api/v1/students/account/me
+GET `/api/v1/students/account/me`
 
 - The extracted userId from JWT will be used in this case to get the __Student__ profile
 
@@ -982,7 +981,7 @@ GET /api/v1/students/account/me
 
 ## PATCH Update My Account
 
-PATCH /api/v1/students/account/me
+PATCH `/api/v1/students/account/me`
 
 - The **Student** can update his account info
 
@@ -1047,7 +1046,7 @@ PATCH /api/v1/students/account/me
 
 ## PATCH Update Profile Picture
 
-PATCH /api/v1/students/account/me/profile-picture
+PATCH `/api/v1/students/account/me/profile-picture`
 
 - **The Teacher** can upload a profile picture (so in this case the file should be sent in the request)
 
@@ -1108,7 +1107,7 @@ image: string
 
 ## DELETE Remove Student
 
-DELETE /api/v1/students/1
+DELETE `/api/v1/students/1`
 
 - **Admin** can remove __Students__
 
@@ -1184,7 +1183,7 @@ POST /api/v1/courses/1/enrollments
 
 ## GET Get Enrollments
 
-GET /api/v1/courses/enrollments
+GET `/api/v1/courses/enrollments`
 
 - **Admin** can see students enrollments of all courses
 
@@ -1266,7 +1265,7 @@ GET /api/v1/courses/enrollments
 
 ## GET Get Enrollments By Course Id
 
-GET /api/v1/courses/1/enrollments
+GET `/api/v1/courses/1/enrollments`
 
 - __Admin__ and __Teacher__ can see enrollments by course
 
@@ -1348,7 +1347,7 @@ GET /api/v1/courses/1/enrollments
 
 ## PATCH Update Enrollment
 
-PATCH /api/v1/enrollments/1
+PATCH `/api/v1/enrollments/1`
 
 - **Admin** can accept or reject __Students__ enrollments by updating the status property
 
@@ -1425,7 +1424,7 @@ PATCH /api/v1/enrollments/1
 
 ## DELETE Cancel Enrollment
 
-DELETE /api/v1/courses/enrollments/1
+DELETE `/api/v1/courses/enrollments/1`
 
 - __Students__ can cancel their enrollments
 
@@ -1486,7 +1485,7 @@ GET /api/v1/courses/1/chats/1
 
 ## GET Get Chat Rooms
 
-GET /api/v1/courses/1/chats
+GET `/api/v1/courses/1/chats`
 
 - **Admin** and **Course Creator** can see chats in of course
 - Enrolled Students with accepted status can see chats
@@ -1520,7 +1519,7 @@ GET /api/v1/courses/1/chats
 
 ## PATCH Update Chat Room
 
-PATCH /api/v1/courses/courseId/chats
+PATCH `/api/v1/courses/courseId/chats`
 
 - __Admin__ and __Course Creator__ can update chat
 
@@ -1568,7 +1567,7 @@ PATCH /api/v1/courses/courseId/chats
 
 ## POST Upload File
 
-POST /api/v1/courses/1/chats/1/messages
+POST `/api/v1/courses/1/chats/1/messages`
 
 - __Admin__ and __Course Creator__ can upload file as message (send file message)
 
@@ -1640,7 +1639,7 @@ file: string
 
 ## PATCH Update Social Links
 
-PATCH /api/v1/social-links/1
+PATCH `/api/v1/social-links/1`
 
 - __All Users__ can update their social link urls
 
