@@ -30,36 +30,6 @@ import Link from 'next/link';
 import { FaRegEdit } from 'react-icons/fa';
 import CourseCard from '@/components/CourseCard';
 
-// const Courses = [
-//     {
-//         id: 1,
-//         title: 'UI/UX',
-//         description: 'This is a course for Designers',
-//         teacher: 'Abdelali Sid Ahmed',
-//         status: 'Active',
-//         createdAt: '4/30/2024 11:15:35',
-//         updatedAt: '4/30/2024 11:15:35'
-//     },
-//     {
-//         id: 2,
-//         title: 'NextJs',
-//         description: 'This is a course for Developers',
-//         teacher: 'Abdelali Sid Ahmed',
-//         status: 'Active',
-//         createdAt: '4/30/2024 11:15:35',
-//         updatedAt: '4/30/2024 11:15:35'
-//     },
-//     {
-//         id: 3,
-//         title: 'NestJs',
-//         description: 'This is a course for Developers',
-//         teacher: 'Abdelali Sid Ahmed',
-//         status: 'Active',
-//         createdAt: '4/30/2024 11:15:35',
-//         updatedAt: '4/30/2024 11:15:35'
-//     },
-// ]
-
 const MyCourses = () => {
   const [courses, setCourses] = useState([]);
   const [courseId, setCourseId] = useState('');
