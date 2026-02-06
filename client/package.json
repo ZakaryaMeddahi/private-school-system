@@ -19,7 +19,7 @@
     "agora-extension-ai-denoiser": "^1.1.0",
     "agora-rtc-sdk-ng": "^4.20.2",
     "framer-motion": "^11.0.24",
-    "next": "14.2.30",
+    "next": "16.1.6",
     "react": "^18",
     "react-calendar": "^4.8.0",
     "react-dom": "^18",
