@@ -34,7 +34,7 @@
     "bcrypt": "^6.0.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
-    "cloudinary": "^2.1.0",
+    "cloudinary": "^2.7.0",
     "nodemailer": "^8.0.0",
     "pg": "^8.11.3",
     "pug": "^3.0.3",
