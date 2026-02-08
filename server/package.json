@@ -22,7 +22,7 @@
   "dependencies": {
     "@nestjs-modules/mailer": "^2.0.2",
     "@nestjs/common": "^10.4.16",
-    "@nestjs/config": "^3.2.1",
+    "@nestjs/config": "^4.0.3",
     "@nestjs/core": "^11.1.5",
     "@nestjs/event-emitter": "^2.0.4",
     "@nestjs/jwt": "^10.2.0",
