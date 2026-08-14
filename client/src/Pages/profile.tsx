@@ -2,7 +2,8 @@
 
 import CardForCourse from '@/components/CardForCourse';
 import Media from '@/components/Socials/Media';
-import { Box, Heading, Text, Badge, Button, Image } from '@chakra-ui/react';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 import { FaFacebookF, FaWhatsapp, FaLinkedinIn } from 'react-icons/fa';
 
@@ -10,98 +11,65 @@ const ProfilePage = ({ userId, FullName, UserName, Bio, Role, courses }) => {
   const router = useRouter()
 
   return (
-    <Box
-      w='100%'
-      h='100%'
-      paddingInline='200px'
-      display='flex'
-      flexDir='column'
-      gap={5}
-      overflowY='auto'
-    >
-      <Box
-        h='10%'
-        w='100%'
-        display='flex'
-        flexDir='column'
-        justifyContent='center'
-        alignItems={'flex-end'}
-      >
+    <div className="flex h-full w-full flex-col gap-5 overflow-y-auto px-50">
+      <div className="flex h-[10%] w-full flex-col items-end justify-center">
         <Button
-          bgColor='#234C51'
-          color='white'
+          className="bg-[#234C51] text-white hover:bg-[#234C51]/90"
           onClick={() => {
             router.push(`/student_dashboard/profile/${userId}/edit_profile`);
           }}
         >
           + Edit Profile
         </Button>
-      </Box>
-      <Box h='fit-content'>
-        <Box w='100%' display='grid' gridTemplateColumns='1fr 0.5fr' gap={5}>
-          <Box display='flex' flexDir='column' gap='10px'>
-            <Heading size='lg' color='#213E69'>
-              {console.log(FullName)}
+      </div>
+      <div className="h-fit">
+        <div className="grid w-full grid-cols-[1fr_0.5fr] gap-5">
+          <div className="flex flex-col gap-2.5">
+            <h2 className="text-lg font-semibold text-[#213E69]">
               {FullName}
-            </Heading>
-            {/* <Text fontSize={16} color='#898C81' >{UserName}</Text> */}
-            <Badge
-              colorScheme={Role === 'student' ? 'blue' : 'red'}
-              w={'fit-content'}
-              paddingInline='5px'
-            >
+            </h2>
+            <Badge className={`w-fit px-1.25 ${Role === 'student' ? 'bg-blue-500' : 'bg-red-500'}`}>
               {Role}
             </Badge>
-            <Box w='100%' marginTop='10px'>
-              <Text fontSize={16} color='#898C81'>
+            <div className="mt-2.5 w-full">
+              <p className="text-base text-[#898C81]">
                 Lorem ipsum dolor sit amet consectetur adipisicing elit.
                 Inventore quod repudiandae nesciunt aspernatur recusandae cumque
                 autem tempora natus corrupti deserunt, consequatur eveniet
                 exercitationem quisquam non, suscipit quibusdam, laboriosam
                 repellendus ipsum.
-              </Text>
-            </Box>
-            <Box display='flex' gap={3}>
+              </p>
+            </div>
+            <div className="flex gap-3">
               <Media
                 icon={<FaFacebookF />}
                 w='32px'
                 h='32px'
                 bgcolor='transparent'
-                hover={{ backgroundColor: 'whiteSmoke' }}
               />
               <Media
                 icon={<FaWhatsapp size='25px' />}
                 w='32px'
                 h='32px'
                 bgcolor='transparent'
-                hover={{ backgroundColor: 'whiteSmoke' }}
               />
               <Media
                 icon={<FaLinkedinIn />}
                 w='32px'
                 h='32px'
                 bgcolor='transparent'
-                hover={{ backgroundColor: 'whiteSmoke' }}
               />
-            </Box>
-          </Box>
-          <Box h={'300px'} display='flex' justifyContent='flex-end'>
-            <Image
+            </div>
+          </div>
+          <div className="flex h-75 justify-end">
+            <img
               src='/profile.jpeg'
-              borderRadius={'15px'}
-              boxShadow='rgb(148 146 146) 6px 7px 8px'
+              className="rounded-[15px] shadow-[rgb(148,146,146)_6px_7px_8px]"
             />
-          </Box>
-        </Box>
-      </Box>
-      <Box
-        marginTop='25px'
-        w='100%'
-        display='grid'
-        gridTemplateColumns='repeat(3, 1fr)'
-        gridTemplateRows='1fr'
-        gap={5}
-      >
+          </div>
+        </div>
+      </div>
+      <div className="mt-6.25 grid w-full grid-cols-3 grid-rows-1 gap-5">
         {courses.map((course) => {
           return (
             <CardForCourse
@@ -114,11 +82,8 @@ const ProfilePage = ({ userId, FullName, UserName, Bio, Role, courses }) => {
           );
         }
         )}
-          {/* <CardForCourse key={courses[0].id} Course={courses[0]} teacher={courses[0].teacher} Enroll={true} Role={Role}  />;
-          <CardForCourse key={courses[1].id} Course={courses[1]} teacher={courses[1].teacher} Enroll={true} Role={Role}  />;
-          <CardForCourse key={courses[2].id} Course={courses[2]} teacher={courses[2].teacher} Enroll={true} Role={Role}  />; */}
-      </Box>
-    </Box>
+      </div>
+    </div>
   );
 };
 

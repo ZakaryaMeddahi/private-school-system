@@ -1,13 +1,14 @@
 'use client';
 
-import { Container } from '@chakra-ui/react';
 import CardForCourse from '@/components/CardForCourse';
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 const EnrollmentCourse = () => {
 
-    const [enrollments, setEnrollments] = useState([]);
+    const [enrollments, setEnrollments] = useState<any[]>([]);
     const [enrollStatus, setEnrollStatus] = useState(false);
+    const router = useRouter();
 
     useEffect(() => {
       const fetchEnrollments = async () => {
@@ -43,30 +44,19 @@ const EnrollmentCourse = () => {
     }, [])
 
     return (
-        <Container
-            padding={25}
-            maxW='100%'
-            h='100%'
-            display='grid'
-            gridTemplateColumns='repeat(3, 1fr)'
-            gap={5}
-            overflowY={'auto'}
-        >
+        <div className="grid h-full max-w-full grid-cols-3 gap-5 overflow-y-auto p-6.25">
             {enrollments.map(enrollment => {
-              // if (!enrollment.enrollmentStatus === "pending") {
                 return (
-                      <CardForCourse 
-                          key={enrollment.course.id} 
-                          Course={enrollment.course} 
-                          teacher={enrollment.course.teacher}  
-                          Role='student' 
-                          Enroll={true} 
+                      <CardForCourse
+                          key={enrollment.course.id}
+                          Course={enrollment.course}
+                          teacher={enrollment.course.teacher}
+                          Role='student'
+                          Enroll={true}
                       />
                     );
-              // }
-
             })}
-        </Container>
+        </div>
     );
 }
 

@@ -1,8 +1,11 @@
-import { Box, Button, Text } from '@chakra-ui/react';
+import { Button } from '@/components/ui/button';
 import { FaCheck } from 'react-icons/fa6';
 import { IoCloseSharp } from 'react-icons/io5';
+import { useRouter } from 'next/navigation';
 
 function EnrollmentCard({ enrollment, enrollments, setEnrollments }) {
+  const router = useRouter();
+
   const updateEnrollment = async (status) => {
     try {
       const response = await fetch(
@@ -40,72 +43,40 @@ function EnrollmentCard({ enrollment, enrollments, setEnrollments }) {
   };
 
   return (
-    <Box
-      h={'fit-content'}
-      paddingBlock='10px'
-      paddingInline='25px'
-      boxShadow={'rgba(0, 0, 0, 0.24) 0px 3px 8px'}
-      bgColor={'white'}
-      borderRadius='5px'
-      display={'flex'}
-      flexDir={'column'}
-      gap={'10px'}
-    >
-      <Box
-        w={'100%'}
-        display={'flex'}
-        flexDirection={'row'}
-        justifyContent={'space-between'}
-        alignItems={'center'}
-      >
-        <Box
-          display={'flex'}
-          flexDirection={'row'}
-          gap={'10px'}
-          alignItems={'center'}
-        >
-          <Box
-            w={'45px'}
-            h={'45px'}
-            borderRadius={'50%'}
-            display={'flex'}
-            justifyContent={'center'}
-            alignItems={'center'}
-            border={'1px solid black'}
-          >
+    <div className="flex h-fit flex-col gap-2.5 rounded-[5px] bg-white px-6.25 py-2.5 shadow-[rgba(0,0,0,0.24)_0px_3px_8px]">
+      <div className="flex w-full flex-row items-center justify-between">
+        <div className="flex flex-row items-center gap-2.5">
+          <div className="flex size-11.25 items-center justify-center rounded-full border border-black">
             A
-          </Box>
-          <Box display={'flex'} flexDirection={'column'} gap={'5px'}>
-            <Text fontSize={'18px'} fontWeight='500' color={'#213E69'}>
+          </div>
+          <div className="flex flex-col gap-1.25">
+            <span className="text-lg font-medium text-[#213E69]">
               {enrollment?.student.user.firstName}{' '}
               {enrollment?.student.user.lastName}
-            </Text>
-            <Text color={'#848484'}>
+            </span>
+            <span className="text-[#848484]">
               {enrollment?.enrollmentDate.split('T')[0]}
-            </Text>
-          </Box>
-        </Box>
-        <Box display={'flex'} flexDirection={'row'} gap={'10px'}>
+            </span>
+          </div>
+        </div>
+        <div className="flex flex-row gap-2.5">
           <Button
-            bgColor='#234C51'
-            w={'50px'}
-            borderRadius={'15px'}
+            className="w-12.5 rounded-[15px] bg-[#234C51] hover:bg-[#234C51]/90"
             onClick={() => updateEnrollment('approved')}
           >
             <FaCheck color='white' />
           </Button>
           <Button
-            colorScheme='red'
-            w={'50px'}
-            borderRadius={'15px'}
+            variant="destructive"
+            className="w-12.5 rounded-[15px]"
             onClick={() => updateEnrollment('rejected')}
           >
             <IoCloseSharp size='35px' />
           </Button>
-        </Box>
-      </Box>
-      <Box>
-        <Text fontSize='20px' color='#848484'>
+        </div>
+      </div>
+      <div>
+        <span className="text-xl text-[#848484]">
           <span
             style={{
               color: '#213E69',
@@ -116,9 +87,9 @@ function EnrollmentCard({ enrollment, enrollments, setEnrollments }) {
             Course:
           </span>{' '}
           {enrollment.course.title}{' '}
-        </Text>
-      </Box>
-    </Box>
+        </span>
+      </div>
+    </div>
   );
 }
 export default EnrollmentCard;

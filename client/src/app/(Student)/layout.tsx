@@ -1,38 +1,25 @@
 'use client';
 
 import Logo from '@/components/Logo/Logo';
-import {
-  Box,
-  Divider,
-  Text,
-  Input,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverHeader,
-  PopoverBody,
-  PopoverFooter,
-  PopoverArrow,
-  PopoverCloseButton,
-  PopoverAnchor,
-} from '@chakra-ui/react';
+import { Input } from '@/components/ui/input';
+import NavDropdown from '@/components/nav-dropdown';
 import { HiOutlineAcademicCap } from 'react-icons/hi2';
 import { IoChatbubblesOutline } from 'react-icons/io5';
-import { createContext, useContext, useEffect, useRef, useState } from 'react';
+import { createContext, useEffect, useState, type Dispatch, type SetStateAction } from 'react';
 import { LuLogOut } from 'react-icons/lu';
 import { TbSmartHome } from 'react-icons/tb';
 import { CgProfile } from 'react-icons/cg';
 import Link from 'next/link';
-import { MdKeyboardArrowDown } from 'react-icons/md';
 import { useRouter } from "next/navigation";
 
-export const StudentContext = createContext();
+export const StudentContext = createContext<{
+  search: string;
+  setSearch: Dispatch<SetStateAction<string>>;
+}>({ search: '', setSearch: () => {} });
 
 const Layout = ({ children }) => {
   const [userId, setUserId] = useState('');
   const [search, setSearch] = useState('');
-
-  const inputRef = useRef();
 
   const router = useRouter();
 
@@ -41,231 +28,89 @@ const Layout = ({ children }) => {
         router.push('/login');
     };
 
-  const onFocus = () => {
-    if (inputRef.current) {
-      inputRef.current.style.outline = 'none';
-      console.log(inputRef.current.style);
-    }
-  };
-
   useEffect(() => {
-    setUserId(localStorage.getItem('userId'));
+    setUserId(localStorage.getItem('userId') || '');
   }, []);
 
   return (
-    <Box w='100%' h='100vh' display='flex'>
-      {/* Sid bar */}
-      <Box w='25%' h='100%' bgColor='#F1F2ED' display='flex' flexDir='column'>
-        <Box paddingRight='25px' w='100%'>
+    <div className="flex h-screen w-full">
+      <div className="flex h-full w-1/4 flex-col bg-[#F1F2ED]">
+        <div className="w-full pr-6.25">
           <Logo fontSize='20px' fontWeight='500' />
-        </Box>
-        <Divider borderColor='#898C81' />
-        <Box w='100%' h='100%' display='flex' flexDir='column'>
+        </div>
+        <hr className="border-t border-[#898C81]" />
+        <div className="flex h-full w-full flex-col">
           <Link href='/student_dashboard'>
-            <Box
-              w='100%'
-              display='flex'
-              flexDir='row'
-              gap='5'
-              alignItems='center'
-              paddingLeft='30'
-              minH='70px'
-              maxH='80px'
-              _hover={{ bgColor: 'whiteSmoke' }}
-            >
+            <div className="flex min-h-17.5 max-h-20 w-full flex-row items-center gap-1.25 pl-7.5 hover:bg-[whitesmoke]">
               <TbSmartHome color='#898C81' size='23px' />
-              <Text color='#898C81'>Overview</Text>
-            </Box>
+              <span className="text-[#898C81]">Overview</span>
+            </div>
           </Link>
           <Link href='/student_dashboard/course'>
-            <Box
-              w='100%'
-              display='flex'
-              flexDir='row'
-              gap='5'
-              alignItems='center'
-              paddingLeft='30'
-              minH='70px'
-              maxH='80px'
-              _hover={{ bgColor: 'whiteSmoke' }}
-            >
+            <div className="flex min-h-17.5 max-h-20 w-full flex-row items-center gap-1.25 pl-7.5 hover:bg-[whitesmoke]">
               <HiOutlineAcademicCap color='#898C81' size='23px' />
-              <Text color='#898C81'>Courses</Text>
-            </Box>
+              <span className="text-[#898C81]">Courses</span>
+            </div>
           </Link>
           <Link href={`/student_dashboard/enrollment_courses`}>
-            <Box
-              w='100%'
-              display='flex'
-              flexDir='row'
-              gap='5'
-              alignItems='center'
-              paddingLeft='30'
-              minH='70px'
-              maxH='80px'
-              _hover={{ bgColor: 'whiteSmoke' }}
-            >
+            <div className="flex min-h-17.5 max-h-20 w-full flex-row items-center gap-1.25 pl-7.5 hover:bg-[whitesmoke]">
               <HiOutlineAcademicCap color='#898C81' size='23px' />
-              <Text color='#898C81'>Enrolled in courses</Text>
-            </Box>
+              <span className="text-[#898C81]">Enrolled in courses</span>
+            </div>
           </Link>
-        </Box>
-        <Box w='100%' height='fit-content' display='flex' flexDir='column'>
+        </div>
+        <div className="flex h-fit w-full flex-col">
           <Link href='/chat'>
-            <Box
-              w='100%'
-              display='flex'
-              flexDir='row'
-              gap='5'
-              alignItems='center'
-              paddingLeft='30'
-              minH='70px'
-              maxH='80px'
-              _hover={{ bgColor: 'whiteSmoke' }}
-            >
+            <div className="flex min-h-17.5 max-h-20 w-full flex-row items-center gap-1.25 pl-7.5 hover:bg-[whitesmoke]">
               <IoChatbubblesOutline color='#898C81' size='23px' />
-              <Text color='#898C81'>Chat</Text>
-            </Box>
+              <span className="text-[#898C81]">Chat</span>
+            </div>
           </Link>
           <Link href={`/student_dashboard/profile/${userId}`}>
-            <Box
-              w='100%'
-              display='flex'
-              flexDir='row'
-              gap='5'
-              alignItems='center'
-              paddingLeft='30'
-              minH='70px'
-              maxH='80px'
-              _hover={{ bgColor: 'whiteSmoke' }}
-            >
+            <div className="flex min-h-17.5 max-h-20 w-full flex-row items-center gap-1.25 pl-7.5 hover:bg-[whitesmoke]">
               <CgProfile color='#898C81' size='23px' />
-              <Text color='#898C81'>Profile</Text>
-            </Box>
+              <span className="text-[#898C81]">Profile</span>
+            </div>
           </Link>
-          <Divider borderColor='#898C81' />
-          <Box
-            w='100%'
-            display='flex'
-            flexDir='row'
-            gap='5'
-            alignItems='center'
-            paddingLeft='30'
-            minH='70px'
-            maxH='80px'
-            _hover={{ bgColor: 'whiteSmoke', cursor: 'pointer'}}
+          <hr className="border-t border-[#898C81]" />
+          <div
+            className="flex min-h-17.5 max-h-20 w-full cursor-pointer flex-row items-center gap-1.25 pl-7.5 hover:bg-[whitesmoke]"
             onClick={Logout}
           >
-            <Box transform='scaleX(-1)'>
-              <LuLogOut color='#898C81' size='23px' transform='scaleX(-1)' />
-            </Box>
-            <Text color='#898C81'>Logout</Text>
-          </Box>
-        </Box>
-      </Box>
-      <Box w='100%' h='100%' display='flex' flexDir='column'>
-        {/* header bar */}
-        <Box
-          w='100%'
-          h='8%'
-          display='flex'
-          alignItems='center'
-          justifyContent='space-between'
-          paddingInline={50}
-          paddingBlock={0}
-          marginTop={'10px'}
-        >
+            <div className="scale-x-[-1]">
+              <LuLogOut color='#898C81' size='23px' />
+            </div>
+            <span className="text-[#898C81]">Logout</span>
+          </div>
+        </div>
+      </div>
+      <div className="flex h-full w-full flex-col">
+        <div className="mt-2.5 flex h-[8%] w-full items-center justify-between px-12.5">
           <Input
             placeholder='Search'
-            w='500px'
-            borderColor='black'
+            className="w-125 border-black"
             onChange={(e) => setSearch(e.target.value)}
           />
-          <Box display='flex' alignItems={'center'} gap={2}>
-            <Box
-              w={'40px'}
-              h={'40px'}
-              borderRadius='50%'
-              bgColor='#D8D9D4'
-              display='flex'
-              alignItems='center'
-              justifyContent='center'
-              paddingBlock={5}
-            >
+          <div className="flex items-center gap-2">
+            <div className="flex size-10 items-center justify-center rounded-full bg-[#D8D9D4]">
               AS
-            </Box>
-            <Popover>
-              <PopoverTrigger>
-                <Box
-                  w={'40px'}
-                  h={'40px'}
-                  display='flex'
-                  alignItems='center'
-                  justifyContent='center'
-                >
-                  <MdKeyboardArrowDown color='black' size='20px' />
-                </Box>
-              </PopoverTrigger>
-              <PopoverContent w='180px' left='-60px'>
-                <PopoverArrow left='43px !important' />
-                <PopoverCloseButton />
-                <Link href={`/student_dashboard/profile/${userId}`}>
-                  <PopoverHeader>Profile</PopoverHeader>
-                </Link>
-                <PopoverHeader onClick={Logout} _hover={{cursor: 'pointer'}}>Logout</PopoverHeader>
-              </PopoverContent>
-            </Popover>
-          </Box>
-        </Box>
-        {/* body */}
-        <Box w={'100%'} h={'93%'}>
+            </div>
+            <NavDropdown
+              items={[
+                { label: 'Profile', href: `/student_dashboard/profile/${userId}` },
+                { label: 'Logout', onClick: Logout },
+              ]}
+            />
+          </div>
+        </div>
+        <div className="h-[93%] w-full">
           <StudentContext.Provider value={{ search, setSearch }}>
             {children}
           </StudentContext.Provider>
-        </Box>
-      </Box>
-    </Box>
+        </div>
+      </div>
+    </div>
   );
 };
 
 export default Layout;
-
-// createdAt
-// : 
-// "2024-04-25T11:45:37.357Z"
-// deadline
-// : 
-// "2024-12-11T23:00:00.000Z"
-// description
-// : 
-// "In this course you will learn how to create a backend applicaton using Express js"
-// difficulty
-// : 
-// "easy"
-// duration
-// : 
-// 1
-// durationUnit
-// : 
-// "months"
-// id
-// : 
-// "39"
-// language
-// : 
-// "English"
-// price
-// : 
-// 100
-// requirements
-// : 
-// null
-// title
-// : 
-// "Node Js Course"
-// topics
-// : 
-// [{…}]
-// updatedAt
-// : 
-// "2024-04-25T11:45:37.357Z"

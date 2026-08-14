@@ -1,49 +1,20 @@
-import { Box, Heading, Text, Divider } from '@chakra-ui/react';
-
 const OverviewCard = ({ title, value, icon, bgColor }) => {
     return(
-        <Box 
-            bgColor={bgColor} 
-            padding='15px' 
-            boxShadow='rgba(0, 0, 0, 0.1) 0px 4px 12px' 
-            borderRadius='15px' 
-            display='flex'
-            flexDirection={'column'}
-            height={'100%'}
-            _hover={{
-                transform: 'scale(1.05)',
-                transition: 'transform 0.5s'
-            }}
+        <div
+            className="flex h-full flex-col rounded-[15px] p-3.75 shadow-[rgba(0,0,0,0.1)_0px_4px_12px] transition-transform duration-500 hover:scale-105"
+            style={{ backgroundColor: bgColor }}
         >
-            <Heading color={"white"} fontWeight='500' marginBottom='5px' >{title}</Heading>
-            <Divider borderColor='white' borderWidth='1px' opacity={2} />
-            <Box
-                display={'flex'}
-                flexDir='row'
-                gap='15px'
-                justifyContent='center'
-                flex={1}
-                alignItems='center'
-                
-            >
-                <Text 
-                    color={"white"} 
-                    fontSize='32px' 
-                    fontWeight={'bold'}
-                    textAlign='center' 
-                >
+            <h3 className="mb-1.25 font-medium text-white">{title}</h3>
+            <hr className="border-t border-white opacity-[2]" />
+            <div className="flex flex-1 flex-row items-center justify-center gap-3.75">
+                <p className="text-center text-[32px] font-bold text-white">
                         {value}
-                </Text>
-                <Box
-                    display='flex'
-                    alignItems='center'
-                    justifyContent='flex-end'
-                    flex={1}
-                >
+                </p>
+                <div className="flex flex-1 items-center justify-end">
                     {icon}
-                </Box>
-            </Box>
-        </Box>
+                </div>
+            </div>
+        </div>
     );
 }
 

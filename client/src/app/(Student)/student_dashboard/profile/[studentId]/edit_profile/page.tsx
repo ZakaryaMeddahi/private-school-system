@@ -1,7 +1,11 @@
 'use client';
 
 import Media from "@/components/Socials/Media";
-import { Box, FormControl, FormLabel, Input, Text, Textarea, Button, Heading, Badge } from "@chakra-ui/react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { FaFacebookF, FaWhatsapp, FaLinkedinIn } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { GetUser } from "@/utils/getUser";
@@ -28,114 +32,62 @@ const EditProfile = () => {
     const [linkedin, setLinkedin] = useState('');
 
     return (
-        <Box
-            w='100%'
-            h='100%'
-            display='grid'
-            gridTemplateColumns='1fr 0.8fr'
-            gap={10}
-            >
-            <Box 
-                bgColor='white'
-                boxShadow='rgba(0, 0, 0, 0.1) 0px 4px 12px'
-                borderRadius='15px'
-                display='flex'
-                flexDir='column'
-                gap={5}
-                padding={50}
-            >
-                <Box
-                    w='100%'
-                    display='flex'
-                    justifyContent='center'
-                >
-                    <Text fontSize={48} fontWeight={700}>Edit Your Profile</Text>
-                </Box>
-                <FormControl>
-                    <FormLabel>Profile Picture</FormLabel>
+        <div className="grid h-full w-full grid-cols-[1fr_0.8fr] gap-10">
+            <div className="flex flex-col gap-5 rounded-[15px] bg-white p-12.5 shadow-[rgba(0,0,0,0.1)_0px_4px_12px]">
+                <div className="flex w-full justify-center">
+                    <span className="text-5xl font-bold">Edit Your Profile</span>
+                </div>
+                <div>
+                    <Label>Profile Picture</Label>
                     <Input placeholder='Profile Picture' onChange={(e) => setProfilePicture(e.target.value)} />
-                </FormControl>
-                <Box
-                    w='100%'
-                    display='grid'
-                    gridTemplateColumns='1fr 1fr'
-                    gap={10}
-                >
-                    <FormControl>
-                        <FormLabel>First Name</FormLabel>
+                </div>
+                <div className="grid w-full grid-cols-2 gap-10">
+                    <div>
+                        <Label>First Name</Label>
                         <Input placeholder='First Name' onChange={(e) => setFirstName(e.target.value)}/>
-                    </FormControl>
-                    <FormControl>
-                        <FormLabel>Last Name</FormLabel>
+                    </div>
+                    <div>
+                        <Label>Last Name</Label>
                         <Input placeholder='Last Name' onChange={(e) => setLastName(e.target.value)} />
-                    </FormControl>
-                </Box>
-                <Text>Bio</Text>
+                    </div>
+                </div>
+                <span>Bio</span>
                 <Textarea
                     placeholder='Here is a sample placeholder'
-                    size='sm'
                     onChange={(e) => setBio(e.target.value)}
                 />
-                <FormControl>
-                    <FormLabel>Facebook</FormLabel>
+                <div>
+                    <Label>Facebook</Label>
                     <Input placeholder='Facebook'  onChange={(e) => setFacebook(e.target.value)}/>
-                </FormControl>
-                <FormControl>
-                    <FormLabel>Whatsapp</FormLabel>
+                </div>
+                <div>
+                    <Label>Whatsapp</Label>
                     <Input placeholder='Whatsapp' onChange={(e) => setWhatsapp(e.target.value)} />
-                </FormControl>
-                <FormControl>
-                    <FormLabel>LinkedIn</FormLabel>
+                </div>
+                <div>
+                    <Label>LinkedIn</Label>
                     <Input placeholder='LinkedIn' onChange={(e) => setLinkedin(e.target.value)} />
-                </FormControl>
-                <Box 
-                    w='100%'
-                    display='flex'
-                    justifyContent='flex-end'
-                    marginTop={10}
-                >
-                    <Button bgColor='#234C51' color='white' >Update Profile</Button>
-                </Box>
-            </Box>
-            <Box>
-                <Box
-                    w='100%'
-                    h='100%'
-                    bgColor='white'
-                    boxShadow='rgba(0, 0, 0, 0.1) 0px 4px 12px'
-                    borderRadius='15px'
-                    display='flex'
-                    flexDirection={'column'}
-                    alignItems='center'
-                    gap={15}
-                >
-                    <Box
-                        marginTop={'25px'}
-                        w='150px'
-                        height='150px'
-                        display='flex'
-                        flexDirection='column'
-                        justifyContent='center'
-                        alignItems={'center'}
-                        borderRadius={'75px'}
-                        bgColor={'#234C51'}
-                    ></Box>
-                    <Heading size='lg' color='#213E69' >{`${firstName} ${lastName}`}</Heading>
-                    <Badge colorScheme='blue' paddingInline={5} >Student</Badge>
-                    <Text fontSize={16} w='70%' color='#898C81' > 
+                </div>
+                <div className="mt-10 flex w-full justify-end">
+                    <Button className="bg-[#234C51] text-white hover:bg-[#234C51]/90">Update Profile</Button>
+                </div>
+            </div>
+            <div>
+                <div className="flex h-full w-full flex-col items-center gap-3.75 rounded-[15px] bg-white shadow-[rgba(0,0,0,0.1)_0px_4px_12px]">
+                    <div className="mt-6.25 size-37.5 rounded-[75px] bg-[#234C51]"></div>
+                    <h2 className="text-lg font-semibold text-[#213E69]">{`${firstName} ${lastName}`}</h2>
+                    <Badge className="bg-blue-500 px-1.25">Student</Badge>
+                    <p className="w-[70%] text-base text-[#898C81]">
                         {bio}
-                    </Text>
-                    <Box
-                        display='flex'
-                        gap={3}
-                    >
-                        <Media icon={<FaFacebookF />} w='32px' h='32px' bgcolor='transparent' hover={{backgroundColor: 'whiteSmoke'}} />
-                        <Media icon={<FaWhatsapp size='25px' />} w='32px' h='32px' bgcolor='transparent' hover={{backgroundColor: 'whiteSmoke'}} />
-                        <Media icon={<FaLinkedinIn />} w='32px' h='32px' bgcolor='transparent' hover={{backgroundColor: 'whiteSmoke'}} />   
-                    </Box>
-                </Box>
-            </Box>
-        </Box>
+                    </p>
+                    <div className="flex gap-3">
+                        <Media icon={<FaFacebookF />} w='32px' h='32px' bgcolor='transparent' />
+                        <Media icon={<FaWhatsapp size='25px' />} w='32px' h='32px' bgcolor='transparent' />
+                        <Media icon={<FaLinkedinIn />} w='32px' h='32px' bgcolor='transparent' />
+                    </div>
+                </div>
+            </div>
+        </div>
     );
 }
 

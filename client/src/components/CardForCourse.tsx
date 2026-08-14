@@ -1,29 +1,23 @@
 'use client';
 
-import { Box, Image, Text, Button, Heading } from '@chakra-ui/react';
+import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 const Admin = ({ To }) => {
   return (
-    <Box
-      w='100%'
-      display='flex'
-      flexDirection='row'
-      alignItems='center'
-      justifyContent={'flex-end'}
-    >
+    <div className="flex w-full flex-row items-center justify-end">
       <Link href={To}>
-        <Button bgColor='#234C51' color='white'>
+        <Button className="bg-[#234C51] text-white hover:bg-[#234C51]/90">
           Course Details
         </Button>
       </Link>
-    </Box>
+    </div>
   );
 };
 const Student = ({ courseId, price, Enroll }) => {
-  const [enrollment, setEnrollment] = useState({});
+  const [enrollment, setEnrollment] = useState<any>({});
   const [enrolled, setEnrolled] = useState(false);
   const router = useRouter();
   // const roleRef = useRef();
@@ -90,45 +84,17 @@ const Student = ({ courseId, price, Enroll }) => {
   }, [enrolled]);
 
   return (
-    <Box
-      w='100%'
-      display='flex'
-      flexDirection='row'
-      alignItems='center'
-      justifyContent={Enroll ? 'flex-end' : 'space-between'}
-    >
-      {/* {Enroll ? (
-        <Button bgColor='#234C51' color='white'>
-          Join Room
-        </Button>
-      ) : (
-        <>
-          <Button bgColor='#234C51' color='white'>
-            Enroll
-          </Button>
-          <Text fontWeight='bold' color={'#FCC128'}>
-            {price == 0 ? 'free' : `${price} DZ`}
-          </Text>
-        </>
-      )} */}
+    <div className={`flex w-full flex-row items-center ${Enroll ? 'justify-end' : 'justify-between'}`}>
       {!enrollment.isEnrolled ? (
         <Button
-          bgColor='#234C51'
-          color='white'
-          w='180px'
-          textAlign='center'
-          _hover={{ bgColor: '#234C5180' }}
+          className="w-45 bg-[#234C51] text-center text-white hover:bg-[#234C51]/50"
           onClick={enroll}
         >
           Enroll
         </Button>
       ) : enrollment.status === 'approved' ? (
         <Button
-          bgColor='#234C51'
-          color='white'
-          w='180px'
-          textAlign='center'
-          _hover={{ bgColor: '#234C5150' }}
+          className="w-45 bg-[#234C51] text-center text-white hover:bg-[#234C51]/31"
           onClick={() => {
             router.push(`/chat`);
           }}
@@ -137,94 +103,52 @@ const Student = ({ courseId, price, Enroll }) => {
         </Button>
       ) : (
         <Button
-          bgColor='#234C51'
-          color='white'
-          w='180px'
-          textAlign='center'
-          isDisabled={true}
-          _hover={{ bgColor: '#234C51' }}
+          className="w-45 bg-[#234C51] text-center text-white hover:bg-[#234C51]"
+          disabled={true}
         >
           {enrollment.status}
         </Button>
       )}
-    </Box>
+    </div>
   );
 };
 
 const Teacher = ({ To }) => {
   return (
-    <Box
-      w='100%'
-      display='flex'
-      flexDirection='row'
-      alignItems='center'
-      justifyContent={'space-between'}
-    >
-      <Button colorScheme={'red'} color='white'>
+    <div className="flex w-full flex-row items-center justify-between">
+      <Button variant="destructive">
         Delete Course
       </Button>
       <Link href={To}>
-        <Button bgColor='#234C51' color='white'>
+        <Button className="bg-[#234C51] text-white hover:bg-[#234C51]/90">
           Course Detials
         </Button>
       </Link>
-    </Box>
+    </div>
   );
 };
 
-const CardForCourse = ({ w, h, teacher, Course, Role, Enroll }) => {
+const CardForCourse = ({ w = 'fit-content', teacher, Course, Role, Enroll = false }) => {
   const course_details = `/course_details/${Course.id}`;
   return (
     <Link href={course_details}>
-      <Box
-        w={w || 'fit-content'}
-        height={'fit-content'}
-        borderRadius='25px'
-        paddingBlock='25px'
-        paddingInline='15px'
-        bgColor={'white'}
-        display='flex'
-        flexDirection='column'
-        gap='15px'
-        boxShadow='rgba(0, 0, 0, 0.1) 0px 0px 14px 1px'
-        _hover={{
-          transform: 'scale(1.05)',
-          transition: 'transform 0.5s',
-        }}
+      <div
+        className="flex flex-col gap-3.75 rounded-[25px] bg-white px-3.75 py-6.25 shadow-[rgba(0,0,0,0.1)_0px_0px_14px_1px] transition-transform duration-500 hover:scale-105"
+        style={{ width: w, height: 'fit-content' }}
       >
-        <Box display='flex' alignItems='center' justifyContent='center'>
-          {/*<Image
-                        src={Course?.file?.url1 || '../Private-School-default-image.png'}
-                        h={'300px'}
-                        borderRadius='25px'
-                    /> */}
-        </Box>
-        <Box
-          w='100%'
-          display='flex'
-          flexDirection='row'
-          alignItems='center'
-          gap='15px'
-        >
-          <Box
-            w='32px'
-            h='32px'
-            borderRadius='50%'
-            bgColor='whitesmoke'
-            display={'flex'}
-            alignItems='center'
-            justifyContent='center'
-          >
+        <div className="flex items-center justify-center"></div>
+        <div className="flex w-full flex-row items-center gap-3.75">
+          <div className="flex size-8 items-center justify-center rounded-full bg-[whitesmoke]">
             A
-          </Box>
-          <Text fontWeight='500'>{`${teacher?.user.firstName} ${teacher?.user.lastName}`}</Text>
-        </Box>
-        <Text fontSize='32px' fontWeight='bold' color='#213E69'>
+          </div>
+          <span className="font-medium">{`${teacher?.user.firstName} ${teacher?.user.lastName}`}</span>
+        </div>
+        <span className="text-[32px] font-bold text-[#213E69]">
           {Course?.title}
-        </Text>
-        <Text color='GrayText'>
+        </span>
+        <span className="text-[graytext]">
           {Course?.description.slice(0, 100) + '...'}
-        </Text>
+        </span>
         {Role === 'student' ? (
           <Student courseId={Course.id} price={Course.price} Enroll={Enroll} />
         ) : Role === 'teacher' ? (
@@ -232,7 +156,7 @@ const CardForCourse = ({ w, h, teacher, Course, Role, Enroll }) => {
         ) : (
           <Admin To={course_details} />
         )}
-      </Box>
+      </div>
     </Link>
   );
 };

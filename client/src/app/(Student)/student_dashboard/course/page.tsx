@@ -1,13 +1,14 @@
 'use client';
 
-import { Box, Center, Container, HStack, Input } from '@chakra-ui/react';
 import CardForCourse from '@/components/CardForCourse';
 import { useContext, useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { StudentContext } from '../../layout';
 
 const CoursePage = () => {
-  const [courses, setCourses] = useState([]);
+  const [courses, setCourses] = useState<any[]>([]);
   const { search, setSearch } = useContext(StudentContext);
+  const router = useRouter();
 
   // fetch courses
   useEffect(() => {
@@ -73,15 +74,7 @@ const CoursePage = () => {
   //   };
 
   return (
-    <Container
-      padding={25}
-      maxW='100%'
-      h='100%'
-      display='grid'
-      gridTemplateColumns='repeat(3, 1fr)'
-      gap={5}
-      overflowY={'auto'}
-    >
+    <div className="grid h-full max-w-full grid-cols-3 gap-5 overflow-y-auto p-6.25">
       {courses.map((course) => {
         return (
           <CardForCourse
@@ -93,7 +86,7 @@ const CoursePage = () => {
           />
         );
       })}
-    </Container>
+    </div>
   );
 };
 

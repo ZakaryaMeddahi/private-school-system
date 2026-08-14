@@ -1,8 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-// import Calendar from "react-calendar";
-import { Badge, Box, Heading, Text, Divider, Image } from '@chakra-ui/react';
+import { Badge } from '@/components/ui/badge';
 import { GetUser } from '@/utils/getUser';
 import { HiOutlineAcademicCap } from 'react-icons/hi2';
 import { IoChatbubblesOutline, IoSearch } from 'react-icons/io5';
@@ -36,46 +35,18 @@ const Overview = () => {
   const FullName = `${firstName} ${lastName}`;
 
   return (
-    <Box
-      paddingBlock='20px'
-      paddingInline='50px'
-      h='100%'
-      display='flex'
-      flexDir='column'
-      overflowY='auto'
-    >
-      <Box h='100%' display='grid' gridTemplateColumns='1fr 0.5fr' gap={5}>
-        <Box h='100%' display='flex' flexDir='column' gap={5}>
-          <Box
-            h='250px'
-            borderRadius='25px'
-            bgColor='white'
-            boxShadow='rgba(0, 0, 0, 0.1) 0px 4px 12px'
-            // bgImage='url(/overview.png)'
-            // bgSize='cover'
-            // bgRepeat={'no-repeat'}
-          >
-            <Box
-              display='flex'
-              flexDir='column'
-              padding='20px'
-              h={'100%'}
-              justifyContent={'center'}
-            >
-              <Heading fontSize='64px'>Welcome Back</Heading>
-              <Text fontSize='24px' fontWeight='500'>
+    <div className="flex h-full flex-col overflow-y-auto py-5 px-12.5">
+      <div className="grid h-full grid-cols-[1fr_0.5fr] gap-5">
+        <div className="flex h-full flex-col gap-5">
+          <div className="h-62.5 rounded-[25px] bg-white shadow-[rgba(0,0,0,0.1)_0px_4px_12px]">
+            <div className="flex h-full flex-col justify-center p-5">
+              <h1 className="text-[64px] font-semibold">Welcome Back</h1>
+              <p className="text-2xl font-medium">
                 {FullName}
-              </Text>
-            </Box>
-          </Box>
-          <Box
-            flex={1}
-            borderRadius='25px'
-            display='grid'
-            gridTemplateColumns={'1fr 1fr'}
-            gridTemplateRows={'1fr 1fr'}
-            gap={5}
-          >
+              </p>
+            </div>
+          </div>
+          <div className="grid flex-1 grid-cols-2 grid-rows-2 gap-5 rounded-[25px]">
             <Link href='/student_dashboard/course'>
               <OverviewCard
                 title='Courses'
@@ -108,45 +79,29 @@ const Overview = () => {
                 bgColor={'#213E69'}
               />
             </Link>
-          </Box>
-        </Box>
-        <Box h='100%' display={'flex'} flexDir='column' gap={5}>
-          <Box
-            w={'100%'}
-            h='50%'
-            borderRadius='25px'
-            bgColor='white'
-            boxShadow='rgba(0, 0, 0, 0.1) 0px 4px 12px'
-            display='flex'
-            flexDir='column'
-            alignItems={'center'}
-            justifyContent={'center'}
-            gap={10}
-          >
-            <Box w='32' h='32' border='1px solid black' borderRadius='50%'>
-              <Image src='/profile.jpeg' alt='profile' borderRadius='50%' />
-            </Box>
-            <Box textAlign='center'>
-              <Heading fontSize='32px'>{FullName}</Heading>
-              <Text>
+          </div>
+        </div>
+        <div className="flex h-full flex-col gap-5">
+          <div className="flex h-1/2 w-full flex-col items-center justify-center gap-6.25 rounded-[25px] bg-white shadow-[rgba(0,0,0,0.1)_0px_4px_12px]">
+            <div className="size-32 rounded-full border border-black">
+              <img src='/profile.jpeg' alt='profile' className="rounded-full" />
+            </div>
+            <div className="text-center">
+              <h2 className="text-[32px] font-semibold">{FullName}</h2>
+              <p>
                 {firstName}
                 {lastName}
                 {userId}
-              </Text>
-              <Badge colorScheme='blue' paddingInline={3}>
+              </p>
+              <Badge className="bg-blue-500 px-1.75">
                 {role}
               </Badge>
-            </Box>
-          </Box>
-          <Box
-            h='50%'
-            borderRadius='25px'
-            bgColor='white'
-            boxShadow='rgba(0, 0, 0, 0.1) 0px 4px 12px'
-          ></Box>
-        </Box>
-      </Box>
-    </Box>
+            </div>
+          </div>
+          <div className="h-1/2 rounded-[25px] bg-white shadow-[rgba(0,0,0,0.1)_0px_4px_12px]"></div>
+        </div>
+      </div>
+    </div>
   );
 };
 

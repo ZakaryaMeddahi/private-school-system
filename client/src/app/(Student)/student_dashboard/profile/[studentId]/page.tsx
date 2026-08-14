@@ -2,20 +2,24 @@
 
 import ProfilePage from '@/Pages/profile';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { GetUser } from '@/utils/getUser';
 
-const Profile = ({ params }) => {
-  const { userId } = params;
+const Profile = ({ params }: { params: Promise<{ studentId: string }> }) => {
+  const [userId, setUserId] = useState('');
+  const router = useRouter();
 
   const [FirstName, setFirstName] = useState('');
   const [LastName, setLastName] = useState('');
   const [UserName, setUserName] = useState('');
   const [Bio, setBio] = useState('');
   const [Role, setRole] = useState('');
-  const [enrollments, setEnrollments] = useState([]);
-  const [courses, setCourses] = useState([]);
+  const [enrollments, setEnrollments] = useState<any[]>([]);
+  const [courses, setCourses] = useState<any[]>([]);
 
   useEffect(() => {
+    params.then(({ studentId }) => setUserId(studentId));
+
     GetUser()
       .then((data) => {
         setFirstName(data.firstName);
