@@ -4,7 +4,7 @@ import { ChakraProvider } from '@chakra-ui/react'
 
 const Providers = ({ children }) => {
   return (
-    <ChakraProvider>
+    <ChakraProvider resetCSS={false}>
         {children}
     </ChakraProvider>
   );
