@@ -27,7 +27,12 @@ export class CoursesService {
       if (role === Role.TEACHER) {
         courses = await this.coursesRepository.find({
           where: { teacher: { user: { id: Equal(id) } } },
-          relations: ['teacher', 'file', 'chat', 'rooms'],
+          relations: {
+            teacher: true,
+            file: true,
+            chat: true,
+            rooms: true
+          },
         });
       }
 
@@ -40,13 +45,23 @@ export class CoursesService {
               enrollmentStatus: EnrollmentStatus.APPROVED,
             },
           },
-          relations: ['teacher', 'file', 'chat', 'rooms'],
+          relations: {
+            teacher: true,
+            file: true,
+            chat: true,
+            rooms: true
+          },
         });
       }
 
       if (role === Role.ADMIN) {
         courses = await this.coursesRepository.find({
-          relations: ['teacher', 'file', 'chat', 'rooms'],
+          relations: {
+            teacher: true,
+            file: true,
+            chat: true,
+            rooms: true
+          },
         });
       }
 
@@ -78,7 +93,11 @@ export class CoursesService {
       // }
 
       const courses = await this.coursesRepository.find({
-        relations: ['topics', 'file', 'teacher'],
+        relations: {
+          topics: true,
+          file: true,
+          teacher: true
+        },
         where: search
           ? [
               { title: ILike(`%${search}%`) },
@@ -98,7 +117,11 @@ export class CoursesService {
     try {
       const course = await this.coursesRepository.findOne({
         where: { id: Equal(id) },
-        relations: ['topics', 'file', 'teacher'],
+        relations: {
+          topics: true,
+          file: true,
+          teacher: true
+        },
       });
 
       if (!course) return null;
