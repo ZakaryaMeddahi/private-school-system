@@ -24,7 +24,10 @@ export class MessagesService {
       const { courseId, chatId } = options;
       const messages = await this.messagesRepository.find({
         where: { chat: { id: Equal(chatId), course: { id: Equal(courseId) } } },
-        relations: ['sender', 'file'],
+        relations: {
+          sender: true,
+          file: true
+        },
         order: { sentAt: 'ASC' },
       });
 
@@ -46,7 +49,10 @@ export class MessagesService {
             room: { id: Equal(roomId), course: { id: Equal(courseId) } },
           },
         },
-        relations: ['sender', 'file'],
+        relations: {
+          sender: true,
+          file: true
+        },
         order: { sentAt: 'ASC' },
       });
 
@@ -120,7 +126,10 @@ export class MessagesService {
     try {
       const message = await this.messagesRepository.findOne({
         where: { id: Equal(id) },
-        relations: ['sender', 'file'],
+        relations: {
+          sender: true,
+          file: true
+        },
       });
 
       if (!message) throw new NotFoundException('Cannot find message');

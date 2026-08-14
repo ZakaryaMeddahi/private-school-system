@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { MailService } from './mail.service';
 import { MailerModule } from '@nestjs-modules/mailer';
-import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
+import { PugAdapter } from '@nestjs-modules/mailer/adapters/pug.adapter';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
@@ -29,25 +29,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       }),
       inject: [ConfigService],
     }),
-    // MailerModule.forRoot({
-    //   transport: {
-    //     service: 'gmail',
-    //     auth: {
-    //       user: 'zakaryameddahi@gmail.com',
-    //       pass: 'sntz mcab fdzx tvnu',
-    //     },
-    //   },
-    //   defaults: {
-    //     from: '"No Reply" <zakaryameddahi@gmail.com>',
-    //   },
-    //   template: {
-    //     dir: __dirname + '/templates',
-    //     adapter: new PugAdapter(),
-    //     options: {
-    //       strict: true,
-    //     },
-    //   },
-    // }),
   ],
   providers: [MailService],
   exports: [MailService],

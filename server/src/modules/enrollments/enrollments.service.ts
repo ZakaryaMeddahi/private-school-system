@@ -64,13 +64,15 @@ export class EnrollmentsService {
     try {
       // add student and user relations
       const enrollments = await this.enrollmentRepository.find({
-        relations: [
-          'student',
-          'student.user',
-          'course',
-          'course.teacher',
-          'course.file',
-        ],
+        relations: {
+          student: {
+            user: true,
+          },
+          course: {
+            teacher: true,
+            file: true,
+          },
+        },
         where: userId !== 0 ? { student: { user: { id: Equal(userId) } } } : {},
       });
       return enrollments;
@@ -180,7 +182,12 @@ export class EnrollmentsService {
   async update(id: number, enrollmentData: UpdateEnrollmentParams) {
     try {
       const enrollment = await this.enrollmentRepository.findOne({
-        relations: ['course', 'student', 'student.user'],
+        relations: {
+          course: true,
+          student: {
+            user: true,
+          },
+        },
         where: { id: Equal(id) },
       });
 
