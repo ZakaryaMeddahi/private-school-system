@@ -1,16 +1,13 @@
 'use client';
 
 import Logo from "@/components/Logo/Logo";
-import { Box, Divider, Text, Input, Popover, PopoverTrigger, PopoverContent, PopoverHeader, PopoverBody, PopoverFooter, PopoverArrow, PopoverCloseButton, PopoverAnchor } from "@chakra-ui/react";
+import { Input } from "@/components/ui/input";
+import NavDropdown from "@/components/nav-dropdown";
 import { HiOutlineAcademicCap } from "react-icons/hi2";
 import { IoChatbubblesOutline } from "react-icons/io5";
-import { useRef } from "react";
 import { LuLogOut } from "react-icons/lu";
-import { TbSmartHome } from "react-icons/tb";
 import { CgProfile } from "react-icons/cg";
 import Link from "next/link";
-import { MdKeyboardArrowDown } from "react-icons/md";
-import { Logout } from "../(Admin)/layout";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -18,15 +15,6 @@ import { useEffect, useState } from "react";
 const Layout = ({ children }) => {
 
     const [teacherId, setTeacherId] = useState('');
-
-    const inputRef = useRef();
-  
-    const onFocus = () => {
-        if(inputRef.current) {
-            inputRef.current.style.outline = 'none';
-            console.log(inputRef.current.style);
-        }
-    }
 
     const router = useRouter();
 
@@ -36,176 +24,71 @@ const Layout = ({ children }) => {
     };
 
     useEffect(() => {
-        setTeacherId(localStorage.getItem('userId'));
+        setTeacherId(localStorage.getItem('userId') || '');
     }, []);
 
     const teacherProfile = `/teacher_dashboard/profile/${teacherId}`;
 
     return (
-        <Box 
-            w='100%' 
-            h='100vh'
-            display='flex' 
-        >
-            {/* Sid bar */}
-            <Box
-                w='25%' 
-                h='100%' 
-                bgColor='#F1F2ED' 
-                display='flex' 
-                flexDir='column'
-            >
-                <Box
-                    paddingRight='25px'
-                    w='100%'
-                >
+        <div className="flex h-screen w-full">
+            <div className="flex h-full w-1/4 flex-col bg-[#F1F2ED]">
+                <div className="w-full pr-6.25">
                     <Logo fontSize='20px' fontWeight='500'/>
-                </Box>
-                <Divider borderColor='#898C81' />
-                <Box
-                    w='100%'
-                    h='100%'
-                    display='flex'
-                    flexDir='column'
-                >
-                    {/* gi */}
+                </div>
+                <hr className="border-t border-[#898C81]" />
+                <div className="flex h-full w-full flex-col">
                     <Link href='/teacher_dashboard/my_courses'>
-                        <Box
-                            w='100%'
-                            display='flex'
-                            flexDir='row'
-                            gap='5'
-                            alignItems='center'
-                            paddingLeft='30'
-                            minH='70px'
-                            maxH='80px'
-                            _hover={{bgColor: 'whiteSmoke'}}
-                            >
+                        <div className="flex min-h-17.5 max-h-20 w-full flex-row items-center gap-1.25 pl-7.5 hover:bg-[whitesmoke]">
                             <HiOutlineAcademicCap color="#898C81" size='23px' />
-                            <Text color='#898C81'>My Courses</Text>
-                        </Box>
+                            <span className="text-[#898C81]">My Courses</span>
+                        </div>
                     </Link>
-                </Box>
-                <Box
-                    w='100%'
-                    height='fit-content'
-                    display='flex'
-                    flexDir='column'
-                >
+                </div>
+                <div className="flex h-fit w-full flex-col">
                     <Link href='/chat'>
-                        <Box 
-                            w='100%'
-                            display='flex'
-                            flexDir='row'
-                            gap='5'
-                            alignItems='center'
-                            paddingLeft='30'
-                            minH='70px'
-                            maxH='80px'
-                            _hover={{bgColor: 'whiteSmoke'}}
-                        >
+                        <div className="flex min-h-17.5 max-h-20 w-full flex-row items-center gap-1.25 pl-7.5 hover:bg-[whitesmoke]">
                             <IoChatbubblesOutline color="#898C81" size='23px' />
-                            <Text color='#898C81'>Chat</Text>
-                        </Box>
+                            <span className="text-[#898C81]">Chat</span>
+                        </div>
                     </Link>
                     <Link href={teacherProfile}>
-                        <Box
-                            w='100%'
-                            display='flex'
-                            flexDir='row'
-                            gap='5'
-                            alignItems='center'
-                            paddingLeft='30'
-                            minH='70px'
-                            maxH='80px'
-                            _hover={{bgColor: 'whiteSmoke'}}
-                        >
+                        <div className="flex min-h-17.5 max-h-20 w-full flex-row items-center gap-1.25 pl-7.5 hover:bg-[whitesmoke]">
                             <CgProfile color="#898C81" size='23px' />
-                            <Text color='#898C81'>Profile</Text>
-                        </Box>
+                            <span className="text-[#898C81]">Profile</span>
+                        </div>
                     </Link>
-                    <Divider borderColor='#898C81' />
-                    
-                    <Box
-                        w='100%'
-                        display='flex'
-                        flexDir='row'
-                        gap='5'
-                        alignItems='center'
-                        paddingLeft='30'
-                        minH='70px'
-                        maxH='80px'
-                        _hover={{bgColor: 'whiteSmoke', cursor: 'pointer'}}
+                    <hr className="border-t border-[#898C81]" />
+                    <div
+                        className="flex min-h-17.5 max-h-20 w-full cursor-pointer flex-row items-center gap-1.25 pl-7.5 hover:bg-[whitesmoke]"
                         onClick={Logout}
                     >
-                        <Box transform='scaleX(-1)'>
-                            <LuLogOut color="#898C81" size='23px' transform='scaleX(-1)' />
-                        </Box>
-                        <Text color='#898C81'>Logout</Text>
-                    </Box>
-                </Box>
-            </Box>
-            <Box
-                w='100%'
-                h='100%'
-                display='flex'
-                flexDir='column'
-            >
-                {/* header bar */}
-                <Box
-                    w='100%'
-                    h='8%'
-                    display='flex'
-                    alignItems='center'
-                    justifyContent='space-between'
-                    paddingInline={50}
-                    paddingBlock={0}
-                    marginTop={'10px'}
-                >
-                    <Input placeholder="Search" w='500px' borderColor='black' />
-                    <Box
-                        display='flex'
-                        alignItems={'center'}
-                        gap={2}
-                    >
-                        <Box
-                            w={'40px'}
-                            h={'40px'}
-                            borderRadius='50%'
-                            bgColor='#D8D9D4'
-                            display='flex'
-                            alignItems='center'
-                            justifyContent='center'
-                            paddingBlock={5}
-                        >
+                        <div className="scale-x-[-1]">
+                            <LuLogOut color="#898C81" size='23px' />
+                        </div>
+                        <span className="text-[#898C81]">Logout</span>
+                    </div>
+                </div>
+            </div>
+            <div className="flex h-full w-full flex-col">
+                <div className="mt-2.5 flex h-[8%] w-full items-center justify-between px-12.5">
+                    <Input placeholder="Search" className="w-125 border-black" />
+                    <div className="flex items-center gap-2">
+                        <div className="flex size-10 items-center justify-center rounded-full bg-[#D8D9D4]">
                             AS
-                        </Box>
-                        <Popover>
-                            <PopoverTrigger>
-                                <Box w={'40px'} h={'40px'} display='flex' alignItems='center' justifyContent='center'>
-                                    <MdKeyboardArrowDown color='black' size='20px' />
-                                </Box>
-                            </PopoverTrigger>
-                            <PopoverContent w='180px'>
-                                <PopoverArrow />
-                                <PopoverCloseButton />
-                                <Link href={teacherProfile}>
-                                    <PopoverHeader>Profile</PopoverHeader>
-                                </Link>
-                                <PopoverHeader onClick={Logout} _hover={{cursor: 'pointer'}}>Logout</PopoverHeader>
-                            </PopoverContent>
-                        </Popover>
-                    </Box>    
-                </Box>
-                {/* body */}
-                <Box
-                    w={'100%'}
-                    h={'93%'}
-                >
+                        </div>
+                        <NavDropdown
+                            items={[
+                                { label: 'Profile', href: teacherProfile },
+                                { label: 'Logout', onClick: Logout },
+                            ]}
+                        />
+                    </div>
+                </div>
+                <div className="h-[93%] w-full">
                     {children}
-                </Box>
-            </Box>
-        </Box>
+                </div>
+            </div>
+        </div>
     );
 }
 

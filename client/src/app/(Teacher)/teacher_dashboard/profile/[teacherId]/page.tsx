@@ -1,20 +1,24 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { GetUser } from '@/utils/getUser';
 import ProfilePage from '@/Pages/profile';
 
-const Profile = ({ params }) => {
-  const { userId } = params;
+const Profile = ({ params }: { params: Promise<{ teacherId: string }> }) => {
+  const [userId, setUserId] = useState('');
+  const router = useRouter();
 
   const [FirstName, setFirstName] = useState('');
   const [LastName, setLastName] = useState('');
   const [UserName, setUserName] = useState('');
   const [Bio, setBio] = useState('');
   const [Role, setRole] = useState('');
-  const [courses, setCourses] = useState([]);
+  const [courses, setCourses] = useState<any[]>([]);
 
   useEffect(() => {
+    params.then(({ teacherId }) => setUserId(teacherId));
+
     GetUser()
       .then((data) => {
         setFirstName(data.firstName);

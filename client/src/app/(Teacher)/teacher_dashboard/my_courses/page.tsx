@@ -2,36 +2,25 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { MdDelete } from 'react-icons/md';
+import { Button } from '@/components/ui/button';
 import {
-  Box,
-  Button,
-  Image,
-  Text,
-  Drawer,
-  DrawerBody,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerOverlay,
-  DrawerContent,
-  DrawerCloseButton,
-  Input,
-  FormControl,
-  useDisclosure,
   AlertDialog,
-  AlertDialogOverlay,
-  AlertDialogHeader,
-  AlertDialogCloseButton,
-  AlertDialogBody,
-  AlertDialogFooter,
+  AlertDialogAction,
+  AlertDialogCancel,
   AlertDialogContent,
-} from '@chakra-ui/react';
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+} from '@/components/ui/alert-dialog';
+import { useDisclosure } from '@/hooks/use-disclosure';
 import { IoMdClose } from 'react-icons/io';
 import Link from 'next/link';
-import { FaRegEdit } from 'react-icons/fa';
+import { useRouter } from 'next/navigation';
 import CourseCard from '@/components/CourseCard';
 
 const MyCourses = () => {
-  const [courses, setCourses] = useState([]);
+  const [courses, setCourses] = useState<any[]>([]);
   const [courseId, setCourseId] = useState('');
   const [courseTitle, setCourseTitle] = useState('');
   const [courseDescription, setCourseDescription] = useState('');
@@ -40,16 +29,17 @@ const MyCourses = () => {
   const [courseImage, setCourseImage] = useState('');
   const [courseCreatedAt, setCourseCreatedAt] = useState('');
   const [courseUpdatedAt, setCourseUpdatedAt] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const boxRef = useRef();
-  const gridRef = useRef();
+  const boxRef = useRef<HTMLDivElement>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
   const {
     isOpen: isDeleteAlertOpen,
     onOpen: onDeleteAlertOpen,
     onClose: onDeleteAlertClose,
   } = useDisclosure();
-  const cancelRef = useRef();
 
   const getCourse = (id) => {
     courses.forEach((course) => {
@@ -145,65 +135,35 @@ const MyCourses = () => {
 
   return (
     <>
-      <AlertDialog
-        motionPreset='slideInBottom'
-        leastDestructiveRef={cancelRef}
-        onClose={onDeleteAlertClose}
-        isOpen={isDeleteAlertOpen}
-        isCentered
-      >
-        <AlertDialogOverlay />
-
+      <AlertDialog open={isDeleteAlertOpen} onOpenChange={(open) => !open && onDeleteAlertClose()}>
         <AlertDialogContent>
-          <AlertDialogHeader>Delete course?</AlertDialogHeader>
-          <AlertDialogCloseButton />
-          <AlertDialogBody>
-            Are you sure you want to remove this course?
-          </AlertDialogBody>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete course?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to remove this course?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
           <AlertDialogFooter>
-            <Button ref={cancelRef} onClick={onDeleteAlertClose}>
-              No
-            </Button>
-            <Button
-              colorScheme='red'
-              ml={3}
+            <AlertDialogCancel>No</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-destructive text-white hover:bg-destructive/90"
               onClick={() => deleteCourse(courseId)}
             >
               Yes
-            </Button>
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-      <Box h={'100%'} paddingInline='50px'>
-        <Box
-          w={'100%'}
-          h={'10%'}
-          display={'flex'}
-          flexDirection={'row'}
-          alignItems={'center'}
-          justifyContent={'flex-end'}
-        >
+      <div className="h-full px-12.5">
+        <div className="flex h-[10%] w-full flex-row items-center justify-end">
           <Link href='/create_course'>
-            <Button bgColor={'#234C51'} color={'white'}>
+            <Button className="bg-[#234C51] text-white hover:bg-[#234C51]/90">
               + Create Course
             </Button>
           </Link>
-        </Box>
-        <Box
-          ref={gridRef}
-          w='100%'
-          h='82vh'
-          display='grid'
-          gridTemplateColumns='1fr'
-          gap={5}
-        >
-          <Box
-            w='100%'
-            h='100%'
-            display='flex'
-            flexDir='column'
-            overflowY={'auto'}
-          >
+        </div>
+        <div ref={gridRef} className="grid h-[82vh] w-full grid-cols-1 gap-5">
+          <div className="flex h-full w-full flex-col overflow-y-auto">
             {courses.map((course) => {
               return (
                 <CourseCard
@@ -215,81 +175,53 @@ const MyCourses = () => {
                 />
               );
             })}
-          </Box>
-          <Box
-            display='none'
-            ref={boxRef}
-            w='100%'
-            h='100%'
-            bgColor={'white'}
-            flexDir='column'
-            gap={5}
-            overflowY={'auto'}
-          >
-            <Box
-              w='100%'
-              display='flex'
-              flexDirection='row'
-              justifyContent='flex-end'
-              padding={'10px'}
-              cursor='pointer'
-            >
+          </div>
+          <div ref={boxRef} className="hidden h-full w-full flex-col gap-5 overflow-y-auto bg-white">
+            <div className="flex w-full cursor-pointer flex-row justify-end p-2.5">
               <IoMdClose size={'25px'} onClick={closeTab} />
-            </Box>
-            <Image src={courseImage || '/ui-ux-unsplash.jpg'} w='100%' />
-            <Box
-              paddingRight='50px'
-              display='flex'
-              flexDirection='column'
-              gap='15px'
-              paddingBlock='10px'
-            >
-              <Text>
+            </div>
+            <img src={courseImage || '/ui-ux-unsplash.jpg'} className="w-full" />
+            <div className="flex flex-col gap-3.75 py-2.5 pr-12.5">
+              <p>
                 {' '}
                 <span style={{ fontWeight: '700' }}> Course Title: </span>{' '}
                 {courseTitle}
-              </Text>
-              <Text>
+              </p>
+              <p>
                 {' '}
                 <span style={{ fontWeight: '700' }}>
                   {' '}
                   Course Teacher:{' '}
                 </span>{' '}
                 {courseTeacher}
-              </Text>
-              <Text>
+              </p>
+              <p>
                 {' '}
                 <span style={{ fontWeight: '700' }}> Description: </span>{' '}
                 {courseDescription}
-              </Text>
-              <Text>
+              </p>
+              <p>
                 {' '}
                 <span style={{ fontWeight: '700' }}> Created At: </span>{' '}
                 {courseCreatedAt}
-              </Text>
-              <Text>
+              </p>
+              <p>
                 {' '}
                 <span style={{ fontWeight: '700' }}> Updated At: </span>{' '}
                 {courseUpdatedAt}
-              </Text>
-              <Box
-                display='flex'
-                flexDir='row'
-                justifyContent='space-between'
-                alignItems='center'
-                marginTop='25px'
-              >
-                <Button colorScheme='red' onClick={onDeleteAlertOpen}>
+              </p>
+              <div className="mt-6.25 flex flex-row items-center justify-between">
+                <Button variant="destructive" onClick={onDeleteAlertOpen}>
                   Delete Course
                 </Button>
                 <Link href={`/course_details/${courseId}`}>
-                  <Button colorScheme='blue'>View Course Details</Button>
+                  <Button className="bg-blue-500 hover:bg-blue-600">View Course Details</Button>
                 </Link>
-              </Box>
-            </Box>
-          </Box>
-        </Box>
-      </Box>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </>
   );
 };
