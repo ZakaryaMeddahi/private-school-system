@@ -1,14 +1,13 @@
 'use client';
 
-import CardForCourse from '@/components/CardForCourse';
 import CourseCard from '@/components/Course Card/CourseCard';
 import Item from '@/components/Item/Item';
-import WhatDoYouLearn from '@/components/What do you learn/WhatDoYouLearn';
-import { Container, Heading, UnorderedList, Text, Box } from '@chakra-ui/react';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 const CourseDetailsPage = ({ courseId }) => {
-  const [course, setCourse] = useState({});
+  const [course, setCourse] = useState<any>({});
+  const router = useRouter();
 
   const printScroll = () => {
     console.log(window.innerHeight);
@@ -48,31 +47,23 @@ const CourseDetailsPage = ({ courseId }) => {
   }, []);
 
   return (
-    <Container m='0' p='75px' minH='100vh' maxW='100%' onClick={printScroll}>
-      <Box
-        display='grid'
-        gridTemplateColumns='repeat(2, 1fr)'
-        gap='25'
-        justifyItems='center'
-        maxH='200px'
-      >
-        <Box paddingTop='50px'>
-          <Heading>{course.title}</Heading>
-          <Text marginBottom='45px' marginTop='5' lineHeight='1.6'>
-            {course.description}
-          </Text>
-          <Heading> Topics </Heading>
-          <UnorderedList marginBottom='45px'>
-            {course.topics?.map((topic) => {
-              return <Item key={topic.id} item={topic.title} mrT='5' />;
-            })}
-          </UnorderedList>
-          <Heading>Requirements</Heading>
-          <Box mb='45px'>{course.requirements}</Box>
-        </Box>
-        <CourseCard courseId={courseId} course={course} />
-      </Box>
-    </Container>
+    <div className="m-0 max-h-50 max-w-full p-18.75 min-h-screen grid grid-cols-2 gap-6.25 justify-items-center" onClick={printScroll}>
+      <div className="pt-12.5">
+        <h1 className="text-2xl font-semibold">{course.title}</h1>
+        <p className="mt-1.25 mb-11.25 leading-relaxed">
+          {course.description}
+        </p>
+        <h2 className="text-xl font-semibold"> Topics </h2>
+        <ul className="mb-11.25 list-disc pl-5">
+          {course.topics?.map((topic: any) => {
+            return <Item key={topic.id} item={topic.title} mrT='5' />;
+          })}
+        </ul>
+        <h2 className="text-xl font-semibold">Requirements</h2>
+        <div className="mb-11.25">{course.requirements}</div>
+      </div>
+      <CourseCard courseId={courseId} course={course} />
+    </div>
   );
 };
 

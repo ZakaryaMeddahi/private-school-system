@@ -1,10 +1,5 @@
-import {
-  Button,
-  Editable,
-  EditableInput,
-  EditablePreview,
-  Stack,
-} from '@chakra-ui/react';
+import { Button } from '@/components/ui/button';
+import EditableField from '@/components/editable-field';
 import { BsTrash } from 'react-icons/bs';
 
 function Topic({ topic, topics, setTopics, useSoftDelete }) {
@@ -25,39 +20,27 @@ function Topic({ topic, topics, setTopics, useSoftDelete }) {
     setTopics(topics.filter((t) => t.id !== topic.id));
   };
 
-  const handelUpdateTopic = (e) => {
+  const handelUpdateTopic = (value: string) => {
     setTopics(
       topics.map((t) => {
         if (t.id === topic.id) {
-          t.title = e.target.value;
+          t.title = value;
         }
         return t;
       })
     );
   };
   return (
-    <Stack
-      flexDirection='row'
-      alignItems='center'
-      mb='15px'
-      p='10px'
-      bgColor='#00000015'
-      borderRadius='7px'
-    >
-      <Editable defaultValue={topic.title} w='100%'>
-        <EditablePreview />
-        <EditableInput onChange={handelUpdateTopic} />
-      </Editable>
+    <div className="mb-3.75 flex flex-row items-center rounded-[7px] bg-[#00000015] p-2.5">
+      <EditableField defaultValue={topic.title} className="w-full" onChange={handelUpdateTopic} />
       <Button
-        colorScheme='red'
-        h='35px'
-        p='0'
-        boxShadow='0 2px 10px grey'
+        variant="destructive"
+        className="h-8.75 p-0 shadow-[0_2px_10px_grey]"
         onClick={handelRemoveTopic}
       >
         <BsTrash />
       </Button>
-    </Stack>
+    </div>
   );
 }
 export default Topic;

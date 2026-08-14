@@ -1,30 +1,17 @@
 'use-client';
 
-import {
-  Avatar,
-  Box,
-  Button,
-  Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
-  Flex,
-  Heading,
-  Image,
-  Text,
-  Divider,
-  Stack,
-} from '@chakra-ui/react';
+import { Button } from '@/components/ui/button';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
 const CourseCard = ({ courseId, course }) => {
   const { difficulty, duration, durationUnit, language, teacher, file } =
     course;
-  const [enrollment, setEnrollment] = useState({});
+  const [enrollment, setEnrollment] = useState<any>({});
   const [enrolled, setEnrolled] = useState(false);
   const router = useRouter();
-  const roleRef = useRef();
+  const roleRef = useRef<string | null>(null);
 
   const enroll = async () => {
     try {
@@ -88,76 +75,56 @@ const CourseCard = ({ courseId, course }) => {
   }, [enrolled]);
 
   return (
-    <Card maxW='md'>
-      <CardHeader>
-        <Image
+    <div className="max-w-md rounded-xl border shadow-sm">
+      <div className="p-6">
+        <img
           src={file?.url || '../../Private-School-default-image.png'}
           alt='course image'
-          borderRadius='8'
+          className="rounded-lg"
         />
-      </CardHeader>
+      </div>
 
-      <CardBody>
-        <Box
-          display='flex'
-          flexDirection='row'
-          justifyContent='start'
-          alignItems='center'
-        >
-          <Box
-            display='flex'
-            flexDirection='row'
-            alignItems='center'
-            gap='5px'
-            mb='30px'
-          >
-            <Avatar size='sm' mr='10px' />
-            <Text>
+      <div className="px-6 pb-6">
+        <div className="flex flex-row items-center justify-start">
+          <div className="mb-7.5 flex flex-row items-center gap-1.25">
+            <Avatar className="mr-2.5 size-6">
+              <AvatarFallback>{teacher?.user?.firstName?.[0]}</AvatarFallback>
+            </Avatar>
+            <span>
               {teacher?.user?.firstName} {teacher?.user?.lastName}
-            </Text>
-          </Box>
-          {/* <Box>
-            <Text color='#FCC128'>Web Dev</Text>
-          </Box> */}
-        </Box>
-        <Box>
-          <Heading size='md' color='#213E69' mb='20px'>
+            </span>
+          </div>
+        </div>
+        <div>
+          <h3 className="mb-5 text-lg font-semibold text-[#213E69]">
             {course.title}
-          </Heading>
-          <Stack flexDir='row' color='#213E69' mb='20px'>
-            <Text fontWeight='600'>Language: </Text> <Text>{language}</Text>
-          </Stack>
-          <Stack flexDir='row' color='#213E69' mb='20px'>
-            <Text fontWeight='600'>Duration: </Text>
-            <Text>
+          </h3>
+          <div className="mb-5 flex flex-row gap-1.5 text-[#213E69]">
+            <span className="font-semibold">Language: </span> <span>{language}</span>
+          </div>
+          <div className="mb-5 flex flex-row gap-1.5 text-[#213E69]">
+            <span className="font-semibold">Duration: </span>
+            <span>
               {duration} {durationUnit}
-            </Text>
-          </Stack>
-          <Stack flexDir='row' color='#213E69'>
-            <Text fontWeight='600'>Difficulty: </Text> <Text>{difficulty}</Text>
-          </Stack>
-        </Box>
-      </CardBody>
+            </span>
+          </div>
+          <div className="flex flex-row gap-1.5 text-[#213E69]">
+            <span className="font-semibold">Difficulty: </span> <span>{difficulty}</span>
+          </div>
+        </div>
+      </div>
       {roleRef.current === 'student' && (
-        <CardFooter justifyContent='end'>
+        <div className="flex justify-end border-t px-6 py-4">
           {!enrollment.isEnrolled ? (
             <Button
-              bgColor='#234C51'
-              color='white'
-              w='180px'
-              textAlign='center'
-              _hover={{ bgColor: '#234C5180' }}
+              className="w-45 bg-[#234C51] text-center text-white hover:bg-[#234C51]/50"
               onClick={enroll}
             >
               Enroll
             </Button>
           ) : enrollment.status === 'approved' ? (
             <Button
-              bgColor='#234C51'
-              color='white'
-              w='180px'
-              textAlign='center'
-              _hover={{ bgColor: '#234C5150' }}
+              className="w-45 bg-[#234C51] text-center text-white hover:bg-[#234C51]/31"
               onClick={() => {
                 router.push(`/chat`);
               }}
@@ -166,19 +133,15 @@ const CourseCard = ({ courseId, course }) => {
             </Button>
           ) : (
             <Button
-              bgColor='#234C51'
-              color='white'
-              w='180px'
-              textAlign='center'
-              isDisabled={true}
-              _hover={{ bgColor: '#234C51' }}
+              className="w-45 bg-[#234C51] text-center text-white hover:bg-[#234C51]"
+              disabled={true}
             >
               {enrollment.status}
             </Button>
           )}
-        </CardFooter>
+        </div>
       )}
-    </Card>
+    </div>
   );
 };
 

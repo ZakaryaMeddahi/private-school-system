@@ -1,7 +1,15 @@
-import CourseDetailsPage from '@/Pages/CourseDetails';
+'use client';
 
-const Course_Details = ({ params }) => {
-  const { courseId } = params;
+import CourseDetailsPage from '@/Pages/CourseDetails';
+import { useEffect, useState } from 'react';
+
+const Course_Details = ({ params }: { params: Promise<{ courseId: string }> }) => {
+  const [courseId, setCourseId] = useState('');
+
+  useEffect(() => {
+    params.then(({ courseId }) => setCourseId(courseId));
+  }, [params]);
+
   return <CourseDetailsPage courseId={courseId}/>;
 };
 
