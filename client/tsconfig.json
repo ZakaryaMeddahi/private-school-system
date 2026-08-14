@@ -1,0 +1,6 @@
+{
+    "compilerOptions": {
+    "paths": { "@/*": ["./src/*"] }
+    // ...Next-generated defaults
+    }
+}
