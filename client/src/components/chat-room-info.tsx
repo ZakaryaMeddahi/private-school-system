@@ -21,6 +21,22 @@ import {
 import Room from '@/components/Room/Room';
 import { useEffect, useRef } from 'react';
 import Message from './Message';
+import { Socket } from 'socket.io-client';
+import {
+  ChatMessage,
+  Course,
+  CourseMember,
+} from '@/app/providers/ChatProvider';
+import { Dispatch, SetStateAction, RefObject } from 'react';
+
+interface RoomInfoProps {
+  teacherInfo: CourseMember | Record<string, never>;
+  members: CourseMember[];
+  pinnedMessages: ChatMessage[];
+  setPinnedMessages: Dispatch<SetStateAction<ChatMessage[]>>;
+  chatNamespace: RefObject<Socket | null>;
+  selectedCourse: Course | null;
+}
 
 const RoomInfo = ({
   teacherInfo,
@@ -29,8 +45,8 @@ const RoomInfo = ({
   setPinnedMessages,
   chatNamespace,
   selectedCourse,
-}) => {
-  const userIdRef = useRef();
+}: RoomInfoProps) => {
+  const userIdRef = useRef<string | null>(null);
   console.log('====================================');
   console.log('FROM RoomInfo : ', teacherInfo);
   console.log('====================================');
@@ -136,9 +152,9 @@ const RoomInfo = ({
             </Accordion> */}
           </TabPanel>
           <TabPanel>
-            {selectedCourse && (
+            {selectedCourse?.teacher && (
               <Stack
-                key={selectedCourse?.teacher.id}
+                key={selectedCourse.teacher.id}
                 w='100%'
                 flexDir='row'
                 justifyContent='space-between'
@@ -154,17 +170,17 @@ const RoomInfo = ({
                     border='1.2px solid blue'
                     borderRadius='full'
                     boxSize='35px'
-                    src={selectedCourse?.teacher.profilePicture || './logo.png'}
+                    src={selectedCourse.teacher.profilePicture || './logo.png'}
                     alt={
-                      selectedCourse?.teacher.user.firstName +
+                      selectedCourse.teacher.user.firstName +
                       ' ' +
-                      selectedCourse?.teacher.user.lastName
+                      selectedCourse.teacher.user.lastName
                     }
                   />
                   <Text fontSize='sm' fontWeight='600' color='black.500'>
-                    {selectedCourse?.teacher.user.firstName +
+                    {selectedCourse.teacher.user.firstName +
                       ' ' +
-                      selectedCourse?.teacher.user.lastName}
+                      selectedCourse.teacher.user.lastName}
                   </Text>
                 </Stack>
                 <Text

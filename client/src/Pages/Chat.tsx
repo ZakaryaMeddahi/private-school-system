@@ -17,9 +17,9 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 
 import RoomInfo from '@/components/chat-room-info';
 import RoomChat from '@/components/room-chat';
-import { ChatContext } from '@/app/providers/ChatProvider';
+import { ChatContext, ChatMessage } from '@/app/providers/ChatProvider';
 import Link from 'next/link';
-import io from 'socket.io-client';
+import io, { Socket } from 'socket.io-client';
 import { useRouter } from 'next/navigation';
 
 const ChatPage = () => {
@@ -50,8 +50,8 @@ const ChatPage = () => {
   /****************/
 
   const router = useRouter();
-  const chatNamespace = useRef(null);
-  const userRole = useRef(null);
+  const chatNamespace = useRef<Socket | null>(null);
+  const userRole = useRef<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   // Get chats by teacher id or student id
@@ -59,18 +59,18 @@ const ChatPage = () => {
   // Get Teacher info
   // Get room members
 
-  const switchRoom = (chatId) => {
+  const switchRoom = (chatId?: string) => {
     console.log('Switching room');
-    chatNamespace.current.emit('leave-room', {
+    chatNamespace.current?.emit('leave-room', {
       chatId: chatId,
     });
 
-    chatNamespace.current.emit('join-room', {
+    chatNamespace.current?.emit('join-room', {
       chatId: chatId,
     });
   };
 
-  const fetchMessages = async (courseId, chatId) => {
+  const fetchMessages = async (courseId: string, chatId?: string) => {
     try {
       console.log(selectedCourse);
       const response = await fetch(
@@ -94,7 +94,7 @@ const ChatPage = () => {
 
       setMessages(data);
       setPinnedMessages([]);
-      data.map((message) => {
+      data.map((message: ChatMessage) => {
         console.log(
           '==================================================================================================================================================='
         );
@@ -125,7 +125,7 @@ const ChatPage = () => {
     }
   };
 
-  const fetchChatMembers = async (courseId) => {
+  const fetchChatMembers = async (courseId: string) => {
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/courses/${courseId}/members`,
@@ -197,7 +197,7 @@ const ChatPage = () => {
         //   setTeacherInfo(teacher);
         // });
 
-        chatNamespace.current.emit('join-room', {
+        chatNamespace.current?.emit('join-room', {
           chatId: data[0].chat.id,
         });
 
@@ -209,7 +209,7 @@ const ChatPage = () => {
     };
 
     const handleWebsocketEvents = () => {
-      chatNamespace.current.on('connect', async () => {
+      chatNamespace.current?.on('connect', async () => {
         console.log('Connected to socket');
 
         console.log(selectedCourse);
@@ -224,13 +224,13 @@ const ChatPage = () => {
         //   return course;
         // });
 
-        chatNamespace.current.on('user-joined', (data) => {
+        chatNamespace.current?.on('user-joined', (data) => {
           console.log('====================================');
           console.log('Joined Room : ', data);
           console.log('====================================');
         });
 
-        chatNamespace.current.on('message', (data) => {
+        chatNamespace.current?.on('message', (data) => {
           console.log('====================================');
           console.log('FROM Chat : ', data);
           console.log('====================================');
@@ -241,11 +241,11 @@ const ChatPage = () => {
 
         console.log('websocket events');
 
-        chatNamespace.current.on('message-updated', (data) => {
+        chatNamespace.current?.on('message-updated', (data) => {
           console.log('====================================');
           console.log('FROM Chat (update message) : ', data);
           console.log('====================================');
-          const message = data.message;
+          const message: ChatMessage = data.message;
           setMessages((prev) => {
             const index = prev.findIndex((msg) => msg.id === message.id);
             prev[index] = message;
@@ -267,7 +267,7 @@ const ChatPage = () => {
           });
         });
 
-        chatNamespace.current.on('message-removed', (data) => {
+        chatNamespace.current?.on('message-removed', (data) => {
           console.log('====================================');
           console.log('FROM Chat (delete message) : ', data);
           console.log('====================================');
@@ -284,10 +284,10 @@ const ChatPage = () => {
 
     handleWebsocketEvents();
     return () => {
-      chatNamespace.current.emit('leave-room', {
+      chatNamespace.current?.emit('leave-room', {
         chatId: selectedCourse?.chat?.id,
       });
-      chatNamespace.current.disconnect();
+      chatNamespace.current?.disconnect();
     };
   }, []);
 
@@ -389,7 +389,7 @@ const ChatPage = () => {
             icon={<CiMenuKebab />}
             ShowPopover={true}
             selectedCourse={selectedCourse}
-            chatId={selectedCourse?.chat.id}
+            chatId={selectedCourse?.chat?.id}
             pinnedMessages={pinnedMessages}
             setPinnedMessages={setPinnedMessages}
             isLoading={isLoading}

@@ -7,8 +7,14 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { CgClose } from 'react-icons/cg';
+import { Dispatch, SetStateAction } from 'react';
 
-function FileCard({ file, setFile }) {
+interface FileCardProps {
+  file: File | null;
+  setFile: Dispatch<SetStateAction<File | null>>;
+}
+
+function FileCard({ file, setFile }: FileCardProps) {
   return (
     <Fade in={file ? true : false}>
       <Stack
@@ -26,6 +32,7 @@ function FileCard({ file, setFile }) {
         <Stack flexDir='row'>
           <Text fontSize='sm' color='blue.500'>Attachment</Text>
           <IconButton
+            aria-label='Remove attachment'
             icon={<CgClose />}
             w='25px'
             h='25px'

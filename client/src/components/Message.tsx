@@ -11,11 +11,46 @@ import {
   Stack,
   Text,
 } from '@chakra-ui/react';
-import { useRef, useState } from 'react';
+import {
+  Dispatch,
+  MutableRefObject,
+  RefObject,
+  SetStateAction,
+  useRef,
+  useState,
+} from 'react';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { CgEditBlackPoint, CgTrash } from 'react-icons/cg';
 import { MdChangeCircle, MdUpdate } from 'react-icons/md';
 import { PiNeedle } from 'react-icons/pi';
+import { Socket } from 'socket.io-client';
+import { ChatMessage, Course } from '@/app/providers/ChatProvider';
+
+interface UpdateMessagePayload {
+  messageId: string;
+  message: ChatMessage;
+  roomId?: string;
+  chatId?: string;
+}
+
+interface DeleteMessagePayload {
+  messageId: string;
+  roomId?: string;
+  chatId?: string;
+}
+
+interface MessageProps {
+  msg: ChatMessage;
+  userIdRef: RefObject<string | null>;
+  isPinned: boolean;
+  pinnedMessages: ChatMessage[];
+  setPinnedMessages: Dispatch<SetStateAction<ChatMessage[]>>;
+  chatNamespace: RefObject<Socket | null>;
+  selectedCourse?: Course | null;
+  chatId?: string;
+  isChatSession?: boolean;
+  chatRef?: MutableRefObject<HTMLDivElement | null>;
+}
 
 function Message({
   msg,
@@ -24,11 +59,10 @@ function Message({
   pinnedMessages,
   setPinnedMessages,
   chatNamespace,
-  selectedCourse,
   chatId,
   isChatSession,
   chatRef,
-}) {
+}: MessageProps) {
   const [updateMode, setUpdateMode] = useState(false);
   const [updatedMessage, setUpdatedMessage] = useState(msg.content);
 
@@ -39,12 +73,12 @@ function Message({
     return result;
   };
 
-  const convertTime = (time) => {
-    const date = new Date(time);
+  const convertTime = (time?: string) => {
+    const date = new Date(time || '');
     return date.toLocaleString().replace(',', '');
   };
 
-  const handleUpdateContent = (e) => {
+  const handleUpdateContent = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUpdatedMessage(e.target.value);
   };
 
@@ -53,14 +87,14 @@ function Message({
     // update message
     // console.log(msg);
 
-    const message = {
+    const message: UpdateMessagePayload = {
       messageId: msg.id,
       message: { ...msg, isPinned: true },
     };
 
     isChatSession ? (message.roomId = chatId) : (message.chatId = chatId);
 
-    chatNamespace.current.emit('update-message', message);
+    chatNamespace.current?.emit('update-message', message);
 
     // chatRef.current.scrollIntoView({
     //   behavior: 'smooth',
@@ -74,7 +108,7 @@ function Message({
       pinnedMessages.filter((message) => message.id !== msg.id)
     );
 
-    const message = {
+    const message: UpdateMessagePayload = {
       messageId: msg.id,
       message: { ...msg, isPinned: false },
     };
@@ -82,7 +116,7 @@ function Message({
     isChatSession ? (message.roomId = chatId) : (message.chatId = chatId);
 
     // update message
-    chatNamespace.current.emit('update-message', message);
+    chatNamespace.current?.emit('update-message', message);
 
     // chatRef.current.scrollIntoView({
     //   behavior: 'smooth',
@@ -91,11 +125,11 @@ function Message({
     // });
   };
 
-  const handleUpdateMessage = (e) => {
+  const handleUpdateMessage = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('update message');
 
-    const message = {
+    const message: UpdateMessagePayload = {
       messageId: msg.id,
       message: { ...msg, content: updatedMessage },
     };
@@ -103,50 +137,47 @@ function Message({
     isChatSession ? (message.roomId = chatId) : (message.chatId = chatId);
 
     // update content of message
-    chatNamespace.current.emit('update-message', message);
+    chatNamespace.current?.emit('update-message', message);
     setUpdateMode(false);
 
     chatRef?.current?.scrollIntoView({
       behavior: 'smooth',
-      // block: 'end',
-      top: chatRef.current.scrollHeight + 20,
+      block: 'end',
     });
   };
 
   const handleDeleteMessage = () => {
     console.log('delete message');
 
-    const message = {
+    const message: DeleteMessagePayload = {
       messageId: msg.id,
     };
 
     isChatSession ? (message.roomId = chatId) : (message.chatId = chatId);
 
     // delete message
-    chatNamespace.current.emit('remove-message', message);
+    chatNamespace.current?.emit('remove-message', message);
 
     chatRef?.current?.scrollIntoView({
       behavior: 'smooth',
-      // block: 'end',
-      top: chatRef.current.scrollHeight + 20,
+      block: 'end',
     });
   };
 
-  const pinRef = useRef();
-  const hoverRef = useRef();
+  const pinRef = useRef<HTMLDivElement>(null);
+  const hoverRef = useRef<HTMLDivElement>(null);
 
   return (
     <Stack
       className='chat'
-      ref={(el) => {
-        chatRef && (chatRef.current = el);
+      ref={(el: HTMLDivElement | null) => {
+        if (chatRef) chatRef.current = el;
         console.log(el);
         // msg.sender.role = 'student';
         if (chatRef?.current) {
           chatRef.current.scrollIntoView({
             behavior: 'smooth',
             block: 'end',
-            top: chatRef.current.scrollHeight + 15,
           });
         }
       }}
@@ -278,6 +309,7 @@ function Message({
             onChange={handleUpdateContent}
           />
           <IconButton
+            aria-label='Save message'
             icon={<MdChangeCircle />}
             type='submit'
             onClick={handleUpdateMessage}

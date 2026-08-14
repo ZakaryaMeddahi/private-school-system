@@ -17,11 +17,20 @@ import {
   Image,
 } from '@chakra-ui/react';
 import Room from '@/components/Room/Room';
-import { chatContext } from '@/Pages/Chat';
-import React, { useRef, useState, useContext } from 'react';
+import React, { ReactNode, useRef, useState, useContext } from 'react';
 import { ChatContext } from '@/app/providers/ChatProvider';
 import { MdRunCircle, MdStart } from 'react-icons/md';
 import { useRouter } from 'next/navigation';
+
+interface RoomHeaderProps {
+  roomName?: string;
+  image?: string;
+  ChangeLayout?: boolean;
+  icon?: ReactNode;
+  ShowPopover?: boolean;
+  roomId?: string;
+  isChatSession?: boolean;
+}
 
 const RoomHeader = ({
   roomName,
@@ -31,8 +40,8 @@ const RoomHeader = ({
   ShowPopover,
   roomId,
   isChatSession,
-}) => {
-  const MenuRef = useRef();
+}: RoomHeaderProps) => {
+  const MenuRef = useRef<HTMLDivElement>(null);
   const [count, setCount] = useState(0);
   const [popover, setPopover] = useState(false);
   const router = useRouter();
@@ -77,7 +86,7 @@ const RoomHeader = ({
       boxShadow='rgba(0, 0, 0, 0.24) 0px 3px 8px'
       borderRadius='15px'
     >
-      <Box onClick={ChangeLayout && changeLayout}>
+      <Box onClick={ChangeLayout ? changeLayout : undefined}>
         {/* <Room RoomName={roomName} image={image} hover={false} /> */}
         <Box padding='15px' color='black' borderRadius='7px' cursor='pointer'>
           <Flex direction='row' gap='15' alignItems='center'>
@@ -93,6 +102,7 @@ const RoomHeader = ({
       </Box>
       {!isChatSession && (
         <IconButton
+          aria-label='Start room'
           icon={<MdStart />}
           onClick={() => router.push(`/room/${roomId}`)}
           colorScheme='teal'

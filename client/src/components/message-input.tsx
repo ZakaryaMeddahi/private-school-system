@@ -10,10 +10,26 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { IoIosAttach, IoIosSend } from 'react-icons/io';
-import { chatContext } from '../Pages/Chat';
-import React, { createRef, useContext, useEffect, useState } from 'react';
-import { ChatContext } from '@/app/providers/ChatProvider';
+import React, { createRef, useState } from 'react';
+import {
+  ChatMessage,
+  Course,
+} from '@/app/providers/ChatProvider';
 import FileCard from './FileCard';
+import { Socket } from 'socket.io-client';
+import { Dispatch, RefObject, SetStateAction } from 'react';
+
+interface MessageInputProps {
+  messages: ChatMessage[];
+  setMessages: Dispatch<SetStateAction<ChatMessage[]>>;
+  chatNamespace: RefObject<Socket | null>;
+  selectedCourse: Course | null;
+  chatId?: string;
+  isChatSession?: boolean;
+  isLoading: boolean;
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
+  fileUploading?: boolean;
+}
 
 const MessageInput = ({
   messages,
@@ -25,13 +41,12 @@ const MessageInput = ({
   isLoading,
   setIsLoading,
   fileUploading,
-}) => {
-  // const { messages, setMessages } = useContext(ChatContext);
-  const [message, setMessage] = useState({});
-  const [file, setFile] = useState(null);
-  const messageInputRef = createRef();
+}: MessageInputProps) => {
+  const [message, setMessage] = useState<{ content?: string }>({});
+  const [file, setFile] = useState<File | null>(null);
+  const messageInputRef = createRef<HTMLInputElement>();
 
-  const sendMsg = async (e) => {
+  const sendMsg = async (e: React.FormEvent) => {
     e.preventDefault();
     // console.log(file.split('\\')[file.split('\\').length - 1]);
     console.log(file);
@@ -50,7 +65,7 @@ const MessageInput = ({
       }
 
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/courses/${selectedCourse.id}/chats/${chatId}/messages`,
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/courses/${selectedCourse?.id}/chats/${chatId}/messages`,
         {
           method: 'POST',
           headers: {
@@ -90,13 +105,17 @@ const MessageInput = ({
       return;
     }
 
-    const newMessage = { message };
+    const newMessage: {
+      message: { content?: string };
+      roomId?: string;
+      chatId?: string;
+    } = { message };
 
     isChatSession ? (newMessage.roomId = chatId) : (newMessage.chatId = chatId);
 
     chatNamespace.current?.emit('message', newMessage);
 
-    messageInputRef.current.value = '';
+    if (messageInputRef.current) messageInputRef.current.value = '';
     setMessage({});
     setFile(null);
   };
@@ -145,7 +164,7 @@ const MessageInput = ({
                 accept='image/*, .pdf'
                 id='file'
                 display='none'
-                onChange={(e) => setFile(e.target.files[0])}
+                onChange={(e) => setFile(e.target.files?.[0] || null)}
                 isDisabled={selectedCourse ? false : true}
               />
               <Center h='100%'>

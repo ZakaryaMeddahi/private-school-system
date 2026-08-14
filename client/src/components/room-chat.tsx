@@ -4,6 +4,31 @@ import { Box } from '@chakra-ui/react';
 import RoomHeader from './room-header';
 import RoomBody from './chat-room-body';
 import MessageInput from './message-input';
+import { Socket } from 'socket.io-client';
+import {
+  ChatMessage,
+  Course,
+} from '@/app/providers/ChatProvider';
+import { Dispatch, ReactNode, RefObject, SetStateAction } from 'react';
+
+interface RoomChatProps {
+  roomName?: string;
+  messages: ChatMessage[];
+  setMessages: Dispatch<SetStateAction<ChatMessage[]>>;
+  chatNamespace: RefObject<Socket | null>;
+  image?: string;
+  ChangeLayout?: boolean;
+  icon?: ReactNode;
+  ShowPopover?: boolean;
+  selectedCourse: Course | null;
+  chatId?: string;
+  isChatSession?: boolean;
+  pinnedMessages: ChatMessage[];
+  setPinnedMessages: Dispatch<SetStateAction<ChatMessage[]>>;
+  isLoading: boolean;
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
+  fileUploading?: boolean;
+}
 
 const RoomChat = ({
   roomName,
@@ -22,7 +47,7 @@ const RoomChat = ({
   isLoading,
   setIsLoading,
   fileUploading,
-}) => {
+}: RoomChatProps) => {
   console.log('====================================');
   console.log('FROM RoomChat : ', messages);
   console.log('====================================');
@@ -41,7 +66,7 @@ const RoomChat = ({
         ChangeLayout={ChangeLayout}
         icon={icon}
         ShowPopover={ShowPopover}
-        roomId={selectedCourse?.rooms[0].id}
+        roomId={selectedCourse?.rooms?.[0]?.id}
         isChatSession={isChatSession}
       />
       <RoomBody

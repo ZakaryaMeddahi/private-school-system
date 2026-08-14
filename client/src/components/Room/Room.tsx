@@ -10,6 +10,19 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { useRef } from 'react';
+import { Course, CourseMember } from '@/app/providers/ChatProvider';
+
+interface RoomProps {
+  RoomName?: string;
+  image?: string;
+  hover?: boolean;
+  course: Course;
+  setSelectedCourse: (course: Course) => void;
+  setTeacherInfo: (teacher: CourseMember | Record<string, never>) => void;
+  fetchMessages: (courseId: string, chatId?: string) => void;
+  fetchChatMembers: (courseId: string) => void;
+  switchRoom: (chatId?: string) => void;
+}
 
 const Room = ({
   RoomName,
@@ -20,9 +33,9 @@ const Room = ({
   setTeacherInfo,
   fetchMessages,
   fetchChatMembers,
-  switchRoom
-}) => {
-  const boxRef = useRef();
+  switchRoom,
+}: RoomProps) => {
+  const boxRef = useRef<HTMLDivElement>(null);
 
   const RoomFocus = () => {
     if (boxRef.current) {
@@ -39,11 +52,13 @@ const Room = ({
       color='black'
       borderRadius='7px'
       cursor='pointer'
-      _hover={hover && { backgroundColor: 'rgba(128, 128, 128, 0.150)' }}
+      _hover={
+        hover ? { backgroundColor: 'rgba(128, 128, 128, 0.150)' } : undefined
+      }
       // onClick={hover && RoomFocus}
       onClick={() => {
         setSelectedCourse(course);
-        setTeacherInfo(course.teacher);
+        setTeacherInfo(course.teacher || {});
         fetchMessages(course.id, course.chat?.id);
         fetchChatMembers(course.id);
         switchRoom(course.chat?.id);

@@ -11,7 +11,7 @@ import {
   Stack,
   Text,
 } from '@chakra-ui/react';
-import { useEffect, useRef } from 'react';
+import { Dispatch, RefObject, SetStateAction, useEffect, useRef } from 'react';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { CgEditContrast, CgTrash } from 'react-icons/cg';
 import { FaDeleteLeft } from 'react-icons/fa6';
@@ -19,6 +19,18 @@ import { IoAddCircleOutline } from 'react-icons/io5';
 import { MdUpdate } from 'react-icons/md';
 import { PiNeedle } from 'react-icons/pi';
 import Message from './Message';
+import { Socket } from 'socket.io-client';
+import { ChatMessage, Course } from '@/app/providers/ChatProvider';
+
+interface RoomBodyProps {
+  messages: ChatMessage[];
+  pinnedMessages: ChatMessage[];
+  setPinnedMessages: Dispatch<SetStateAction<ChatMessage[]>>;
+  chatNamespace: RefObject<Socket | null>;
+  selectedCourse: Course | null;
+  chatId?: string;
+  isChatSession?: boolean;
+}
 
 const RoomBody = ({
   messages,
@@ -28,9 +40,9 @@ const RoomBody = ({
   selectedCourse,
   chatId,
   isChatSession,
-}) => {
-  const chatRef = useRef();
-  const userIdRef = useRef();
+}: RoomBodyProps) => {
+  const chatRef = useRef<HTMLDivElement | null>(null);
+  const userIdRef = useRef<string | null>(null);
   useEffect(() => {
     console.log(chatRef);
     userIdRef.current = localStorage.getItem('userId');
