@@ -1,24 +1,13 @@
 'use client';
 
 import React, { useState } from 'react';
-import {
-  Flex,
-  Stack,
-  Container,
-  VStack,
-  Text,
-  Checkbox,
-  Link,
-  Button,
-  Image,
-  Box,
-} from '@chakra-ui/react';
-import Header from '@/components/Form header/Header';
-import FormInput from '@/components/Form input/FormInput';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import Header from '@/components/form-header/Header';
+import FormInput from '@/components/form-input/FormInput';
 import { useContext } from 'react';
 import { LoginContext } from '@/app/providers/LoginProvider';
-import { redirect, useRouter } from 'next/navigation';
-import { TbRosetteNumber0 } from 'react-icons/tb';
+import { useRouter } from 'next/navigation';
 import ErrorMessage from '@/components/ErrorMessage';
 
 const SignUpPage = () => {
@@ -111,28 +100,13 @@ const SignUpPage = () => {
         alignItems: 'center',
       }}
     >
-      <Flex
-        flexDir='row-reverse'
-        color='white'
-        bg='#FCC128'
-        height='90%'
-        w='80%'
-        borderRadius='25px'
-      >
-        <Stack
-          maxW='container.lg'
-          w='51%'
-          height='100%'
-          bg='#1C1D21'
-          p='25'
-          zIndex={1}
-          borderRightRadius='25px'
-        >
-          <Container w='100%' h='100%' display='flex' justifyContent='center'>
-            <VStack h='100%' w='90%' align='self-start' justifyContent='center'>
+      <div className="flex h-[90%] w-4/5 flex-row-reverse rounded-[25px] text-white" style={{ backgroundColor: '#FCC128' }}>
+        <div className="z-1 flex h-full w-[51%] max-w-3xl flex-col rounded-r-[25px] bg-[#1C1D21] p-6.25">
+          <div className="flex h-full w-full justify-center">
+            <div className="flex h-full w-[90%] flex-col items-start justify-center gap-2">
               <Header title='Sign Up' />
-              <Stack w='100%' flexDir='row' justifyContent='space-between'>
-                <Box w='48%'>
+              <div className="flex w-full flex-row justify-between">
+                <div className="w-[48%]">
                   <FormInput
                     type='text'
                     placeholder='First Name'
@@ -141,8 +115,8 @@ const SignUpPage = () => {
                     }}
                   />
                   <ErrorMessage errorMessage={firstNameErrorMessage} />
-                </Box>
-                <Box w='48%'>
+                </div>
+                <div className="w-[48%]">
                   <FormInput
                     type='text'
                     placeholder='Last Name'
@@ -151,10 +125,9 @@ const SignUpPage = () => {
                     }}
                   />
                   <ErrorMessage errorMessage={lastNameErrorMessage} />
-                </Box>
-              </Stack>
-              {/* <Box w='100%'></Box> */}
-              <Box w='100%'>
+                </div>
+              </div>
+              <div className="w-full">
                 <FormInput
                   type='email'
                   placeholder='Email'
@@ -163,67 +136,45 @@ const SignUpPage = () => {
                   }}
                 />
                 <ErrorMessage errorMessage={emailErrorMessage} />
-              </Box>
-              <Box w='100%'>
+              </div>
+              <div className="w-full">
                 <FormInput
                   type='password'
                   placeholder='Password'
                   onchange={(e) => setPassword(e.target.value)}
                 />
                 <ErrorMessage errorMessage={passwordErrorMessage} />
-              </Box>
+              </div>
               <FormInput
                 type='password'
                 placeholder='Confirm Password'
                 onchange={(e) => setConfirmPassword(e.target.value)}
               />
               <ErrorMessage errorMessage={errorMessage} />
-              {/* <ErrorMessage errorMessage={errorMessage} /> */}
-              {/* <Stack direction='row' justify='space-between' w='100%'>
-                                <Checkbox colorScheme='blue' size='lg'>Remember me</Checkbox>
-                                <Link href='/forgot-password'>
-                                    <Text color='blue'>Forgot password?</Text>
-                                </Link>
-                            </Stack> */}
               <Button
-                size='lg'
-                w='100%'
-                mt='5'
-                fontSize='16px'
-                border='none'
-                borderRadius='7'
-                bgColor='#234C51'
-                color='white'
-                isLoading={isSubmitting ? true : false}
+                className="h-auto w-full rounded-[7px] bg-[#234C51] py-2.5 text-base text-white hover:bg-[#234C51]/90"
+                disabled={isSubmitting}
                 onClick={handleSubmit}
               >
-                Sign Up
+                {isSubmitting ? 'Sign Up...' : 'Sign Up'}
               </Button>
-              <Text textAlign='center' mt='5'>
+              <p className="mt-5 text-center">
                 I already have an account !!
                 <span style={{ color: 'blue' }}>
                   <Link href='/login'> Sign in</Link>
                 </span>
-              </Text>
-            </VStack>
-          </Container>
-        </Stack>
-        <Container
-          flex={1}
-          bg='transparent'
-          display='flex'
-          justifyContent='center'
-          alignItems='center'
-          maxW='100%'
-        >
-          <Image
+              </p>
+            </div>
+          </div>
+        </div>
+        <div className="flex max-w-full flex-1 items-center justify-center bg-transparent">
+          <img
             src='/illustration.png'
             alt='illustration'
-            w='800px'
-            zIndex='1'
+            className="z-1 w-200"
           />
-        </Container>
-      </Flex>
+        </div>
+      </div>
     </div>
   );
 };

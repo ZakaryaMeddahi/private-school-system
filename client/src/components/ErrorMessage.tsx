@@ -1,20 +1,11 @@
-import { Box, Text } from '@chakra-ui/react';
-
 function ErrorMessage({ errorMessage }) {
   return (
-    <Box
-      visibility={errorMessage !== '' ? 'visible' : 'hidden'}
-      width='100%'
-      height='25px'
-      backgroundColor='#ff000030'
-      color='white'
-      padding='0 10px'
-      borderRadius='2px'
-      display='flex'
-      alignItems='center'
+    <div
+      className="flex h-6.25 w-full items-center rounded-xs bg-[#ff000030] px-2.5 text-white"
+      style={{ visibility: errorMessage !== '' ? 'visible' : 'hidden' }}
     >
-      <Text fontSize='xs'>{errorMessage}</Text>
-    </Box>
+      <span className="text-xs">{errorMessage}</span>
+    </div>
   );
 }
 export default ErrorMessage;

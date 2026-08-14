@@ -1,18 +1,8 @@
 'use client';
 
-import {
-  Box,
-  Button,
-  Checkbox,
-  Container,
-  Flex,
-  Image,
-  Stack,
-  Text,
-  VStack,
-} from '@chakra-ui/react';
-import Header from '@/components/Form header/Header';
-import FormInput from '@/components/Form input/FormInput';
+import { Button } from '@/components/ui/button';
+import Header from '@/components/form-header/Header';
+import FormInput from '@/components/form-input/FormInput';
 import Link from 'next/link';
 import { useContext, useState } from 'react';
 import { LoginContext } from '@/app/providers/LoginProvider';
@@ -110,87 +100,52 @@ const LoginPage = () => {
         alignItems: 'center',
       }}
     >
-      <Flex color='white' bg='#FCC128' height='90%' w='80%' borderRadius='50px'>
-        <Stack
-          maxW='container.lg'
-          w='51%'
-          height='100%'
-          bg='#1C1D21'
-          p='25'
-          zIndex={1}
-          borderLeftRadius='50px'
-        >
-          <Container w='100%' h='100%' display='flex' justifyContent='center'>
-            <VStack h='100%' w='90%' align='self-start' justifyContent='center'>
+      <div className="flex h-[90%] w-4/5 rounded-[50px] text-white" style={{ backgroundColor: '#FCC128' }}>
+        <div className="z-1 flex h-full w-[51%] max-w-3xl flex-col rounded-l-[50px] bg-[#1C1D21] p-6.25">
+          <div className="flex h-full w-full justify-center">
+            <div className="flex h-full w-[90%] flex-col items-start justify-center gap-2">
               <Header title='Login' />
-              <Box w='100%'>
+              <div className="w-full">
                 <FormInput
                   type='text'
                   placeholder='Email'
                   onchange={(e) => setEmail(e.target.value)}
                 />
                 <ErrorMessage errorMessage={emailErrorMessage} />
-              </Box>
-              <Box w='100%'>
+              </div>
+              <div className="w-full">
                 <FormInput
                   type='password'
                   placeholder='Password'
                   onchange={(e) => setPassword(e.target.value)}
                 />
                 <ErrorMessage errorMessage={passwordErrorMessage} />
-              </Box>
+              </div>
               <ErrorMessage errorMessage={errorMessage} />
-              {/* <Stack direction='row' justify='space-between' w='100%'>
-                <Checkbox
-                  colorScheme='blue'
-                  size='lg'
-                  onChange={handleCheckbox}
-                >
-                  Remember me
-                </Checkbox>
-                <Link href='/forgot-password'>
-                  <Text color='blue'>Forgot password?</Text>
-                </Link>
-              </Stack> */}
               <Button
-                size='lg'
-                w='100%'
-                mt='5'
-                fontSize='16px'
-                border='none'
-                borderRadius='7'
-                bgColor='#234C51'
-                color='white'
-                isLoading={isSubmitting ? true : false}
+                className="h-auto w-full rounded-[7px] bg-[#234C51] py-2.5 text-base text-white hover:bg-[#234C51]/90"
+                disabled={isSubmitting}
                 onClick={handleSubmit}
               >
-                Login
+                {isSubmitting ? 'Login...' : 'Login'}
               </Button>
-              <Text textAlign='center' mt='5'>
+              <p className="mt-5 text-center">
                 Don&#39;t have an account?
                 <span style={{ color: 'blue' }}>
                   <Link href='/signup'> Register</Link>
                 </span>
-              </Text>
-            </VStack>
-          </Container>
-        </Stack>
-        <Container
-          flex={1}
-          bg='transparent'
-          display='flex'
-          justifyContent='center'
-          alignItems='center'
-          maxW='100%'
-        >
-          <Image
+              </p>
+            </div>
+          </div>
+        </div>
+        <div className="flex max-w-full flex-1 items-center justify-center bg-transparent">
+          <img
             src='/illustration.png'
             alt='illustration'
-            w='800px'
-            zIndex='1'
+            className="z-1 w-200"
           />
-        </Container>
-      </Flex>
+        </div>
+      </div>
     </div>
   );
 };
