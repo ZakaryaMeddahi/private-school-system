@@ -1,10 +1,8 @@
-import { ListItem } from '@chakra-ui/react';
-
-const Item = ({ item, color, _hover, transition, mrT }) => {
+const Item = ({ item, color = 'inherit', transition = '', mrT = '0' }) => {
     return (
-        <ListItem color={color} _hover={_hover || {}} transition={ transition || ''} marginTop={mrT || '0'}>
+        <li className="transition-colors hover:text-[#213E69]" style={{ color, transition, marginTop: mrT }}>
             {item}
-        </ListItem>
+        </li>
     );
 }
 
