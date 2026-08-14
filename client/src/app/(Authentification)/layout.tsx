@@ -1,5 +1,4 @@
-import React from "react";
-import NavBar from "../../components/Nav Bar/NavBar";
+import NavBar from "../../components/nav-bar/NavBar";
 import Footer from "../../components/Footer/Footer";
 import LoginProvider from "../providers/LoginProvider";
 
