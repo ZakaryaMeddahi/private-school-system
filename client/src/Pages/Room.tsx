@@ -1,19 +1,6 @@
 'use client';
 
-import {
-  GridItem,
-  Grid,
-  Container,
-  Box,
-  VStack,
-  Wrap,
-  WrapItem,
-  Center,
-  Text,
-  AspectRatio,
-  Button,
-  Img,
-} from '@chakra-ui/react';
+import { Button } from '@/components/ui/button';
 import {
   createContext,
   useContext,
@@ -381,49 +368,16 @@ const SessionPage = ({ roomId }) => {
   //   useContext(ChatContext);
 
   return (
-    <Container
-      ref={gridRef}
-      w='100%'
-      h='100%'
-      maxW='100%'
-      maxH='100%'
-      display='grid'
-      gridTemplateColumns='1fr'
-      p={0}
-      m={0}
-    >
-      <Box w='100%' h='100%'>
-        <VStack align='stretch' height='100%' w='100%' gap={0}>
-          <Box h='100%'>
-            <Grid
-              templateColumns={'repeat(4, 1fr)'}
-              templateRows='repeat(3, 1fr)'
-              p='25px'
-              height='100%'
-              gap={4}
-            >
-              <GridItem
+    <div ref={gridRef} className="m-0 grid h-full max-h-full w-full max-w-full grid-cols-1 p-0">
+      <div className="h-full w-full">
+        <div className="flex h-full w-full flex-col items-stretch gap-0">
+          <div className="h-full">
+            <div className="grid h-full grid-cols-4 grid-rows-3 gap-4 p-6.25">
+              <div
                 ref={GridItemRef}
-                // onClick={() => updateScreen()}
                 onClick={(e) => changeGrid(e)}
-                bg='gray.200'
-                // h='300px'
-                borderRadius='15px'
-                height={'fit-content'}
-                // boxShadow='0px 0px 15px 0px rgba(0,0,0,0.5);'
+                className="h-fit rounded-[15px] bg-gray-200"
               >
-                {/* <Center
-                                    h='100%'
-                                    w='100%'
-                                >
-                                    <Box
-                                        ref={ProfileRef}
-                                        height='45%'
-                                        w='30%'
-                                        borderRadius='50%'
-                                        bgColor='#D9D9D9'
-                                    ></Box>
-                                </Center> */}
                 {sessionStarted ? (
                   <video
                     ref={localVideoRef}
@@ -431,54 +385,39 @@ const SessionPage = ({ roomId }) => {
                     playsInline
                     muted
                     style={{
-                      // width: state.isScreenFull ? '1000px' : '100%',
                       width: '100%',
                       borderRadius: '15px',
                       transform: state.isScreenSharing
                         ? 'rotateY(0deg)'
                         : 'rotateY(180deg)',
                     }}
-                    //   onClick={() => updateScreen()}
-                    //   onClick={(e) => changeGrid(e)}
-                    //   onClick={() => updateScreen()}
                   ></video>
                 ) : (
-                  <Center h='100%'>
-                    <Img src='../1-removebg-preview.png' boxSize='230px' />
-                  </Center>
+                  <div className="flex h-full items-center justify-center">
+                    <img src='../1-removebg-preview.png' className="size-57.5" />
+                  </div>
                 )}
-              </GridItem>
+              </div>
               <VideosList
                 users={state.users}
                 GridItemRef={GridItemRef}
                 changeGrid={changeGrid}
               />
-            </Grid>
-          </Box>
-          <Box
-            w='100%'
-            display='flex'
-            justifyContent='space-around'
-            alignItems='center'
-          >
-            {/* <Box > */}
-            {/* <Center h='100%' w='250px' borderRadius='10px' gap='15'>
-              <MdOutlineContentPaste size='30px' cursor='pointer' />
-              <Text>Slug</Text>
-            </Center> */}
-            {/* </Box> */}
+            </div>
+          </div>
+          <div className="flex w-full items-center justify-around">
             {localStorage.getItem('role') === 'teacher' ? (
               <Button
-                colorScheme='teal'
-                isDisabled={sessionStarted}
+                className="bg-teal-600 hover:bg-teal-700"
+                disabled={sessionStarted}
                 onClick={() => startSession()}
               >
                 start session
               </Button>
             ) : (
               <Button
-                colorScheme='teal'
-                isDisabled={sessionStarted}
+                className="bg-teal-600 hover:bg-teal-700"
+                disabled={sessionStarted}
                 onClick={() => joinSession()}
               >
                 join session
@@ -500,36 +439,20 @@ const SessionPage = ({ roomId }) => {
             >
               <ControlPanel />
             </StreamingContext.Provider>
-            <Box
-              h='100%'
-              w='fit-content'
-              p='15'
-              borderRadius='10px'
-              display='flex'
-              flexDir='row'
-              gap='15'
-              alignItems='center'
-            >
-              <Box
-                w='50px'
-                height='50px'
-                borderRadius='50px'
-                bgColor='#E6E5E5'
+            <div className="flex h-full w-fit flex-row items-center gap-3.75 rounded-[10px] p-3.75">
+              <div
+                className="flex size-12.5 items-center justify-center rounded-full bg-[#E6E5E5]"
                 onClick={onGridClick}
               >
-                <Center h='100%'>
-                  <BsChat size='25px' />
-                </Center>
-              </Box>
-            </Box>
-          </Box>
-        </VStack>
-      </Box>
-      <Box ref={boxRef} display='none' bgColor='white' w='100%' h='100%'>
+                <BsChat size='25px' />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div ref={boxRef} className="hidden h-full w-full bg-white">
         <RoomChat
           roomName={selectedCourse.title}
-          // look i change this from msgsg to messages i use the ones i got from provider
-          // messages={msgs}
           messages={messages}
           setMessages={setMessages}
           chatNamespace={chatNamespace}
@@ -544,8 +467,8 @@ const SessionPage = ({ roomId }) => {
           setIsLoading={setIsLoading}
           fileUploading={false}
         />
-      </Box>
-    </Container>
+      </div>
+    </div>
   );
 };
 

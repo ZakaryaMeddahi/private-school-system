@@ -1,14 +1,5 @@
 'use client';
 
-import {
-  Box,
-  Flex,
-  Avatar,
-  Heading,
-  Image,
-  Divider,
-  Text,
-} from '@chakra-ui/react';
 import { useRef } from 'react';
 import { Course, CourseMember } from '@/app/providers/ChatProvider';
 
@@ -46,16 +37,9 @@ const Room = ({
   };
 
   return (
-    <Box
+    <div
       ref={boxRef}
-      padding='15px'
-      color='black'
-      borderRadius='7px'
-      cursor='pointer'
-      _hover={
-        hover ? { backgroundColor: 'rgba(128, 128, 128, 0.150)' } : undefined
-      }
-      // onClick={hover && RoomFocus}
+      className={`cursor-pointer rounded-[7px] p-3.75 text-black ${hover ? 'hover:bg-[rgba(128,128,128,0.15)]' : ''}`}
       onClick={() => {
         setSelectedCourse(course);
         setTeacherInfo(course.teacher || {});
@@ -64,16 +48,15 @@ const Room = ({
         switchRoom(course.chat?.id);
       }}
     >
-      <Flex direction='row' gap='15' alignItems='center'>
-        <Image
-          borderRadius='full'
-          boxSize='35px'
+      <div className="flex flex-row items-center gap-3.75">
+        <img
+          className="size-8.75 rounded-full object-cover"
           src={image}
           alt={RoomName}
         />
-        <Text size='sm'>{RoomName}</Text>
-      </Flex>
-    </Box>
+        <span className="text-sm">{RoomName}</span>
+      </div>
+    </div>
   );
 };
 

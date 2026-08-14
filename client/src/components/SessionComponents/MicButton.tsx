@@ -1,5 +1,4 @@
 import { StreamingContext } from '@/Pages/Room';
-import { Center } from '@chakra-ui/react';
 import { useContext, useState } from 'react';
 import { MdOutlineMicNone, MdOutlineMicOff } from 'react-icons/md';
 
@@ -27,16 +26,12 @@ function MicButton() {
   // };
 
   return (
-    <Center
-      w='50px'
-      height='50px'
-      borderRadius='50px'
-      bgColor='#E6E5E5'
-      cursor='pointer'
+    <div
+      className="flex size-12.5 cursor-pointer items-center justify-center rounded-full bg-[#E6E5E5]"
       onClick={handleMicrophone}
     >
       {mic ? <MdOutlineMicNone size='30px' /> : <MdOutlineMicOff size='30px' />}
-    </Center>
+    </div>
   );
 }
 export default MicButton;

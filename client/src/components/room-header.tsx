@@ -1,25 +1,7 @@
-import {
-  Box,
-  Center,
-  Button,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverArrow,
-  PopoverCloseButton,
-  PopoverHeader,
-  PopoverBody,
-  PopoverFooter,
-  Portal,
-  IconButton,
-  Flex,
-  Text,
-  Image,
-} from '@chakra-ui/react';
-import Room from '@/components/Room/Room';
-import React, { ReactNode, useRef, useState, useContext } from 'react';
+import { Button } from '@/components/ui/button';
+import React, { ReactNode, useContext, useState } from 'react';
 import { ChatContext } from '@/app/providers/ChatProvider';
-import { MdRunCircle, MdStart } from 'react-icons/md';
+import { MdStart } from 'react-icons/md';
 import { useRouter } from 'next/navigation';
 
 interface RoomHeaderProps {
@@ -41,15 +23,9 @@ const RoomHeader = ({
   roomId,
   isChatSession,
 }: RoomHeaderProps) => {
-  const MenuRef = useRef<HTMLDivElement>(null);
   const [count, setCount] = useState(0);
-  const [popover, setPopover] = useState(false);
   const router = useRouter();
   const { roomInfoRef, chatRef } = useContext(ChatContext);
-
-  // if (ChangeLayout) {
-  //   var { roomInfoRef, chatRef } = useContext(ChatContext);
-  // }
 
   const changeLayout = () => {
     if (chatRef.current && roomInfoRef.current && count === 0) {
@@ -68,80 +44,31 @@ const RoomHeader = ({
     }
   };
 
-  const showPopover = () => {
-    if (MenuRef.current) {
-      setPopover(true);
-    }
-  };
-
   return (
-    <Box
-      w='100%'
-      height='8%'
-      bgColor='white'
-      display='flex'
-      flexDirection='row'
-      justifyContent='space-between'
-      alignItems='center'
-      boxShadow='rgba(0, 0, 0, 0.24) 0px 3px 8px'
-      borderRadius='15px'
-    >
-      <Box onClick={ChangeLayout ? changeLayout : undefined}>
-        {/* <Room RoomName={roomName} image={image} hover={false} /> */}
-        <Box padding='15px' color='black' borderRadius='7px' cursor='pointer'>
-          <Flex direction='row' gap='15' alignItems='center'>
-            <Image
-              borderRadius='full'
-              boxSize='35px'
+    <div className="flex h-[8%] w-full flex-row items-center justify-between rounded-[15px] bg-white shadow-[rgba(0,0,0,0.24)_0px_3px_8px]">
+      <div onClick={ChangeLayout ? changeLayout : undefined}>
+        <div className="cursor-pointer rounded-[7px] p-3.75 text-black">
+          <div className="flex flex-row items-center gap-3.75">
+            <img
+              className="size-8.75 rounded-full object-cover"
               src={image}
               alt={roomName}
             />
-            <Text size='sm'>{roomName}</Text>
-          </Flex>
-        </Box>
-      </Box>
+            <span className="text-sm">{roomName}</span>
+          </div>
+        </div>
+      </div>
       {!isChatSession && (
-        <IconButton
+        <Button
           aria-label='Start room'
-          icon={<MdStart />}
           onClick={() => router.push(`/room/${roomId}`)}
-          colorScheme='teal'
-          marginRight='15px'
-        />
+          className="mr-3.75 bg-teal-600 hover:bg-teal-700"
+          size="icon"
+        >
+          <MdStart />
+        </Button>
       )}
-      {/* <Box
-        ref={MenuRef}
-        onClick={showPopover}
-        w='45px'
-        height='45px'
-        borderRadius='50px'
-        marginRight='15px'
-        _hover={{ bgColor: 'whitesmoke' }}
-      >
-        {ShowPopover ? (
-          <Popover>
-            <PopoverTrigger>
-              <Center h='100%'>{icon}</Center>
-            </PopoverTrigger>
-            {popover && (
-              <Portal>
-                <PopoverContent>
-                  <PopoverArrow />
-                  <PopoverHeader>Header</PopoverHeader>
-                  <PopoverCloseButton />
-                  <PopoverBody>
-                    <Button colorScheme='blue'>Button</Button>
-                  </PopoverBody>
-                  <PopoverFooter>This is the footer</PopoverFooter>
-                </PopoverContent>
-              </Portal>
-            )}
-          </Popover>
-        ) : (
-          <Center h='100%'>{icon}</Center>
-        )}
-      </Box> */}
-    </Box>
+    </div>
   );
 };
 

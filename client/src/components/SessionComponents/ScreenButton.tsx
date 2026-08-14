@@ -1,5 +1,4 @@
 import { StreamingContext } from '@/Pages/Room';
-import { Center } from '@chakra-ui/react';
 import AgoraRTC from 'agora-rtc-sdk-ng';
 import { useContext, useState } from 'react';
 import { LuScreenShare, LuScreenShareOff } from 'react-icons/lu';
@@ -44,17 +43,12 @@ function ScreenButton() {
   };
 
   return (
-    <Center
-      w='50px'
-      height='50px'
-      borderRadius='50px'
-      bgColor='#E6E5E5'
-      cursor='pointer'
+    <div
+      className="flex size-12.5 cursor-pointer items-center justify-center rounded-full bg-[#E6E5E5]"
       onClick={handleScreenSharing}
     >
       {isSharing ? <LuScreenShare size='25px' /> : <LuScreenShareOff size='25px' />}
-      
-    </Center>
+    </div>
   );
 }
 export default ScreenButton;

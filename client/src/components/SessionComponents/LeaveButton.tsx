@@ -1,5 +1,4 @@
 import { StreamingContext } from '@/Pages/Room';
-import { Center } from '@chakra-ui/react';
 import { useContext } from 'react';
 import { MdOutlineCall } from 'react-icons/md';
 
@@ -36,19 +35,15 @@ function LeaveButton() {
   };
 
   return (
-    <Center
-      w='50px'
-      height='50px'
-      borderRadius='50px'
-      bgColor='#F95252'
-      cursor='pointer'
+    <div
+      className="flex size-12.5 cursor-pointer items-center justify-center rounded-full bg-[#F95252]"
       onClick={() => {
         endCall();
         setSessionStarted(false);
       }}
     >
       <MdOutlineCall size='30px' />
-    </Center>
+    </div>
   );
 }
 export default LeaveButton;

@@ -1,16 +1,12 @@
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
-  Avatar,
-  Box,
-  FormControl,
-  IconButton,
-  Input,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-  Stack,
-  Text,
-} from '@chakra-ui/react';
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import {
   Dispatch,
   MutableRefObject,
@@ -167,13 +163,13 @@ function Message({
   const pinRef = useRef<HTMLDivElement>(null);
   const hoverRef = useRef<HTMLDivElement>(null);
 
+  const isOwn = msg.sender?.id === userIdRef.current;
+
   return (
-    <Stack
-      className='chat'
+    <div
+      className="chat mb-3.75 flex flex-col justify-between p-3.5"
       ref={(el: HTMLDivElement | null) => {
         if (chatRef) chatRef.current = el;
-        console.log(el);
-        // msg.sender.role = 'student';
         if (chatRef?.current) {
           chatRef.current.scrollIntoView({
             behavior: 'smooth',
@@ -182,113 +178,82 @@ function Message({
         }
       }}
       key={msg.id}
-      flexDir='column'
-      justifyContent='space-between'
-      w={isPinned ? '100%' : isChatSession ? '90%' : '48%'}
-      padding='14px 15px'
-      bgColor={msg.sender?.id === userIdRef.current ? 'blue.100' : 'gray.100'}
-      color={msg.sender?.id === userIdRef.current ? 'blue.900' : 'gray.900'}
-      borderRadius={
-        msg.sender?.id === userIdRef.current
-          ? '7px 50px 7px 7px'
-          : '7px 7px 7px 50px'
-      }
-      marginBottom='15px'
-      marginLeft={msg.sender?.id === userIdRef.current ? 'auto' : '0'}
+      style={{
+        width: isPinned ? '100%' : isChatSession ? '90%' : '48%',
+        backgroundColor: isOwn ? '#dbeafe' : '#f3f4f6',
+        color: isOwn ? '#1e3a8a' : '#111827',
+        borderRadius: isOwn ? '7px 50px 7px 7px' : '7px 7px 7px 50px',
+        marginLeft: isOwn ? 'auto' : '0',
+      }}
     >
-      <Stack
-        flexDir='row'
-        justifyContent='space-between'
-        alignItems='center'
-        mb='10px'
-      >
-        <Stack
-          w='100%'
-          justifyContent='space-between'
-          alignItems='center'
-          flexDir='row'
-        >
-          <Stack alignItems='center' flexDir='row'>
-            <Avatar name='private school' src='../logo.png' boxSize='35px' />
-            <Text fontSize='sm' fontWeight='bold'>
+      <div className="mb-2.5 flex flex-row items-center justify-between">
+        <div className="flex w-full flex-row items-center justify-between">
+          <div className="flex flex-row items-center gap-2">
+            <Avatar className="size-8.75">
+              <AvatarImage src='../logo.png' alt='private school' />
+              <AvatarFallback>PS</AvatarFallback>
+            </Avatar>
+            <span className="text-sm font-bold">
               {msg.sender?.firstName + ' ' + msg.sender?.lastName}
-            </Text>
-          </Stack>
+            </span>
+          </div>
 
-          <Box
-            p='3px'
-            bgColor={
-              msg.sender?.role === 'admin'
-                ? 'red.600'
-                : msg.sender?.role === 'teacher'
-                ? 'blue.600'
-                : 'green'
-            }
-            color='white'
-            borderRadius='3px'
-            opacity='0.9'
+          <div
+            className="rounded-[3px] p-0.75 text-white opacity-90"
+            style={{
+              backgroundColor:
+                msg.sender?.role === 'admin'
+                  ? '#dc2626'
+                  : msg.sender?.role === 'teacher'
+                  ? '#2563eb'
+                  : 'green',
+            }}
           >
-            <Text fontSize='8' fontWeight='600' textTransform='uppercase'>
+            <span className="text-[8px] font-semibold uppercase">
               {msg.sender?.role}
-            </Text>
-          </Box>
-        </Stack>
+            </span>
+          </div>
+        </div>
 
-        {(showPin() || msg.sender?.id === userIdRef.current) && (
-          <Menu>
-            <MenuButton
-              as={IconButton}
-              aria-label='Options'
-              icon={<BsThreeDotsVertical />}
-              variant='outline'
-              paddingInline='0'
-              minW='10px'
-              border='none'
-              _hover={{
-                bgColor:
-                  msg.sender?.id === userIdRef.current
-                    ? 'blue.200'
-                    : 'gray.200',
-              }}
-            />
-            <MenuList minW='10rem' fontSize='12'>
+        {(showPin() || isOwn) && (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                aria-label='Options'
+                variant='outline'
+                size='icon-sm'
+                className={`border-0 px-0 ${isOwn ? 'hover:bg-blue-200' : 'hover:bg-gray-200'}`}
+              >
+                <BsThreeDotsVertical />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="min-w-40 text-xs">
               {showPin() &&
                 (msg.isPinned ? (
-                  <MenuItem icon={<PiNeedle />} onClick={handleUnpinMessage}>
-                    Unpin
-                  </MenuItem>
+                  <DropdownMenuItem onClick={handleUnpinMessage}>
+                    <PiNeedle /> Unpin
+                  </DropdownMenuItem>
                 ) : (
-                  <MenuItem icon={<PiNeedle />} onClick={handlePinMessage}>
-                    Pin
-                  </MenuItem>
+                  <DropdownMenuItem onClick={handlePinMessage}>
+                    <PiNeedle /> Pin
+                  </DropdownMenuItem>
                 ))}
-              {msg.sender?.id === userIdRef.current && (
-                <MenuItem
-                  icon={<CgEditBlackPoint />}
-                  onClick={() => setUpdateMode(true)}
-                >
-                  Edit
-                </MenuItem>
+              {isOwn && (
+                <DropdownMenuItem onClick={() => setUpdateMode(true)}>
+                  <CgEditBlackPoint /> Edit
+                </DropdownMenuItem>
               )}
-              {msg.sender?.id === userIdRef.current && (
-                <MenuItem icon={<CgTrash />} onClick={handleDeleteMessage}>
-                  Delete
-                </MenuItem>
+              {isOwn && (
+                <DropdownMenuItem onClick={handleDeleteMessage}>
+                  <CgTrash /> Delete
+                </DropdownMenuItem>
               )}
-            </MenuList>
-          </Menu>
+            </DropdownMenuContent>
+          </DropdownMenu>
         )}
-      </Stack>
+      </div>
       {msg.file && (
-        <Box
-          w='100%'
-          minH='45px'
-          bgColor='gray.200'
-          borderRadius='8px'
-          marginBottom='10px'
-          border='2px'
-          borderColor='gray.400'
-        >
+        <div className="mb-2.5 min-h-11.25 w-full rounded-lg border-2 border-gray-400 bg-gray-200">
           <a
             href={msg.file.url}
             download
@@ -297,34 +262,25 @@ function Message({
           >
             {msg.file?.name + '.' + msg.file?.format}
           </a>
-        </Box>
+        </div>
       )}
-      <Text paddingInline='10px'>{msg.content}</Text>
+      <p className="px-2.5">{msg.content}</p>
       <form>
-        <FormControl display={updateMode ? 'flex' : 'none'} gap='10px'>
+        <div className="gap-2.5" style={{ display: updateMode ? 'flex' : 'none' }}>
           <Input
             value={updatedMessage}
-            borderColor='gray'
-            _hover={{ borderColor: 'blue' }}
+            className="border-gray-500 hover:border-blue-500"
             onChange={handleUpdateContent}
           />
-          <IconButton
-            aria-label='Save message'
-            icon={<MdChangeCircle />}
-            type='submit'
-            onClick={handleUpdateMessage}
-          />
-        </FormControl>
+          <Button aria-label='Save message' type='submit' size='icon' onClick={handleUpdateMessage}>
+            <MdChangeCircle />
+          </Button>
+        </div>
       </form>
-      {/* <Text fontSize='xs' ml='auto'>
-        {isPinned
-          ? msg.sentAt.split('T')[0]
-          : msg.sentAt.split('T')[1].split('.')[0]}
-      </Text>{' '} */}
-      <Text fontFamily='monospace' fontSize='10' ml='auto'>
+      <span className="ml-auto font-mono text-[10px]">
         {convertTime(msg.sentAt)}
-      </Text>
-    </Stack>
+      </span>
+    </div>
   );
 }
 export default Message;

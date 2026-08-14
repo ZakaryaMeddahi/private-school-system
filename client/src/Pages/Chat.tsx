@@ -1,13 +1,5 @@
 'use client';
 
-import {
-  Box,
-  Grid,
-  GridItem,
-  Container,
-  Divider,
-  Button,
-} from '@chakra-ui/react';
 import Room from '@/components/Room/Room';
 
 import { CiMenuKebab } from 'react-icons/ci';
@@ -292,29 +284,11 @@ const ChatPage = () => {
   }, []);
 
   return (
-    <Container
-      m='0'
-      p='0'
-      h='100vh'
-      maxW='100%'
-      bgColor='white'
-      position='fixed'
-    >
-      <Grid templateColumns='repeat(12, 1fr)' h='100%'>
-        <GridItem
-          colSpan={3}
-          overflowY='auto'
-          borderLeft='1px solid gray'
-          boxShadow='rgba(0, 0, 0, 0.15) 5px -1px 2.6px'
-        >
-          <Box h='100%' display='flex' flexDir='column' padding='2'>
-            <Box
-              display='flex'
-              flexDirection='row'
-              alignItems='center'
-              justifyContent='flex-start'
-              paddingBlock='10px'
-            >
+    <div className="fixed h-screen max-w-full bg-white">
+      <div className="grid h-full grid-cols-12">
+        <div className="col-span-3 overflow-y-auto border-l border-gray-500 shadow-[rgba(0,0,0,0.15)_5px_-1px_2.6px]">
+          <div className="flex h-full flex-col p-2">
+            <div className="flex flex-row items-center justify-start py-2.5">
               <Link
                 href={
                   userRole.current === 'admin'
@@ -324,36 +298,21 @@ const ChatPage = () => {
                     : '/student_dashboard'
                 }
               >
-                <Box
-                  w={'50px'}
-                  h={'50px'}
-                  display={'flex'}
-                  justifyContent={'center'}
-                  alignItems={'center'}
-                  borderRadius={'50%'}
-                  marginLeft={'5px'}
-                  _hover={{ bgColor: 'whiteSmoke' }}
-                >
+                <div className="ml-1.25 flex size-12.5 items-center justify-center rounded-full hover:bg-[whitesmoke]">
                   <IoMdArrowBack size='28px' />
-                </Box>
+                </div>
               </Link>
-              <Box
-                w='100%'
-                display={'flex'}
-                flexDirection={'column'}
-                justifyContent={'center'}
-                alignItems={'center'}
-              >
-                <Box fontSize='20px' fontWeight='600' textAlign='center'>
+              <div className="flex w-full flex-col items-center justify-center">
+                <div className="text-center text-xl font-semibold">
                   Chat Rooms
-                </Box>
-                <Box fontSize='14px' fontWeight='400'>
+                </div>
+                <div className="text-sm font-normal">
                   Select a room to start chat
-                </Box>
-              </Box>
-            </Box>
-            <Divider borderColor='black' />
-            <Box h='100%' overflowY='auto'>
+                </div>
+              </div>
+            </div>
+            <hr className="border-black" />
+            <div className="h-full overflow-y-auto">
               {courses.map((course) => {
                 return (
                   <Room
@@ -370,15 +329,10 @@ const ChatPage = () => {
                   />
                 );
               })}
-            </Box>
-          </Box>
-        </GridItem>
-        <GridItem
-          ref={chatRef}
-          colSpan={6}
-          borderLeft='1px solid gray'
-          h='100vh'
-        >
+            </div>
+          </div>
+        </div>
+        <div ref={chatRef} className="col-span-6 h-screen border-l border-gray-500">
           <RoomChat
             roomName={selectedCourse?.title}
             messages={messages}
@@ -395,12 +349,10 @@ const ChatPage = () => {
             isLoading={isLoading}
             setIsLoading={setIsLoading}
           />
-        </GridItem>
-        <GridItem
-          colSpan={3}
-          borderLeft='1px solid gray'
-          boxShadow='rgba(0, 0, 0, 0.24) 0px 3px 8px'
+        </div>
+        <div
           ref={roomInfoRef}
+          className="col-span-3 border-l border-gray-500 shadow-[rgba(0,0,0,0.24)_0px_3px_8px]"
         >
           <RoomInfo
             teacherInfo={teacherInfo}
@@ -410,9 +362,9 @@ const ChatPage = () => {
             chatNamespace={chatNamespace}
             selectedCourse={selectedCourse}
           />
-        </GridItem>
-      </Grid>
-    </Container>
+        </div>
+      </div>
+    </div>
   );
 };
 

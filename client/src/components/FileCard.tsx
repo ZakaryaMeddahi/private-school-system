@@ -1,11 +1,4 @@
-import {
-  Box,
-  Fade,
-  IconButton,
-  SlideFade,
-  Stack,
-  Text,
-} from '@chakra-ui/react';
+import { Button } from '@/components/ui/button';
 import { CgClose } from 'react-icons/cg';
 import { Dispatch, SetStateAction } from 'react';
 
@@ -16,39 +9,27 @@ interface FileCardProps {
 
 function FileCard({ file, setFile }: FileCardProps) {
   return (
-    <Fade in={file ? true : false}>
-      <Stack
-        w='250px'
-        padding='14px 15px'
-        bgColor='gray.200'
-        color='blue.900'
-        borderRadius='5px'
-        marginBottom='15px'
-        boxShadow='0 2px 4px 0 rgba(0, 0, 0, 0.1)'
-        position='absolute'
-        bottom={file ? '60px' : '0'}
-        left='20px'
-      >
-        <Stack flexDir='row'>
-          <Text fontSize='sm' color='blue.500'>Attachment</Text>
-          <IconButton
-            aria-label='Remove attachment'
-            icon={<CgClose />}
-            w='25px'
-            h='25px'
-            variant='ghost'
-            size='sm'
-            ml='auto'
-            color='blue.600'
-            onClick={() => setFile(null)}
-          />
-        </Stack>
+    <div
+      className="absolute left-5 flex w-62.5 flex-col gap-2 rounded-[5px] bg-gray-200 p-3.5 text-blue-900 shadow-[0_2px_4px_0_rgba(0,0,0,0.1)] transition-opacity duration-200"
+      style={{ bottom: file ? '60px' : '0', opacity: file ? 1 : 0, pointerEvents: file ? 'auto' : 'none' }}
+    >
+      <div className="flex flex-row">
+        <span className="text-sm text-blue-500">Attachment</span>
+        <Button
+          aria-label='Remove attachment'
+          variant='ghost'
+          size='icon-sm'
+          className="ml-auto size-6.25 text-blue-600"
+          onClick={() => setFile(null)}
+        >
+          <CgClose />
+        </Button>
+      </div>
 
-        <Text minH='70px' bgColor='gray.300' padding='10px' borderRadius='5px'>
-          {file?.name}
-        </Text>
-      </Stack>
-    </Fade>
+      <div className="min-h-17.5 rounded-[5px] bg-gray-300 p-2.5">
+        {file?.name}
+      </div>
+    </div>
   );
 }
 export default FileCard;

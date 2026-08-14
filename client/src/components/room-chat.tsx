@@ -1,6 +1,5 @@
 'use client';
 
-import { Box } from '@chakra-ui/react';
 import RoomHeader from './room-header';
 import RoomBody from './chat-room-body';
 import MessageInput from './message-input';
@@ -53,13 +52,7 @@ const RoomChat = ({
   console.log('====================================');
 
   return (
-    <Box
-      h='100%'
-      p='20px'
-      display='flex'
-      flexDirection='column'
-      justifyContent='space-between'
-    >
+    <div className="flex h-full flex-col justify-between p-5">
       <RoomHeader
         roomName={roomName}
         image={image}
@@ -89,7 +82,7 @@ const RoomChat = ({
         setIsLoading={setIsLoading}
         fileUploading={fileUploading}
       />
-    </Box>
+    </div>
   );
 };
 

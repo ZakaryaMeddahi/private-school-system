@@ -1,5 +1,4 @@
 /* eslint-disable react/prop-types */
-import { Center, GridItem, Img } from '@chakra-ui/react';
 import { useEffect, useRef, useState } from 'react';
 
 function Video({ user, changeGrid }) {
@@ -36,10 +35,9 @@ function Video({ user, changeGrid }) {
   });
 
   return (
-    <GridItem onClick={(e) => changeGrid(e)} bg='gray.200' borderRadius='15px' height={'fit-content'}>
+    <div onClick={(e) => changeGrid(e)} className="h-fit rounded-[15px] bg-gray-200">
       {isSharing ? (
         <video
-          // className="video remote-video"
           ref={videoRef}
           autoPlay
           playsInline
@@ -50,11 +48,11 @@ function Video({ user, changeGrid }) {
           onClick={() => setIsScreenFull(!isScreenFull)}
         />
       ) : (
-        <Center h='100%'>
-          <Img src='../../1-removebg-preview.png' boxSize='230px' />
-        </Center>
+        <div className="flex h-full items-center justify-center">
+          <img src='../../1-removebg-preview.png' className="size-57.5" />
+        </div>
       )}
-    </GridItem>
+    </div>
   );
 }
 export default Video;

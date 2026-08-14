@@ -1,23 +1,6 @@
 'use client';
 
-import {
-  Avatar,
-  Box,
-  IconButton,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-  Stack,
-  Text,
-} from '@chakra-ui/react';
 import { Dispatch, RefObject, SetStateAction, useEffect, useRef } from 'react';
-import { BsThreeDotsVertical } from 'react-icons/bs';
-import { CgEditContrast, CgTrash } from 'react-icons/cg';
-import { FaDeleteLeft } from 'react-icons/fa6';
-import { IoAddCircleOutline } from 'react-icons/io5';
-import { MdUpdate } from 'react-icons/md';
-import { PiNeedle } from 'react-icons/pi';
 import Message from './Message';
 import { Socket } from 'socket.io-client';
 import { ChatMessage, Course } from '@/app/providers/ChatProvider';
@@ -51,20 +34,7 @@ const RoomBody = ({
   }, []);
 
   return (
-    <Box
-      w='100%'
-      height='82%'
-      paddingInline='5'
-      bgColor='white'
-      boxShadow='rgba(0, 0, 0, 0.24) 0px 3px 8px'
-      paddingTop='20px'
-      borderRadius='15px'
-      overflowY='auto'
-      display='flex'
-      // justifyContent='flex-end'
-      flexDir='column'
-      gap='15px'
-    >
+    <div className="flex h-[82%] w-full flex-col gap-3.75 overflow-y-auto rounded-[15px] bg-white px-5 pt-5 shadow-[rgba(0,0,0,0.24)_0px_3px_8px]">
       {messages.map((msg) => {
         return (
           <Message
@@ -82,7 +52,7 @@ const RoomBody = ({
           />
         );
       })}
-    </Box>
+    </div>
   );
 };
 

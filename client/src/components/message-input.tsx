@@ -1,14 +1,6 @@
-import {
-  Box,
-  Button,
-  Center,
-  FormControl,
-  FormLabel,
-  Input,
-  SlideFade,
-  Stack,
-  Text,
-} from '@chakra-ui/react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { IoIosAttach, IoIosSend } from 'react-icons/io';
 import React, { createRef, useState } from 'react';
 import {
@@ -131,78 +123,45 @@ const MessageInput = ({
   // }, []);
 
   return (
-    <Stack
-      paddingInline='3'
-      w='100%'
-      height='8%'
-      bgColor='white'
-      boxShadow='rgba(0, 0, 0, 0.24) 0px 3px 8px'
-      borderRadius='15px'
-      flexDir='row'
-      alignItems='center'
-      position='relative'
-    >
+    <div className="relative flex w-full flex-row items-center rounded-[15px] bg-white px-3 shadow-[rgba(0,0,0,0.24)_0px_3px_8px]" style={{ height: '8%' }}>
       <FileCard file={file} setFile={setFile} />
-      <form style={{ width: '100%' }} onSubmit={sendMsg}>
-        <FormControl w='100%' display='flex' gap='10px'>
+      <form className="w-full" onSubmit={sendMsg}>
+        <div className="flex w-full gap-2.5">
           {!isChatSession && (
-            <FormLabel
+            <Label
               htmlFor='file'
-              bgColor='teal'
-              color='#FFF'
-              w='45px'
-              h='40px'
-              m='0'
-              marginInline='0'
-              // bgColor='gray.200'
-              borderRadius='5px'
-              cursor='pointer'
-              _hover={{ bgColor: 'teal.500' }}
+              className="m-0 flex h-10 w-11.25 cursor-pointer items-center justify-center rounded-[5px] bg-teal-600 text-white hover:bg-teal-500"
             >
-              <Input
+              <input
                 type='file'
                 accept='image/*, .pdf'
                 id='file'
-                display='none'
+                className="hidden"
                 onChange={(e) => setFile(e.target.files?.[0] || null)}
-                isDisabled={selectedCourse ? false : true}
+                disabled={!selectedCourse}
               />
-              <Center h='100%'>
-                <IoIosAttach size='24px' />
-              </Center>
-            </FormLabel>
+              <IoIosAttach size='24px' />
+            </Label>
           )}
 
           <Input
             ref={messageInputRef}
             value={message.content || ''}
             placeholder='Hello, world'
-            border='none'
+            className="border-none"
             onChange={(e) => setMessage({ content: e.target.value })}
-            isDisabled={selectedCourse ? false : true}
+            disabled={!selectedCourse}
           />
           <Button
-            colorScheme='teal'
-            w='40px'
+            className="w-10 bg-teal-600 hover:bg-teal-700"
             type='submit'
-            isLoading={isLoading}
+            disabled={isLoading}
           >
-            <Center h='100%'>
-              <IoIosSend size='24px' />
-            </Center>
+            <IoIosSend size='24px' />
           </Button>
-          {/* <Box
-          w='45px'
-          height='45px'
-          borderRadius='50px'
-          _hover={{ bgColor: 'whitesmoke' }}
-          onClick={sendMsg}
-        >
-          
-        </Box> */}
-        </FormControl>
+        </div>
       </form>
-    </Stack>
+    </div>
   );
 };
 

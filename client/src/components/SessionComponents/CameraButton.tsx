@@ -1,5 +1,4 @@
 import { StreamingContext } from '@/Pages/Room';
-import { Center } from '@chakra-ui/react';
 import { useContext, useState } from 'react';
 import { CiVideoOff, CiVideoOn } from 'react-icons/ci';
 import { TbRuler } from 'react-icons/tb';
@@ -29,19 +28,15 @@ function CameraButton() {
   };
 
   return (
-    <Center
-      w='50px'
-      height='50px'
-      borderRadius='50px'
-      bgColor='#E6E5E5'
-      cursor='pointer'
+    <div
+      className="size-12.5 cursor-pointer place-items-center rounded-full bg-[#E6E5E5]"
       style={{
         display: state.isScreenSharing ? 'none' : 'grid',
       }}
       onClick={handleCamera}
     >
       {cam ? <CiVideoOn size='30px' /> : <CiVideoOff size='30px' />}
-    </Center>
+    </div>
   );
 }
 export default CameraButton;
