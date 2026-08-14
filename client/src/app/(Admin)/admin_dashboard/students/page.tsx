@@ -1,29 +1,15 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { MdDelete } from 'react-icons/md';
-import {
-  Box,
-  Button,
-  Image,
-  Text,
-  Drawer,
-  DrawerBody,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerOverlay,
-  DrawerContent,
-  DrawerCloseButton,
-  Input,
-  FormControl,
-  IconButton,
-} from '@chakra-ui/react';
+import { Input } from '@/components/ui/input';
 import { IoMdClose } from 'react-icons/io';
+import { useRouter } from 'next/navigation';
 import UserCard from '@/components/UserCard';
 import { convertTime } from '@/app/(Admin)/admin_dashboard/teachers/page';
 
 const StudentsPage = () => {
-  const [students, setStudents] = useState([]);
+  const [students, setStudents] = useState<any[]>([]);
+  const router = useRouter();
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -34,8 +20,8 @@ const StudentsPage = () => {
   const [createdAt, setCreatedAt] = useState('');
   const [updatedAt, setUpdatedAt] = useState('');
 
-  const boxRef = useRef();
-  const gridRef = useRef();
+  const boxRef = useRef<HTMLDivElement>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
 
   const getStudent = (id) => {
     students.forEach((student) => {
@@ -91,7 +77,7 @@ const StudentsPage = () => {
         throw new Error(data.message);
       }
 
-      const newStudents = [];
+      const newStudents: any[] = [];
       students.filter((student) => {
         if (student.id !== id) {
           newStudents.push(student);
@@ -176,39 +162,17 @@ const StudentsPage = () => {
   }, []);
 
   return (
-    <Box h={'100%'} paddingInline='50px'>
-      <Box
-        w={'100%'}
-        h={'10%'}
-        display={'flex'}
-        flexDirection={'row'}
-        alignItems={'center'}
-        justifyContent={'flex-start'}
-      >
+    <div className="h-full px-12.5">
+      <div className="flex h-[10%] w-full flex-row items-center justify-start">
         <Input
           placeholder='Search Student'
-          w='500px'
-          borderColor='black'
+          className="w-125 border-black"
           onChange={(e) => SearchStudent(e.target.value)}
         />
-      </Box>
-      <Box
-        ref={gridRef}
-        w='100%'
-        h='82vh'
-        display='grid'
-        gridTemplateColumns='1fr'
-        gap={5}
-      >
-        <Box
-          w='100%'
-          h='100%'
-          display='flex'
-          flexDir='column'
-          overflowY={'auto'}
-        >
-          {students?.map((student, index) => {
-            const id = student.id;
+      </div>
+      <div ref={gridRef} className="grid h-[82vh] w-full grid-cols-1 gap-5">
+        <div className="flex h-full w-full flex-col overflow-y-auto">
+          {students?.map((student) => {
             return (
               <UserCard
                 key={student.id}
@@ -219,105 +183,61 @@ const StudentsPage = () => {
               />
             );
           })}
-        </Box>
-        <Box
-          display='none'
-          ref={boxRef}
-          w='100%'
-          h='100%'
-          bgColor={'white'}
-          flexDir='column'
-          gap={5}
-          overflowY={'auto'}
-        >
-          <Box
-            w='100%'
-            display='flex'
-            flexDirection='row'
-            justifyContent='flex-end'
-            padding={'10px'}
-          >
+        </div>
+        <div ref={boxRef} className="hidden h-full w-full flex-col gap-5 overflow-y-auto bg-white">
+          <div className="flex w-full flex-row justify-end p-2.5">
             <IoMdClose size={'25px'} onClick={closeTab} />
-          </Box>
-          <Image src='/profile.jpeg' w='100%' />
-          <Box
-            paddingRight='50px'
-            display='flex'
-            flexDirection='column'
-            gap='15px'
-            paddingBlock='10px'
-          >
-            <Box
-              w='100%'
-              display={'flex'}
-              flexDirection='row'
-              alignItems={'center'}
-              justifyContent={'space-between'}
-            >
-              <Text>
+          </div>
+          <img src='/profile.jpeg' className="w-full" />
+          <div className="flex flex-col gap-3.75 py-2.5 pr-12.5">
+            <div className="flex w-full flex-row items-center justify-between">
+              <p>
                 {' '}
                 <span style={{ fontWeight: '700' }}> First Name: </span>{' '}
                 {firstName}
-              </Text>
-              <Text>
+              </p>
+              <p>
                 {' '}
                 <span style={{ fontWeight: '700' }}> Last Name: </span>{' '}
                 {lastName}
-              </Text>
-            </Box>
-            <Text>
+              </p>
+            </div>
+            <p>
               {' '}
               <span style={{ fontWeight: '700' }}> Email: </span> {email}
-            </Text>
-            <Text>
+            </p>
+            <p>
               {' '}
               <span style={{ fontWeight: '700' }}> Adress: </span> {adress}
-            </Text>
-            <Text>
+            </p>
+            <p>
               {' '}
               <span style={{ fontWeight: '700' }}> Role: </span> {role}
-            </Text>
-            <Text>
+            </p>
+            <p>
               {' '}
               <span style={{ fontWeight: '700' }}> Status: </span>{' '}
               {status ? 'Active' : 'Inactive'}
-            </Text>
-            <Text>
+            </p>
+            <p>
               {' '}
               <span style={{ fontWeight: '700' }}> Last Login: </span>{' '}
               {convertTime(lastLogin)}
-            </Text>
-            <Text>
+            </p>
+            <p>
               {' '}
               <span style={{ fontWeight: '700' }}> Created At: </span>{' '}
               {convertTime(createdAt)}
-            </Text>
-            <Text>
+            </p>
+            <p>
               {' '}
               <span style={{ fontWeight: '700' }}> Updated At: </span>{' '}
               {convertTime(updatedAt)}
-            </Text>
-            {/* <Box
-              display='flex'
-              flexDir='row'
-              justifyContent='space-between'
-              alignItems='center'
-              marginTop='25px'
-            >
-              <Button
-                colorScheme='red'
-                onClick={() => {
-                  console.log('Delete student');
-                }}
-              >
-                Delete student
-              </Button>
-              <Button colorScheme='blue'>View Profile</Button>
-            </Box> */}
-          </Box>
-        </Box>
-      </Box>
-    </Box>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

@@ -1,13 +1,13 @@
 'use client';
 
-import { Box, Button, Input, Text } from '@chakra-ui/react';
-import { IoCloseSharp } from 'react-icons/io5';
-import { FaCheck } from 'react-icons/fa';
+import { Input } from '@/components/ui/input';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import EnrollmentCard from '@/components/EnrollmentCard';
 
 const EnrollmentPage = () => {
-  const [enrollments, setEnrollments] = useState([]);
+  const [enrollments, setEnrollments] = useState<any[]>([]);
+  const router = useRouter();
 
   const SearchRequest = (Search) => {
     console.log(Search);
@@ -53,30 +53,15 @@ const EnrollmentPage = () => {
   }, []);
 
   return (
-    <Box
-      width='100%'
-      height='100vh'
-      paddingInline='50px'
-      display='flex'
-      flexDirection='column'
-    >
-      <Box h={'fit-content'} paddingBlock='25px'>
+    <div className="flex h-screen w-full flex-col px-12.5">
+      <div className="h-fit py-6.25">
         <Input
           placeholder='Search Student Request'
-          w='500px'
-          borderColor='black'
+          className="w-125 border-black"
           onChange={(e) => SearchRequest(e.target.value)}
         />
-      </Box>
-      <Box
-        w='100%'
-        // flex={1}
-        display='grid'
-        gridTemplateColumns={'1fr 1fr'}
-        gap={'10px'}
-        overflowY={'auto'}
-        padding={5}
-      >
+      </div>
+      <div className="grid w-full grid-cols-2 gap-2.5 overflow-y-auto p-5">
         {enrollments.map((enrollment) => (
           <EnrollmentCard
             key={enrollment.id}
@@ -85,8 +70,8 @@ const EnrollmentPage = () => {
             setEnrollments={setEnrollments}
           />
         ))}
-      </Box>
-    </Box>
+      </div>
+    </div>
   );
 };
 

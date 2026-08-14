@@ -1,36 +1,17 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { MdDelete } from 'react-icons/md';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
-  Box,
-  Button,
-  Image,
-  Text,
-  Drawer,
-  DrawerBody,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerOverlay,
-  DrawerContent,
-  DrawerCloseButton,
-  Input,
-  FormControl,
-  Alert,
-  AlertIcon,
-  AlertTitle,
-  AlertDescription,
-  IconButton,
-  AlertDialog,
-  AlertDialogOverlay,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogCloseButton,
-  AlertDialogBody,
-  AlertDialogFooter,
-  Center,
-} from '@chakra-ui/react';
-import { useDisclosure } from '@chakra-ui/react';
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetFooter,
+} from '@/components/ui/sheet';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { useDisclosure } from '@/hooks/use-disclosure';
 import { IoMdClose } from 'react-icons/io';
 import { useRouter } from 'next/navigation';
 import UserCard from '@/components/UserCard';
@@ -44,7 +25,7 @@ export const convertTime = (time) => {
 const TeachersPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const [teachers, setTeachers] = useState([]);
+  const [teachers, setTeachers] = useState<any[]>([]);
   const [teacherFirstName, setTeacherFirstName] = useState('');
   const [teacherLastName, setTeacherLastName] = useState('');
   const [teacherEmail, setTeacherEmail] = useState('');
@@ -66,10 +47,9 @@ const TeachersPage = () => {
   const router = useRouter();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const btnRef = useRef();
 
-  const boxRef = useRef();
-  const gridRef = useRef();
+  const boxRef = useRef<HTMLDivElement>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
 
   // time util
   const convertTime = (time) => {
@@ -132,7 +112,7 @@ const TeachersPage = () => {
         throw new Error(data.message);
       }
 
-      const newTeachers = [];
+      const newTeachers: any[] = [];
       teachers.filter((teacher) => {
         if (teacher.id !== id) {
           newTeachers.push(teacher);
@@ -282,146 +262,82 @@ const TeachersPage = () => {
   }, []);
 
   return (
-    <Box h={'100%'} paddingInline='50px'>
-      <Box
-        w={'100%'}
-        h={'10%'}
-        display={'flex'}
-        flexDirection={'row'}
-        alignItems={'center'}
-        justifyContent={'space-between'}
-      >
+    <div className="h-full px-12.5">
+      <div className="flex h-[10%] w-full flex-row items-center justify-between">
         <Input
           placeholder='Search Teacher'
-          w='500px'
-          borderColor='black'
+          className="w-125 border-black"
           onChange={(e) => SearchTeacher(e.target.value)}
         />
         <Button
-          ref={btnRef}
-          bgColor={'#234C51'}
-          color={'white'}
+          className="bg-[#234C51] text-white hover:bg-[#234C51]/90"
           onClick={onOpen}
         >
           + Add Teacher
         </Button>
-      </Box>
-      {/* create account for teacher */}
-      <Drawer
-        size='sm'
-        isOpen={isOpen}
-        placement='right'
-        onClose={onClose}
-        finalFocusRef={btnRef}
-      >
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
-          <DrawerHeader>Create teacher&#39;s account</DrawerHeader>
+      </div>
+      <Sheet open={isOpen} onOpenChange={(open) => !open && onClose()}>
+        <SheetContent>
+          <SheetHeader>
+            <SheetTitle>Create teacher&#39;s account</SheetTitle>
+          </SheetHeader>
 
-          <DrawerBody>
-            <FormControl display='flex' flexDirection='column' gap='15px'>
-              <Input
-                value={teacherFirstName}
-                placeholder='First Name'
-                onChange={(e) => setTeacherFirstName(e.target.value)}
-              />
-              <Input
-                value={teacherLastName}
-                placeholder='Last Name'
-                onChange={(e) => setTeacherLastName(e.target.value)}
-              />
-              <Input
-                value={teacherEmail}
-                type='email'
-                placeholder='Teacher Email'
-                onChange={(e) => setTeacherEmail(e.target.value)}
-              />
-            </FormControl>
-          </DrawerBody>
+          <div className="flex flex-col gap-3.75 px-4">
+            <Input
+              value={teacherFirstName}
+              placeholder='First Name'
+              onChange={(e) => setTeacherFirstName(e.target.value)}
+            />
+            <Input
+              value={teacherLastName}
+              placeholder='Last Name'
+              onChange={(e) => setTeacherLastName(e.target.value)}
+            />
+            <Input
+              value={teacherEmail}
+              type='email'
+              placeholder='Teacher Email'
+              onChange={(e) => setTeacherEmail(e.target.value)}
+            />
+          </div>
 
-          <DrawerFooter display='flex' flexDirection='column'>
+          <SheetFooter>
             {displaySuccessAlert && (
-              <Alert
-                status='success'
-                variant='subtle'
-                flexDirection='column'
-                alignItems='center'
-                justifyContent='center'
-                textAlign='center'
-                height='100px'
-                marginBottom='30px'
-                borderRadius='10px'
-              >
-                <AlertIcon boxSize='25px' mr={0} />
-                {/* <AlertTitle mt={4} mb={1} fontSize='lg'>
-                Application submitted!
-              </AlertTitle> */}
-                <AlertDescription maxWidth='sm'>
+              <Alert className="mb-7.5 h-25 flex-col items-center justify-center rounded-[10px] text-center">
+                <AlertDescription className="max-w-sm">
                   Created successfully
                 </AlertDescription>
               </Alert>
             )}
             {displayErrorAlert && (
-              <Alert
-                status='error'
-                variant='subtle'
-                flexDirection='column'
-                alignItems='center'
-                justifyContent='center'
-                textAlign='center'
-                height='100px'
-                marginBottom='30px'
-                borderRadius='10px'
-              >
-                <AlertIcon boxSize='25px' mr={0} />
-                {/* <AlertTitle mt={4} mb={1} fontSize='lg'>
-                Application submitted!
-              </AlertTitle> */}
-                <AlertDescription maxWidth='sm'>
+              <Alert variant="destructive" className="mb-7.5 h-25 flex-col items-center justify-center rounded-[10px] text-center">
+                <AlertDescription className="max-w-sm">
                   {errorMessage}
                 </AlertDescription>
               </Alert>
             )}
-            <Box w='100%' display='flex' justifyContent='space-between'>
+            <div className="flex w-full justify-between">
               <Button
                 variant='outline'
-                paddingInline='20px'
-                mr={3}
+                className="mr-3 px-5"
                 onClick={onClose}
               >
                 Cancel
               </Button>
               <Button
-                isLoading={isSubmitting ? true : false}
-                loadingText='Saving'
-                colorScheme='blue'
-                paddingInline='20px'
+                disabled={isSubmitting}
+                className="bg-blue-500 px-5 hover:bg-blue-600"
                 onClick={createTeacher}
               >
-                Save
+                {isSubmitting ? 'Saving' : 'Save'}
               </Button>
-            </Box>
-          </DrawerFooter>
-        </DrawerContent>
-      </Drawer>
-      <Box
-        ref={gridRef}
-        // w='100%'
-        h='82vh'
-        display='grid'
-        gridTemplateColumns='1fr'
-        gap={5}
-      >
-        <Box
-          w='100%'
-          h='100%'
-          display='flex'
-          flexDir='column'
-          overflowY={'auto'}
-        >
+            </div>
+          </SheetFooter>
+        </SheetContent>
+      </Sheet>
+      <div ref={gridRef} className="grid h-[82vh] grid-cols-1 gap-5">
+        <div className="flex h-full w-full flex-col overflow-y-auto">
           {teachers.map((teacher) => {
-            const id = teacher.id;
             return (
               <UserCard
                 key={teacher.id}
@@ -432,116 +348,71 @@ const TeachersPage = () => {
               />
             );
           })}
-        </Box>
-        <Box
-          display='none'
-          ref={boxRef}
-          // w='100%'
-          h='100%'
-          bgColor={'white'}
-          flexDir='column'
-          gap={5}
-          overflowY={'auto'}
-        >
-          <Box
-            w='100%'
-            display='flex'
-            flexDirection='row'
-            justifyContent='flex-end'
-            padding={'10px'}
-          >
+        </div>
+        <div ref={boxRef} className="hidden h-full flex-col gap-5 overflow-y-auto bg-white">
+          <div className="flex w-full flex-row justify-end p-2.5">
             <IoMdClose size={'25px'} cursor='pointer' onClick={closeTab} />
-          </Box>
-          <Center>
-            <Image
-              h='200px'
-              w='200px'
-              mb='20px'
-              borderRadius='50%'
+          </div>
+          <div className="flex items-center justify-center">
+            <img
+              className="mb-5 size-50 rounded-full object-cover"
               src={profilePicture || '/user.png'}
             />
-          </Center>
-          <Box
-            paddingRight='50px'
-            display='flex'
-            flexDirection='column'
-            gap='15px'
-            paddingBlock='10px'
-          >
-            <Box
-              w='100%'
-              display={'flex'}
-              flexDirection='row'
-              alignItems={'center'}
-              justifyContent={'space-between'}
-            >
-              <Text>
+          </div>
+          <div className="flex flex-col gap-3.75 py-2.5 pr-12.5">
+            <div className="flex w-full flex-row items-center justify-between">
+              <p>
                 {' '}
                 <span style={{ fontWeight: '700' }}> First name: </span>{' '}
                 {firstName}
-              </Text>
-              <Text>
+              </p>
+              <p>
                 {' '}
                 <span style={{ fontWeight: '700' }}> Last name: </span>{' '}
                 {lastName}
-              </Text>
-            </Box>
-            <Text>
+              </p>
+            </div>
+            <p>
               {' '}
               <span style={{ fontWeight: '700' }}> Email: </span> {email}
-            </Text>
-            <Text display={address ? 'block' : 'none'}>
+            </p>
+            <p style={{ display: address ? 'block' : 'none' }}>
               {' '}
               <span style={{ fontWeight: '700' }}> Address: </span> {address}
-            </Text>
-            <Text>
+            </p>
+            <p>
               {' '}
               <span style={{ fontWeight: '700' }}> Role: </span> {role}
-            </Text>
-            <Text>
+            </p>
+            <p>
               {' '}
               <span style={{ fontWeight: '700' }}> Status: </span>{' '}
               {isActive ? 'Active' : 'Inactive'}
-            </Text>
+            </p>
             {lastLogin && (
-              <Text>
+              <p>
                 {' '}
                 <span style={{ fontWeight: '700' }}>
                   {' '}
                   Last login date:{' '}
                 </span>{' '}
                 {convertTime(lastLogin)}
-              </Text>
+              </p>
             )}
-            <Text>
+            <p>
               {' '}
               <span style={{ fontWeight: '700' }}> Created at: </span>{' '}
               {convertTime(createdAt)}
-            </Text>
-            <Text>
+            </p>
+            <p>
               {' '}
               <span style={{ fontWeight: '700' }}> Updated at: </span>{' '}
               {convertTime(updatedAt)}
-            </Text>
-            {/* <Box
-              display='flex'
-              flexDir='row'
-              justifyContent='space-between'
-              alignItems='center'
-              marginTop='25px'
-            >
-              <Button
-                colorScheme='red'
-                onClick={onDeleteAlertOpen}
-              >
-                Delete Teacher
-              </Button>
-              <Button colorScheme='blue'>View Profile</Button>
-            </Box> */}
-          </Box>
-        </Box>
-      </Box>
-    </Box>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

@@ -1,18 +1,15 @@
 import {
   AlertDialog,
-  AlertDialogBody,
-  AlertDialogCloseButton,
+  AlertDialogAction,
+  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogFooter,
   AlertDialogHeader,
-  AlertDialogOverlay,
-  Box,
-  Button,
-  IconButton,
-  Text,
-  useDisclosure,
-} from '@chakra-ui/react';
-import { useRef } from 'react';
+  AlertDialogTitle,
+  AlertDialogDescription,
+} from '@/components/ui/alert-dialog';
+import { Button } from '@/components/ui/button';
+import { useDisclosure } from '@/hooks/use-disclosure';
 import { MdDelete } from 'react-icons/md';
 
 function UserCard({ user, getUser, deleteUser, openTab }) {
@@ -23,96 +20,57 @@ function UserCard({ user, getUser, deleteUser, openTab }) {
     onOpen: onDeleteAlertOpen,
     onClose: onDeleteAlertClose,
   } = useDisclosure();
-  const cancelRef = useRef();
 
   return (
     <>
-      <AlertDialog
-        motionPreset='slideInBottom'
-        leastDestructiveRef={cancelRef}
-        onClose={onDeleteAlertClose}
-        isOpen={isDeleteAlertOpen}
-        isCentered
-      >
-        <AlertDialogOverlay />
-
+      <AlertDialog open={isDeleteAlertOpen} onOpenChange={(open) => !open && onDeleteAlertClose()}>
         <AlertDialogContent>
-          <AlertDialogHeader>Delete {userRole}?</AlertDialogHeader>
-          <AlertDialogCloseButton />
-          <AlertDialogBody>
-            Are you sure you want to remove this {user.role} account?
-          </AlertDialogBody>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete {userRole}?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to remove this {user.role} account?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
           <AlertDialogFooter>
-            <Button ref={cancelRef} onClick={onDeleteAlertClose}>
-              No
-            </Button>
-            <Button
-              colorScheme='red'
-              ml={3}
+            <AlertDialogCancel>No</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-destructive text-white hover:bg-destructive/90"
               onClick={() => {
                 deleteUser(user.id);
                 onDeleteAlertClose();
               }}
             >
               Yes
-            </Button>
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
 
-      <Box
-        width={'100%'}
-        display='flex'
-        flexDirection={'row'}
-        justifyContent={'space-between'}
-        borderBottom={'1px solid #E2E8F0'}
-        _hover={{ bgColor: 'whiteSmoke' }}
-        paddingBlock={'10px'}
-        cursor='pointer'
+      <div
+        className="flex w-full flex-row justify-between border-b border-[#E2E8F0] py-2.5 cursor-pointer hover:bg-[whitesmoke]"
         onClick={() => {
           getUser(user.id);
           openTab();
         }}
       >
-        <Box display='flex' flexDirection={'row'} gap={5}>
-          <Box
-            display='flex'
-            justifyContent='center'
-            alignItems='center'
-            width={'50px'}
-            height={'50px'}
-            bgColor={'#E2E8F0'}
-            borderRadius={'50%'}
-          >
-            <Text fontSize={18} fontWeight={500}>
+        <div className="flex flex-row gap-5">
+          <div className="flex size-12.5 items-center justify-center rounded-full bg-[#E2E8F0]">
+            <span className="text-lg font-medium">
               {user?.firstName && user?.firstName[0]}
-            </Text>
-          </Box>
-          <Box display='flex' flexDirection='column' justifyContent='center'>
-            <Text
-              fontSize={18}
-              fontWeight={500}
-            >{`${user.firstName} ${user.lastName}`}</Text>
-          </Box>
-        </Box>
-        <Box display='flex' flexDirection={'row'} gap={5}>
-          <Box
-            display='flex'
-            justifyContent='center'
-            alignItems='center'
-            width={'50px'}
-            height={'50px'}
-            // _hover={{ bgColor: 'white' }}
-            borderRadius={'50%'}
-            // onClick={() => deleteTeacher(id)}
-          >
-            <IconButton
-              icon={<MdDelete fontSize={24} color='red' />}
-              onClick={onDeleteAlertOpen}
-            />
-          </Box>
-        </Box>
-      </Box>
+            </span>
+          </div>
+          <div className="flex flex-col justify-center">
+            <span className="text-lg font-medium">{`${user.firstName} ${user.lastName}`}</span>
+          </div>
+        </div>
+        <div className="flex flex-row gap-5">
+          <div className="flex size-12.5 items-center justify-center rounded-full">
+            <Button variant="ghost" size="icon" onClick={onDeleteAlertOpen}>
+              <MdDelete fontSize={24} color='red' />
+            </Button>
+          </div>
+        </div>
+      </div>
     </>
   );
 }

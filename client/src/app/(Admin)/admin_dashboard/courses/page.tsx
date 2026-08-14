@@ -1,14 +1,14 @@
 'use client';
 
-import { Box, Center, Container, HStack, Input } from '@chakra-ui/react';
+import { Input } from '@/components/ui/input';
 import CardForCourse from '@/components/CardForCourse';
-import { useContext, useEffect, useState } from 'react';
-// import { AdminContext } from '../../layout';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 const CoursePage = () => {
-  const [courses, setCourses] = useState([]);
-  // const {search, setSearch} = useContext(AdminContext);
-  const { search, setSearch } = useState('');
+  const [courses, setCourses] = useState<any[]>([]);
+  const [search, setSearch] = useState('');
+  const router = useRouter();
 
   // fetch courses
   useEffect(() => {
@@ -74,37 +74,20 @@ const CoursePage = () => {
   };
 
   return (
-    <Box h={'100%'} paddingInline='50px'>
-      <Box
-        w={'100%'}
-        h={'10%'}
-        display={'flex'}
-        flexDirection={'row'}
-        alignItems={'center'}
-        justifyContent={'flex-start'}
-      >
+    <div className="h-full px-12.5">
+      <div className="flex h-[10%] w-full flex-row items-center justify-start">
         <Input
           placeholder='Search Course'
-          w='500px'
-          borderColor='black'
+          className="w-125 border-black"
           onChange={(e) => searchCourses(e.target.value)}
         />
-      </Box>
-      <Container
-        padding={25}
-        maxW='100%'
-        h='100%'
-        display={'grid'}
-        gridTemplateColumns='repeat(3, 1fr)'
-        gap={5}
-        overflowY={'auto'}
-      >
+      </div>
+      <div className="grid h-full max-w-full grid-cols-3 gap-5 overflow-y-auto p-6.25">
         {courses.map((course) => {
-          console.log(course);
-          return <CardForCourse key={course.id} w={'100%'} h={'100%'} Course={course} teacher={course.teacher} Role='admin' />;
+          return <CardForCourse key={course.id} w={'100%'} Course={course} teacher={course.teacher} Role='admin' />;
         })}
-      </Container>
-    </Box>
+      </div>
+    </div>
   );
 };
 
