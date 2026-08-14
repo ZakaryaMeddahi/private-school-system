@@ -3,6 +3,9 @@
 import { Button } from '@/components/ui/button';
 import {
   createContext,
+  Dispatch,
+  MutableRefObject,
+  SetStateAction,
   useContext,
   useEffect,
   useReducer,
@@ -24,7 +27,6 @@ import RoomHeader from '@/components/room-header';
 import { MdClose } from 'react-icons/md';
 import RoomBody from '@/components/chat-room-body';
 import RoomChat from '@/components/room-chat';
-import { msgs } from './Chat';
 import { ChatContext } from '@/app/providers/ChatProvider';
 import ControlPanel from '@/components/SessionComponents/ControlPanel';
 import {
@@ -35,20 +37,53 @@ import {
   UPDATE_SHARING,
 } from '@/actions';
 import reducer from '@/reducer';
-import AgoraRTC from 'agora-rtc-sdk-ng';
+import AgoraRTC, {
+  IAgoraRTCClient,
+  ICameraVideoTrack,
+  ILocalVideoTrack,
+  IMicrophoneAudioTrack,
+} from 'agora-rtc-sdk-ng';
 import VideosList from '@/components/SessionComponents/VideosList';
 import { useRouter } from 'next/navigation';
-import io from 'socket.io-client';
+import io, { Socket } from 'socket.io-client';
 
-// no
+interface StreamingState {
+  users: any[];
+  isScreenSharing: boolean;
+  isScreenFull: boolean;
+}
 
-export const StreamingContext = createContext();
+interface StreamingContextValue {
+  clientRef: MutableRefObject<IAgoraRTCClient | undefined>;
+  localVideoRef: MutableRefObject<HTMLVideoElement | null>;
+  localScreenTrackRef: MutableRefObject<ILocalVideoTrack | undefined>;
+  localCameraTrackRef: MutableRefObject<ICameraVideoTrack | undefined>;
+  localAudioTrackRef: MutableRefObject<IMicrophoneAudioTrack | undefined>;
+  state: StreamingState;
+  updateSharing: (isSharing: boolean) => void;
+  sessionStarted: boolean;
+  setSessionStarted: Dispatch<SetStateAction<boolean>>;
+  resetUsers: () => void;
+}
 
-const defaultState = {
+const defaultState: StreamingState = {
   users: [],
   isScreenSharing: false,
   isScreenFull: false,
 };
+
+export const StreamingContext = createContext<StreamingContextValue>({
+  clientRef: { current: undefined },
+  localVideoRef: { current: null },
+  localScreenTrackRef: { current: undefined },
+  localCameraTrackRef: { current: undefined },
+  localAudioTrackRef: { current: undefined },
+  state: defaultState,
+  updateSharing: () => {},
+  sessionStarted: false,
+  setSessionStarted: () => {},
+  resetUsers: () => {},
+});
 
 const options = {
   appId: process.env.NEXT_PUBLIC_APP_ID,
@@ -77,17 +112,17 @@ const SessionPage = ({ roomId }) => {
   } = useContext(ChatContext);
 
   // Streaming refs
-  const clientRef = useRef();
-  const localVideoRef = useRef();
-  const localCameraTrackRef = useRef();
-  const localScreenTrackRef = useRef();
-  const localAudioTrackRef = useRef();
+  const clientRef = useRef<IAgoraRTCClient>();
+  const localVideoRef = useRef<HTMLVideoElement>(null);
+  const localCameraTrackRef = useRef<ICameraVideoTrack>();
+  const localScreenTrackRef = useRef<ILocalVideoTrack>();
+  const localAudioTrackRef = useRef<IMicrophoneAudioTrack>();
 
-  const chatNamespace = useRef(null);
+  const chatNamespace = useRef<Socket | null>(null);
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [sessionStarted, setSessionStarted] = useState(false);
-  const uidRef = useRef(null);
+  const uidRef = useRef<string | null>(null);
 
   const [state, dispatch] = useReducer(reducer, defaultState);
 
@@ -125,16 +160,16 @@ const SessionPage = ({ roomId }) => {
       clientRef.current = client;
       // TODO: use channel name and token form session object
       // TODO: use userId as UID
-      await client.join(APP_ID, agoraChannel, agoraToken, uidRef.current);
+      await client.join(APP_ID as string, agoraChannel, agoraToken, uidRef.current);
       const localVideoTrack = await AgoraRTC.createCameraVideoTrack({});
       const localAudioTrack = await AgoraRTC.createMicrophoneAudioTrack();
       localCameraTrackRef.current = localVideoTrack;
       localAudioTrackRef.current = localAudioTrack;
-      localVideoTrack.play(localVideoRef.current);
+      localVideoTrack.play(localVideoRef.current!);
       // mute mic and camera by default
       localAudioTrack.setMuted(true);
       // localVideoTrack.setMuted(true);
-      await clientRef.current.publish([localAudioTrack, localVideoTrack]);
+      await clientRef.current!.publish([localAudioTrack, localVideoTrack]);
     } catch (error) {
       console.error(error);
     }
@@ -142,7 +177,7 @@ const SessionPage = ({ roomId }) => {
 
   const listen = () => {
     clientRef.current?.on('user-published', async (user, mediaType) => {
-      await clientRef.current.subscribe(user, mediaType);
+      await clientRef.current?.subscribe(user, mediaType);
 
       if (mediaType === 'video') {
         // setUsers((users) => {
@@ -174,8 +209,8 @@ const SessionPage = ({ roomId }) => {
   };
 
   const startSession = () => {
-    chatNamespace.current.emit('start-session', { roomId });
-    chatNamespace.current.once('session-started', (data) => {
+    chatNamespace.current!.emit('start-session', { roomId });
+    chatNamespace.current!.once('session-started', (data) => {
       const { session } = data;
       joinChannel(session);
       listen();
@@ -184,8 +219,8 @@ const SessionPage = ({ roomId }) => {
   };
 
   const joinSession = () => {
-    chatNamespace.current.emit('join-session', { roomId });
-    chatNamespace.current.once('joined-session', (data) => {
+    chatNamespace.current!.emit('join-session', { roomId });
+    chatNamespace.current!.once('joined-session', (data) => {
       const {
         data: { session },
       } = data;
@@ -244,15 +279,15 @@ const SessionPage = ({ roomId }) => {
     chatNamespace.current.on('connect', () => {
       console.log('Connected to socket');
 
-      chatNamespace.current.emit('join-room', { roomId });
+      chatNamespace.current!.emit('join-room', { roomId });
 
-      chatNamespace.current.on('user-joined', (data) => {
+      chatNamespace.current!.on('user-joined', (data) => {
         console.log('====================================');
         console.log('Joined Room : ', data);
         console.log('====================================');
       });
 
-      chatNamespace.current.on('message', (data) => {
+      chatNamespace.current!.on('message', (data) => {
         console.log('====================================');
         console.log('FROM Chat : ', data);
         console.log('====================================');
@@ -261,7 +296,7 @@ const SessionPage = ({ roomId }) => {
         setIsLoading(false);
       });
 
-      chatNamespace.current.on('message-updated', (data) => {
+      chatNamespace.current!.on('message-updated', (data) => {
         console.log('====================================');
         console.log('FROM Chat (update message) : ', data);
         console.log('====================================');
@@ -274,7 +309,7 @@ const SessionPage = ({ roomId }) => {
         });
       });
 
-      chatNamespace.current.on('message-removed', (data) => {
+      chatNamespace.current!.on('message-removed', (data) => {
         console.log('====================================');
         console.log('FROM Chat (delete message) : ', data);
         console.log('====================================');
@@ -286,7 +321,7 @@ const SessionPage = ({ roomId }) => {
     });
     // joinChannel();
     // listen();
-    fetchMessages(selectedCourse.id, roomId);
+    fetchMessages(selectedCourse!.id, roomId);
     console.log(
       '========================================================================'
     );
@@ -296,19 +331,19 @@ const SessionPage = ({ roomId }) => {
     );
     return () => {
       clientRef.current?.leave();
-      chatNamespace.current.emit('leave-room', {
+      chatNamespace.current!.emit('leave-room', {
         roomId,
       });
-      chatNamespace.current.disconnect();
+      chatNamespace.current!.disconnect();
     };
   }, []);
 
   // *************************
 
-  const boxRef = useRef();
-  const gridRef = useRef();
-  const GridItemRef = useRef();
-  const ProfileRef = useRef();
+  const boxRef = useRef<HTMLDivElement>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
+  const GridItemRef = useRef<HTMLDivElement>(null);
+  const ProfileRef = useRef<HTMLDivElement>(null);
   const [count, setCount] = useState(0);
   const [micOn, setMicOn] = useState(false);
 
@@ -400,7 +435,6 @@ const SessionPage = ({ roomId }) => {
               </div>
               <VideosList
                 users={state.users}
-                GridItemRef={GridItemRef}
                 changeGrid={changeGrid}
               />
             </div>
@@ -452,7 +486,7 @@ const SessionPage = ({ roomId }) => {
       </div>
       <div ref={boxRef} className="hidden h-full w-full bg-white">
         <RoomChat
-          roomName={selectedCourse.title}
+          roomName={selectedCourse!.title}
           messages={messages}
           setMessages={setMessages}
           chatNamespace={chatNamespace}
@@ -461,8 +495,10 @@ const SessionPage = ({ roomId }) => {
           icon={<MdClose size='25px' color='gray' />}
           ShowPopover={false}
           selectedCourse={selectedCourse}
-          chatId={selectedCourse.rooms[0].id}
+          chatId={selectedCourse!.rooms![0].id}
           isChatSession={true}
+          pinnedMessages={pinnedMessages}
+          setPinnedMessages={setPinnedMessages}
           isLoading={isLoading}
           setIsLoading={setIsLoading}
           fileUploading={false}

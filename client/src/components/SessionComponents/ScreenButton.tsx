@@ -18,25 +18,29 @@ function ScreenButton() {
 
   const handleScreenSharing = async () => {
     if (!state.isScreenSharing) {
-      const screenTrack = await AgoraRTC.createScreenVideoTrack();
-      await clientRef.current?.unpublish([localCameraTrackRef.current]);
+      const screenTrack = await AgoraRTC.createScreenVideoTrack({}, 'disable');
+      if (localCameraTrackRef.current) {
+        await clientRef.current?.unpublish([localCameraTrackRef.current]);
+      }
       // dispatch({ type: UPDATE_SHARING, payload: { isSharing: true } });
       updateSharing(true);
       localCameraTrackRef.current?.close();
-      localCameraTrackRef.current = null;
+      localCameraTrackRef.current = undefined;
       localScreenTrackRef.current = screenTrack;
-      localScreenTrackRef.current?.play(localVideoRef.current);
+      localScreenTrackRef.current?.play(localVideoRef.current!);
       await clientRef.current?.publish([screenTrack]);
       setIsSharing(true);
     } else {
-      await clientRef.current?.unpublish([localScreenTrackRef.current]);
+      if (localScreenTrackRef.current) {
+        await clientRef.current?.unpublish([localScreenTrackRef.current]);
+      }
       // dispatch({ type: UPDATE_SHARING, payload: { isSharing: false } });
       updateSharing(false);
       localScreenTrackRef.current?.close();
-      localScreenTrackRef.current = null;
+      localScreenTrackRef.current = undefined;
       const cameraTrack = await AgoraRTC.createCameraVideoTrack({});
       localCameraTrackRef.current = cameraTrack;
-      localCameraTrackRef.current?.play(localVideoRef.current);
+      localCameraTrackRef.current?.play(localVideoRef.current!);
       await clientRef.current?.publish([cameraTrack]);
       setIsSharing(false);
     }

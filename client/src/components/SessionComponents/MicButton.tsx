@@ -8,14 +8,14 @@ function MicButton() {
   const [mic, setMic] = useState(false);
 
   const handleMicrophone = async () => {
-    if (localAudioTrackRef.current.muted) {
+    if (localAudioTrackRef.current?.muted) {
       console.log('on');
       setMic(true);
-      await localAudioTrackRef.current.setMuted(false);
+      await localAudioTrackRef.current?.setMuted(false);
     } else {
       console.log('off');
       setMic(false);
-      await localAudioTrackRef.current.setMuted(true);
+      await localAudioTrackRef.current?.setMuted(true);
     }
   };
 

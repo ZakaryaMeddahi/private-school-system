@@ -1,5 +1,8 @@
 import { StreamingContext } from '@/views/Room';
-import { AIDenoiserExtension } from 'agora-extension-ai-denoiser';
+import {
+  AIDenoiserExtension,
+  AIDenoiserProcessor,
+} from 'agora-extension-ai-denoiser';
 import AgoraRTC from 'agora-rtc-sdk-ng';
 import { useContext } from 'react';
 import { RiVoiceprintFill } from 'react-icons/ri';
@@ -19,16 +22,16 @@ function NoiseButton() {
     }
 
     AgoraRTC.registerExtensions([denoiser]);
+    let processor: AIDenoiserProcessor | null = denoiser.createProcessor();
     denoiser.onloaderror = (e) => {
       console.error(e);
       processor = null;
     };
-    let processor = denoiser.createProcessor();
 
     localAudioTrackRef.current
-      .pipe(processor)
+      ?.pipe(processor!)
       .pipe(localAudioTrackRef.current.processorDestination);
-    await processor.enable();
+    await processor!.enable();
   };
 
   return (

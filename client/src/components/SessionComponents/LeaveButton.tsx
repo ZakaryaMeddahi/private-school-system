@@ -18,20 +18,20 @@ function LeaveButton() {
   const endCall = async () => {
     const role = localStorage.getItem('role');
     if (role === 'teacher') {
-      clientRef.current.emit('end-session');
+      (clientRef.current as any)?.emit('end-session');
     } else {
-      clientRef.current.emit('leave-session');
+      (clientRef.current as any)?.emit('leave-session');
     }
 
     resetUsers();
 
     localCameraTrackRef.current?.close();
-    localCameraTrackRef.current = null;
+    localCameraTrackRef.current = undefined;
     localScreenTrackRef.current?.close();
-    localScreenTrackRef.current = null;
+    localScreenTrackRef.current = undefined;
     localAudioTrackRef.current?.close();
-    localAudioTrackRef.current = null;
-    clientRef.current.leave();
+    localAudioTrackRef.current = undefined;
+    clientRef.current?.leave();
   };
 
   return (
