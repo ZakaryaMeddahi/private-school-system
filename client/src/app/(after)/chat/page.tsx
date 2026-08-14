@@ -1,4 +1,4 @@
-import ChatPage from "@/Pages/Chat";
+import ChatPage from "@/views/Chat";
 
 const Chat = () => {
     return (

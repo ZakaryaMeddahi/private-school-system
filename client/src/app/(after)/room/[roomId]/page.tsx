@@ -1,4 +1,4 @@
-import RoomPage from '@/Pages/Room';
+import RoomPage from '@/views/Room';
 
 const Room = ({ params }) => {
   const { roomId } = params;

@@ -1,6 +1,6 @@
 'use client';
 
-import ProfilePage from '@/Pages/profile';
+import ProfilePage from '@/views/profile';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { GetUser } from '@/utils/getUser';

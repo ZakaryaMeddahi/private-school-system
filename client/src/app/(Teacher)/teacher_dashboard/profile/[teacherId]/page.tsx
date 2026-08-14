@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { GetUser } from '@/utils/getUser';
-import ProfilePage from '@/Pages/profile';
+import ProfilePage from '@/views/profile';
 
 const Profile = ({ params }: { params: Promise<{ teacherId: string }> }) => {
   const [userId, setUserId] = useState('');

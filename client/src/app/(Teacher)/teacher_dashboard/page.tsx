@@ -1,6 +1,6 @@
 'use client';
 
-import Overview from '@/Pages/Overview';
+import Overview from '@/views/Overview';
 import Loading from '@/components/Loading';
 
 const TeacherDashboard = () => {

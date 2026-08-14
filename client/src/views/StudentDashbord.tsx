@@ -1,4 +1,4 @@
-import Overview from "@/Pages/Overview";
+import Overview from "@/views/Overview";
 
 const StudentDashbord = () => {
   return (

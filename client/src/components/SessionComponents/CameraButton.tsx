@@ -1,4 +1,4 @@
-import { StreamingContext } from '@/Pages/Room';
+import { StreamingContext } from '@/views/Room';
 import { useContext, useState } from 'react';
 import { CiVideoOff, CiVideoOn } from 'react-icons/ci';
 import { TbRuler } from 'react-icons/tb';

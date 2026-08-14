@@ -1,6 +1,6 @@
 'use client';
 
-import CourseDetailsPage from '@/Pages/CourseDetails';
+import CourseDetailsPage from '@/views/CourseDetails';
 import { useEffect, useState } from 'react';
 
 const Course_Details = ({ params }: { params: Promise<{ courseId: string }> }) => {

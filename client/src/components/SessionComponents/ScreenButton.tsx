@@ -1,4 +1,4 @@
-import { StreamingContext } from '@/Pages/Room';
+import { StreamingContext } from '@/views/Room';
 import AgoraRTC from 'agora-rtc-sdk-ng';
 import { useContext, useState } from 'react';
 import { LuScreenShare, LuScreenShareOff } from 'react-icons/lu';

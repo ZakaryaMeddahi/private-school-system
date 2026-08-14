@@ -1,4 +1,4 @@
-import StudentDashbordPage from "@/Pages/StudentDashbord";
+import StudentDashbordPage from "@/views/StudentDashbord";
 
 const StudentDashbord = () => {
     return (

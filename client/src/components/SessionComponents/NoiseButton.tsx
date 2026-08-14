@@ -1,4 +1,4 @@
-import { StreamingContext } from '@/Pages/Room';
+import { StreamingContext } from '@/views/Room';
 import { AIDenoiserExtension } from 'agora-extension-ai-denoiser';
 import AgoraRTC from 'agora-rtc-sdk-ng';
 import { useContext } from 'react';

@@ -1,4 +1,4 @@
-import { StreamingContext } from '@/Pages/Room';
+import { StreamingContext } from '@/views/Room';
 import { useContext } from 'react';
 import { MdOutlineCall } from 'react-icons/md';
 

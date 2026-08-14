@@ -1,4 +1,4 @@
-import { StreamingContext } from '@/Pages/Room';
+import { StreamingContext } from '@/views/Room';
 import { useContext, useState } from 'react';
 import { MdOutlineMicNone, MdOutlineMicOff } from 'react-icons/md';
 
