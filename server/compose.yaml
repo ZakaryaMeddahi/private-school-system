@@ -1,0 +1,11 @@
+services:
+  database:
+    container_name: database
+    image: postgres:18
+    ports:
+      - '5432:5432'
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: private-school-db
