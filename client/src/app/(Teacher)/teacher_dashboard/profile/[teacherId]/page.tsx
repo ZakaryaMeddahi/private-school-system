@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { GetUser } from '@/Lib/getUser';
+import { GetUser } from '@/utils/getUser';
 import ProfilePage from '@/Pages/profile';
 
 const Profile = ({ params }) => {

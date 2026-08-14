@@ -2,7 +2,7 @@
 
 import ProfilePage from '@/Pages/profile';
 import { useEffect, useState } from 'react';
-import { GetUser } from '../../../../../Lib/getUser';
+import { GetUser } from '@/utils/getUser';
 
 const Profile = ({ params }) => {
   const { userId } = params;

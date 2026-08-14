@@ -4,7 +4,7 @@ import Media from "@/components/Socials/Media";
 import { Box, FormControl, FormLabel, Input, Text, Textarea, Button, Heading, Badge } from "@chakra-ui/react";
 import { FaFacebookF, FaWhatsapp, FaLinkedinIn } from "react-icons/fa";
 import { useEffect, useState } from "react";
-import { GetUser } from "@/Lib/getUser";
+import { GetUser } from "@/utils/getUser";
 
 var data;
 

@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 // import Calendar from "react-calendar";
 import { Badge, Box, Heading, Text, Divider, Image } from '@chakra-ui/react';
-import { GetUser } from '@/Lib/getUser';
+import { GetUser } from '@/utils/getUser';
 import { HiOutlineAcademicCap } from 'react-icons/hi2';
 import { IoChatbubblesOutline, IoSearch } from 'react-icons/io5';
 import { CgInbox } from 'react-icons/cg';
