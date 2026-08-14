@@ -17,7 +17,7 @@ import { UseGuards } from '@nestjs/common';
 import { WsAuth } from 'src/guards/ws-auth.guard';
 import { UserSocket } from 'src/shared/interfaces';
 import { SocketSession } from '../../shared/websocket.session';
-import { v4 as uuidv4 } from 'uuid';
+import { randomUUID } from 'node:crypto';
 import { Role } from 'src/shared/enums';
 
 // We should have as DS like Map to store user sockets in room
@@ -260,7 +260,7 @@ export class RoomsGateway {
 
       const { roomId } = data;
 
-      const agoraChannel = uuidv4();
+      const agoraChannel = randomUUID();
 
       const session = await this.sessionsService.create({
         agoraChannel,
