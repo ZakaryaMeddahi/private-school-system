@@ -1,6 +1,4 @@
 {
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "eslint.experimental.useFlatConfig": true,
-  "eslint.format.enable": false,
-  "eslint.ignoreUntitled": false
+  "js/ts.tsdk.path": "server/node_modules/typescript/lib"
 }
