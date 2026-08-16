@@ -62,8 +62,10 @@ export class UsersService {
 
       return user;
     } catch (error) {
-      console.error(error);
-      throw new HttpException('Cannot get user', 500);
+      throw new HttpException(
+        error.message || 'Cannot get user',
+        error.status || 500,
+      );
     }
   }
 
@@ -83,7 +85,6 @@ export class UsersService {
 
       return userWithoutPassword;
     } catch (error) {
-      console.error(error);
       throw new HttpException(
         error.message || 'Cannot create user',
         error.status || 500,
@@ -98,6 +99,8 @@ export class UsersService {
       });
       if (!user) throw new NotFoundException('User not found');
 
+      // TODO: check if the email already exists
+
       const updatedUser = await this.usersRepository.save({
         ...user,
         ...userData,
@@ -106,7 +109,6 @@ export class UsersService {
 
       return updatedUser;
     } catch (error) {
-      console.error(error);
       throw new HttpException(
         error.message || 'Cannot update user',
         error.status || 500,
