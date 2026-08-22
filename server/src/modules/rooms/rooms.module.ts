@@ -25,7 +25,7 @@ import { UsersModule } from '../users/users.module';
     SessionsModule,
     StudentSessionsModule,
     EnrollmentsModule,
-    UsersModule
+    UsersModule,
   ],
   controllers: [RoomsController],
   providers: [

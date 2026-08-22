@@ -63,6 +63,9 @@ import { ObjectStorageModule } from './modules/object-storage/object-storage.mod
           StudentSession,
           SocialLinks,
         ],
+        ssl: {
+          rejectUnauthorized: false,
+        },
         synchronize: true,
       }),
       inject: [ConfigService],

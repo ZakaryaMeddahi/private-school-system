@@ -16,7 +16,6 @@ export class RoomsEvents {
 
       console.log('roomId: ' + roomId);
       console.log('userId: ' + userId);
-      
 
       client.to(`room-${roomId}`).emit('message', { message });
     } else {

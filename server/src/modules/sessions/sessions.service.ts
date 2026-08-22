@@ -26,10 +26,7 @@ export class SessionsService {
   }
 
   // Implement create session
-  async create(
-    sessionData: CreateSessionParams,
-    roomId: number,
-  ) {
+  async create(sessionData: CreateSessionParams, roomId: number) {
     // implement create session
     try {
       const newSession = this.sessionsRepository.create({
