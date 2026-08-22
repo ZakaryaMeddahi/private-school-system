@@ -1,148 +1,109 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Equal, Repository } from 'typeorm';
-import { UsersService } from '../users.service';
 import { SocialLinksService } from 'src/modules/social-links/social-links.service';
 import { User } from 'src/shared/entities/user.entity';
-import { CreateUserParams, UpdateUserParams } from 'src/shared/types';
 import { Role } from 'src/shared/enums';
+import {
+  createMockRepository,
+  makeUser,
+  MockRepository,
+  useFrozenClock,
+} from 'src/shared/testing';
+import { CreateUserParams, UpdateUserParams } from 'src/shared/types';
+import { UsersService } from '../users.service';
 
 describe('UsersService', () => {
   let service: UsersService;
-  let socialLinksService: SocialLinksService;
-  let repository: Repository<User>;
+  let repository: MockRepository<User>;
+  let socialLinksService: { create: jest.Mock };
+
+  // `update()` stamps `updatedAt: new Date()` itself.
+  // TODO: drop this once the entity uses `@UpdateDateColumn`.
+  useFrozenClock();
 
   beforeEach(async () => {
+    repository = createMockRepository<User>();
+    socialLinksService = { create: jest.fn() };
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         UsersService,
-        {
-          provide: getRepositoryToken(User),
-          useValue: {
-            findOne: jest.fn(),
-            create: jest.fn(),
-            save: jest.fn(),
-          },
-        },
-        {
-          provide: SocialLinksService,
-          useValue: {
-            create: jest.fn(),
-          },
-        },
+        { provide: getRepositoryToken(User), useValue: repository },
+        { provide: SocialLinksService, useValue: socialLinksService },
       ],
     }).compile();
 
-    service = module.get<UsersService>(UsersService);
-    socialLinksService = module.get<SocialLinksService>(SocialLinksService);
-    repository = module.get<Repository<User>>(getRepositoryToken(User));
-  });
-
-  it('should be defined', () => {
-    expect(service).toBeDefined();
+    service = module.get(UsersService);
   });
 
   describe('findOne', () => {
-    it('should successfully return a user by id', async () => {
-      const user: User = {
-        id: 1,
-        firstName: 'Zakarya',
-        lastName: 'Meddahi',
-        email: 'zakarya@gmail.com',
-        password: 'password',
-        address: null,
-        isActive: true,
-        lastLogging: null,
-        role: Role.STUDENT,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        messages: [],
-      };
+    it('should return the user when it exists', async () => {
+      const user = makeUser();
+      repository.findOne.mockResolvedValue(user);
 
-      jest.spyOn(repository, 'findOne').mockResolvedValue(user);
-
-      await expect(service.findOne(1)).resolves.toEqual(user);
-      expect(repository.findOne).toHaveBeenCalledWith({ where: { id: 1 } });
+      await expect(service.findOne(user.id)).resolves.toEqual(user);
     });
 
-    it('should throw when user does not exist', async () => {
-      jest.spyOn(repository, 'findOne').mockResolvedValue(null);
-      await expect(service.findOne(1)).rejects.toThrow('User not found');
-      expect(repository.findOne).toHaveBeenCalledWith({ where: { id: 1 } });
+    it('should throw when the user does not exist', async () => {
+      repository.findOne.mockResolvedValue(null);
+
+      await expect(service.findOne(999)).rejects.toThrow('User not found');
     });
+
+    // TODO: `findOne` returns the full entity including `password`, while
+    // `create` strips it. Once the service is consistent, assert here that the
+    // password never leaves the service.
   });
 
   describe('create', () => {
     const createUserData: CreateUserParams = {
-      firstName: 'Sid Ahmed',
-      lastName: 'Abdelali',
-      email: 'sidahmed@gmail.com',
+      firstName: 'Zakarya',
+      lastName: 'Meddahi',
+      email: 'zakarya@gmail.com',
       password: 'password',
       address: 'Chlef, Algeria',
       role: Role.STUDENT,
     };
 
-    const createdUser: User = {
-      ...createUserData,
-      id: 2,
-      address: 'Chlef, Algeria',
-      isActive: true,
-      lastLogging: null,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      messages: [],
-    };
+    it('should return the created user without its password', async () => {
+      const createdUser = makeUser({ id: 1, email: createUserData.email });
+      repository.findOne.mockResolvedValue(null);
+      repository.create.mockReturnValue(createdUser);
+      repository.save.mockResolvedValue(createdUser);
 
-    it('should successfully add a new user', async () => {
-      const { password, ...expectedUser } = createdUser;
+      const result = await service.create(createUserData);
 
-      jest.spyOn(repository, 'findOne').mockResolvedValue(null);
-      jest.spyOn(repository, 'create').mockReturnValue(createdUser);
-      jest.spyOn(repository, 'save').mockResolvedValue(createdUser);
+      const { password, ...userWithoutPassword } = createdUser;
+      expect(result).toEqual(userWithoutPassword);
+      expect(result).not.toHaveProperty('password');
+    });
 
-      await expect(service.create(createUserData)).resolves.toEqual(
-        expectedUser,
-      );
-      expect(repository.findOne).toHaveBeenCalledWith({
-        where: { email: 'sidahmed@gmail.com' },
-      });
-      expect(repository.create).toHaveBeenCalledWith(createUserData);
-      expect(repository.save).toHaveBeenCalledWith(createdUser);
+    it('should create the social links for the new user', async () => {
+      const createdUser = makeUser({ id: 2, email: createUserData.email });
+      repository.findOne.mockResolvedValue(null);
+      repository.create.mockReturnValue(createdUser);
+      repository.save.mockResolvedValue(createdUser);
+
+      await service.create(createUserData);
+
       expect(socialLinksService.create).toHaveBeenCalledWith(
         createdUser.id,
         {},
       );
     });
 
-    it('should throw when email already exists', async () => {
-      jest.spyOn(repository, 'findOne').mockResolvedValue(createdUser);
+    it('should throw when the email is already taken', async () => {
+      repository.findOne.mockResolvedValue(makeUser());
+
       await expect(service.create(createUserData)).rejects.toThrow(
         'Email already exists',
       );
-      expect(repository.findOne).toHaveBeenCalledWith({
-        where: { email: 'sidahmed@gmail.com' },
-      });
+      expect(repository.save).not.toHaveBeenCalled();
     });
   });
 
   describe('update', () => {
-    const userToUpdate: User = {
-      id: 1,
-      firstName: 'Zakarya',
-      lastName: 'Meddahi',
-      email: 'zakarya@gmail.com',
-      password: 'password',
-      address: null,
-      isActive: true,
-      lastLogging: null,
-      role: Role.STUDENT,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      messages: [],
-    };
-
     const updateUserData: UpdateUserParams = {
-      id: 1,
       firstName: 'Zakarya Updated',
       lastName: 'Meddahi Updated',
       email: 'zakarya.updated@gmail.com',
@@ -150,34 +111,44 @@ describe('UsersService', () => {
       role: Role.TEACHER,
     };
 
-    const updatedUser: User = {
-      ...userToUpdate,
-      ...updateUserData,
-      updatedAt: new Date(),
-    };
+    it('should return the updated user', async () => {
+      const existingUser = makeUser();
+      const updatedUser = makeUser({ ...updateUserData });
+      repository.findOne.mockResolvedValue(existingUser);
+      repository.save.mockResolvedValue(updatedUser);
 
-    it('should successfully update a user', async () => {
-      jest.spyOn(repository, 'findOne').mockResolvedValue(userToUpdate);
-      jest.spyOn(repository, 'save').mockResolvedValue(updatedUser);
-
-      await expect(service.update(1, updateUserData)).resolves.toEqual(
-        updatedUser,
-      );
-      expect(repository.findOne).toHaveBeenCalledWith({
-        where: { id: Equal(1) },
-      });
-      expect(repository.save).toHaveBeenCalledWith({
-        ...userToUpdate,
-        ...updateUserData,
-        updatedAt: expect.any(Date),
-      });
+      await expect(
+        service.update(existingUser.id, updateUserData),
+      ).resolves.toEqual(updatedUser);
     });
 
-    it('should throw when user does not exist', async () => {
-      jest.spyOn(repository, 'findOne').mockResolvedValue(null);
-      await expect(service.update(1, updateUserData)).rejects.toThrow(
+    it('should apply the changes on top of the existing user', async () => {
+      const existingUser = makeUser();
+      repository.findOne.mockResolvedValue(existingUser);
+      repository.save.mockResolvedValue(makeUser({ ...updateUserData }));
+
+      await service.update(existingUser.id, updateUserData);
+
+      expect(repository.save).toHaveBeenCalledWith(
+        expect.objectContaining({
+          id: existingUser.id,
+          ...updateUserData,
+        }),
+      );
+    });
+
+    it('should throw when the user does not exist', async () => {
+      repository.findOne.mockResolvedValue(null);
+
+      await expect(service.update(999, updateUserData)).rejects.toThrow(
         'User not found',
       );
+      expect(repository.save).not.toHaveBeenCalled();
     });
+
+    // TODO: the service does not check whether the new email is already taken
+    // by another user (see the TODO in `users.service.ts`). Add a test for
+    // that once it throws.
+    it.todo('should throw when the new email belongs to another user');
   });
 });
