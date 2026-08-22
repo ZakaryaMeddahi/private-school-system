@@ -26,7 +26,7 @@ export class MessagesService {
         where: { chat: { id: Equal(chatId), course: { id: Equal(courseId) } } },
         relations: {
           sender: true,
-          file: true
+          file: true,
         },
         order: { sentAt: 'ASC' },
       });
@@ -51,7 +51,7 @@ export class MessagesService {
         },
         relations: {
           sender: true,
-          file: true
+          file: true,
         },
         order: { sentAt: 'ASC' },
       });
@@ -128,7 +128,7 @@ export class MessagesService {
         where: { id: Equal(id) },
         relations: {
           sender: true,
-          file: true
+          file: true,
         },
       });
 

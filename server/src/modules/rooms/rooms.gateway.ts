@@ -262,10 +262,13 @@ export class RoomsGateway {
 
       const agoraChannel = randomUUID();
 
-      const session = await this.sessionsService.create({
-        agoraChannel,
-        agoraToken: null,
-      }, roomId);
+      const session = await this.sessionsService.create(
+        {
+          agoraChannel,
+          agoraToken: null,
+        },
+        roomId,
+      );
 
       // const session = await this.sessionsService.create({
       //   agoraChannel: `${topic.title}-${topicId}`,
@@ -362,9 +365,7 @@ export class RoomsGateway {
       }
 
       // Broadcast message to all users in chat
-      client
-        .to(`room-${roomId}`)
-        .emit('user-joined-session', sessionData);
+      client.to(`room-${roomId}`).emit('user-joined-session', sessionData);
 
       client.emit('joined-session', {
         status: 'success',
@@ -395,12 +396,15 @@ export class RoomsGateway {
       const { sub: userId, role } = client.user;
       const { roomId } = data;
 
-      const sessionData = {}
+      const sessionData = {};
 
-      if(role === Role.STUDENT) {
-        const studentSession = await this.studentSessionsService.update(userId, {
-          leaveDate: new Date(),
-        });
+      if (role === Role.STUDENT) {
+        const studentSession = await this.studentSessionsService.update(
+          userId,
+          {
+            leaveDate: new Date(),
+          },
+        );
         sessionData['studentSession'] = studentSession;
       }
 

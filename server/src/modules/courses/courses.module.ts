@@ -28,7 +28,7 @@ import { ObjectStorageService } from '../object-storage/object-storage.service';
     ChatsService,
     RoomsService,
     FilesService,
-    ObjectStorageService
+    ObjectStorageService,
   ],
 })
 export class CoursesModule {}
