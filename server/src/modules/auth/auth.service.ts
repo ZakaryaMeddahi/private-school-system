@@ -15,7 +15,7 @@ import { Admin } from 'src/shared/entities/admin.entity';
 export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
-    @InjectRepository(User) private readonly usersRepository: Repository<User>,
+    @InjectRepository(User) private readonly userRepository: Repository<User>,
     @InjectRepository(Admin)
     private readonly adminRepository: Repository<Admin>,
     private readonly studentsService: StudentsService,
@@ -25,27 +25,26 @@ export class AuthService {
 
   async registerUser(userData: RegisterUserParams) {
     try {
-      const user = await this.usersRepository.findOneBy({
+      const user = await this.userRepository.findOneBy({
         email: userData.email,
       });
 
-      console.log(user);
-
+      // TODO: returning `null` conflates "email taken" with a legitimate
+      // empty result and forces callers to guess. Throw a `ConflictException`
+      // instead, then tighten the matching test to `.rejects.toThrow`.
       if (user) return null;
 
       const hash = await hashPassword(userData.password);
 
-      const newUser = this.usersRepository.create({
+      const newUser = this.userRepository.create({
         ...userData,
         password: hash,
         lastLogging: new Date(),
       });
-      console.log(newUser);
 
-      const userEntity = await this.usersRepository.save({
+      const userEntity = await this.userRepository.save({
         ...newUser,
       });
-      console.log(userEntity);
 
       await this.socialLinksService.create(userEntity.id, {});
 
@@ -54,6 +53,9 @@ export class AuthService {
       }
 
       // ! Create Account for Admin
+      // TODO: the student branch above goes through `StudentsService` while
+      // this one writes through the repository directly. Move it behind an
+      // `AdminsService` so both roles follow the same path.
       if (userEntity.role === Role.ADMIN) {
         const admin = this.adminRepository.create({
           user: { id: userEntity.id },
@@ -72,33 +74,39 @@ export class AuthService {
 
       const { password, ...userWithoutPass } = userEntity;
 
-      console.log({ ...userEntity, access_token });
-
       return { ...userWithoutPass, access_token };
     } catch (error) {
-      console.error(error);
+      // TODO: this flattens every error to a generic 500, swallowing the real
+      // status and message. Forward `error.message` / `error.status` the way
+      // `UsersService` already does.
       throw new HttpException('Something went wrong in the server', 500);
     }
   }
 
   async loginUser(userData: LoginUserParams) {
     try {
-      console.log(userData);
-      const user = await this.usersRepository
+      // TODO: `addSelect('password')` is redundant — the `password` column has
+      // no `select: false`, so it is already selected. This whole builder can
+      // collapse to `findOne({ where: { email: userData.email } })`.
+      const user = await this.userRepository
         .createQueryBuilder()
         .addSelect('password')
         .where('email = :email', { email: userData.email })
         .getOne();
 
-      console.log(user);
-
+      // TODO: both of these `null` returns should be a single
+      // `UnauthorizedException` — same message for either case, so the response
+      // does not reveal whether the email exists. Then tighten the matching
+      // tests to `.rejects.toThrow`.
       if (!user) return null;
 
       const isMatch = await comparePassword(userData.password, user.password);
 
       if (!isMatch) return null;
 
-      const updatedUser = await this.usersRepository.save({
+      // TODO: see the `updatedAt` note in `users.service.ts` — once the entity
+      // uses `@UpdateDateColumn`, this hand-stamped date can go.
+      const updatedUser = await this.userRepository.save({
         ...user,
         lastLogging: new Date(),
       });
@@ -113,7 +121,9 @@ export class AuthService {
 
       return { ...userWithoutPass, access_token };
     } catch (error) {
-      console.error(error);
+      // TODO: this flattens every error to a generic 500, swallowing the real
+      // status and message. Forward `error.message` / `error.status` the way
+      // `UsersService` already does.
       throw new HttpException('Something went wrong in the server', 500);
     }
   }

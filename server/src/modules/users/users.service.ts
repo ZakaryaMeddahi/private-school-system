@@ -21,6 +21,8 @@ export class UsersService {
     // private readonly teachersService: TeachersService,
   ) {}
 
+  // TODO: dead code — this superseded `findOne(id)` below and should be
+  // deleted rather than kept commented out.
   // async findOne(id: number, role: Role) {
   //   try {
   //     let user: User;
@@ -55,6 +57,8 @@ export class UsersService {
   //   }
   // }
 
+  // TODO: this returns the full entity including `password`, while `create`
+  // strips it. Make the two consistent so the hash never leaves the service.
   async findOne(id: number) {
     try {
       const user = await this.usersRepository.findOne({ where: { id } });
@@ -101,6 +105,10 @@ export class UsersService {
 
       // TODO: check if the email already exists
 
+      // TODO: `updatedAt` is stamped by hand because the entity declares it as
+      // a plain `@Column` with a `CURRENT_TIMESTAMP` default, which only fires
+      // on INSERT. Switching to `@UpdateDateColumn` lets TypeORM maintain it
+      // and removes the need to freeze the clock in the tests.
       const updatedUser = await this.usersRepository.save({
         ...user,
         ...userData,
