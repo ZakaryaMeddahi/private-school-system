@@ -81,6 +81,10 @@ export type UpdateTopicParams = {
   isDeleted?: boolean;
 };
 
+// TODO: `slug` is required here but the `Room` entity has no `slug` column, so
+// the value is accepted from callers and then silently dropped on save. Either
+// add the column (and index it, if it is meant to be a lookup key) or remove
+// the field from both param types.
 export type CreateRoomParams = {
   name: string;
   slug: string;
@@ -116,6 +120,10 @@ export type UpdateEnrollmentParams = {
 export type CreateMessageParams = {
   content: string;
   isPinned?: boolean;
+  // TODO: declared required, but `MessagesService.createByChatId` and
+  // `createByRoomId` both read it as `MessageData.file || null` — i.e. they
+  // treat it as optional. Every caller sending a plain text message is forced
+  // to pass `file: null` explicitly. Should be `file?: File`.
   file: File;
 };
 

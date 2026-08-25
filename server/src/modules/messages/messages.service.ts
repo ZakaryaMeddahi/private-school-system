@@ -26,11 +26,12 @@ export class MessagesService {
         where: { chat: { id: Equal(chatId), course: { id: Equal(courseId) } } },
         relations: {
           sender: true,
-          file: true
+          file: true,
         },
         order: { sentAt: 'ASC' },
       });
 
+      // TODO: remove this, messages is of type list
       if (!messages) return null;
 
       return messages;
@@ -51,11 +52,12 @@ export class MessagesService {
         },
         relations: {
           sender: true,
-          file: true
+          file: true,
         },
         order: { sentAt: 'ASC' },
       });
 
+      // TODO: remove this, messages is of type list
       if (!messages) return null;
 
       return messages;
@@ -122,13 +124,16 @@ export class MessagesService {
     }
   }
 
+  // TODO: SECURITY — `userId` is accepted but never used, so any authenticated
+  // user can edit anyone's message. `remove()` below scopes its lookup with
+  // `sender: { id: Equal(userId) }`; this should do the same.
   async update(userId: number, id: number, MessageData: UpdateMessageParams) {
     try {
       const message = await this.messagesRepository.findOne({
         where: { id: Equal(id) },
         relations: {
           sender: true,
-          file: true
+          file: true,
         },
       });
 

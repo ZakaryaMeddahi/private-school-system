@@ -16,7 +16,7 @@ import { UsersModule } from '../users/users.module';
     FilesModule,
     ChatsModule,
     EnrollmentsModule,
-    UsersModule
+    UsersModule,
   ],
   controllers: [MessagesController],
   providers: [MessagesService],

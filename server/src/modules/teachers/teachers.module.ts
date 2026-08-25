@@ -17,7 +17,7 @@ import { FilesModule } from '../files/files.module';
     SocialLinksModule,
     UsersModule,
     MailModule,
-    FilesModule
+    FilesModule,
   ],
   controllers: [TeachersController],
   providers: [TeachersService],

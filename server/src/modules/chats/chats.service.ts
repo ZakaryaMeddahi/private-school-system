@@ -12,6 +12,9 @@ export class ChatsService {
     // private readonly coursesService: CoursesService,
   ) {}
 
+  // TODO: takes no course id and applies no filter, so it returns every chat in
+  // the database — identical to `findAll()`. Either accept a courseId and
+  // filter on it, or delete the method and let callers use `findAll()`.
   async findByCourseId() {
     try {
       const chats = await this.chatRepository.find();
@@ -122,6 +125,10 @@ export class ChatsService {
         where: { id: Equal(id) },
       });
 
+      // TODO: BUG — missing `return`. A missing chat falls through to `save()`
+      // below, which spreads `undefined` and INSERTS a brand new row instead of
+      // failing. Should be `throw new NotFoundException(...)`; see the matching
+      // test in chats.service.spec.ts.
       if (!chat) null;
 
       const updatedChat = await this.chatRepository.save({

@@ -8,10 +8,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([User]),
-    SocialLinksModule,
-  ],
+  imports: [TypeOrmModule.forFeature([User]), SocialLinksModule],
   controllers: [UsersController],
   providers: [UsersService],
   exports: [UsersService],

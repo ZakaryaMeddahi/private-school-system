@@ -13,7 +13,7 @@ import { FilesModule } from '../files/files.module';
     TypeOrmModule.forFeature([Student]),
     UsersModule,
     SocialLinksModule,
-    FilesModule
+    FilesModule,
   ],
   controllers: [StudentsController],
   providers: [StudentsService],
