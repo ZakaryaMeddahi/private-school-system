@@ -31,6 +31,7 @@ export class MessagesService {
         order: { sentAt: 'ASC' },
       });
 
+      // TODO: remove this, messages is of type list
       if (!messages) return null;
 
       return messages;
@@ -56,6 +57,7 @@ export class MessagesService {
         order: { sentAt: 'ASC' },
       });
 
+      // TODO: remove this, messages is of type list
       if (!messages) return null;
 
       return messages;
