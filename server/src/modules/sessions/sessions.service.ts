@@ -11,6 +11,9 @@ export class SessionsService {
     private readonly sessionsRepository: Repository<Session>,
   ) {}
 
+  // TODO: returns whatever the repository gives back, so a room with no
+  // sessions resolves `null` silently and callers cannot distinguish that from
+  // a failure. Consider throwing `NotFoundException`, as `update()` does.
   async findRecentSession(roomId: number) {
     try {
       const session = await this.sessionsRepository.findOne({

@@ -124,6 +124,9 @@ export class MessagesService {
     }
   }
 
+  // TODO: SECURITY — `userId` is accepted but never used, so any authenticated
+  // user can edit anyone's message. `remove()` below scopes its lookup with
+  // `sender: { id: Equal(userId) }`; this should do the same.
   async update(userId: number, id: number, MessageData: UpdateMessageParams) {
     try {
       const message = await this.messagesRepository.findOne({

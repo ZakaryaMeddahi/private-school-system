@@ -33,6 +33,10 @@ export class StudentSessionsService {
         session,
       });
 
+      // TODO: BUG — this returns the entity built by `create()`, discarding the
+      // result of `save()`. Anything the database assigns on insert (the
+      // generated `id` above all) is missing from what the caller receives.
+      // Should be `return await this.studentSessionRepository.save(...)`.
       await this.studentSessionRepository.save(studentSession);
 
       return studentSession;
@@ -48,6 +52,10 @@ export class StudentSessionsService {
   async update(id: number, studentSessionData: UpdateStudentSessionParams) {
     try {
       const studentSession = await this.studentSessionRepository.findOne({
+        // TODO: BUG — this is an OR across three different ids, so `update(3)`
+        // can match a row that merely belongs to student 3 or session 3 and
+        // update the wrong record. The caller means one of them specifically;
+        // split into separate methods or take a typed criteria object.
         where: [
           { id: Equal(id) },
           { student: { id: Equal(id) } },

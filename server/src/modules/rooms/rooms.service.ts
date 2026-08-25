@@ -62,6 +62,10 @@ export class RoomsService {
 
       const room = await this.roomsRepository.save(newRoom);
 
+      // TODO: BUG — `newRoom` is the in-memory entity from
+      // `repository.create()`, which has no id until it is inserted. The
+      // database assigns the id on `save()`, so this should be `room.id`.
+      // As written every room's chat is created against `undefined`.
       await this.chatsService.createByRoomId(newRoom.id, {
         name: roomData.name,
       });
