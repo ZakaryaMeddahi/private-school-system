@@ -17,6 +17,13 @@ export class ObjectStorageService {
   }
 
   uploadFile(file: Express.Multer.File) {
+    // TODO: BUG — `error` is accepted and then ignored; there is no `reject`
+    // anywhere in this method. A failed upload therefore RESOLVES with
+    // `undefined`, and the `.then()` below dereferences `uploadResult.url`,
+    // turning a Cloudinary error into a TypeError. Should be:
+    //   (error, uploadResult) =>
+    //     error ? reject(error) : resolve(uploadResult)
+    // with `reject` taken from the executor arguments.
     const uploader = new Promise((resolve) => {
       cloudinary.uploader
         .upload_stream(
