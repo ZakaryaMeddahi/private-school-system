@@ -28,7 +28,11 @@ import { Role } from 'src/shared/enums';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { FilesService } from '../files/files.service';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { JWT_AUTH } from 'src/config/swagger.config';
 
+@ApiTags('Courses')
+@ApiBearerAuth(JWT_AUTH)
 @Controller('api/v1/courses')
 @UseGuards(AuthGuard, RolesGuard)
 export class CoursesController {

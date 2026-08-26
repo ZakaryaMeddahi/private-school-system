@@ -14,7 +14,11 @@ import { UpdateSocialLinksDto } from './dto/update-socialLinks.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { AuthUser } from 'src/decorators/user.decorator';
 import { JwtPayload } from 'src/shared/types';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { JWT_AUTH } from 'src/config/swagger.config';
 
+@ApiTags('Social Links')
+@ApiBearerAuth(JWT_AUTH)
 @Controller('api/v1/social-links')
 @UseGuards(AuthGuard)
 export class SocialLinksController {

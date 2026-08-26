@@ -9,11 +9,20 @@ import { AuthService } from './auth.service';
 import { LoginUserDto } from './dto/login.dto';
 import { RegisterUserDto } from './dto/register.dto';
 import { Role } from '../../shared/enums';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Auth')
 @Controller('api/v1/auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @ApiOperation({
+    summary: 'Register a new student account',
+    description:
+      'Creates a student account and returns the profile together with an access token.',
+  })
+  @ApiResponse({ status: 201, description: 'Account created.' })
+  @ApiResponse({ status: 400, description: 'Email already exists.' })
   @Post('register')
   async register(@Body() registerUserDto: RegisterUserDto) {
     try {
@@ -37,6 +46,13 @@ export class AuthController {
     }
   }
 
+  @ApiOperation({
+    summary: 'Log in',
+    description:
+      'Exchanges email and password for an access token to use with the **Authorize** button.',
+  })
+  @ApiResponse({ status: 201, description: 'Authenticated.' })
+  @ApiResponse({ status: 400, description: 'Invalid credentials.' })
   @Post('login')
   async login(@Body() loginUserDto: LoginUserDto) {
     try {

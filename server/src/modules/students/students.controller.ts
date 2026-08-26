@@ -24,7 +24,11 @@ import { Role } from 'src/shared/enums';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UpdateStudentDto } from './dto/update-student.dto';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { JWT_AUTH } from 'src/config/swagger.config';
 
+@ApiTags('Students')
+@ApiBearerAuth(JWT_AUTH)
 @Controller('api/v1/students')
 @UseGuards(AuthGuard, RolesGuard)
 export class StudentsController {
