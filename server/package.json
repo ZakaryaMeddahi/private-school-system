@@ -29,6 +29,7 @@
     "@nestjs/mapped-types": "^2.1.1",
     "@nestjs/platform-express": "^11.2.0",
     "@nestjs/platform-socket.io": "^11.2.0",
+    "@nestjs/swagger": "^11.4.7",
     "@nestjs/typeorm": "^11.0.3",
     "@nestjs/websockets": "^11.2.0",
     "bcrypt": "^6.0.0",

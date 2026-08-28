@@ -21,7 +21,11 @@ import { AuthUser } from 'src/decorators/user.decorator';
 import { JwtPayload } from 'src/shared/types';
 import { EnrollmentGuard } from 'src/guards/enrollment.guard';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { JWT_AUTH } from 'src/config/swagger.config';
 
+@ApiTags('Messages')
+@ApiBearerAuth(JWT_AUTH)
 @Controller('api/v1')
 @UseGuards(AuthGuard)
 export class MessagesController {

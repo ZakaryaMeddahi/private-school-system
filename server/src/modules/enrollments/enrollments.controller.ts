@@ -23,7 +23,11 @@ import { JwtPayload } from 'src/shared/types';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { Roles } from 'src/decorators/roles.decorator';
 import { Role } from 'src/shared/enums';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { JWT_AUTH } from 'src/config/swagger.config';
 
+@ApiTags('Enrollments')
+@ApiBearerAuth(JWT_AUTH)
 @Controller('api/v1/courses')
 @UseGuards(AuthGuard) // RolesGuard
 export class EnrollmentsController {

@@ -17,7 +17,11 @@ import { RolesGuard } from 'src/guards/roles.guard';
 import { Roles } from 'src/decorators/roles.decorator';
 import { Role } from 'src/shared/enums';
 import { EnrollmentGuard } from 'src/guards/enrollment.guard';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { JWT_AUTH } from 'src/config/swagger.config';
 
+@ApiTags('Chats')
+@ApiBearerAuth(JWT_AUTH)
 @Controller('api/v1/courses/:courseId/chats')
 @UseGuards(AuthGuard, RolesGuard)
 export class ChatsController {
