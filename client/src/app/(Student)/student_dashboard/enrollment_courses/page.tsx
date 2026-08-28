@@ -1,63 +1,52 @@
 'use client';
 
-import CardForCourse from '@/components/CardForCourse';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { LearningCard } from '@/components/my-learning/learning-card';
+import { fetchMyEnrollments, type Enrollment } from '@/lib/student-portal/api';
 
 const EnrollmentCourse = () => {
+  const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
+  const router = useRouter();
 
-    const [enrollments, setEnrollments] = useState<any[]>([]);
-    const [enrollStatus, setEnrollStatus] = useState(false);
-    const router = useRouter();
+  useEffect(() => {
+    fetchMyEnrollments()
+      .then((data) =>
+        setEnrollments(data.filter((e) => e.status === 'approved'))
+      )
+      .catch((err) => console.error(err));
+  }, []);
 
-    useEffect(() => {
-      const fetchEnrollments = async () => {
-        try {
-          const response = await fetch(
-            `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/courses/enrollments/me`,
-            {
-              method: 'GET',
-              headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
-              },
-            }
-          );
-  
-          if (!response.ok) {
-            response.status === 401 && router.push('/login');
-            const { data } = await response.json();
-            throw new Error(data.message);
-          }
-  
-          const { data } = await response.json();
-  
-          console.log(data);
-          setEnrollments(data);
-        } catch (error) {
-          console.error(error);
-        }
-      };
-  
-      
-    fetchEnrollments();
-    }, [])
+  return (
+    <div className="flex flex-col gap-6 p-8">
+      <div>
+        <h1 className="text-2xl font-bold text-[#1A1A2E] sm:text-[28px]">
+          My Learning
+        </h1>
+        <p className="mt-1 text-[#6B7280]">
+          Your enrolled online formations and progress.
+        </p>
+      </div>
 
-    return (
-        <div className="grid h-full max-w-full grid-cols-3 gap-5 overflow-y-auto p-6.25">
-            {enrollments.map(enrollment => {
-                return (
-                      <CardForCourse
-                          key={enrollment.course.id}
-                          Course={enrollment.course}
-                          teacher={enrollment.course.teacher}
-                          Role='student'
-                          Enroll={true}
-                      />
-                    );
-            })}
+      {enrollments.length === 0 ? (
+        <p className="py-12 text-center text-sm text-[#6B7280]">
+          You haven&apos;t enrolled in any formations yet.{' '}
+          <button
+            onClick={() => router.push('/student_dashboard/course')}
+            className="font-medium text-[#6C3CE1] hover:underline"
+          >
+            Explore Courses
+          </button>
+        </p>
+      ) : (
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {enrollments.map((enrollment) => (
+            <LearningCard key={enrollment.id} enrollment={enrollment} />
+          ))}
         </div>
-    );
-}
+      )}
+    </div>
+  );
+};
 
 export default EnrollmentCourse;
