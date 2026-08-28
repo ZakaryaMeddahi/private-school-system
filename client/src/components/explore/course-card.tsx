@@ -59,7 +59,7 @@ export function ExploreCourseCard({ course }: { course: Course }) {
 
   return (
     <Card className="overflow-hidden p-0 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
-      <div className="relative h-[180px] w-full">
+      <div className="relative h-45 w-full">
         <Image
           src={thumbnailFor(course.id)}
           alt={course.title}

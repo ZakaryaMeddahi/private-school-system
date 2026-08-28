@@ -33,19 +33,21 @@ const actions: {
   },
   {
     label: 'Live Class',
+    href: '/student_dashboard/live_classes',
     icon: Monitor,
     bg: '#FDE8E8',
     color: 'text-[#EF4444]',
   },
   {
     label: 'Resources',
+    href: '/student_dashboard/resources',
     icon: FolderOpen,
     bg: '#FFF6DB',
     color: 'text-[#F59E0B]',
   },
   {
     label: 'Messages',
-    href: '/chat',
+    href: '/student_dashboard/messages',
     icon: MessageSquare,
     bg: '#E5EEFF',
     color: 'text-[#3B82F6]',

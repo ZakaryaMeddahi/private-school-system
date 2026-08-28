@@ -1,7 +1,15 @@
 'use client';
 
 import { usePathname, useRouter } from 'next/navigation';
-import { Search, Bell, ChevronDown, Menu } from 'lucide-react';
+import {
+  Search,
+  Bell,
+  ChevronDown,
+  Menu,
+  User,
+  Settings,
+  LogOut,
+} from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
@@ -9,8 +17,11 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+
+const NOTIFICATIONS_PATH = '/student_dashboard#notifications';
 
 function initialsOf(firstName: string, lastName: string) {
   return `${firstName?.[0] ?? ''}${lastName?.[0] ?? ''}`.toUpperCase() || 'ST';
@@ -26,6 +37,7 @@ export function StudentPortalHeader({
   onSearchChange,
   onLogout,
   onProfile,
+  onSettings,
   onMenuClick,
 }: {
   firstName: string;
@@ -35,6 +47,7 @@ export function StudentPortalHeader({
   onSearchChange: (value: string) => void;
   onLogout: () => void;
   onProfile: () => void;
+  onSettings: () => void;
   onMenuClick: () => void;
 }) {
   const router = useRouter();
@@ -67,7 +80,10 @@ export function StudentPortalHeader({
       </div>
 
       <div className="flex shrink-0 items-center gap-4">
-        <button className="relative flex size-9 items-center justify-center rounded-full text-[#6B7280] hover:bg-[#F3EEFF] hover:text-[#6C3CE1]">
+        <button
+          onClick={() => router.push(NOTIFICATIONS_PATH)}
+          className="relative flex size-9 items-center justify-center rounded-full text-[#6B7280] hover:bg-[#F3EEFF] hover:text-[#6C3CE1]"
+        >
           <Bell size={20} />
           <Badge className="absolute -top-0.5 -right-0.5 h-4 min-w-4 justify-center rounded-full bg-red-500 px-1 text-[10px] text-white">
             3
@@ -91,9 +107,31 @@ export function StudentPortalHeader({
               <ChevronDown size={16} className="text-[#9CA3AF]" />
             </button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-40">
-            <DropdownMenuItem onClick={onProfile}>Profile</DropdownMenuItem>
-            <DropdownMenuItem onClick={onLogout}>Logout</DropdownMenuItem>
+          <DropdownMenuContent align="end" className="w-52 py-2">
+            <DropdownMenuItem className="gap-2 px-4 py-2.5" onClick={onProfile}>
+              <User size={16} />
+              My Profile
+            </DropdownMenuItem>
+            <DropdownMenuItem className="gap-2 px-4 py-2.5" onClick={onSettings}>
+              <Settings size={16} />
+              Account Settings
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              className="gap-2 px-4 py-2.5"
+              onClick={() => router.push(NOTIFICATIONS_PATH)}
+            >
+              <Bell size={16} />
+              Notifications
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              variant="destructive"
+              className="gap-2 px-4 py-2.5"
+              onClick={onLogout}
+            >
+              <LogOut size={16} />
+              Logout
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

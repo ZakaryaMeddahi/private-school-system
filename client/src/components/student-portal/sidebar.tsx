@@ -44,9 +44,21 @@ const mainItems: NavItem[] = [
     href: '/student_dashboard/enrollments',
     icon: ClipboardList,
   },
-  { label: 'Live Classes', icon: Monitor },
-  { label: 'Messages', href: '/chat', icon: MessageSquare },
-  { label: 'Resources', icon: FolderOpen },
+  {
+    label: 'Live Classes',
+    href: '/student_dashboard/live_classes',
+    icon: Monitor,
+  },
+  {
+    label: 'Messages',
+    href: '/student_dashboard/messages',
+    icon: MessageSquare,
+  },
+  {
+    label: 'Resources',
+    href: '/student_dashboard/resources',
+    icon: FolderOpen,
+  },
   { label: 'Progress', icon: TrendingUp },
 ];
 

@@ -83,6 +83,9 @@ const Layout = ({ children }) => {
           onSearchChange={setSearch}
           onLogout={Logout}
           onProfile={() => router.push(`/student_dashboard/profile/${userId}`)}
+          onSettings={() =>
+            router.push(`/student_dashboard/profile/${userId}/edit_profile`)
+          }
           onMenuClick={() => setMobileNavOpen(true)}
         />
         <main className="min-h-0 flex-1 overflow-y-auto">
