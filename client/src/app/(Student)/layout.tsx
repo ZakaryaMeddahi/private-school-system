@@ -1,16 +1,18 @@
 'use client';
 
-import Logo from '@/components/Logo/Logo';
-import { Input } from '@/components/ui/input';
-import NavDropdown from '@/components/nav-dropdown';
-import { HiOutlineAcademicCap } from 'react-icons/hi2';
-import { IoChatbubblesOutline } from 'react-icons/io5';
 import { createContext, useEffect, useState, type Dispatch, type SetStateAction } from 'react';
-import { LuLogOut } from 'react-icons/lu';
-import { TbSmartHome } from 'react-icons/tb';
-import { CgProfile } from 'react-icons/cg';
-import Link from 'next/link';
-import { useRouter } from "next/navigation";
+import { useRouter } from 'next/navigation';
+import { HelpCircle } from 'lucide-react';
+import { StudentPortalSidebar } from '@/components/student-portal/sidebar';
+import { StudentPortalHeader } from '@/components/student-portal/header';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
+import { Sheet, SheetContent, SheetTitle } from '@/components/ui/sheet';
+import { GetUser } from '@/utils/getUser';
 
 export const StudentContext = createContext<{
   search: string;
@@ -19,96 +21,87 @@ export const StudentContext = createContext<{
 
 const Layout = ({ children }) => {
   const [userId, setUserId] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [role, setRole] = useState('');
   const [search, setSearch] = useState('');
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   const router = useRouter();
 
-    const Logout = () => {
-        localStorage.removeItem('token');
-        router.push('/login');
-    };
+  const Logout = () => {
+    localStorage.removeItem('token');
+    router.push('/login');
+  };
 
   useEffect(() => {
-    setUserId(localStorage.getItem('userId') || '');
+    GetUser()
+      .then((data) => {
+        if (!data) return;
+        setUserId(data.id);
+        setFirstName(data.firstName ?? '');
+        setLastName(data.lastName ?? '');
+        setRole(data.role ?? '');
+      })
+      .catch((err) => console.log(err.message));
   }, []);
 
   return (
-    <div className="flex h-screen w-full">
-      <div className="flex h-full w-1/4 flex-col bg-[#F1F2ED]">
-        <div className="w-full pr-6.25">
-          <Logo fontSize='20px' fontWeight='500' />
-        </div>
-        <hr className="border-t border-[#898C81]" />
-        <div className="flex h-full w-full flex-col">
-          <Link href='/student_dashboard'>
-            <div className="flex min-h-17.5 max-h-20 w-full flex-row items-center gap-1.25 pl-7.5 hover:bg-[whitesmoke]">
-              <TbSmartHome color='#898C81' size='23px' />
-              <span className="text-[#898C81]">Overview</span>
-            </div>
-          </Link>
-          <Link href='/student_dashboard/course'>
-            <div className="flex min-h-17.5 max-h-20 w-full flex-row items-center gap-1.25 pl-7.5 hover:bg-[whitesmoke]">
-              <HiOutlineAcademicCap color='#898C81' size='23px' />
-              <span className="text-[#898C81]">Courses</span>
-            </div>
-          </Link>
-          <Link href={`/student_dashboard/enrollment_courses`}>
-            <div className="flex min-h-17.5 max-h-20 w-full flex-row items-center gap-1.25 pl-7.5 hover:bg-[whitesmoke]">
-              <HiOutlineAcademicCap color='#898C81' size='23px' />
-              <span className="text-[#898C81]">Enrolled in courses</span>
-            </div>
-          </Link>
-        </div>
-        <div className="flex h-fit w-full flex-col">
-          <Link href='/chat'>
-            <div className="flex min-h-17.5 max-h-20 w-full flex-row items-center gap-1.25 pl-7.5 hover:bg-[whitesmoke]">
-              <IoChatbubblesOutline color='#898C81' size='23px' />
-              <span className="text-[#898C81]">Chat</span>
-            </div>
-          </Link>
-          <Link href={`/student_dashboard/profile/${userId}`}>
-            <div className="flex min-h-17.5 max-h-20 w-full flex-row items-center gap-1.25 pl-7.5 hover:bg-[whitesmoke]">
-              <CgProfile color='#898C81' size='23px' />
-              <span className="text-[#898C81]">Profile</span>
-            </div>
-          </Link>
-          <hr className="border-t border-[#898C81]" />
-          <div
-            className="flex min-h-17.5 max-h-20 w-full cursor-pointer flex-row items-center gap-1.25 pl-7.5 hover:bg-[whitesmoke]"
-            onClick={Logout}
-          >
-            <div className="scale-x-[-1]">
-              <LuLogOut color='#898C81' size='23px' />
-            </div>
-            <span className="text-[#898C81]">Logout</span>
-          </div>
-        </div>
-      </div>
-      <div className="flex h-full w-full flex-col">
-        <div className="mt-2.5 flex h-[8%] w-full items-center justify-between px-12.5">
-          <Input
-            placeholder='Search'
-            className="w-125 border-black"
-            onChange={(e) => setSearch(e.target.value)}
+    <div
+      className="flex h-screen w-full bg-[#F8F7FC]"
+      style={
+        {
+          '--primary': '#6C3CE1',
+          '--primary-foreground': '#FFFFFF',
+        } as React.CSSProperties
+      }
+    >
+      <StudentPortalSidebar
+        userId={userId}
+        onLogout={Logout}
+        className="hidden border-r border-black/5 lg:flex"
+      />
+
+      <Sheet open={mobileNavOpen} onOpenChange={setMobileNavOpen}>
+        <SheetContent side="left" className="w-60 p-0 sm:max-w-60">
+          <SheetTitle className="sr-only">Navigation</SheetTitle>
+          <StudentPortalSidebar
+            userId={userId}
+            onLogout={Logout}
+            className="w-full"
+            onNavigate={() => setMobileNavOpen(false)}
           />
-          <div className="flex items-center gap-2">
-            <div className="flex size-10 items-center justify-center rounded-full bg-[#D8D9D4]">
-              AS
-            </div>
-            <NavDropdown
-              items={[
-                { label: 'Profile', href: `/student_dashboard/profile/${userId}` },
-                { label: 'Logout', onClick: Logout },
-              ]}
-            />
-          </div>
-        </div>
-        <div className="h-[93%] w-full">
+        </SheetContent>
+      </Sheet>
+
+      <div className="flex h-full min-w-0 flex-1 flex-col">
+        <StudentPortalHeader
+          firstName={firstName}
+          lastName={lastName}
+          role={role}
+          search={search}
+          onSearchChange={setSearch}
+          onLogout={Logout}
+          onProfile={() => router.push(`/student_dashboard/profile/${userId}`)}
+          onMenuClick={() => setMobileNavOpen(true)}
+        />
+        <main className="min-h-0 flex-1 overflow-y-auto">
           <StudentContext.Provider value={{ search, setSearch }}>
             {children}
           </StudentContext.Provider>
-        </div>
+        </main>
       </div>
+
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <button className="fixed right-6 bottom-6 z-50 flex size-12 items-center justify-center rounded-full bg-[#6C3CE1] text-white shadow-lg transition-colors hover:bg-[#5A2EC0]">
+              <HelpCircle size={22} />
+            </button>
+          </TooltipTrigger>
+          <TooltipContent side="left">Help & Support — coming soon</TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
     </div>
   );
 };
