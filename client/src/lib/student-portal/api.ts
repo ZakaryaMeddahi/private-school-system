@@ -72,3 +72,17 @@ export async function enrollInCourse(courseId: string) {
   const { data } = await response.json();
   return data;
 }
+
+export async function cancelEnrollment(enrollmentId: string) {
+  const response = await fetch(
+    `${BASE_URL}/api/v1/courses/enrollments/${enrollmentId}`,
+    {
+      method: 'PATCH',
+      headers: authHeaders(),
+      body: JSON.stringify({ enrollmentStatus: 'rejected' }),
+    }
+  );
+  if (!response.ok) throw new Error('Failed to cancel enrollment');
+  const { data } = await response.json();
+  return data;
+}
