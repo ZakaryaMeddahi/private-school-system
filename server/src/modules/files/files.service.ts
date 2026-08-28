@@ -52,6 +52,10 @@ export class FilesService {
     }
   }
 
+  // TODO: both of these are unimplemented stubs returning a hard-coded string.
+  // `remove()` in particular should delete from Cloudinary via
+  // `objectStorage.deleteFile` as well as from the database. The specs carry
+  // matching `it.todo` entries.
   async find() {
     return 'Get file';
   }

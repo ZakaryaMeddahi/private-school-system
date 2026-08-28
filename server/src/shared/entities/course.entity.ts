@@ -56,7 +56,9 @@ export class Course {
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   updatedAt: Date;
 
-  @ManyToOne(() => Teacher, (teacher) => teacher.courses, { onDelete: 'CASCADE' })
+  @ManyToOne(() => Teacher, (teacher) => teacher.courses, {
+    onDelete: 'CASCADE',
+  })
   teacher: Teacher;
 
   @OneToMany(() => Topic, (topic) => topic.course, { cascade: true })

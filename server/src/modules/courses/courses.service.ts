@@ -31,7 +31,7 @@ export class CoursesService {
             teacher: true,
             file: true,
             chat: true,
-            rooms: true
+            rooms: true,
           },
         });
       }
@@ -49,7 +49,7 @@ export class CoursesService {
             teacher: true,
             file: true,
             chat: true,
-            rooms: true
+            rooms: true,
           },
         });
       }
@@ -60,7 +60,7 @@ export class CoursesService {
             teacher: true,
             file: true,
             chat: true,
-            rooms: true
+            rooms: true,
           },
         });
       }
@@ -96,7 +96,7 @@ export class CoursesService {
         relations: {
           topics: true,
           file: true,
-          teacher: true
+          teacher: true,
         },
         where: search
           ? [
@@ -120,7 +120,7 @@ export class CoursesService {
         relations: {
           topics: true,
           file: true,
-          teacher: true
+          teacher: true,
         },
       });
 

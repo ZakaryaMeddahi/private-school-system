@@ -19,6 +19,10 @@ export class User {
   @Column()
   lastName: string;
 
+  // TODO: the column is nullable but the property is typed non-nullable, so
+  // `address: null` only compiles because `strictNullChecks` is off. Type it
+  // `string | null` — `CreateUserParams.address` is optional, and the mismatch
+  // currently forces workarounds in test fixtures.
   @Column({ nullable: true })
   address: string;
 
@@ -31,6 +35,12 @@ export class User {
   @Column({ type: 'timestamp', nullable: true })
   lastLogging: Date;
 
+  // TODO: a column default only fires on INSERT, so `updatedAt` never changes
+  // unless a service stamps it by hand (see `users.service.ts#update`).
+  // Replace these with `@CreateDateColumn` / `@UpdateDateColumn` and let
+  // TypeORM maintain them; that also removes the need to freeze the clock in
+  // the unit tests. Applies to all 14 entities — sequence it before generating
+  // the baseline migration, since it changes the schema.
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 

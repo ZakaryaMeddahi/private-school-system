@@ -202,6 +202,10 @@ export class EnrollmentsService {
 
       console.log(updatedEnrollment);
 
+      // TODO: the status change is already committed above, but a mailer
+      // failure is caught below and rethrown as a 500 — so the caller sees an
+      // error for an update that actually succeeded. Either send the mail
+      // outside the try, or swallow/queue the notification failure.
       await this.mailService.sendEnrollmentStatus(
         enrollment.student.user,
         updatedEnrollment.enrollmentStatus,

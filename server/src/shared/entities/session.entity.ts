@@ -1,4 +1,10 @@
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { StudentSession } from './studentSession.entity';
 import { Room } from './room.entity';
 
@@ -10,7 +16,7 @@ export class Session {
   @Column()
   agoraChannel: string;
 
-  @Column({nullable: true})
+  @Column({ nullable: true })
   agoraToken: string;
 
   // @Column({ default: null })

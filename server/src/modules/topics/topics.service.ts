@@ -11,6 +11,10 @@ export class TopicsService {
     private readonly topicsRepository: Repository<Topic>,
   ) {}
 
+  // TODO: `findOne`, `updateOne` and `deleteOne` all return `null` for a
+  // missing topic instead of throwing `NotFoundException`, unlike every other
+  // service. Callers cannot tell "not found" from "no result", and the specs
+  // currently pin the `null` behaviour — tighten them once this throws.
   async findOne(id: number) {
     try {
       const topic = await this.topicsRepository.findOne({
@@ -52,6 +56,8 @@ export class TopicsService {
     }
   }
 
+  // TODO: `sessionId` is never used — the only line that referenced it is
+  // commented out below. Drop the parameter and update the two call sites.
   async updateOne(id: number, sessionId: number, topicData: UpdateTopicParams) {
     try {
       const topic = await this.topicsRepository.findOne({
