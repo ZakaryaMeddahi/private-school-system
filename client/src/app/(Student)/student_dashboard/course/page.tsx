@@ -1,91 +1,91 @@
 'use client';
 
-import CardForCourse from '@/components/CardForCourse';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { LayoutGrid } from 'lucide-react';
 import { StudentContext } from '../../layout';
+import { fetchCourses, type Course } from '@/lib/student-portal/api';
+import { ExploreCourseCard } from '@/components/explore/course-card';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+
+type SortOption = 'title-asc' | 'title-desc';
 
 const CoursePage = () => {
-  const [courses, setCourses] = useState<any[]>([]);
-  const { search, setSearch } = useContext(StudentContext);
+  const [courses, setCourses] = useState<Course[]>([]);
+  const [sort, setSort] = useState<SortOption>('title-asc');
+  const { search } = useContext(StudentContext);
   const router = useRouter();
 
-  // fetch courses
   useEffect(() => {
-    const fetchCourses = async () => {
+    const fetchData = async () => {
       try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/courses?${search}`,
-          {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
-            },
-          }
-        );
-
-        if (!response.ok) {
-          response.status === 401 && router.push('/login');
-          const { data } = await response.json();
-          throw new Error(data.message);
-        }
-
-        const { data } = await response.json();
-
-        console.log(data);
-
+        const query = search ? `search=${encodeURIComponent(search)}` : '';
+        const data = await fetchCourses(query);
         setCourses(data);
       } catch (error) {
         console.error(error);
+        if ((error as any)?.status === 401) router.push('/login');
       }
     };
 
-    fetchCourses();
+    fetchData();
   }, [search]);
 
-  //   const searchCourses = async (value) => {
-  //     try {
-  //       const response = await fetch(
-  //         `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/courses?search=${value}`,
-  //         {
-  //           method: 'GET',
-  //           headers: {
-  //             'Content-Type': 'application/json',
-  //             Authorization: `Bearer ${localStorage.getItem('token')}`,
-  //           },
-  //         }
-  //       );
-
-  //       if (!response.ok) {
-  //         response.status === 401 && router.push('/login');
-  //         const { data } = await response.json();
-  //         throw new Error(data.message);
-  //       }
-
-  //       const { data } = await response.json();
-
-  //       console.log(data);
-
-  //       setCourses(data);
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   };
+  const sortedCourses = useMemo(() => {
+    const list = [...courses];
+    list.sort((a, b) =>
+      sort === 'title-asc'
+        ? a.title.localeCompare(b.title)
+        : b.title.localeCompare(a.title)
+    );
+    return list;
+  }, [courses, sort]);
 
   return (
-    <div className="grid h-full max-w-full grid-cols-3 gap-5 overflow-y-auto p-6.25">
-      {courses.map((course) => {
-        return (
-          <CardForCourse
-            w='100%'
-            key={course.id}
-            teacher={course.teacher}
-            Course={course}
-            Role='student'
-          />
-        );
-      })}
+    <div className="flex flex-col gap-6 p-8">
+      <div>
+        <h1 className="text-2xl font-bold text-[#1A1A2E] sm:text-[28px]">
+          Explore Formations
+        </h1>
+        <p className="mt-1 text-[#6B7280]">
+          Discover online formations and expand your skills.
+        </p>
+      </div>
+
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <Select value={sort} onValueChange={(v) => setSort(v as SortOption)}>
+          <SelectTrigger className="w-45">
+            <SelectValue placeholder="Sort by" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="title-asc">Title A–Z</SelectItem>
+            <SelectItem value="title-desc">Title Z–A</SelectItem>
+          </SelectContent>
+        </Select>
+
+        <div className="flex items-center gap-1.5 text-sm text-[#6B7280]">
+          <LayoutGrid size={16} />
+          {sortedCourses.length} formations
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {sortedCourses.map((course) => (
+          <ExploreCourseCard key={course.id} course={course} />
+        ))}
+      </div>
+
+      {sortedCourses.length === 0 && (
+        <p className="py-12 text-center text-sm text-[#6B7280]">
+          No formations found.
+        </p>
+      )}
     </div>
   );
 };
