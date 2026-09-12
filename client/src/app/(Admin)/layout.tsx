@@ -1,23 +1,15 @@
 'use client';
 
 import { useState } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { AdminPortalSidebar } from '@/components/admin-portal/sidebar';
 import { AdminPortalHeader } from '@/components/admin-portal/header';
 import { Sheet, SheetContent, SheetTitle } from '@/components/ui/sheet';
 
-const PAGE_TITLES: Record<string, string> = {
-  '/admin_dashboard': 'Dashboard',
-  '/admin_dashboard/teachers': 'Teachers',
-  '/admin_dashboard/students': 'Students',
-  '/admin_dashboard/courses': 'Courses',
-  '/admin_dashboard/enrollements': 'Enrollment Requests',
-};
-
 const Layout = ({ children }: { children: React.ReactNode }) => {
+  const [search, setSearch] = useState('');
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const router = useRouter();
-  const pathname = usePathname();
 
   const Logout = () => {
     localStorage.removeItem('token');
@@ -40,7 +32,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       />
 
       <Sheet open={mobileNavOpen} onOpenChange={setMobileNavOpen}>
-        <SheetContent side="left" className="w-60 p-0 sm:max-w-60">
+        <SheetContent side="left" className="w-65 p-0 sm:max-w-65">
           <SheetTitle className="sr-only">Navigation</SheetTitle>
           <AdminPortalSidebar
             onLogout={Logout}
@@ -52,7 +44,8 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 
       <div className="flex h-full min-w-0 flex-1 flex-col">
         <AdminPortalHeader
-          title={PAGE_TITLES[pathname] ?? 'Admin'}
+          search={search}
+          onSearchChange={setSearch}
           onLogout={Logout}
           onMenuClick={() => setMobileNavOpen(true)}
         />
