@@ -69,7 +69,7 @@ const LoginPage = () => {
 
       if (data.role === 'admin') {
         console.log('this user is admin');
-        router.push('/admin_dashboard');
+        router.push('/admin');
       }
     } catch (error) {
       setIsSubmitting(false);
