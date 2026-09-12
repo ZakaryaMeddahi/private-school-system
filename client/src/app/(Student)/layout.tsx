@@ -48,7 +48,7 @@ const Layout = ({ children }) => {
 
   return (
     <div
-      className="flex h-screen w-full bg-[#F8F7FC]"
+      className="flex h-screen w-full bg-white/97"
       style={
         {
           '--primary': '#6C3CE1',
