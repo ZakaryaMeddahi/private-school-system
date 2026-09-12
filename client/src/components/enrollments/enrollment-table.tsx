@@ -21,6 +21,8 @@ import {
   demoProgressFor,
   thumbnailFor,
 } from '@/lib/student-portal/demo-data';
+import { EmptyState } from '@/components/ui/empty-state';
+import { emptyStatePresets } from '@/components/ui/empty-state-presets';
 
 function initialsOf(firstName?: string, lastName?: string) {
   return `${firstName?.[0] ?? ''}${lastName?.[0] ?? ''}`.toUpperCase() || 'T';
@@ -54,11 +56,7 @@ export function EnrollmentTable({
   };
 
   if (enrollments.length === 0) {
-    return (
-      <p className="py-12 text-center text-sm text-[#6B7280]">
-        No enrollments found.
-      </p>
-    );
+    return <EmptyState {...emptyStatePresets.enrollments} />;
   }
 
   return (
