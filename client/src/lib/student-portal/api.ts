@@ -8,6 +8,12 @@ export type Course = {
   description: string;
   price: number;
   teacher: Teacher;
+  difficulty?: 'easy' | 'medium' | 'hard';
+  duration?: number;
+  durationUnit?: 'days' | 'weeks' | 'months' | 'years';
+  topics?: { id: string }[];
+  file?: { url: string } | null;
+  createdAt?: string;
 };
 
 export type Enrollment = {

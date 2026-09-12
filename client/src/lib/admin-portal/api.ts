@@ -20,7 +20,7 @@ export type AdminEnrollment = {
   id: string;
   enrollmentDate: string;
   enrollmentStatus: EnrollmentStatus;
-  student: { user: { firstName: string; lastName: string } };
+  student: { user: { firstName: string; lastName: string; email: string } };
   course: { id: string; title: string };
 };
 
