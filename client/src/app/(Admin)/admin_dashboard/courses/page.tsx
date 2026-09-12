@@ -1,94 +1,67 @@
 'use client';
 
-import { Input } from '@/components/ui/input';
-import CardForCourse from '@/components/CardForCourse';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { LayoutGrid } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { AdminCourseCard } from '@/components/admin-portal/course-overview-card';
+import { EmptyState } from '@/components/ui/empty-state';
+import { emptyStatePresets } from '@/components/ui/empty-state-presets';
+import { fetchCourses, type Course } from '@/lib/student-portal/api';
 
-const CoursePage = () => {
-  const [courses, setCourses] = useState<any[]>([]);
+const CoursesPage = () => {
+  const [courses, setCourses] = useState<Course[]>([]);
   const [search, setSearch] = useState('');
   const router = useRouter();
 
-  // fetch courses
   useEffect(() => {
-    const fetchCourses = async () => {
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/courses?${search}`,
-          {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
-            },
-          }
-        );
-
-        if (!response.ok) {
-          response.status === 401 && router.push('/login');
-          const { data } = await response.json();
-          throw new Error(data.message);
-        }
-
-        const { data } = await response.json();
-
-        console.log(data);
-
-        setCourses(data);
-      } catch (error) {
+    const query = search ? `search=${encodeURIComponent(search)}` : '';
+    fetchCourses(query)
+      .then(setCourses)
+      .catch((error) => {
         console.error(error);
-      }
-    };
-
-    fetchCourses();
+        if ((error as { status?: number })?.status === 401) {
+          router.push('/login');
+        }
+      });
   }, [search]);
 
-  const searchCourses = async (value) => {
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/courses?search=${value}`,
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        }
-      );
-
-      if (!response.ok) {
-        response.status === 401 && router.push('/login');
-        const { data } = await response.json();
-        throw new Error(data.message);
-      }
-
-      const { data } = await response.json();
-
-      console.log(data);
-
-      setCourses(data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   return (
-    <div className="h-full px-12.5">
-      <div className="flex h-[10%] w-full flex-row items-center justify-start">
+    <div className="flex flex-col gap-6 p-8">
+      <div>
+        <h1 className="text-2xl font-bold text-[#1A1A2E] sm:text-[28px]">
+          Courses
+        </h1>
+        <p className="mt-1 text-[#6B7280]">
+          Browse every course published across the school.
+        </p>
+      </div>
+
+      <div className="flex flex-wrap items-center justify-between gap-4">
         <Input
-          placeholder='Search Course'
-          className="w-125 border-black"
-          onChange={(e) => searchCourses(e.target.value)}
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search courses..."
+          className="h-10 max-w-md rounded-full border-[#E5E7EB] bg-[#F8F7FC]"
         />
+
+        <div className="flex items-center gap-1.5 text-sm text-[#6B7280]">
+          <LayoutGrid size={16} />
+          {courses.length} courses
+        </div>
       </div>
-      <div className="grid h-full max-w-full grid-cols-3 gap-5 overflow-y-auto p-6.25">
-        {courses.map((course) => {
-          return <CardForCourse key={course.id} w={'100%'} Course={course} teacher={course.teacher} Role='admin' />;
-        })}
-      </div>
+
+      {courses.length === 0 ? (
+        <EmptyState {...emptyStatePresets.adminCourses} />
+      ) : (
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {courses.map((course) => (
+            <AdminCourseCard key={course.id} course={course} />
+          ))}
+        </div>
+      )}
     </div>
   );
 };
 
-export default CoursePage;
+export default CoursesPage;
