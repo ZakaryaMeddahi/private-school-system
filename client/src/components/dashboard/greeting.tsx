@@ -8,7 +8,13 @@ function timeOfDayGreeting(hour: number) {
   return 'Good evening';
 }
 
-export function Greeting({ firstName }: { firstName: string }) {
+export function Greeting({
+  firstName,
+  subtitle = 'Continue your learning journey.',
+}: {
+  firstName: string;
+  subtitle?: string;
+}) {
   const [now, setNow] = useState<Date | null>(null);
 
   useEffect(() => {
@@ -24,7 +30,7 @@ export function Greeting({ firstName }: { firstName: string }) {
           {now ? timeOfDayGreeting(now.getHours()) : 'Welcome'}
           {firstName ? `, ${firstName}` : ''} 👋
         </h1>
-        <p className="mt-1 text-[#6B7280]">Continue your learning journey.</p>
+        <p className="mt-1 text-[#6B7280]">{subtitle}</p>
       </div>
 
       {now && (
