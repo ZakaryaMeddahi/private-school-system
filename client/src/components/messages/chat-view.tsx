@@ -2,7 +2,8 @@
 
 import { useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { MoreHorizontal } from 'lucide-react';
+import { MessageSquare, MoreHorizontal } from 'lucide-react';
+import { EmptyState } from '@/components/ui/empty-state';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   DropdownMenu,
@@ -49,8 +50,13 @@ export function ChatView({
 
   if (!selectedCourse) {
     return (
-      <div className="flex h-full items-center justify-center text-sm text-[#9CA3AF]">
-        Select a conversation to start chatting.
+      <div className="flex h-full items-center justify-center">
+        <EmptyState
+          icon={MessageSquare}
+          variant="purple"
+          title="Select a conversation"
+          description="Choose a conversation from the list to start chatting."
+        />
       </div>
     );
   }
