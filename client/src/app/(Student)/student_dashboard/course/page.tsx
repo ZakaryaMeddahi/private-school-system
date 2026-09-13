@@ -1,11 +1,19 @@
 'use client';
 
-import { useContext, useEffect, useMemo, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { LayoutGrid } from 'lucide-react';
+import {
+  Bell,
+  BookOpen,
+  Calendar,
+  FileText,
+  LayoutGrid,
+  MessageSquare,
+} from 'lucide-react';
 import { StudentContext } from '../../layout';
 import { fetchCourses, type Course } from '@/lib/student-portal/api';
 import { ExploreCourseCard } from '@/components/explore/course-card';
+import { EmptyState } from '@/components/ui/empty-state';
 import {
   Select,
   SelectContent,
@@ -36,6 +44,11 @@ const CoursePage = () => {
 
     fetchData();
   }, [search]);
+
+  const handleNotify = useCallback(() => {
+    // TODO: wire up to the notifications preference endpoint once available.
+    console.info('Notify me requested for new formations');
+  }, []);
 
   const sortedCourses = useMemo(() => {
     const list = [...courses];
@@ -82,9 +95,34 @@ const CoursePage = () => {
       </div>
 
       {sortedCourses.length === 0 && (
-        <p className="py-12 text-center text-sm text-[#6B7280]">
-          No formations found.
-        </p>
+        <EmptyState
+          icon={BookOpen}
+          variant="purple"
+          title="No formations available yet"
+          description="New formations are being prepared. Check back soon or explore other learning resources in the meantime."
+          // action={{
+          //   label: 'Notify me when available',
+          //   icon: Bell,
+          //   onClick: handleNotify,
+          // }}
+          hints={[
+            // {
+            //   icon: FileText,
+            //   label: 'Browse resources',
+            //   href: '/student_dashboard/resources',
+            // },
+            // {
+            //   icon: MessageSquare,
+            //   label: 'Ask a question',
+            //   href: '/student_dashboard/messages',
+            // },
+            // {
+            //   icon: Calendar,
+            //   label: 'Live classes',
+            //   href: '/student_dashboard/live_classes',
+            // },
+          ]}
+        />
       )}
     </div>
   );

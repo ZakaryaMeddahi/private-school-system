@@ -5,6 +5,8 @@ import { SatelliteDish } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { SessionCard } from '@/components/live-classes/session-card';
 import { demoLiveSessions } from '@/lib/student-portal/demo-data';
+import { EmptyState } from '@/components/ui/empty-state';
+import { emptyStatePresets } from '@/components/ui/empty-state-presets';
 
 type TabKey = 'upcoming' | 'live' | 'completed';
 
@@ -55,31 +57,41 @@ const LiveClassesPage = () => {
         </TabsList>
 
         <TabsContent value="upcoming" className="mt-6">
-          <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-            {upcoming.map((session) => (
-              <SessionCard key={session.id} session={session} />
-            ))}
-          </div>
+          {upcoming.length === 0 ? (
+            <EmptyState {...emptyStatePresets.liveClasses} />
+          ) : (
+            <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+              {upcoming.map((session) => (
+                <SessionCard key={session.id} session={session} />
+              ))}
+            </div>
+          )}
         </TabsContent>
 
         <TabsContent value="live" className="mt-6">
-          <div className="flex flex-col items-center justify-center gap-2 rounded-xl bg-white py-16 shadow-sm">
-            <SatelliteDish size={48} className="text-[#B8A4F0]" />
-            <p className="font-semibold text-[#1A1A2E]">
-              No live now sessions
-            </p>
-            <p className="text-sm text-[#6B7280]">
-              No sessions are live right now.
-            </p>
-          </div>
+          <EmptyState
+            icon={SatelliteDish}
+            variant="rose"
+            title="No live now sessions"
+            description="No sessions are live right now. Check the Upcoming tab to see what's scheduled next."
+          />
         </TabsContent>
 
         <TabsContent value="completed" className="mt-6">
-          <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-            {completed.map((session) => (
-              <SessionCard key={session.id} session={session} />
-            ))}
-          </div>
+          {completed.length === 0 ? (
+            <EmptyState
+              icon={SatelliteDish}
+              variant="rose"
+              title="No completed sessions yet"
+              description="Live classes you've attended will show up here once they're finished."
+            />
+          ) : (
+            <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+              {completed.map((session) => (
+                <SessionCard key={session.id} session={session} />
+              ))}
+            </div>
+          )}
         </TabsContent>
       </Tabs>
     </div>

@@ -5,6 +5,8 @@ import { Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
+import { EmptyState } from '@/components/ui/empty-state';
+import { emptyStatePresets } from '@/components/ui/empty-state-presets';
 import type { Course } from '@/app/providers/ChatProvider';
 
 function initialsOf(title?: string) {
@@ -49,9 +51,11 @@ export function ConversationList({
 
       <div className="flex-1 overflow-y-auto">
         {filtered.length === 0 && (
-          <p className="px-4 py-6 text-center text-sm text-[#9CA3AF]">
-            No conversations found.
-          </p>
+          <EmptyState
+            {...emptyStatePresets.messages}
+            hints={undefined}
+            className="px-4 py-10"
+          />
         )}
 
         {filtered.map((course) => {

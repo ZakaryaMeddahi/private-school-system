@@ -5,6 +5,8 @@ import { ResourceFilter, type FilterOption } from '@/components/resources/resour
 import { ResourceCard } from '@/components/resources/resource-card';
 import { demoResources } from '@/lib/student-portal/demo-data';
 import type { ResourceType } from '@/lib/student-portal/demo-data';
+import { EmptyState } from '@/components/ui/empty-state';
+import { emptyStatePresets } from '@/components/ui/empty-state-presets';
 
 const filterToType: Partial<Record<FilterOption, ResourceType>> = {
   PDF: 'pdf',
@@ -48,9 +50,7 @@ const ResourcesPage = () => {
       />
 
       {filtered.length === 0 ? (
-        <p className="py-12 text-center text-sm text-[#6B7280]">
-          No resources found.
-        </p>
+        <EmptyState {...emptyStatePresets.resources} />
       ) : (
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
           {filtered.map((resource) => (

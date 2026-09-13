@@ -1,13 +1,13 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { LearningCard } from '@/components/my-learning/learning-card';
 import { fetchMyEnrollments, type Enrollment } from '@/lib/student-portal/api';
+import { EmptyState } from '@/components/ui/empty-state';
+import { emptyStatePresets } from '@/components/ui/empty-state-presets';
 
 const EnrollmentCourse = () => {
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
-  const router = useRouter();
 
   useEffect(() => {
     fetchMyEnrollments()
@@ -29,15 +29,7 @@ const EnrollmentCourse = () => {
       </div>
 
       {enrollments.length === 0 ? (
-        <p className="py-12 text-center text-sm text-[#6B7280]">
-          You haven&apos;t enrolled in any formations yet.{' '}
-          <button
-            onClick={() => router.push('/student_dashboard/course')}
-            className="font-medium text-[#6C3CE1] hover:underline"
-          >
-            Explore Courses
-          </button>
-        </p>
+        <EmptyState {...emptyStatePresets.myLearning} />
       ) : (
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {enrollments.map((enrollment) => (
