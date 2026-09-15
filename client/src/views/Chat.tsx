@@ -292,7 +292,7 @@ const ChatPage = () => {
               <Link
                 href={
                   userRole.current === 'admin'
-                    ? '/admin_dashboard'
+                    ? '/admin'
                     : userRole.current === 'teacher'
                     ? '/teacher_dashboard'
                     : '/student_dashboard'

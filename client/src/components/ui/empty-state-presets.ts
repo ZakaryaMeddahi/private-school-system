@@ -3,14 +3,17 @@ import {
   BellOff,
   BookOpen,
   Calendar,
+  CheckCircle2,
   ClipboardList,
   Compass,
   FileText,
   FolderOpen,
+  GraduationCap,
   ListChecks,
   MessageSquare,
   Rocket,
   Target,
+  Users,
   Video,
 } from "lucide-react"
 
@@ -133,5 +136,31 @@ export const emptyStatePresets = {
     variant: "gray",
     title: "You're all caught up",
     description: "You have no notifications right now. Check back later.",
+  },
+  adminTeachers: {
+    icon: GraduationCap,
+    variant: "purple",
+    title: "No teachers found",
+    description:
+      "No teacher accounts match your search yet. Add a teacher to get started.",
+  },
+  adminStudents: {
+    icon: Users,
+    variant: "blue",
+    title: "No students found",
+    description: "No student accounts match your search right now.",
+  },
+  adminCourses: {
+    icon: BookOpen,
+    variant: "amber",
+    title: "No courses found",
+    description: "No courses match your search right now.",
+  },
+  adminEnrollments: {
+    icon: CheckCircle2,
+    variant: "gray",
+    title: "No pending requests",
+    description:
+      "You're all caught up — new enrollment requests will show up here.",
   },
 } as const satisfies Record<string, EmptyStateProps>
