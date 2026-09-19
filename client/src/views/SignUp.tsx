@@ -9,6 +9,10 @@ import { useContext } from 'react';
 import { LoginContext } from '@/app/providers/LoginProvider';
 import { useRouter } from 'next/navigation';
 import ErrorMessage from '@/components/ErrorMessage';
+import AuthLayout from '@/components/auth/AuthLayout';
+import AuthBrandPanel from '@/components/auth/AuthBrandPanel';
+import SocialLoginButton from '@/components/auth/SocialLoginButton';
+import PasswordInput from '@/components/auth/PasswordInput';
 
 const SignUpPage = () => {
   const {
@@ -90,92 +94,106 @@ const SignUpPage = () => {
   };
 
   return (
-    <div
-      style={{
-        color: '100%',
-        zIndex: '50',
-        display: 'flex',
-        height: '100%',
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
-    >
-      <div className="flex h-[90%] w-4/5 flex-row-reverse rounded-[25px] text-white" style={{ backgroundColor: '#FCC128' }}>
-        <div className="z-1 flex h-full w-[51%] max-w-3xl flex-col rounded-r-[25px] bg-[#1C1D21] p-6.25">
-          <div className="flex h-full w-full justify-center">
-            <div className="flex h-full w-[90%] flex-col items-start justify-center gap-2">
-              <Header title='Sign Up' />
-              <div className="flex w-full flex-row justify-between">
-                <div className="w-[48%]">
-                  <FormInput
-                    type='text'
-                    placeholder='First Name'
-                    onchange={(e) => {
-                      setFirstName(e.target.value);
-                    }}
-                  />
-                  <ErrorMessage errorMessage={firstNameErrorMessage} />
-                </div>
-                <div className="w-[48%]">
-                  <FormInput
-                    type='text'
-                    placeholder='Last Name'
-                    onchange={(e) => {
-                      setLastName(e.target.value);
-                    }}
-                  />
-                  <ErrorMessage errorMessage={lastNameErrorMessage} />
-                </div>
-              </div>
-              <div className="w-full">
-                <FormInput
-                  type='email'
-                  placeholder='Email'
-                  onchange={(e) => {
-                    setEmail(e.target.value);
-                  }}
-                />
-                <ErrorMessage errorMessage={emailErrorMessage} />
-              </div>
-              <div className="w-full">
-                <FormInput
-                  type='password'
-                  placeholder='Password'
-                  onchange={(e) => setPassword(e.target.value)}
-                />
-                <ErrorMessage errorMessage={passwordErrorMessage} />
-              </div>
+    <AuthLayout brandPanel={<AuthBrandPanel />}>
+      <Header
+        title="Create your account"
+        subtitle="Start your learning journey with NEXA."
+      />
+
+      <div className="flex flex-col gap-4">
+        <SocialLoginButton />
+
+        <div className="flex items-center gap-3 text-xs text-[#64748B]">
+          <div className="h-px flex-1 bg-[#E2E8F0]" />
+          OR
+          <div className="h-px flex-1 bg-[#E2E8F0]" />
+        </div>
+
+        <form
+          className="flex flex-col gap-4"
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSubmit(e);
+          }}
+        >
+          <div className="flex flex-col gap-4 sm:flex-row sm:justify-between">
+            <div className="w-full sm:w-[48%]">
               <FormInput
-                type='password'
-                placeholder='Confirm Password'
-                onchange={(e) => setConfirmPassword(e.target.value)}
+                label="First Name"
+                type="text"
+                placeholder="First name"
+                autoComplete="given-name"
+                onchange={(e) => {
+                  setFirstName(e.target.value);
+                }}
               />
-              <ErrorMessage errorMessage={errorMessage} />
-              <Button
-                className="h-auto w-full rounded-[7px] bg-[#234C51] py-2.5 text-base text-white hover:bg-[#234C51]/90"
-                disabled={isSubmitting}
-                onClick={handleSubmit}
-              >
-                {isSubmitting ? 'Sign Up...' : 'Sign Up'}
-              </Button>
-              <p className="mt-5 text-center">
-                I already have an account !!
-                <span style={{ color: 'blue' }}>
-                  <Link href='/login'> Sign in</Link>
-                </span>
-              </p>
+              <ErrorMessage errorMessage={firstNameErrorMessage} />
+            </div>
+            <div className="w-full sm:w-[48%]">
+              <FormInput
+                label="Last Name"
+                type="text"
+                placeholder="Last name"
+                autoComplete="family-name"
+                onchange={(e) => {
+                  setLastName(e.target.value);
+                }}
+              />
+              <ErrorMessage errorMessage={lastNameErrorMessage} />
             </div>
           </div>
-        </div>
-        <div className="flex max-w-full flex-1 items-center justify-center bg-transparent">
-          <img
-            src='/illustration.png'
-            alt='illustration'
-            className="z-1 w-200"
+
+          <div>
+            <FormInput
+              label="Email"
+              type="email"
+              placeholder="Enter your email"
+              autoComplete="email"
+              onchange={(e) => {
+                setEmail(e.target.value);
+              }}
+            />
+            <ErrorMessage errorMessage={emailErrorMessage} />
+          </div>
+
+          <div>
+            <PasswordInput
+              label="Password"
+              placeholder="Enter your password"
+              autoComplete="new-password"
+              onchange={(e) => setPassword(e.target.value)}
+            />
+            <ErrorMessage errorMessage={passwordErrorMessage} />
+          </div>
+
+          <PasswordInput
+            label="Confirm Password"
+            placeholder="Confirm your password"
+            autoComplete="new-password"
+            onchange={(e) => setConfirmPassword(e.target.value)}
           />
-        </div>
+          <ErrorMessage errorMessage={errorMessage} />
+
+          <Button
+            type="submit"
+            className="h-11 w-full rounded-lg bg-[#4338CA] text-sm font-semibold text-white hover:bg-[#4338CA]/90"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? 'Creating account...' : 'Create Account'}
+          </Button>
+        </form>
+
+        <p className="text-center text-sm text-[#64748B]">
+          Already have an account?{' '}
+          <Link
+            href="/login"
+            className="font-medium text-[#4338CA] hover:underline"
+          >
+            Sign in
+          </Link>
+        </p>
       </div>
-    </div>
+    </AuthLayout>
   );
 };
 
